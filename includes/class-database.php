@@ -1,0 +1,353 @@
+<?php
+/**
+ * Database schema and management
+ *
+ * @package ACS
+ */
+
+namespace ACS;
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * Database class
+ */
+class Database {
+
+    /**
+     * Create all database tables
+     *
+     * @return void
+     */
+    public static function create_tables() {
+        global $wpdb;
+
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_prefix = $wpdb->prefix . ACS_TABLE_PREFIX;
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        // 1. Business Profiles
+        $sql_business_profiles = "CREATE TABLE {$table_prefix}business_profiles (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            business_type VARCHAR(100) NOT NULL COMMENT 'Type d activité',
+            business_name VARCHAR(255) NOT NULL,
+            description TEXT COMMENT 'Description courte de l activité',
+            niche VARCHAR(255) COMMENT 'Niche spécifique',
+            location VARCHAR(255) COMMENT 'Localisation',
+            target_audience LONGTEXT COMMENT 'JSON: {type: B2B/B2C, age_range, interests}',
+            goals LONGTEXT COMMENT 'JSON: [awareness, sales, engagement]',
+            platforms LONGTEXT COMMENT 'JSON: [instagram, facebook, linkedin, tiktok, twitter, youtube]',
+            languages LONGTEXT COMMENT 'JSON: [fr, en, es, de, it]',
+            has_blog BOOLEAN DEFAULT 0 COMMENT 'Indique si l utilisateur a un blog',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY user_id (user_id),
+            KEY idx_business_type (business_type)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 2. Strategies
+        $sql_strategies = "CREATE TABLE {$table_prefix}strategies (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            content_strategy LONGTEXT COMMENT 'JSON: Strategy complète générée par Claude',
+            posting_schedule LONGTEXT COMMENT 'JSON: {platform: {frequency, bestTimes}}',
+            content_pillars LONGTEXT COMMENT 'JSON: [pilier1, pilier2, pilier3]',
+            tone_style TEXT COMMENT 'Ton et style de communication',
+            hashtags LONGTEXT COMMENT 'JSON: Hashtags recommandés par plateforme',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY user_id (user_id)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 3. Usage Stats
+        $sql_usage_stats = "CREATE TABLE {$table_prefix}usage_stats (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            posts_generated INT DEFAULT 0 COMMENT 'Total posts générés',
+            posts_this_month INT DEFAULT 0 COMMENT 'Posts ce mois',
+            articles_generated INT DEFAULT 0 COMMENT 'Total articles générés',
+            articles_this_month INT DEFAULT 0 COMMENT 'Articles ce mois',
+            images_generated INT DEFAULT 0 COMMENT 'Total images générées',
+            images_this_month INT DEFAULT 0 COMMENT 'Images ce mois',
+            videos_generated INT DEFAULT 0,
+            videos_this_month INT DEFAULT 0,
+            last_reset_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Dernière réinitialisation mensuelle',
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY user_id (user_id)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 4. Social Posts
+        $sql_social_posts = "CREATE TABLE {$table_prefix}social_posts (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            platform VARCHAR(50) NOT NULL COMMENT 'instagram, facebook, linkedin, tiktok, twitter, youtube',
+            content LONGTEXT NOT NULL,
+            hashtags LONGTEXT COMMENT 'JSON: [#tag1, #tag2]',
+            language VARCHAR(10) DEFAULT 'fr',
+            status VARCHAR(20) DEFAULT 'draft' COMMENT 'draft, scheduled, published, failed',
+            scheduled_for DATETIME COMMENT 'Date de publication programmée',
+            published_at DATETIME COMMENT 'Date de publication effective',
+            published_url VARCHAR(500) COMMENT 'URL du post publié',
+            trend_id BIGINT(20) UNSIGNED COMMENT 'Tendance utilisée',
+            template_id BIGINT(20) UNSIGNED COMMENT 'Template utilisé',
+            image_id BIGINT(20) UNSIGNED COMMENT 'Image associée',
+            metadata LONGTEXT COMMENT 'JSON: {variants, tone, original_prompt, etc}',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user_status (user_id, status),
+            KEY idx_scheduled (scheduled_for),
+            KEY idx_platform (platform)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 5. Blog Articles
+        $sql_blog_articles = "CREATE TABLE {$table_prefix}blog_articles (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            content LONGTEXT NOT NULL COMMENT 'Contenu HTML structuré',
+            excerpt TEXT COMMENT 'Résumé court',
+            meta_description VARCHAR(160),
+            focus_keyword VARCHAR(100),
+            keywords LONGTEXT COMMENT 'JSON: [keyword1, keyword2]',
+            seo_score INT DEFAULT 0 COMMENT 'Score SEO sur 100',
+            word_count INT,
+            reading_time INT COMMENT 'Temps de lecture en minutes',
+            language VARCHAR(10) DEFAULT 'fr',
+            status VARCHAR(20) DEFAULT 'draft' COMMENT 'draft, scheduled, published',
+            scheduled_for DATETIME,
+            published_post_id BIGINT(20) UNSIGNED COMMENT 'ID du post WordPress créé',
+            metadata LONGTEXT COMMENT 'JSON: {headings, image_suggestions, internal_links, seo_analysis}',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user_status (user_id, status),
+            KEY idx_keyword (focus_keyword),
+            FULLTEXT idx_content (title, content)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 6. Generated Images
+        $sql_generated_images = "CREATE TABLE {$table_prefix}generated_images (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            prompt TEXT NOT NULL COMMENT 'Prompt utilisé pour générer l image',
+            dalle_prompt TEXT COMMENT 'Prompt optimisé envoyé à DALL-E',
+            image_url VARCHAR(500) NOT NULL COMMENT 'URL de l image générée',
+            thumbnail_url VARCHAR(500),
+            width INT DEFAULT 1024,
+            height INT DEFAULT 1024,
+            format VARCHAR(20) DEFAULT 'square' COMMENT 'square, portrait, landscape',
+            style VARCHAR(50) COMMENT 'realistic, artistic, cartoon, etc',
+            post_id BIGINT(20) UNSIGNED COMMENT 'Post associé si applicable',
+            article_id BIGINT(20) UNSIGNED COMMENT 'Article associé si applicable',
+            status VARCHAR(20) DEFAULT 'generated' COMMENT 'generated, edited, deleted',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user (user_id),
+            KEY idx_status (status)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 7. Trends
+        $sql_trends = "CREATE TABLE {$table_prefix}trends (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            keyword VARCHAR(255) NOT NULL,
+            platform VARCHAR(50) NOT NULL COMMENT 'google, instagram, tiktok, twitter, linkedin',
+            category VARCHAR(100) COMMENT 'Catégorie business associée',
+            language VARCHAR(10) DEFAULT 'fr',
+            volume INT COMMENT 'Volume de recherche/mentions',
+            growth_rate DECIMAL(5,2) COMMENT 'Taux de croissance en %',
+            relevance_score DECIMAL(3,2) COMMENT 'Score 0-1 de pertinence',
+            detected_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            expires_at DATETIME NOT NULL COMMENT 'Date d expiration de la tendance',
+            PRIMARY KEY (id),
+            KEY idx_platform_category (platform, category),
+            KEY idx_relevance (relevance_score),
+            KEY idx_expires (expires_at),
+            KEY idx_keyword (keyword)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 8. Templates
+        $sql_templates = "CREATE TABLE {$table_prefix}templates (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            description TEXT,
+            category VARCHAR(100) NOT NULL COMMENT 'social_post, blog_article, email',
+            subcategory VARCHAR(100) COMMENT 'announcement, promotion, education, etc',
+            template_content LONGTEXT COMMENT 'Contenu du template avec variables {{name}}',
+            prompt_template TEXT COMMENT 'Template de prompt pour Claude',
+            platform VARCHAR(50) COMMENT 'Plateforme cible si social post',
+            language VARCHAR(10) DEFAULT 'fr',
+            is_premium BOOLEAN DEFAULT 0 COMMENT 'Réservé aux plans payants',
+            is_default BOOLEAN DEFAULT 1 COMMENT 'Template fourni par défaut',
+            usage_count INT DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_category (category, subcategory),
+            KEY idx_platform (platform),
+            KEY idx_popularity (usage_count DESC)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 9. Brand Kits
+        $sql_brand_kits = "CREATE TABLE {$table_prefix}brand_kits (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            brand_name VARCHAR(255),
+            logo_url VARCHAR(500),
+            logo_attachment_id BIGINT(20) UNSIGNED COMMENT 'ID media WordPress',
+            primary_color VARCHAR(7) COMMENT 'HEX color',
+            secondary_color VARCHAR(7),
+            accent_color VARCHAR(7),
+            font_primary VARCHAR(100),
+            font_secondary VARCHAR(100),
+            tone_of_voice TEXT COMMENT 'Description du ton de communication',
+            brand_values LONGTEXT COMMENT 'JSON: [valeur1, valeur2]',
+            banned_words LONGTEXT COMMENT 'JSON: Mots à éviter',
+            preferred_hashtags LONGTEXT COMMENT 'JSON: Hashtags de marque',
+            signature VARCHAR(255) COMMENT 'Signature à ajouter aux posts',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY user_id (user_id)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 10. Social Connections
+        $sql_social_connections = "CREATE TABLE {$table_prefix}social_connections (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            platform VARCHAR(50) NOT NULL COMMENT 'facebook, instagram, linkedin, twitter',
+            account_id VARCHAR(255) NOT NULL COMMENT 'ID du compte sur la plateforme',
+            account_name VARCHAR(255) COMMENT 'Nom du compte',
+            account_username VARCHAR(255) COMMENT 'Username/handle',
+            account_type VARCHAR(50) COMMENT 'page, profile, business, etc',
+            access_token TEXT NOT NULL,
+            refresh_token TEXT,
+            token_type VARCHAR(50) DEFAULT 'Bearer',
+            token_expires_at DATETIME,
+            scopes TEXT COMMENT 'Permissions accordées',
+            is_active BOOLEAN DEFAULT 1,
+            last_used_at DATETIME,
+            connected_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY user_platform_account (user_id, platform, account_id),
+            KEY idx_user_platform (user_id, platform),
+            KEY idx_expires (token_expires_at)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 11. Calendar Events
+        $sql_calendar_events = "CREATE TABLE {$table_prefix}calendar_events (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            description TEXT,
+            event_type VARCHAR(50) NOT NULL COMMENT 'post, article, holiday, custom',
+            event_date DATE NOT NULL,
+            post_id BIGINT(20) UNSIGNED COMMENT 'Si lié à un post',
+            article_id BIGINT(20) UNSIGNED COMMENT 'Si lié à un article',
+            is_recurring BOOLEAN DEFAULT 0,
+            recurrence_rule VARCHAR(255) COMMENT 'RRULE format',
+            color VARCHAR(7) COMMENT 'Couleur dans le calendrier',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user_date (user_id, event_date),
+            KEY idx_type (event_type)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 12. Analytics
+        $sql_analytics = "CREATE TABLE {$table_prefix}analytics (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            metric_type VARCHAR(50) NOT NULL COMMENT 'post_generated, article_published, image_created, etc',
+            metric_value INT DEFAULT 1,
+            platform VARCHAR(50),
+            language VARCHAR(10),
+            content_type VARCHAR(50),
+            metadata LONGTEXT COMMENT 'JSON: Données additionnelles',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user_type (user_id, metric_type),
+            KEY idx_created (created_at)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 13. Notifications
+        $sql_notifications = "CREATE TABLE {$table_prefix}notifications (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            type VARCHAR(50) NOT NULL COMMENT 'limit_reached, trend_detected, post_published, etc',
+            title VARCHAR(255) NOT NULL,
+            message TEXT NOT NULL,
+            action_url VARCHAR(500) COMMENT 'URL de l action',
+            action_text VARCHAR(100) COMMENT 'Texte du bouton',
+            is_read BOOLEAN DEFAULT 0,
+            read_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user_unread (user_id, is_read),
+            KEY idx_created (created_at DESC)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 14. Favorites
+        $sql_favorites = "CREATE TABLE {$table_prefix}favorites (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            item_type VARCHAR(50) NOT NULL COMMENT 'template, post, article, trend',
+            item_id BIGINT(20) UNSIGNED NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY user_item (user_id, item_type, item_id),
+            KEY idx_user_type (user_id, item_type)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // Execute all table creations
+        dbDelta($sql_business_profiles);
+        dbDelta($sql_strategies);
+        dbDelta($sql_usage_stats);
+        dbDelta($sql_social_posts);
+        dbDelta($sql_blog_articles);
+        dbDelta($sql_generated_images);
+        dbDelta($sql_trends);
+        dbDelta($sql_templates);
+        dbDelta($sql_brand_kits);
+        dbDelta($sql_social_connections);
+        dbDelta($sql_calendar_events);
+        dbDelta($sql_analytics);
+        dbDelta($sql_notifications);
+        dbDelta($sql_favorites);
+
+        // Store database version
+        update_option('acs_db_version', ACS_VERSION);
+    }
+
+    /**
+     * Check if tables exist
+     *
+     * @return bool
+     */
+    public static function tables_exist() {
+        global $wpdb;
+        $table_prefix = $wpdb->prefix . ACS_TABLE_PREFIX;
+        $table = $table_prefix . 'business_profiles';
+
+        return $wpdb->get_var("SHOW TABLES LIKE '{$table}'") === $table;
+    }
+
+    /**
+     * Get table name with prefix
+     *
+     * @param string $table
+     * @return string
+     */
+    public static function get_table_name($table) {
+        global $wpdb;
+        return $wpdb->prefix . ACS_TABLE_PREFIX . $table;
+    }
+}
