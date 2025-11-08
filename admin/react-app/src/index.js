@@ -7,9 +7,12 @@ import './styles/app.css';
 apiFetch.use(apiFetch.createNonceMiddleware(window.acsData.nonce));
 apiFetch.use(apiFetch.createRootURLMiddleware(window.acsData.apiUrl));
 
-// Mount React app
-const rootElement = document.getElementById('acs-admin-root');
+// Mount React app - works for both admin and frontend
+const adminRoot = document.getElementById('acs-admin-root');
+const frontendRoot = document.getElementById('acs-frontend-root');
 
-if (rootElement) {
-    render(<App />, rootElement);
+if (adminRoot) {
+    render(<App />, adminRoot);
+} else if (frontendRoot) {
+    render(<App isFrontend={true} />, frontendRoot);
 }

@@ -72,6 +72,7 @@ class Plugin {
         $this->init_services();
         $this->init_woocommerce();
         $this->init_cron();
+        $this->init_shortcode();
     }
 
     /**
@@ -260,6 +261,18 @@ class Plugin {
                 $service->publish_scheduled_posts();
             }
         });
+    }
+
+    /**
+     * Initialize shortcode
+     *
+     * @return void
+     */
+    private function init_shortcode() {
+        if (file_exists(ACS_PLUGIN_DIR . 'includes/class-shortcode.php')) {
+            require_once ACS_PLUGIN_DIR . 'includes/class-shortcode.php';
+            new Shortcode();
+        }
     }
 
     /**
