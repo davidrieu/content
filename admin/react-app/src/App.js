@@ -9,6 +9,7 @@ import EnhancedPostGenerator from './components/SocialGenerator/EnhancedPostGene
 import ContentCalendar from './components/Calendar/ContentCalendar';
 import StrategyGenerator from './components/Strategy/StrategyGenerator';
 import ContentLibrary from './components/Library/ContentLibrary';
+import LogsViewer from './components/Logs/LogsViewer';
 import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
 import LoadingSpinner from './components/common/LoadingSpinner';
@@ -27,6 +28,7 @@ function AppContent({ profile }) {
             case '/articles': return 'Articles de blog';
             case '/images': return 'Images IA';
             case '/trends': return 'Tendances';
+            case '/logs': return 'Logs Système';
             case '/settings': return 'Paramètres';
             default: return 'Dashboard';
         }
@@ -47,6 +49,7 @@ function AppContent({ profile }) {
                         <Route path="/articles" element={<PlaceholderPage title="Articles de blog" />} />
                         <Route path="/images" element={<PlaceholderPage title="Images IA" />} />
                         <Route path="/trends" element={<PlaceholderPage title="Tendances" />} />
+                        <Route path="/logs" element={<LogsViewer />} />
                         <Route path="/settings" element={<PlaceholderPage title="Paramètres" />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
