@@ -1248,7 +1248,7 @@ body.admin-bar #acs-frontend-root .acs-app {
 }
 
 /* ========================================
-   Onboarding Wizard (3 Steps - Modern 2025 Design)
+   Onboarding Wizard (3 Steps - Simplified Design)
    ======================================== */
 
 .acs-onboarding-wizard {
@@ -1257,30 +1257,31 @@ body.admin-bar #acs-frontend-root .acs-app {
   padding: var(--acs-spacing-6);
 }
 
-/* Progress Bar */
+/* Progress Steps Header */
 .acs-wizard-progress {
-  margin-bottom: var(--acs-spacing-8);
+  margin-bottom: var(--acs-spacing-6);
 }
 
 .acs-progress-bar {
-  height: 8px;
-  background: var(--acs-gray-200);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: var(--acs-spacing-4);
-}
-
-.acs-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--acs-primary), var(--acs-secondary));
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+  display: none; /* Hide the gradient bar for simpler design */
 }
 
 .acs-progress-steps {
   display: flex;
   justify-content: space-between;
-  gap: var(--acs-spacing-4);
+  margin-bottom: var(--acs-spacing-6);
+  position: relative;
+}
+
+.acs-progress-steps::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--acs-gray-200);
+  z-index: 0;
 }
 
 .acs-step-dot {
@@ -1288,22 +1289,22 @@ body.admin-bar #acs-frontend-root .acs-app {
   height: 40px;
   border-radius: 50%;
   background: var(--acs-white);
-  border: 3px solid var(--acs-gray-300);
-  display: flex;
+  border: 2px solid var(--acs-gray-300);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  color: var(--acs-gray-500);
-  font-size: 14px;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  color: var(--acs-gray-600);
+  margin: 0 auto var(--acs-spacing-2);
+  transition: var(--acs-transition);
+  position: relative;
+  z-index: 1;
 }
 
 .acs-step-dot.active {
-  background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
+  background: var(--acs-primary);
   border-color: var(--acs-primary);
   color: var(--acs-white);
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-  transform: scale(1.1);
 }
 
 .acs-step-dot.completed {
@@ -1315,33 +1316,21 @@ body.admin-bar #acs-frontend-root .acs-app {
 /* Wizard Content */
 .acs-wizard-content {
   background: var(--acs-white);
-  border-radius: var(--acs-radius-xl);
-  padding: var(--acs-spacing-8);
-  box-shadow: var(--acs-shadow-xl);
-  margin-bottom: var(--acs-spacing-6);
-  min-height: 500px;
+  border-radius: var(--acs-radius);
+  padding: var(--acs-spacing-6);
+  box-shadow: var(--acs-shadow);
+  margin-bottom: var(--acs-spacing-4);
 }
 
 .acs-wizard-step {
-  animation: fadeIn 0.4s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* No animation for simpler design */
 }
 
 .acs-step-header {
   text-align: center;
-  margin-bottom: var(--acs-spacing-6);
+  margin-bottom: var(--acs-spacing-5);
   padding-bottom: var(--acs-spacing-4);
-  border-bottom: 2px solid var(--acs-gray-100);
+  border-bottom: 1px solid var(--acs-gray-100);
 }
 
 .acs-step-header svg {
@@ -1350,82 +1339,59 @@ body.admin-bar #acs-frontend-root .acs-app {
 }
 
 .acs-step-header h2 {
-  font-size: 28px;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: var(--acs-spacing-2);
-}
-
-.acs-step-header p {
-  color: var(--acs-gray-600);
-  font-size: 15px;
-}
-
-/* User Type Grid */
-.acs-user-type-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--acs-spacing-4);
-  margin-bottom: var(--acs-spacing-6);
-}
-
-.acs-type-card {
-  background: var(--acs-white);
-  border: 2px solid var(--acs-gray-200);
-  border-radius: var(--acs-radius-lg);
-  padding: var(--acs-spacing-5);
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.acs-type-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.acs-type-card:hover {
-  border-color: var(--acs-primary);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
-  transform: translateY(-2px);
-}
-
-.acs-type-card:hover::before {
-  opacity: 1;
-}
-
-.acs-type-card.selected {
-  border-color: var(--acs-primary);
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
-}
-
-.acs-type-card svg {
-  color: var(--acs-primary);
-  margin-bottom: var(--acs-spacing-3);
-}
-
-.acs-type-card h3 {
-  font-size: 16px;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--acs-gray-900);
   margin-bottom: var(--acs-spacing-2);
 }
 
+.acs-step-header p {
+  color: var(--acs-gray-600);
+  font-size: 14px;
+}
+
+/* User Type Grid */
+.acs-user-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--acs-spacing-3);
+  margin-bottom: var(--acs-spacing-4);
+}
+
+.acs-type-card {
+  background: var(--acs-white);
+  border: 2px solid var(--acs-gray-200);
+  border-radius: var(--acs-radius);
+  padding: var(--acs-spacing-4);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--acs-transition);
+}
+
+.acs-type-card:hover {
+  border-color: var(--acs-primary);
+  box-shadow: var(--acs-shadow);
+}
+
+.acs-type-card.selected {
+  border-color: var(--acs-primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.acs-type-card svg {
+  color: var(--acs-primary);
+  margin-bottom: var(--acs-spacing-2);
+}
+
+.acs-type-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--acs-gray-900);
+  margin-bottom: var(--acs-spacing-1);
+}
+
 .acs-type-card p {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--acs-gray-600);
   margin: 0;
 }
@@ -1433,25 +1399,25 @@ body.admin-bar #acs-frontend-root .acs-app {
 /* Checkbox Grid */
 .acs-checkbox-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--acs-spacing-3);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--acs-spacing-2);
   margin-bottom: var(--acs-spacing-4);
 }
 
 .acs-checkbox-label {
   display: flex;
   align-items: center;
-  padding: var(--acs-spacing-3);
-  background: var(--acs-gray-50);
+  padding: var(--acs-spacing-2) var(--acs-spacing-3);
+  background: var(--acs-white);
   border: 1px solid var(--acs-gray-200);
-  border-radius: var(--acs-radius);
+  border-radius: var(--acs-radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--acs-transition);
   font-size: 14px;
 }
 
 .acs-checkbox-label:hover {
-  background: var(--acs-gray-100);
+  background: var(--acs-gray-50);
   border-color: var(--acs-primary);
 }
 
@@ -1459,58 +1425,53 @@ body.admin-bar #acs-frontend-root .acs-app {
 .acs-checkbox-label input[type="radio"] {
   margin-right: var(--acs-spacing-2);
   cursor: pointer;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   accent-color: var(--acs-primary);
 }
 
-.acs-checkbox-label input[type="checkbox"]:checked,
-.acs-checkbox-label input[type="radio"]:checked {
-  background: var(--acs-primary);
-}
-
 .acs-checkbox-label:has(input:checked) {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  background: rgba(99, 102, 241, 0.05);
   border-color: var(--acs-primary);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* Radio Group */
 .acs-radio-group {
   display: flex;
   flex-direction: column;
-  gap: var(--acs-spacing-3);
+  gap: var(--acs-spacing-2);
 }
 
 .acs-radio-label {
   display: flex;
   align-items: center;
-  padding: var(--acs-spacing-4);
+  padding: var(--acs-spacing-3);
   background: var(--acs-white);
-  border: 2px solid var(--acs-gray-200);
-  border-radius: var(--acs-radius-lg);
+  border: 1px solid var(--acs-gray-200);
+  border-radius: var(--acs-radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 15px;
+  transition: var(--acs-transition);
+  font-size: 14px;
 }
 
 .acs-radio-label:hover {
+  background: var(--acs-gray-50);
   border-color: var(--acs-primary);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
 }
 
 .acs-radio-label input[type="radio"] {
-  margin-right: var(--acs-spacing-3);
+  margin-right: var(--acs-spacing-2);
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   accent-color: var(--acs-primary);
 }
 
 .acs-radio-label:has(input:checked) {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  background: rgba(99, 102, 241, 0.05);
   border-color: var(--acs-primary);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* Keyword Input */
@@ -1537,34 +1498,22 @@ body.admin-bar #acs-frontend-root .acs-app {
   gap: var(--acs-spacing-2);
   background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
   color: var(--acs-white);
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  animation: pillAppear 0.3s ease;
-}
-
-@keyframes pillAppear {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .acs-keyword-pill button {
   background: none;
   border: none;
   color: var(--acs-white);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   cursor: pointer;
   padding: 0;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1580,12 +1529,12 @@ body.admin-bar #acs-frontend-root .acs-app {
 .acs-wizard-footer {
   display: flex;
   gap: var(--acs-spacing-3);
-  padding-top: var(--acs-spacing-4);
+  padding-top: var(--acs-spacing-3);
 }
 
 /* Form Group Styling */
 .acs-form-group {
-  margin-bottom: var(--acs-spacing-5);
+  margin-bottom: var(--acs-spacing-4);
 }
 
 .acs-form-group label {
@@ -1593,7 +1542,7 @@ body.admin-bar #acs-frontend-root .acs-app {
   font-weight: 600;
   color: var(--acs-gray-900);
   margin-bottom: var(--acs-spacing-2);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .acs-form-group label:not(.acs-checkbox-label):not(.acs-radio-label) {
@@ -1607,7 +1556,7 @@ body.admin-bar #acs-frontend-root .acs-app {
   }
 
   .acs-wizard-content {
-    padding: var(--acs-spacing-5);
+    padding: var(--acs-spacing-4);
   }
 
   .acs-user-type-grid {
@@ -1619,7 +1568,7 @@ body.admin-bar #acs-frontend-root .acs-app {
   }
 
   .acs-step-header h2 {
-    font-size: 24px;
+    font-size: 1.25rem;
   }
 
   .acs-keyword-input {
