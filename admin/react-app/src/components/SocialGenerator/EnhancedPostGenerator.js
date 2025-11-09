@@ -68,19 +68,31 @@ export default function EnhancedPostGenerator({ profile }) {
             }
         } catch (err) {
             console.error('Generation error:', err);
-            let errorMessage = err.message || __('Erreur lors de la génération', 'ai-content-studio');
 
-            // Messages d'erreur plus clairs
-            if (errorMessage.includes('API key') || errorMessage.includes('api_key') || errorMessage.includes('no_api_key')) {
-                errorMessage = '❌ Clé API Claude non configurée. Allez dans Paramètres pour configurer votre clé API Anthropic.';
+            // Extract error message from response - structure: { data: { error: { code, message } } }
+            let errorMessage = __('Erreur lors de la génération', 'ai-content-studio');
+            let errorCode = '';
+
+            if (err.data && err.data.error) {
+                errorMessage = err.data.error.message || err.data.error;
+                errorCode = err.data.error.code || '';
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+
+            // Messages d'erreur plus clairs basés sur le code d'erreur
+            if (errorCode === 'no_profile' || errorMessage.includes('profil business')) {
+                errorMessage = '📝 Vous devez d\'abord créer votre profil business via l\'assistant de démarrage ou dans les Paramètres.';
+            } else if (errorCode === 'limit_reached' || errorMessage.includes('limite')) {
+                errorMessage = '📊 ' + errorMessage;
+            } else if (errorMessage.includes('API key') || errorMessage.includes('api_key') || errorMessage.includes('no_api_key')) {
+                errorMessage = '❌ Clé API Claude non configurée. Contactez l\'administrateur.';
             } else if (errorMessage.includes('401') || errorMessage.includes('403')) {
-                errorMessage = '🔑 Clé API invalide ou expirée. Vérifiez votre clé API dans les paramètres.';
+                errorMessage = '🔑 Clé API invalide ou expirée. Contactez l\'administrateur.';
             } else if (errorMessage.includes('429')) {
                 errorMessage = '⏰ Limite d\'utilisation atteinte. Attendez quelques minutes ou passez à un plan supérieur.';
             } else if (errorMessage.includes('timeout')) {
                 errorMessage = '⏱️ Délai d\'attente dépassé. Réessayez dans quelques instants.';
-            } else if (errorMessage.includes('limit_reached')) {
-                errorMessage = '📊 Vous avez atteint votre limite mensuelle de posts. Passez à un plan supérieur.';
             }
 
             setError(errorMessage);
