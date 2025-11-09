@@ -67,7 +67,23 @@ export default function EnhancedPostGenerator({ profile }) {
                 setError(response.error?.message || __('Erreur lors de la génération', 'ai-content-studio'));
             }
         } catch (err) {
-            setError(err.message || __('Erreur lors de la génération', 'ai-content-studio'));
+            console.error('Generation error:', err);
+            let errorMessage = err.message || __('Erreur lors de la génération', 'ai-content-studio');
+
+            // Messages d'erreur plus clairs
+            if (errorMessage.includes('API key') || errorMessage.includes('api_key') || errorMessage.includes('no_api_key')) {
+                errorMessage = '❌ Clé API Claude non configurée. Allez dans Paramètres pour configurer votre clé API Anthropic.';
+            } else if (errorMessage.includes('401') || errorMessage.includes('403')) {
+                errorMessage = '🔑 Clé API invalide ou expirée. Vérifiez votre clé API dans les paramètres.';
+            } else if (errorMessage.includes('429')) {
+                errorMessage = '⏰ Limite d\'utilisation atteinte. Attendez quelques minutes ou passez à un plan supérieur.';
+            } else if (errorMessage.includes('timeout')) {
+                errorMessage = '⏱️ Délai d\'attente dépassé. Réessayez dans quelques instants.';
+            } else if (errorMessage.includes('limit_reached')) {
+                errorMessage = '📊 Vous avez atteint votre limite mensuelle de posts. Passez à un plan supérieur.';
+            }
+
+            setError(errorMessage);
         } finally {
             setGenerating(false);
         }
@@ -111,6 +127,21 @@ export default function EnhancedPostGenerator({ profile }) {
                 <p className="acs-text-muted">
                     {__('Créez du contenu engageant avec des templates professionnels adaptés à vos objectifs', 'ai-content-studio')}
                 </p>
+
+                {/* Help banner for API key */}
+                <div
+                    style={{
+                        marginTop: 'var(--acs-spacing-3)',
+                        padding: 'var(--acs-spacing-3)',
+                        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1))',
+                        borderRadius: 'var(--acs-radius)',
+                        border: '1px solid rgba(99, 102, 241, 0.2)',
+                        fontSize: 'var(--acs-font-size-sm)',
+                        color: 'var(--acs-gray-700)',
+                    }}
+                >
+                    <strong>💡 Première utilisation ?</strong> Assurez-vous d'avoir configuré votre clé API Anthropic dans les <strong>Paramètres</strong> pour utiliser la génération de contenu IA.
+                </div>
             </div>
 
             {/* Generator Form */}
@@ -250,10 +281,45 @@ export default function EnhancedPostGenerator({ profile }) {
                     <div className="acs-form-group">
                         <label className="acs-form-label">{__('Langue', 'ai-content-studio')}</label>
                         <select className="acs-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
-                            <option value="fr">Français</option>
-                            <option value="en">English</option>
-                            <option value="es">Español</option>
-                            <option value="de">Deutsch</option>
+                            <optgroup label="🌍 Europe">
+                                <option value="fr">🇫🇷 Français</option>
+                                <option value="en">🇬🇧 English</option>
+                                <option value="es">🇪🇸 Español</option>
+                                <option value="de">🇩🇪 Deutsch</option>
+                                <option value="it">🇮🇹 Italiano</option>
+                                <option value="pt">🇵🇹 Português</option>
+                                <option value="nl">🇳🇱 Nederlands</option>
+                                <option value="pl">🇵🇱 Polski</option>
+                                <option value="ru">🇷🇺 Русский</option>
+                                <option value="tr">🇹🇷 Türkçe</option>
+                                <option value="uk">🇺🇦 Українська</option>
+                                <option value="ro">🇷🇴 Română</option>
+                                <option value="cs">🇨🇿 Čeština</option>
+                                <option value="sv">🇸🇪 Svenska</option>
+                                <option value="no">🇳🇴 Norsk</option>
+                                <option value="da">🇩🇰 Dansk</option>
+                                <option value="fi">🇫🇮 Suomi</option>
+                                <option value="el">🇬🇷 Ελληνικά</option>
+                            </optgroup>
+                            <optgroup label="🌏 Asie">
+                                <option value="zh">🇨🇳 中文 (Chinese)</option>
+                                <option value="ja">🇯🇵 日本語 (Japanese)</option>
+                                <option value="ko">🇰🇷 한국어 (Korean)</option>
+                                <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+                                <option value="ar">🇸🇦 العربية (Arabic)</option>
+                                <option value="th">🇹🇭 ไทย (Thai)</option>
+                                <option value="vi">🇻🇳 Tiếng Việt</option>
+                                <option value="id">🇮🇩 Bahasa Indonesia</option>
+                                <option value="ms">🇲🇾 Bahasa Melayu</option>
+                                <option value="tl">🇵🇭 Filipino</option>
+                            </optgroup>
+                            <optgroup label="🌎 Amériques">
+                                <option value="pt-br">🇧🇷 Português (Brasil)</option>
+                                <option value="es-mx">🇲🇽 Español (México)</option>
+                            </optgroup>
+                            <optgroup label="🌍 Afrique">
+                                <option value="sw">🇰🇪 Swahili</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>

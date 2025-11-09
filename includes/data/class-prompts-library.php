@@ -84,52 +84,118 @@ Fournis une stratégie au format JSON avec:
         $tone = $params['tone'] ?? 'professional';
         $language = $params['language'] ?? 'fr';
         $profile = $params['profile'] ?? [];
-        $strategy = $params['strategy'] ?? [];
+        $profile_data = $params['profile_data'] ?? [];
+        $content_type = $params['content_type'] ?? 'educational';
+        $template_id = $params['template_id'] ?? '';
 
+        // Contexte business enrichi
         $context = '';
-        if (!empty($profile)) {
-            $context .= sprintf(
-                "\nContexte business: %s - %s",
-                $profile['business_name'] ?? '',
-                $profile['description'] ?? ''
-            );
+        if (!empty($profile['business_name']) || !empty($profile_data['business_name'])) {
+            $business_name = $profile['business_name'] ?? $profile_data['business_name'] ?? '';
+            $description = $profile['description'] ?? '';
+            $context .= sprintf("\nBusiness: %s", $business_name);
+            if ($description) {
+                $context .= sprintf(" - %s", $description);
+            }
         }
 
-        if (!empty($strategy['tone_style'])) {
-            $context .= sprintf("\nStyle de communication: %s", $strategy['tone_style']);
+        // Ajout secteur et audience
+        $sector = $profile_data['sector'] ?? $profile['sector'] ?? '';
+        $target_audience = $profile_data['target_audience'] ?? $profile['target_audience'] ?? '';
+
+        if ($sector) {
+            $context .= sprintf("\nSecteur: %s", $sector);
         }
+        if ($target_audience) {
+            $context .= sprintf("\nAudience cible: %s", $target_audience);
+        }
+
+        // Type de contenu et structure
+        $content_types = [
+            'educational' => 'Éducatif (tips, conseils, how-to)',
+            'promotional' => 'Promotionnel (offres, nouveautés, produits)',
+            'engagement' => 'Engagement (questions, sondages, interaction)',
+            'storytelling' => 'Storytelling (histoires, behind-the-scenes, témoignages)',
+            'inspiration' => 'Inspirationnel (citations, motivation)',
+            'news' => 'Actualités (news de l\'industrie, tendances)',
+        ];
+
+        $content_type_desc = $content_types[$content_type] ?? 'Général';
+
+        // Templates specs
+        $template_structure = '';
+        if ($template_id === 'how_to') {
+            $template_structure = "\n\nStructure HOW-TO:\n- Hook accrocheur avec problème\n- Introduction brève\n- 3-5 étapes numérotées\n- Conseil bonus\n- Call-to-action";
+        } elseif ($template_id === 'tips_list') {
+            $template_structure = "\n\nStructure LISTE DE CONSEILS:\n- Introduction accrocheuse\n- 5 conseils numérotés avec émojis\n- Chaque conseil en 1-2 phrases\n- Conclusion avec CTA";
+        } elseif ($template_id === 'product_launch') {
+            $template_structure = "\n\nStructure LANCEMENT:\n- Teasing accrocheur\n- Présentation du produit\n- 3 bénéfices principaux\n- Élément d'urgence\n- CTA fort";
+        } elseif ($template_id === 'question') {
+            $template_structure = "\n\nStructure QUESTION:\n- Contexte court et relatable\n- Question principale claire\n- Options ou exemples\n- Encouragement à commenter";
+        } elseif ($template_id === 'behind_scenes') {
+            $template_structure = "\n\nStructure COULISSES:\n- Hook intriguant\n- Raconter un processus/moment\n- Détails authentiques\n- Leçon ou insight\n- Remerciement/question";
+        }
+
+        // Specs plateforme
+        $platform_specs = [
+            'instagram' => 'Max 2200 caractères, optimal 125-150. Émojis OK. Style visuel.',
+            'facebook' => 'Optimal 40-80 caractères. Style conversationnel.',
+            'linkedin' => 'Optimal 150-300 caractères. Professionnel et insights.',
+            'twitter' => 'Max 280 caractères. Concis et percutant.',
+        ];
+
+        $specs = $platform_specs[$platform] ?? 'Format standard';
 
         return sprintf(
             "Génère 3 variantes de posts pour %s sur le sujet: %s
 
-Langue: %s
-Ton: %s%s
+CONTEXTE:%s
 
-Consignes:
+Type de contenu: %s
+Langue: %s (IMPORTANT: Réponds dans cette langue!)
+Ton: %s
+Specs plateforme: %s%s
+
+CONSIGNES IMPORTANTES:
 - Adapte le format aux spécificités de %s
-- Utilise des emojis de manière appropriée
-- Inclus un appel à l'action clair
-- Respecte le ton demandé
-- Reste dans les limites de caractères de la plateforme
+- Utilise des emojis de manière appropriée et moderne
+- Inclus un appel à l'action clair et engageant
+- Respecte scrupuleusement le ton demandé
+- Reste dans les limites de caractères
+- Rends le contenu actionnable et utile
+- Pour les hashtags: mélange de popularité (70%% niche + 20%% broad + 10%% branded)
 
-Retourne un JSON:
+Retourne UNIQUEMENT un JSON valide (pas de texte avant ou après):
 {
     \"variants\": [
         {
-            \"content\": \"texte du post\",
-            \"hashtags\": [\"#hashtag1\", \"#hashtag2\"],
-            \"hook\": \"phrase d'accroche\",
-            \"cta\": \"call to action\"
+            \"content\": \"Texte complet du post avec émojis et structure\",
+            \"hashtags\": [\"#hashtag1\", \"#hashtag2\", \"#hashtag3\"],
+            \"hook\": \"Première phrase accrocheuse\",
+            \"cta\": \"Call to action final\"
         },
-        {...},
-        {...}
+        {
+            \"content\": \"Variante 2...\",
+            \"hashtags\": [\"#tag1\", \"#tag2\"],
+            \"hook\": \"Hook variante 2\",
+            \"cta\": \"CTA variante 2\"
+        },
+        {
+            \"content\": \"Variante 3...\",
+            \"hashtags\": [\"#tag1\", \"#tag2\"],
+            \"hook\": \"Hook variante 3\",
+            \"cta\": \"CTA variante 3\"
+        }
     ]
 }",
             $platform,
             $topic,
+            $context,
+            $content_type_desc,
             $language,
             $tone,
-            $context,
+            $specs,
+            $template_structure,
             $platform
         );
     }
