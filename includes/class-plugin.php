@@ -123,11 +123,11 @@ class Plugin {
      */
     private function init_admin() {
         if (is_admin()) {
-            // Admin classes will be loaded here
-            $admin_file = ACS_PLUGIN_DIR . 'includes/admin/class-admin.php';
-            if (file_exists($admin_file)) {
-                require_once $admin_file;
-                $this->admin = new Admin\Admin();
+            // Load settings page
+            $settings_file = ACS_PLUGIN_DIR . 'includes/admin/class-settings.php';
+            if (file_exists($settings_file)) {
+                require_once $settings_file;
+                new Admin\Settings();
             }
         }
     }
