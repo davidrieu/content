@@ -828,3 +828,75 @@ body {
 .w-100 {
   width: 100%;
 }
+
+/* ========================================
+   Frontend Mode Overrides
+   ======================================== */
+
+/* Hide WordPress page title on frontend when shortcode is present */
+.page .acs-frontend-wrapper ~ .entry-header,
+.page .entry-header:has(~ .acs-frontend-wrapper),
+body.page .entry-title {
+  display: none !important;
+}
+
+/* Frontend wrapper should take full width and fix positioning */
+.acs-frontend-wrapper {
+  margin: -20px -20px 0 !important;
+  padding: 0 !important;
+  min-height: 100vh;
+  background: var(--acs-body-bg);
+  position: relative;
+}
+
+/* When on frontend, make app take full viewport */
+#acs-frontend-root {
+  min-height: 100vh;
+}
+
+#acs-frontend-root .acs-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Ensure sidebar stays fixed on frontend */
+#acs-frontend-root .acs-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+}
+
+/* Ensure topbar and content area work correctly */
+#acs-frontend-root .acs-main-wrapper {
+  margin-left: var(--acs-sidebar-width);
+  width: calc(100vw - var(--acs-sidebar-width));
+  height: 100vh;
+  overflow-y: auto;
+}
+
+#acs-frontend-root .acs-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* Hide WordPress admin bar overlap */
+body.admin-bar #acs-frontend-root .acs-app {
+  top: 32px;
+  height: calc(100vh - 32px);
+}
+
+@media screen and (max-width: 782px) {
+  body.admin-bar #acs-frontend-root .acs-app {
+    top: 46px;
+    height: calc(100vh - 46px);
+  }
+}

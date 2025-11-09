@@ -51,6 +51,30 @@ class Shortcode {
         // Render container
         ob_start();
         ?>
+        <style>
+            /* Hide WordPress page elements when using AI Content Studio */
+            .page .entry-header,
+            .page .entry-title,
+            .page-header,
+            .site-breadcrumbs,
+            body.page article .entry-meta,
+            body.page article footer.entry-footer {
+                display: none !important;
+            }
+
+            /* Ensure full-width layout */
+            .page .entry-content {
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: none !important;
+            }
+
+            .page article,
+            .page .site-main {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+        </style>
         <div class="acs-frontend-wrapper" style="min-height: <?php echo esc_attr($atts['height']); ?>;">
             <div id="acs-frontend-root" data-view="<?php echo esc_attr($atts['view']); ?>"></div>
         </div>
