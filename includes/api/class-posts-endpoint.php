@@ -84,11 +84,21 @@ class Posts_Endpoint extends REST_Controller {
     public function generate_posts($request) {
         $user_id = $this->get_current_user_id();
 
+        \ACS\Utils\Logger::info('Post generation started', [
+            'user_id' => $user_id,
+        ], 'generation');
+
         // VÉRIFICATION LIMITE CRITIQUE
         $subscription_service = new Subscription_Service();
         if (!$subscription_service->can_generate_post($user_id)) {
             $plan = $subscription_service->get_user_plan($user_id);
             $limits = $subscription_service->get_plan_limits($plan);
+
+            \ACS\Utils\Logger::warning('Post generation limit reached', [
+                'user_id' => $user_id,
+                'plan' => $plan,
+                'limit' => $limits['posts_per_month'] ?? 0,
+            ], 'generation');
 
             return $this->error(
                 sprintf(__('Vous avez atteint votre limite de %d posts pour le plan %s. Passez à un plan supérieur.', 'ai-content-studio'), $limits['posts_per_month'] ?? 0, $plan),
@@ -99,11 +109,24 @@ class Posts_Endpoint extends REST_Controller {
 
         $params = $request->get_json_params();
 
+        \ACS\Utils\Logger::info('Post generation params received', [
+            'user_id' => $user_id,
+            'platform' => $params['platform'] ?? 'unknown',
+            'topic' => $params['topic'] ?? '',
+            'language' => $params['language'] ?? '',
+            'content_type' => $params['content_type'] ?? '',
+            'template_id' => $params['template_id'] ?? '',
+        ], 'generation');
+
         // Get profile and strategy
         $profile_model = new Business_Profile();
         $profile = $profile_model->get_by_user($user_id);
 
         if (!$profile) {
+            \ACS\Utils\Logger::error('Post generation failed: no profile found', [
+                'user_id' => $user_id,
+            ], 'generation');
+
             return $this->error(__('Créez d\'abord votre profil business', 'ai-content-studio'), 'no_profile', 400);
         }
 
@@ -114,6 +137,12 @@ class Posts_Endpoint extends REST_Controller {
         $variants = $claude->generate_social_posts($params);
 
         if (is_wp_error($variants)) {
+            \ACS\Utils\Logger::error('Post generation failed: Claude API error', [
+                'user_id' => $user_id,
+                'error_message' => $variants->get_error_message(),
+                'error_code' => $variants->get_error_code(),
+            ], 'generation');
+
             return $this->error($variants->get_error_message(), 'generation_error');
         }
 

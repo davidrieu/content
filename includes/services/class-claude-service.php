@@ -261,7 +261,7 @@ class Claude_Service {
      */
     private function call_api($user_message, $max_tokens = 4096, $system_prompt = '') {
         if (empty($this->api_key)) {
-            Logger::error('Claude API key not configured');
+            Logger::error('Claude API key not configured', [], 'api');
             return new \WP_Error('no_api_key', __('Clé API Claude non configurée', 'ai-content-studio'));
         }
 
@@ -280,6 +280,11 @@ class Claude_Service {
                 ],
             ],
         ];
+
+        Logger::info('Calling Claude API', [
+            'model' => $this->model,
+            'max_tokens' => $max_tokens,
+        ], 'api');
 
         $attempt = 0;
 
@@ -300,7 +305,7 @@ class Claude_Service {
                 Logger::error('Claude API request failed', [
                     'attempt' => $attempt,
                     'error' => $response->get_error_message(),
-                ]);
+                ], 'api');
 
                 if ($attempt >= $this->max_retries) {
                     return $response;
@@ -316,9 +321,9 @@ class Claude_Service {
             if ($status_code !== 200) {
                 Logger::error('Claude API returned error', [
                     'status_code' => $status_code,
-                    'response' => $response_body,
+                    'response' => substr($response_body, 0, 500), // Limit response body length
                     'attempt' => $attempt,
-                ]);
+                ], 'api');
 
                 if ($attempt >= $this->max_retries) {
                     return new \WP_Error('api_error', sprintf(
@@ -334,20 +339,20 @@ class Claude_Service {
             $data = json_decode($response_body, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
-                Logger::error('Failed to parse Claude API response', ['response' => $response_body]);
+                Logger::error('Failed to parse Claude API response', ['response' => substr($response_body, 0, 500)], 'api');
                 return new \WP_Error('json_error', __('Erreur de parsing de la réponse API', 'ai-content-studio'));
             }
 
             if (!isset($data['content'][0]['text'])) {
-                Logger::error('Unexpected Claude API response format', ['data' => $data]);
+                Logger::error('Unexpected Claude API response format', ['data' => $data], 'api');
                 return new \WP_Error('unexpected_format', __('Format de réponse inattendu', 'ai-content-studio'));
             }
 
             $text = $data['content'][0]['text'];
 
-            Logger::debug('Claude API call successful', [
+            Logger::info('Claude API call successful', [
                 'tokens_used' => $data['usage']['total_tokens'] ?? 0,
-            ]);
+            ], 'api');
 
             return $text;
         }

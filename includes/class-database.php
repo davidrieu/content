@@ -472,6 +472,51 @@ class Database {
         if (!in_array('idx_sector', $index_names)) {
             $wpdb->query("ALTER TABLE {$table} ADD KEY idx_sector (sector)");
         }
+
+        // Create system_logs table if it doesn't exist (added in v1.2.0)
+        self::create_system_logs_table();
+    }
+
+    /**
+     * Create system logs table if it doesn't exist
+     *
+     * @return void
+     */
+    public static function create_system_logs_table() {
+        global $wpdb;
+        $table_prefix = $wpdb->prefix . ACS_TABLE_PREFIX;
+        $table = $table_prefix . 'system_logs';
+
+        // Check if table exists
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$table}'") === $table) {
+            return; // Table already exists
+        }
+
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE {$table} (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED DEFAULT 0 COMMENT 'ID utilisateur (0 pour logs système)',
+            level VARCHAR(20) NOT NULL COMMENT 'debug, info, warning, error, critical',
+            category VARCHAR(50) NOT NULL COMMENT 'api, generation, auth, database, etc',
+            message TEXT NOT NULL,
+            context LONGTEXT COMMENT 'JSON: Contexte additionnel (params, stack trace, etc)',
+            file VARCHAR(255) COMMENT 'Fichier source du log',
+            line INT COMMENT 'Ligne dans le fichier source',
+            ip_address VARCHAR(45) COMMENT 'Adresse IP de l utilisateur',
+            user_agent TEXT COMMENT 'User agent du navigateur',
+            request_uri VARCHAR(500) COMMENT 'URI de la requête',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_level (level),
+            KEY idx_category (category),
+            KEY idx_user (user_id),
+            KEY idx_created (created_at DESC),
+            KEY idx_level_created (level, created_at DESC)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
     }
 
     /**

@@ -283,6 +283,11 @@ class Activator {
             self::update_to_1_1_0();
         }
 
+        if (version_compare($installed_version, '1.2.0', '<')) {
+            // Update to 1.2.0 - Add system logs table
+            self::update_to_1_2_0();
+        }
+
         // Update version number
         update_option('acs_version', ACS_VERSION);
 
@@ -316,6 +321,25 @@ class Activator {
 
         if (class_exists('ACS\\Utils\\Logger')) {
             Utils\Logger::info('Database upgraded to version 1.1.0 - Added new onboarding fields');
+        }
+    }
+
+    /**
+     * Update to version 1.2.0
+     * Add system_logs table for debugging and monitoring
+     *
+     * @return void
+     */
+    private static function update_to_1_2_0() {
+        if (!class_exists('ACS\\Database')) {
+            require_once ACS_PLUGIN_DIR . 'includes/class-database.php';
+        }
+
+        // Create system_logs table
+        Database::create_system_logs_table();
+
+        if (class_exists('ACS\\Utils\\Logger')) {
+            Utils\Logger::info('Database upgraded to version 1.2.0 - Added system_logs table', [], 'database');
         }
     }
 }
