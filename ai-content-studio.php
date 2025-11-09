@@ -3,7 +3,7 @@
  * Plugin Name: AI Content Studio
  * Plugin URI: https://aicontentstudio.com
  * Description: Plateforme SaaS complète pour générer du contenu réseaux sociaux et articles de blog avec IA. Inclut détection de tendances, générateur d'images, calendrier éditorial, et bien plus.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Requires at least: 6.4
  * Requires PHP: 8.1
  * Author: AI Content Studio Team
@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) {
 // =====================================================
 // CONSTANTS
 // =====================================================
-define('ACS_VERSION', '1.1.0');
+define('ACS_VERSION', '1.2.0');
 define('ACS_PLUGIN_FILE', __FILE__);
 define('ACS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ACS_PLUGIN_URL', plugin_dir_url(__FILE__));

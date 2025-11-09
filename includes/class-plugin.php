@@ -199,6 +199,16 @@ class Plugin {
                 $subscription->register_routes();
             }
 
+            if (class_exists('ACS\\API\\Calendar_Endpoint')) {
+                $calendar = new API\Calendar_Endpoint();
+                $calendar->register_routes();
+            }
+
+            if (class_exists('ACS\\API\\Library_Endpoint')) {
+                $library = new API\Library_Endpoint();
+                $library->register_routes();
+            }
+
             // More endpoints will be registered as they are created
         });
     }

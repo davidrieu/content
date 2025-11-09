@@ -5,7 +5,10 @@ import Sidebar from './components/Layout/Sidebar';
 import Topbar from './components/Layout/Topbar';
 import OnboardingWizard from './components/Onboarding/OnboardingWizard';
 import Dashboard from './components/Dashboard/Dashboard';
-import PostGenerator from './components/SocialGenerator/PostGenerator';
+import EnhancedPostGenerator from './components/SocialGenerator/EnhancedPostGenerator';
+import ContentCalendar from './components/Calendar/ContentCalendar';
+import StrategyGenerator from './components/Strategy/StrategyGenerator';
+import ContentLibrary from './components/Library/ContentLibrary';
 import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
 import LoadingSpinner from './components/common/LoadingSpinner';
@@ -18,9 +21,11 @@ function AppContent({ profile }) {
         switch (location.pathname) {
             case '/': return 'Dashboard';
             case '/generate': return 'Générer des posts';
+            case '/calendar': return 'Calendrier Éditorial';
+            case '/strategy': return 'Stratégie Automatique';
+            case '/library': return 'Bibliothèque';
             case '/articles': return 'Articles de blog';
             case '/images': return 'Images IA';
-            case '/calendar': return 'Calendrier';
             case '/trends': return 'Tendances';
             case '/settings': return 'Paramètres';
             default: return 'Dashboard';
@@ -35,10 +40,12 @@ function AppContent({ profile }) {
                 <div className="acs-content">
                     <Routes>
                         <Route path="/" element={<Dashboard profile={profile} />} />
-                        <Route path="/generate" element={<PostGenerator profile={profile} />} />
+                        <Route path="/generate" element={<EnhancedPostGenerator profile={profile} />} />
+                        <Route path="/calendar" element={<ContentCalendar profile={profile} />} />
+                        <Route path="/strategy" element={<StrategyGenerator profile={profile} />} />
+                        <Route path="/library" element={<ContentLibrary profile={profile} />} />
                         <Route path="/articles" element={<PlaceholderPage title="Articles de blog" />} />
                         <Route path="/images" element={<PlaceholderPage title="Images IA" />} />
-                        <Route path="/calendar" element={<PlaceholderPage title="Calendrier" />} />
                         <Route path="/trends" element={<PlaceholderPage title="Tendances" />} />
                         <Route path="/settings" element={<PlaceholderPage title="Paramètres" />} />
                         <Route path="*" element={<Navigate to="/" replace />} />

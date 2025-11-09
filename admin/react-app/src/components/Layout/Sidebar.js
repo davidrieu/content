@@ -1,13 +1,15 @@
-import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp } from 'react-icons/fi';
+import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark } from 'react-icons/fi';
 import { __ } from '@wordpress/i18n';
 
 export default function Sidebar({ currentPath, onNavigate }) {
     const menuItems = [
         { path: '/', icon: FiHome, label: __('Tableau de bord', 'ai-content-studio') },
         { path: '/generate', icon: FiZap, label: __('Générer des posts', 'ai-content-studio') },
+        { path: '/strategy', icon: FiTarget, label: __('Stratégie Auto', 'ai-content-studio') },
+        { path: '/calendar', icon: FiCalendar, label: __('Calendrier', 'ai-content-studio') },
+        { path: '/library', icon: FiBookmark, label: __('Bibliothèque', 'ai-content-studio') },
         { path: '/articles', icon: FiFileText, label: __('Articles de blog', 'ai-content-studio') },
         { path: '/images', icon: FiImage, label: __('Images IA', 'ai-content-studio') },
-        { path: '/calendar', icon: FiCalendar, label: __('Calendrier', 'ai-content-studio') },
         { path: '/trends', icon: FiTrendingUp, label: __('Tendances', 'ai-content-studio') },
         { path: '/settings', icon: FiSettings, label: __('Paramètres', 'ai-content-studio') },
     ];

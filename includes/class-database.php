@@ -317,6 +317,46 @@ class Database {
             KEY idx_user_type (user_id, item_type)
         ) $charset_collate ENGINE=InnoDB;";
 
+        // 15. Content Plans (Stratégies de contenu automatiques)
+        $sql_content_plans = "CREATE TABLE {$table_prefix}content_plans (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            name VARCHAR(255) NOT NULL COMMENT 'Nom du plan (ex: Plan Mars 2025)',
+            month INT NOT NULL COMMENT 'Mois (1-12)',
+            year INT NOT NULL COMMENT 'Année',
+            strategy LONGTEXT COMMENT 'JSON: Stratégie complète avec thèmes, mix contenu, etc',
+            weekly_themes LONGTEXT COMMENT 'JSON: [{week: 1, theme: \"Lancement\", description: \"...\"}]',
+            posting_frequency VARCHAR(50) COMMENT 'daily, frequent, weekly, occasional',
+            content_mix LONGTEXT COMMENT 'JSON: {educational: 40, promotional: 20, engagement: 30, storytelling: 10}',
+            platforms LONGTEXT COMMENT 'JSON: [instagram, facebook, linkedin]',
+            status VARCHAR(20) DEFAULT 'active' COMMENT 'active, archived, draft',
+            posts_generated INT DEFAULT 0 COMMENT 'Nombre de posts générés depuis ce plan',
+            is_generated BOOLEAN DEFAULT 1 COMMENT 'Plan généré automatiquement',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user_period (user_id, year, month),
+            KEY idx_status (status)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 16. Saved Templates (Templates personnalisés utilisateur)
+        $sql_saved_templates = "CREATE TABLE {$table_prefix}saved_templates (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            category VARCHAR(100) NOT NULL COMMENT 'post, caption, cta, hook',
+            content LONGTEXT NOT NULL,
+            platform VARCHAR(50) COMMENT 'Plateforme cible',
+            hashtags LONGTEXT COMMENT 'JSON: Hashtags sauvegardés',
+            usage_count INT DEFAULT 0,
+            is_favorite BOOLEAN DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user_category (user_id, category),
+            KEY idx_favorite (user_id, is_favorite)
+        ) $charset_collate ENGINE=InnoDB;";
+
         // Execute all table creations
         dbDelta($sql_business_profiles);
         dbDelta($sql_strategies);
@@ -332,6 +372,8 @@ class Database {
         dbDelta($sql_analytics);
         dbDelta($sql_notifications);
         dbDelta($sql_favorites);
+        dbDelta($sql_content_plans);
+        dbDelta($sql_saved_templates);
 
         // Store database version
         update_option('acs_db_version', ACS_VERSION);
