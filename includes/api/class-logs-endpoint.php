@@ -62,12 +62,12 @@ class Logs_Endpoint extends WP_REST_Controller {
             ],
         ]);
 
-        // Clear old logs
+        // Clear old logs (admin only)
         register_rest_route($this->namespace, '/' . $this->rest_base . '/clear', [
             [
                 'methods'             => WP_REST_Server::CREATABLE,
                 'callback'            => [$this, 'clear_logs'],
-                'permission_callback' => [$this, 'check_admin_permission'],
+                'permission_callback' => [$this, 'check_manage_options_permission'],
             ],
         ]);
 
@@ -82,12 +82,23 @@ class Logs_Endpoint extends WP_REST_Controller {
     }
 
     /**
-     * Check if user has admin permission
+     * Check if user is logged in
+     * All authenticated users can view logs (filtered by their user_id if not admin)
      *
      * @param WP_REST_Request $request Request object.
      * @return bool
      */
     public function check_admin_permission($request) {
+        return is_user_logged_in();
+    }
+
+    /**
+     * Check if user has manage_options capability (WordPress admin)
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return bool
+     */
+    public function check_manage_options_permission($request) {
         return current_user_can('manage_options');
     }
 
@@ -103,12 +114,19 @@ class Logs_Endpoint extends WP_REST_Controller {
         $category = $request->get_param('category');
         $user_id = $request->get_param('user_id');
 
+        // If not admin, only show logs for current user + system logs (user_id = 0)
+        $include_system = false;
+        if (!current_user_can('manage_options')) {
+            $user_id = get_current_user_id();
+            $include_system = true; // Include system logs for non-admin users
+        }
+
         // Limit maximum results
         if ($limit > 1000) {
             $limit = 1000;
         }
 
-        $logs = Logger::get_recent_logs($limit, $level, $category, $user_id);
+        $logs = Logger::get_recent_logs($limit, $level, $category, $user_id, $include_system);
 
         return rest_ensure_response([
             'success' => true,

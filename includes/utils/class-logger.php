@@ -234,9 +234,10 @@ class Logger {
      * @param string $level
      * @param string $category
      * @param int $user_id
+     * @param bool $include_system Include system logs (user_id = 0)
      * @return array
      */
-    public static function get_recent_logs($limit = 100, $level = null, $category = null, $user_id = null) {
+    public static function get_recent_logs($limit = 100, $level = null, $category = null, $user_id = null, $include_system = false) {
         global $wpdb;
         $table = $wpdb->prefix . ACS_TABLE_PREFIX . 'system_logs';
 
@@ -254,8 +255,14 @@ class Logger {
         }
 
         if ($user_id !== null) {
-            $where[] = 'user_id = %d';
-            $params[] = $user_id;
+            // If include_system is true, show user logs + system logs (user_id = 0)
+            if ($include_system) {
+                $where[] = '(user_id = %d OR user_id = 0)';
+                $params[] = $user_id;
+            } else {
+                $where[] = 'user_id = %d';
+                $params[] = $user_id;
+            }
         }
 
         $where_clause = implode(' AND ', $where);
