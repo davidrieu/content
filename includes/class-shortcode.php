@@ -34,18 +34,13 @@ class Shortcode {
      * @return string
      */
     public function render_shortcode($atts) {
-        // Check if user is logged in
-        if (!is_user_logged_in()) {
-            return $this->render_login_message();
-        }
-
         // Parse attributes
         $atts = shortcode_atts([
             'view' => 'dashboard', // dashboard, generator, blog, etc.
-            'height' => '800px',
+            'height' => '100vh',
         ], $atts, 'ai_content_studio');
 
-        // Enqueue scripts
+        // Enqueue scripts (for both logged in and logged out users)
         $this->enqueue_app_scripts();
 
         // Render container
