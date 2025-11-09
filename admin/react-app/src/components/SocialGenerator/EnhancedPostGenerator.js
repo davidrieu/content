@@ -10,7 +10,7 @@ export default function EnhancedPostGenerator({ profile }) {
     const [template, setTemplate] = useState('');
     const [topic, setTopic] = useState('');
     const [tone, setTone] = useState('professional');
-    const [language, setLanguage] = useState('fr');
+    const [language, setLanguage] = useState('en');
     const [generating, setGenerating] = useState(false);
     const [generatedPosts, setGeneratedPosts] = useState([]);
     const [error, setError] = useState('');
@@ -127,21 +127,6 @@ export default function EnhancedPostGenerator({ profile }) {
                 <p className="acs-text-muted">
                     {__('Créez du contenu engageant avec des templates professionnels adaptés à vos objectifs', 'ai-content-studio')}
                 </p>
-
-                {/* Help banner for API key */}
-                <div
-                    style={{
-                        marginTop: 'var(--acs-spacing-3)',
-                        padding: 'var(--acs-spacing-3)',
-                        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1))',
-                        borderRadius: 'var(--acs-radius)',
-                        border: '1px solid rgba(99, 102, 241, 0.2)',
-                        fontSize: 'var(--acs-font-size-sm)',
-                        color: 'var(--acs-gray-700)',
-                    }}
-                >
-                    <strong>💡 Première utilisation ?</strong> Assurez-vous d'avoir configuré votre clé API Anthropic dans les <strong>Paramètres</strong> pour utiliser la génération de contenu IA.
-                </div>
             </div>
 
             {/* Generator Form */}
@@ -282,43 +267,31 @@ export default function EnhancedPostGenerator({ profile }) {
                         <label className="acs-form-label">{__('Langue', 'ai-content-studio')}</label>
                         <select className="acs-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
                             <optgroup label="🌍 Europe">
-                                <option value="fr">🇫🇷 Français</option>
                                 <option value="en">🇬🇧 English</option>
+                                <option value="fr">🇫🇷 Français</option>
                                 <option value="es">🇪🇸 Español</option>
                                 <option value="de">🇩🇪 Deutsch</option>
                                 <option value="it">🇮🇹 Italiano</option>
                                 <option value="pt">🇵🇹 Português</option>
-                                <option value="nl">🇳🇱 Nederlands</option>
-                                <option value="pl">🇵🇱 Polski</option>
                                 <option value="ru">🇷🇺 Русский</option>
+                                <option value="pl">🇵🇱 Polski</option>
+                                <option value="nl">🇳🇱 Nederlands</option>
                                 <option value="tr">🇹🇷 Türkçe</option>
                                 <option value="uk">🇺🇦 Українська</option>
-                                <option value="ro">🇷🇴 Română</option>
-                                <option value="cs">🇨🇿 Čeština</option>
-                                <option value="sv">🇸🇪 Svenska</option>
-                                <option value="no">🇳🇴 Norsk</option>
-                                <option value="da">🇩🇰 Dansk</option>
-                                <option value="fi">🇫🇮 Suomi</option>
                                 <option value="el">🇬🇷 Ελληνικά</option>
                             </optgroup>
                             <optgroup label="🌏 Asie">
-                                <option value="zh">🇨🇳 中文 (Chinese)</option>
-                                <option value="ja">🇯🇵 日本語 (Japanese)</option>
-                                <option value="ko">🇰🇷 한국어 (Korean)</option>
+                                <option value="zh">🇨🇳 中文 (Mandarin)</option>
                                 <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
                                 <option value="ar">🇸🇦 العربية (Arabic)</option>
-                                <option value="th">🇹🇭 ไทย (Thai)</option>
-                                <option value="vi">🇻🇳 Tiếng Việt</option>
+                                <option value="ja">🇯🇵 日本語 (Japanese)</option>
+                                <option value="ko">🇰🇷 한국어 (Korean)</option>
+                                <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
                                 <option value="id">🇮🇩 Bahasa Indonesia</option>
-                                <option value="ms">🇲🇾 Bahasa Melayu</option>
-                                <option value="tl">🇵🇭 Filipino</option>
+                                <option value="th">🇹🇭 ไทย (Thai)</option>
                             </optgroup>
                             <optgroup label="🌎 Amériques">
                                 <option value="pt-br">🇧🇷 Português (Brasil)</option>
-                                <option value="es-mx">🇲🇽 Español (México)</option>
-                            </optgroup>
-                            <optgroup label="🌍 Afrique">
-                                <option value="sw">🇰🇪 Swahili</option>
                             </optgroup>
                         </select>
                     </div>
