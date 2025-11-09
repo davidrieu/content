@@ -6,6 +6,7 @@ Le plugin AI Content Studio inclut un shortcode `[ai_content_studio]` qui permet
 
 ### Installation Rapide
 
+**Méthode 1: Manuelle (Shortcode)**
 1. Créez une nouvelle page dans WordPress (ex: "Mon Studio de Contenu")
 2. Ajoutez le shortcode dans le contenu:
    ```
@@ -13,6 +14,73 @@ Le plugin AI Content Studio inclut un shortcode `[ai_content_studio]` qui permet
    ```
 3. Publiez la page
 4. Les utilisateurs connectés verront l'interface complète!
+
+**Méthode 2: Automatique (Configuration Globale)**
+1. Créez une nouvelle page WordPress (ex: "Mon Studio")
+2. Allez dans "AI Content Studio → Réglages"
+3. Dans "Page Frontend par défaut", sélectionnez votre page
+4. Sauvegardez
+5. L'interface s'affichera automatiquement sur cette page, sans avoir besoin d'ajouter le shortcode!
+
+💡 **Astuce**: La méthode automatique est idéale pour avoir une page dédiée qui affiche toujours l'interface, même si le contenu de la page change.
+
+## 🌍 Configuration Globale (Shortcode Automatique)
+
+### Qu'est-ce que la Configuration Globale?
+
+Au lieu d'ajouter manuellement le shortcode `[ai_content_studio]` sur une page, vous pouvez configurer une page qui affichera **automatiquement** l'interface.
+
+### Comment Configurer
+
+1. **Accédez aux réglages**
+   - Allez dans votre admin WordPress
+   - Cliquez sur "AI Content Studio → Réglages"
+
+2. **Sélectionnez la page par défaut**
+   - Trouvez le paramètre "Page Frontend par défaut"
+   - Sélectionnez une page existante dans la liste déroulante
+   - Cliquez "Enregistrer les modifications"
+
+3. **C'est tout!**
+   - Visitez la page sélectionnée
+   - L'interface AI Content Studio s'affichera automatiquement
+   - Pas besoin d'ajouter le shortcode manuellement!
+
+### Avantages de la Configuration Globale
+
+✅ **Pas de shortcode à retenir** - La page affiche toujours l'interface
+✅ **Mise à jour automatique** - Si vous changez le contenu de la page, l'interface reste
+✅ **Centralisé** - Un seul endroit pour gérer l'affichage
+✅ **Idéal pour les pages membres** - Parfait pour une zone membre dédiée
+
+### Différence entre Shortcode Manuel et Global
+
+| Aspect | Shortcode Manuel | Configuration Globale |
+|--------|------------------|----------------------|
+| Installation | Ajouter `[ai_content_studio]` dans le contenu | Sélectionner la page dans Réglages |
+| Flexibilité | Peut être placé n'importe où dans le contenu | Remplace tout le contenu de la page |
+| Paramètres | Peut utiliser `view=` et `height=` | Utilise les paramètres par défaut |
+| Usage | Intégration partielle dans une page | Page dédiée 100% à l'interface |
+
+### Exemple d'Utilisation
+
+**Scénario**: Vous voulez une page "Mon Studio de Contenu" qui affiche toujours l'interface.
+
+**Sans configuration globale**:
+```
+1. Créer page "Mon Studio"
+2. Éditer la page
+3. Ajouter [ai_content_studio]
+4. Publier
+```
+
+**Avec configuration globale**:
+```
+1. Créer page "Mon Studio"
+2. Réglages → Sélectionner "Mon Studio"
+3. Sauvegarder
+✅ L'interface s'affiche automatiquement!
+```
 
 ## 📋 Paramètres du Shortcode
 

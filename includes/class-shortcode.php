@@ -22,6 +22,9 @@ class Shortcode {
     public function __construct() {
         add_shortcode('ai_content_studio', [$this, 'render_shortcode']);
         add_action('wp_enqueue_scripts', [$this, 'maybe_enqueue_scripts']);
+
+        // Auto-inject shortcode on configured page
+        add_filter('the_content', [$this, 'maybe_inject_shortcode']);
     }
 
     /**
@@ -175,5 +178,37 @@ class Shortcode {
     public static function has_shortcode_in_page() {
         global $post;
         return is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'ai_content_studio');
+    }
+
+    /**
+     * Maybe inject shortcode automatically on configured page
+     *
+     * @param string $content Post content
+     * @return string Modified content
+     */
+    public function maybe_inject_shortcode($content) {
+        // Only on pages
+        if (!is_page()) {
+            return $content;
+        }
+
+        global $post;
+
+        // Check if this is the configured default page
+        $shortcode_page_id = get_option('acs_shortcode_page', 0);
+
+        // If no page configured, return original content
+        if (empty($shortcode_page_id) || $shortcode_page_id == 0) {
+            return $content;
+        }
+
+        // If this is the configured page and doesn't already have the shortcode
+        if ($post->ID == $shortcode_page_id && !has_shortcode($content, 'ai_content_studio')) {
+            // Replace content with shortcode (or append if you prefer)
+            // Using replace to make it truly "automatic"
+            return do_shortcode('[ai_content_studio]');
+        }
+
+        return $content;
     }
 }
