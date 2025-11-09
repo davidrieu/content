@@ -130,6 +130,13 @@ class Plugin {
                 new Admin\Settings();
             }
         }
+
+        // Load auth AJAX handler (works for both admin and frontend)
+        $auth_ajax_file = ACS_PLUGIN_DIR . 'includes/admin/class-auth-ajax.php';
+        if (file_exists($auth_ajax_file)) {
+            require_once $auth_ajax_file;
+            new Admin\Auth_Ajax();
+        }
     }
 
     /**

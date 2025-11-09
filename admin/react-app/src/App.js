@@ -6,6 +6,8 @@ import Topbar from './components/Layout/Topbar';
 import OnboardingWizard from './components/Onboarding/OnboardingWizard';
 import Dashboard from './components/Dashboard/Dashboard';
 import PostGenerator from './components/SocialGenerator/PostGenerator';
+import LoginForm from './components/Auth/LoginForm';
+import RegisterForm from './components/Auth/RegisterForm';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
 function AppContent({ profile }) {
@@ -57,15 +59,29 @@ function PlaceholderPage({ title }) {
 }
 
 function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [showRegister, setShowRegister] = useState(false);
     const [needsOnboarding, setNeedsOnboarding] = useState(true);
     const [loading, setLoading] = useState(true);
     const [profile, setProfile] = useState(null);
 
     useEffect(() => {
-        checkOnboardingStatus();
+        checkAuthAndOnboarding();
     }, []);
 
-    const checkOnboardingStatus = async () => {
+    const checkAuthAndOnboarding = async () => {
+        // Check if user is logged in
+        const currentUserId = window.acsData?.currentUser;
+
+        if (!currentUserId || currentUserId === 0) {
+            setIsAuthenticated(false);
+            setLoading(false);
+            return;
+        }
+
+        setIsAuthenticated(true);
+
+        // Check onboarding status
         try {
             const response = await apiFetch({ path: '/acs/v1/profile' });
             if (response.success && response.data) {
@@ -83,6 +99,24 @@ function App() {
         return <LoadingSpinner />;
     }
 
+    // Show login/register if not authenticated
+    if (!isAuthenticated) {
+        if (showRegister) {
+            return (
+                <RegisterForm
+                    onSwitchToLogin={() => setShowRegister(false)}
+                />
+            );
+        }
+        return (
+            <LoginForm
+                onLogin={() => setIsAuthenticated(true)}
+                onSwitchToRegister={() => setShowRegister(true)}
+            />
+        );
+    }
+
+    // Show onboarding if needed
     if (needsOnboarding) {
         return (
             <OnboardingWizard
@@ -94,6 +128,7 @@ function App() {
         );
     }
 
+    // Show main app
     return (
         <HashRouter>
             <AppContent profile={profile} />
