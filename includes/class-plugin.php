@@ -164,6 +164,8 @@ class Plugin {
                 'class-analytics-endpoint.php',
                 'class-social-connections-endpoint.php',
                 'class-subscription-endpoint.php',
+                'class-library-endpoint.php',
+                'class-logs-endpoint.php',
             ];
 
             foreach ($endpoints as $endpoint) {
@@ -207,6 +209,11 @@ class Plugin {
             if (class_exists('ACS\\API\\Library_Endpoint')) {
                 $library = new API\Library_Endpoint();
                 $library->register_routes();
+            }
+
+            if (class_exists('ACS\\API\\Logs_Endpoint')) {
+                $logs = new API\Logs_Endpoint();
+                $logs->register_routes();
             }
 
             // More endpoints will be registered as they are created

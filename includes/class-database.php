@@ -357,6 +357,28 @@ class Database {
             KEY idx_favorite (user_id, is_favorite)
         ) $charset_collate ENGINE=InnoDB;";
 
+        // 17. System Logs (Table dédiée pour les logs système)
+        $sql_system_logs = "CREATE TABLE {$table_prefix}system_logs (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED DEFAULT 0 COMMENT 'ID utilisateur (0 pour logs système)',
+            level VARCHAR(20) NOT NULL COMMENT 'debug, info, warning, error, critical',
+            category VARCHAR(50) NOT NULL COMMENT 'api, generation, auth, database, etc',
+            message TEXT NOT NULL,
+            context LONGTEXT COMMENT 'JSON: Contexte additionnel (params, stack trace, etc)',
+            file VARCHAR(255) COMMENT 'Fichier source du log',
+            line INT COMMENT 'Ligne dans le fichier source',
+            ip_address VARCHAR(45) COMMENT 'Adresse IP de l utilisateur',
+            user_agent TEXT COMMENT 'User agent du navigateur',
+            request_uri VARCHAR(500) COMMENT 'URI de la requête',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_level (level),
+            KEY idx_category (category),
+            KEY idx_user (user_id),
+            KEY idx_created (created_at DESC),
+            KEY idx_level_created (level, created_at DESC)
+        ) $charset_collate ENGINE=InnoDB;";
+
         // Execute all table creations
         dbDelta($sql_business_profiles);
         dbDelta($sql_strategies);
@@ -374,6 +396,7 @@ class Database {
         dbDelta($sql_favorites);
         dbDelta($sql_content_plans);
         dbDelta($sql_saved_templates);
+        dbDelta($sql_system_logs);
 
         // Store database version
         update_option('acs_db_version', ACS_VERSION);
