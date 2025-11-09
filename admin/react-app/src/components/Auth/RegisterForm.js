@@ -61,7 +61,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
                     username: formData.username,
                     email: formData.email,
                     password: formData.password,
-                    nonce: window.acsData.nonce,
+                    authNonce: window.acsData.authNonce,
                 }),
             });
 

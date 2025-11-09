@@ -33,7 +33,7 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                     action: 'acs_login',
                     username: formData.username,
                     password: formData.password,
-                    nonce: window.acsData.nonce,
+                    authNonce: window.acsData.authNonce,
                 }),
             });
 

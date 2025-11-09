@@ -31,8 +31,10 @@ class Auth_Ajax {
      * @return void
      */
     public function handle_login() {
-        // Verify nonce
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'wp_rest')) {
+        // Verify nonce (use authNonce for non-logged users)
+        $nonce = $_POST['authNonce'] ?? $_POST['nonce'] ?? '';
+        if (!wp_verify_nonce($nonce, 'acs_auth_action')) {
+            \ACS\Utils\Logger::error('Login failed: Invalid nonce', ['nonce_provided' => !empty($nonce)]);
             wp_send_json_error(['message' => __('Erreur de sécurité', 'ai-content-studio')], 403);
         }
 
@@ -70,9 +72,15 @@ class Auth_Ajax {
     public function handle_register() {
         \ACS\Utils\Logger::info('=== Register attempt started ===');
 
-        // Verify nonce
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'wp_rest')) {
-            \ACS\Utils\Logger::error('Register failed: Invalid nonce');
+        // Verify nonce (use authNonce for non-logged users)
+        $nonce = $_POST['authNonce'] ?? $_POST['nonce'] ?? '';
+        \ACS\Utils\Logger::info('Nonce check', ['nonce_provided' => !empty($nonce)]);
+
+        if (!wp_verify_nonce($nonce, 'acs_auth_action')) {
+            \ACS\Utils\Logger::error('Register failed: Invalid nonce', [
+                'nonce_provided' => !empty($nonce),
+                'nonce_value' => $nonce,
+            ]);
             wp_send_json_error(['message' => __('Erreur de sécurité', 'ai-content-studio')], 403);
         }
 

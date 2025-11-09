@@ -155,6 +155,7 @@ class Shortcode {
             wp_localize_script('acs-frontend-app', 'acsData', [
                 'apiUrl' => rest_url('acs/v1'),
                 'nonce' => wp_create_nonce('wp_rest'),
+                'authNonce' => wp_create_nonce('acs_auth_action'), // Special nonce for login/register
                 'currentUser' => get_current_user_id(),
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'pluginUrl' => ACS_PLUGIN_URL,
