@@ -126,6 +126,16 @@ add_action('admin_init', function() {
 });
 
 // =====================================================
+// WOOCOMMERCE HPOS COMPATIBILITY
+// =====================================================
+add_action('before_woocommerce_init', function() {
+    if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, true);
+    }
+});
+
+// =====================================================
 // DEACTIVATION HOOK
 // =====================================================
 register_deactivation_hook(__FILE__, function() {
