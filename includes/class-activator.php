@@ -278,6 +278,11 @@ class Activator {
             self::update_to_1_0_0();
         }
 
+        if (version_compare($installed_version, '1.1.0', '<')) {
+            // Update to 1.1.0 - Add new onboarding fields
+            self::update_to_1_1_0();
+        }
+
         // Update version number
         update_option('acs_version', ACS_VERSION);
 
@@ -293,5 +298,24 @@ class Activator {
      */
     private static function update_to_1_0_0() {
         // Initial release - nothing to update
+    }
+
+    /**
+     * Update to version 1.1.0
+     * Add new onboarding fields to business_profiles table
+     *
+     * @return void
+     */
+    private static function update_to_1_1_0() {
+        if (!class_exists('ACS\\Database')) {
+            require_once ACS_PLUGIN_DIR . 'includes/class-database.php';
+        }
+
+        // Upgrade database tables with new columns
+        Database::upgrade_tables();
+
+        if (class_exists('ACS\\Utils\\Logger')) {
+            Utils\Logger::info('Database upgraded to version 1.1.0 - Added new onboarding fields');
+        }
     }
 }

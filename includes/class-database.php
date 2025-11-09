@@ -33,21 +33,31 @@ class Database {
         $sql_business_profiles = "CREATE TABLE {$table_prefix}business_profiles (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             user_id BIGINT(20) UNSIGNED NOT NULL,
-            business_type VARCHAR(100) NOT NULL COMMENT 'Type d activité',
+            business_type VARCHAR(100) NOT NULL COMMENT 'Type d activité (legacy)',
             business_name VARCHAR(255) NOT NULL,
             description TEXT COMMENT 'Description courte de l activité',
             niche VARCHAR(255) COMMENT 'Niche spécifique',
             location VARCHAR(255) COMMENT 'Localisation',
-            target_audience LONGTEXT COMMENT 'JSON: {type: B2B/B2C, age_range, interests}',
+            target_audience TEXT COMMENT 'Public cible (texte libre)',
             goals LONGTEXT COMMENT 'JSON: [awareness, sales, engagement]',
             platforms LONGTEXT COMMENT 'JSON: [instagram, facebook, linkedin, tiktok, twitter, youtube]',
             languages LONGTEXT COMMENT 'JSON: [fr, en, es, de, it]',
             has_blog BOOLEAN DEFAULT 0 COMMENT 'Indique si l utilisateur a un blog',
+            user_type VARCHAR(50) COMMENT 'Type utilisateur: business, creator, freelance, agency',
+            sector VARCHAR(100) COMMENT 'Secteur activité: ecommerce, services, tech, food, health, music, etc',
+            website VARCHAR(255) COMMENT 'URL du site web',
+            social_platforms LONGTEXT COMMENT 'JSON: Plateformes sociales sélectionnées',
+            posting_frequency VARCHAR(50) COMMENT 'Fréquence publication: daily, frequent, weekly, occasional',
+            seo_goals LONGTEXT COMMENT 'JSON: Objectifs SEO [organic_traffic, ranking, long_tail, authority]',
+            blog_topics LONGTEXT COMMENT 'JSON: Sujets blog préférés',
+            primary_keywords LONGTEXT COMMENT 'JSON: Mots-clés principaux (max 5)',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             UNIQUE KEY user_id (user_id),
-            KEY idx_business_type (business_type)
+            KEY idx_business_type (business_type),
+            KEY idx_user_type (user_type),
+            KEY idx_sector (sector)
         ) $charset_collate ENGINE=InnoDB;";
 
         // 2. Strategies
@@ -325,6 +335,78 @@ class Database {
 
         // Store database version
         update_option('acs_db_version', ACS_VERSION);
+    }
+
+    /**
+     * Upgrade existing tables with new columns
+     *
+     * @return void
+     */
+    public static function upgrade_tables() {
+        global $wpdb;
+        $table_prefix = $wpdb->prefix . ACS_TABLE_PREFIX;
+        $table = $table_prefix . 'business_profiles';
+
+        // Check if new columns exist, if not add them
+        $columns = $wpdb->get_col("DESCRIBE {$table}", 0);
+
+        // Add user_type column
+        if (!in_array('user_type', $columns)) {
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN user_type VARCHAR(50) COMMENT 'Type utilisateur: business, creator, freelance, agency' AFTER has_blog");
+        }
+
+        // Add sector column
+        if (!in_array('sector', $columns)) {
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN sector VARCHAR(100) COMMENT 'Secteur activité: ecommerce, services, tech, food, health, music, etc' AFTER user_type");
+        }
+
+        // Add website column
+        if (!in_array('website', $columns)) {
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN website VARCHAR(255) COMMENT 'URL du site web' AFTER sector");
+        }
+
+        // Add social_platforms column
+        if (!in_array('social_platforms', $columns)) {
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN social_platforms LONGTEXT COMMENT 'JSON: Plateformes sociales sélectionnées' AFTER website");
+        }
+
+        // Add posting_frequency column
+        if (!in_array('posting_frequency', $columns)) {
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN posting_frequency VARCHAR(50) COMMENT 'Fréquence publication: daily, frequent, weekly, occasional' AFTER social_platforms");
+        }
+
+        // Add seo_goals column
+        if (!in_array('seo_goals', $columns)) {
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN seo_goals LONGTEXT COMMENT 'JSON: Objectifs SEO [organic_traffic, ranking, long_tail, authority]' AFTER posting_frequency");
+        }
+
+        // Add blog_topics column
+        if (!in_array('blog_topics', $columns)) {
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN blog_topics LONGTEXT COMMENT 'JSON: Sujets blog préférés' AFTER seo_goals");
+        }
+
+        // Add primary_keywords column
+        if (!in_array('primary_keywords', $columns)) {
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN primary_keywords LONGTEXT COMMENT 'JSON: Mots-clés principaux (max 5)' AFTER blog_topics");
+        }
+
+        // Modify target_audience to TEXT instead of LONGTEXT if needed
+        $column_info = $wpdb->get_row("SHOW COLUMNS FROM {$table} LIKE 'target_audience'");
+        if ($column_info && strpos(strtolower($column_info->Type), 'longtext') !== false) {
+            $wpdb->query("ALTER TABLE {$table} MODIFY COLUMN target_audience TEXT COMMENT 'Public cible (texte libre)'");
+        }
+
+        // Add indexes for new columns
+        $indexes = $wpdb->get_results("SHOW INDEX FROM {$table}", ARRAY_A);
+        $index_names = array_column($indexes, 'Key_name');
+
+        if (!in_array('idx_user_type', $index_names)) {
+            $wpdb->query("ALTER TABLE {$table} ADD KEY idx_user_type (user_type)");
+        }
+
+        if (!in_array('idx_sector', $index_names)) {
+            $wpdb->query("ALTER TABLE {$table} ADD KEY idx_sector (sector)");
+        }
     }
 
     /**

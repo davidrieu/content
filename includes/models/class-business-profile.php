@@ -29,21 +29,44 @@ class Business_Profile {
     public function create($data) {
         global $wpdb;
 
+        // Handle legacy and new field names
+        $user_type = $data['user_type'] ?? $data['business_type'] ?? '';
+        $social_platforms = $data['social_platforms'] ?? $data['platforms'] ?? [];
+
+        // Handle target_audience - can be string or array (legacy)
+        $target_audience = $data['target_audience'] ?? '';
+        if (is_array($target_audience)) {
+            $target_audience = isset($target_audience['type']) ? $target_audience['type'] : '';
+        }
+
         $sanitized = [
             'user_id' => Sanitizer::int($data['user_id']),
-            'business_type' => Sanitizer::text($data['business_type']),
+            'business_type' => Sanitizer::text($user_type), // Keep for backward compatibility
             'business_name' => Sanitizer::text($data['business_name']),
             'description' => Sanitizer::textarea($data['description'] ?? ''),
             'niche' => Sanitizer::text($data['niche'] ?? ''),
             'location' => Sanitizer::text($data['location'] ?? ''),
-            'target_audience' => Sanitizer::json(wp_json_encode($data['target_audience'] ?? [])),
+            'target_audience' => Sanitizer::text($target_audience),
             'goals' => Sanitizer::json(wp_json_encode($data['goals'] ?? [])),
-            'platforms' => Sanitizer::json(wp_json_encode($data['platforms'] ?? [])),
+            'platforms' => Sanitizer::json(wp_json_encode($social_platforms)), // Keep for backward compatibility
             'languages' => Sanitizer::json(wp_json_encode($data['languages'] ?? [])),
             'has_blog' => Sanitizer::bool($data['has_blog'] ?? false),
+            // New onboarding fields
+            'user_type' => Sanitizer::text($user_type),
+            'sector' => Sanitizer::text($data['sector'] ?? ''),
+            'website' => Sanitizer::text($data['website'] ?? ''),
+            'social_platforms' => Sanitizer::json(wp_json_encode($social_platforms)),
+            'posting_frequency' => Sanitizer::text($data['posting_frequency'] ?? ''),
+            'seo_goals' => Sanitizer::json(wp_json_encode($data['seo_goals'] ?? [])),
+            'blog_topics' => Sanitizer::json(wp_json_encode($data['blog_topics'] ?? [])),
+            'primary_keywords' => Sanitizer::json(wp_json_encode($data['primary_keywords'] ?? [])),
         ];
 
-        $result = $wpdb->insert($this->table_name, $sanitized, ['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d']);
+        $result = $wpdb->insert(
+            $this->table_name,
+            $sanitized,
+            ['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
+        );
 
         return $result ? $wpdb->insert_id : false;
     }
@@ -56,10 +79,16 @@ class Business_Profile {
         $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$this->table_name} WHERE user_id = %d", $user_id), ARRAY_A);
 
         if ($row) {
-            $row['target_audience'] = json_decode($row['target_audience'], true);
-            $row['goals'] = json_decode($row['goals'], true);
-            $row['platforms'] = json_decode($row['platforms'], true);
-            $row['languages'] = json_decode($row['languages'], true);
+            // Decode JSON fields
+            $row['goals'] = json_decode($row['goals'], true) ?: [];
+            $row['platforms'] = json_decode($row['platforms'], true) ?: [];
+            $row['languages'] = json_decode($row['languages'], true) ?: [];
+
+            // Decode new JSON fields
+            $row['social_platforms'] = json_decode($row['social_platforms'], true) ?: [];
+            $row['seo_goals'] = json_decode($row['seo_goals'], true) ?: [];
+            $row['blog_topics'] = json_decode($row['blog_topics'], true) ?: [];
+            $row['primary_keywords'] = json_decode($row['primary_keywords'], true) ?: [];
         }
 
         return $row;
@@ -71,20 +100,45 @@ class Business_Profile {
     public function update($user_id, $data) {
         global $wpdb;
 
+        // Handle legacy and new field names
+        $user_type = $data['user_type'] ?? $data['business_type'] ?? '';
+        $social_platforms = $data['social_platforms'] ?? $data['platforms'] ?? [];
+
+        // Handle target_audience - can be string or array (legacy)
+        $target_audience = $data['target_audience'] ?? '';
+        if (is_array($target_audience)) {
+            $target_audience = isset($target_audience['type']) ? $target_audience['type'] : '';
+        }
+
         $sanitized = [
-            'business_type' => Sanitizer::text($data['business_type']),
+            'business_type' => Sanitizer::text($user_type), // Keep for backward compatibility
             'business_name' => Sanitizer::text($data['business_name']),
             'description' => Sanitizer::textarea($data['description'] ?? ''),
             'niche' => Sanitizer::text($data['niche'] ?? ''),
             'location' => Sanitizer::text($data['location'] ?? ''),
-            'target_audience' => Sanitizer::json(wp_json_encode($data['target_audience'] ?? [])),
+            'target_audience' => Sanitizer::text($target_audience),
             'goals' => Sanitizer::json(wp_json_encode($data['goals'] ?? [])),
-            'platforms' => Sanitizer::json(wp_json_encode($data['platforms'] ?? [])),
+            'platforms' => Sanitizer::json(wp_json_encode($social_platforms)), // Keep for backward compatibility
             'languages' => Sanitizer::json(wp_json_encode($data['languages'] ?? [])),
             'has_blog' => Sanitizer::bool($data['has_blog'] ?? false),
+            // New onboarding fields
+            'user_type' => Sanitizer::text($user_type),
+            'sector' => Sanitizer::text($data['sector'] ?? ''),
+            'website' => Sanitizer::text($data['website'] ?? ''),
+            'social_platforms' => Sanitizer::json(wp_json_encode($social_platforms)),
+            'posting_frequency' => Sanitizer::text($data['posting_frequency'] ?? ''),
+            'seo_goals' => Sanitizer::json(wp_json_encode($data['seo_goals'] ?? [])),
+            'blog_topics' => Sanitizer::json(wp_json_encode($data['blog_topics'] ?? [])),
+            'primary_keywords' => Sanitizer::json(wp_json_encode($data['primary_keywords'] ?? [])),
         ];
 
-        return $wpdb->update($this->table_name, $sanitized, ['user_id' => $user_id], ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d'], ['%d']);
+        return $wpdb->update(
+            $this->table_name,
+            $sanitized,
+            ['user_id' => $user_id],
+            ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'],
+            ['%d']
+        );
     }
 
     /**
