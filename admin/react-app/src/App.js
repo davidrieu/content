@@ -70,25 +70,41 @@ function App() {
     }, []);
 
     const checkAuthAndOnboarding = async () => {
-        // Check if user is logged in
-        const currentUserId = window.acsData?.currentUser;
-
-        if (!currentUserId || currentUserId === 0) {
+        // Check if acsData is available
+        if (!window.acsData) {
+            console.error('ACS Error - window.acsData is not defined!');
             setIsAuthenticated(false);
             setLoading(false);
             return;
         }
 
+        // Check if user is logged in
+        const currentUserId = window.acsData.currentUser;
+
+        console.log('ACS Debug - Full acsData:', window.acsData);
+        console.log('ACS Debug - currentUserId:', currentUserId, 'type:', typeof currentUserId);
+
+        // Strict check for logged out users (0, "0", null, undefined, false)
+        if (!currentUserId || currentUserId === 0 || currentUserId === "0" || currentUserId === false) {
+            console.log('ACS Debug - User not authenticated, showing login form');
+            setIsAuthenticated(false);
+            setLoading(false);
+            return;
+        }
+
+        console.log('ACS Debug - User authenticated, checking onboarding status');
         setIsAuthenticated(true);
 
         // Check onboarding status
         try {
             const response = await apiFetch({ path: '/acs/v1/profile' });
+            console.log('ACS Debug - Profile response:', response);
             if (response.success && response.data) {
                 setProfile(response.data);
                 setNeedsOnboarding(false);
             }
         } catch (error) {
+            console.log('ACS Debug - Profile error (needs onboarding):', error);
             setNeedsOnboarding(true);
         } finally {
             setLoading(false);
