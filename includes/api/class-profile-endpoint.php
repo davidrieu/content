@@ -42,6 +42,22 @@ class Profile_Endpoint extends REST_Controller {
         $user_id = $this->get_current_user_id();
         $params = $request->get_json_params();
 
+        // Log received data
+        if (class_exists('ACS\\Utils\\Logger')) {
+            \ACS\Utils\Logger::info('Profile save attempt', [
+                'user_id' => $user_id,
+                'params' => $params
+            ]);
+        }
+
+        // Validate required fields
+        if (empty($params['business_name'])) {
+            if (class_exists('ACS\\Utils\\Logger')) {
+                \ACS\Utils\Logger::error('Profile save failed: missing business_name');
+            }
+            return $this->error(__('Le nom de l\'entreprise est requis', 'ai-content-studio'), 'missing_business_name', 400);
+        }
+
         $model = new Business_Profile();
         $existing = $model->get_by_user($user_id);
 
@@ -50,33 +66,47 @@ class Profile_Endpoint extends REST_Controller {
         if ($existing) {
             $result = $model->update($user_id, $params);
             $message = __('Profil mis à jour', 'ai-content-studio');
+
+            if (class_exists('ACS\\Utils\\Logger')) {
+                \ACS\Utils\Logger::info('Profile updated', ['result' => $result]);
+            }
         } else {
             $result = $model->create($params);
             $message = __('Profil créé', 'ai-content-studio');
 
+            if (class_exists('ACS\\Utils\\Logger')) {
+                \ACS\Utils\Logger::info('Profile created', ['result' => $result]);
+            }
+
             // Mark onboarding as complete
             update_user_meta($user_id, 'acs_onboarding_completed', true);
 
-            // Generate strategy automatically
-            $claude = new Claude_Service();
-            $strategy = $claude->generate_strategy($params);
+            // Generate strategy automatically (skip if API keys not configured)
+            $claude_api_key = get_option('acs_claude_api_key');
+            if (!empty($claude_api_key)) {
+                $claude = new Claude_Service();
+                $strategy = $claude->generate_strategy($params);
 
-            if (!is_wp_error($strategy)) {
-                global $wpdb;
-                $table = $wpdb->prefix . ACS_TABLE_PREFIX . 'strategies';
-                $wpdb->insert($table, [
-                    'user_id' => $user_id,
-                    'content_strategy' => wp_json_encode($strategy),
-                    'posting_schedule' => wp_json_encode($strategy['posting_schedule'] ?? []),
-                    'content_pillars' => wp_json_encode($strategy['content_pillars'] ?? []),
-                    'tone_style' => $strategy['tone_style'] ?? '',
-                    'hashtags' => wp_json_encode($strategy['hashtag_strategy'] ?? []),
-                ]);
+                if (!is_wp_error($strategy)) {
+                    global $wpdb;
+                    $table = $wpdb->prefix . ACS_TABLE_PREFIX . 'strategies';
+                    $wpdb->insert($table, [
+                        'user_id' => $user_id,
+                        'content_strategy' => wp_json_encode($strategy),
+                        'posting_schedule' => wp_json_encode($strategy['posting_schedule'] ?? []),
+                        'content_pillars' => wp_json_encode($strategy['content_pillars'] ?? []),
+                        'tone_style' => $strategy['tone_style'] ?? '',
+                        'hashtags' => wp_json_encode($strategy['hashtag_strategy'] ?? []),
+                    ]);
+                }
             }
         }
 
         if ($result === false) {
-            return $this->error(__('Erreur lors de la sauvegarde', 'ai-content-studio'));
+            if (class_exists('ACS\\Utils\\Logger')) {
+                \ACS\Utils\Logger::error('Profile save failed: database error');
+            }
+            return $this->error(__('Erreur lors de la sauvegarde', 'ai-content-studio'), 'database_error', 500);
         }
 
         return $this->success(['id' => $result], $message);
