@@ -1246,3 +1246,383 @@ body.admin-bar #acs-frontend-root .acs-app {
   color: var(--acs-primary);
   border: 1px solid rgba(99, 102, 241, 0.2);
 }
+
+/* ========================================
+   Onboarding Wizard (3 Steps - Modern 2025 Design)
+   ======================================== */
+
+.acs-onboarding-wizard {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--acs-spacing-6);
+}
+
+/* Progress Bar */
+.acs-wizard-progress {
+  margin-bottom: var(--acs-spacing-8);
+}
+
+.acs-progress-bar {
+  height: 8px;
+  background: var(--acs-gray-200);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: var(--acs-spacing-4);
+}
+
+.acs-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--acs-primary), var(--acs-secondary));
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.acs-progress-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--acs-spacing-4);
+}
+
+.acs-step-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--acs-white);
+  border: 3px solid var(--acs-gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--acs-gray-500);
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.acs-step-dot.active {
+  background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
+  border-color: var(--acs-primary);
+  color: var(--acs-white);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  transform: scale(1.1);
+}
+
+.acs-step-dot.completed {
+  background: var(--acs-success);
+  border-color: var(--acs-success);
+  color: var(--acs-white);
+}
+
+/* Wizard Content */
+.acs-wizard-content {
+  background: var(--acs-white);
+  border-radius: var(--acs-radius-xl);
+  padding: var(--acs-spacing-8);
+  box-shadow: var(--acs-shadow-xl);
+  margin-bottom: var(--acs-spacing-6);
+  min-height: 500px;
+}
+
+.acs-wizard-step {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.acs-step-header {
+  text-align: center;
+  margin-bottom: var(--acs-spacing-6);
+  padding-bottom: var(--acs-spacing-4);
+  border-bottom: 2px solid var(--acs-gray-100);
+}
+
+.acs-step-header svg {
+  color: var(--acs-primary);
+  margin-bottom: var(--acs-spacing-3);
+}
+
+.acs-step-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--acs-spacing-2);
+}
+
+.acs-step-header p {
+  color: var(--acs-gray-600);
+  font-size: 15px;
+}
+
+/* User Type Grid */
+.acs-user-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--acs-spacing-4);
+  margin-bottom: var(--acs-spacing-6);
+}
+
+.acs-type-card {
+  background: var(--acs-white);
+  border: 2px solid var(--acs-gray-200);
+  border-radius: var(--acs-radius-lg);
+  padding: var(--acs-spacing-5);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.acs-type-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.acs-type-card:hover {
+  border-color: var(--acs-primary);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+  transform: translateY(-2px);
+}
+
+.acs-type-card:hover::before {
+  opacity: 1;
+}
+
+.acs-type-card.selected {
+  border-color: var(--acs-primary);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
+}
+
+.acs-type-card svg {
+  color: var(--acs-primary);
+  margin-bottom: var(--acs-spacing-3);
+}
+
+.acs-type-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--acs-gray-900);
+  margin-bottom: var(--acs-spacing-2);
+}
+
+.acs-type-card p {
+  font-size: 13px;
+  color: var(--acs-gray-600);
+  margin: 0;
+}
+
+/* Checkbox Grid */
+.acs-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--acs-spacing-3);
+  margin-bottom: var(--acs-spacing-4);
+}
+
+.acs-checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: var(--acs-spacing-3);
+  background: var(--acs-gray-50);
+  border: 1px solid var(--acs-gray-200);
+  border-radius: var(--acs-radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.acs-checkbox-label:hover {
+  background: var(--acs-gray-100);
+  border-color: var(--acs-primary);
+}
+
+.acs-checkbox-label input[type="checkbox"],
+.acs-checkbox-label input[type="radio"] {
+  margin-right: var(--acs-spacing-2);
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--acs-primary);
+}
+
+.acs-checkbox-label input[type="checkbox"]:checked,
+.acs-checkbox-label input[type="radio"]:checked {
+  background: var(--acs-primary);
+}
+
+.acs-checkbox-label:has(input:checked) {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border-color: var(--acs-primary);
+  font-weight: 600;
+}
+
+/* Radio Group */
+.acs-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--acs-spacing-3);
+}
+
+.acs-radio-label {
+  display: flex;
+  align-items: center;
+  padding: var(--acs-spacing-4);
+  background: var(--acs-white);
+  border: 2px solid var(--acs-gray-200);
+  border-radius: var(--acs-radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 15px;
+}
+
+.acs-radio-label:hover {
+  border-color: var(--acs-primary);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+}
+
+.acs-radio-label input[type="radio"] {
+  margin-right: var(--acs-spacing-3);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--acs-primary);
+}
+
+.acs-radio-label:has(input:checked) {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border-color: var(--acs-primary);
+  font-weight: 600;
+}
+
+/* Keyword Input */
+.acs-keyword-input {
+  display: flex;
+  gap: var(--acs-spacing-2);
+  margin-bottom: var(--acs-spacing-3);
+}
+
+.acs-keyword-input .acs-input {
+  flex: 1;
+}
+
+.acs-keyword-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--acs-spacing-2);
+  margin-top: var(--acs-spacing-2);
+}
+
+.acs-keyword-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--acs-spacing-2);
+  background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
+  color: var(--acs-white);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  animation: pillAppear 0.3s ease;
+}
+
+@keyframes pillAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.acs-keyword-pill button {
+  background: none;
+  border: none;
+  color: var(--acs-white);
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.acs-keyword-pill button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Wizard Footer */
+.acs-wizard-footer {
+  display: flex;
+  gap: var(--acs-spacing-3);
+  padding-top: var(--acs-spacing-4);
+}
+
+/* Form Group Styling */
+.acs-form-group {
+  margin-bottom: var(--acs-spacing-5);
+}
+
+.acs-form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--acs-gray-900);
+  margin-bottom: var(--acs-spacing-2);
+  font-size: 15px;
+}
+
+.acs-form-group label:not(.acs-checkbox-label):not(.acs-radio-label) {
+  cursor: default;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .acs-onboarding-wizard {
+    padding: var(--acs-spacing-4);
+  }
+
+  .acs-wizard-content {
+    padding: var(--acs-spacing-5);
+  }
+
+  .acs-user-type-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .acs-checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .acs-step-header h2 {
+    font-size: 24px;
+  }
+
+  .acs-keyword-input {
+    flex-direction: column;
+  }
+}
