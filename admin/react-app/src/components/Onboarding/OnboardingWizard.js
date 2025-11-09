@@ -1,5 +1,5 @@
 import { useState } from '@wordpress/element';
-import { FiCheck, FiBriefcase, FiUser, FiTarget, FiTrendingUp, FiFileText, FiHash } from 'react-icons/fi';
+import { FiCheck, FiBriefcase, FiUser, FiTarget, FiTrendingUp } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 
@@ -112,75 +112,86 @@ export default function OnboardingWizard({ onComplete }) {
     const totalSteps = 3;
 
     return (
-        <div className="acs-onboarding-wizard">
+        <div style={{ padding: 'var(--acs-spacing-6)', background: 'var(--acs-body-bg)', minHeight: '100vh' }}>
             {/* Progress Bar */}
-            <div className="acs-wizard-progress">
-                <div className="acs-progress-bar">
-                    <div className="acs-progress-fill" style={{ width: `${(step / totalSteps) * 100}%` }}></div>
+            <div style={{ maxWidth: '800px', margin: '0 auto var(--acs-spacing-6)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--acs-spacing-2)' }}>
+                    <span style={{ fontSize: 'var(--acs-font-size-sm)', fontWeight: 600, color: 'var(--acs-primary)' }}>
+                        {__('Configuration de votre profil', 'ai-content-studio')}
+                    </span>
+                    <span style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
+                        {step}/{totalSteps}
+                    </span>
                 </div>
-                <div className="acs-progress-steps">
-                    {[...Array(totalSteps)].map((_, i) => (
-                        <div key={i} className={`acs-step-dot ${i + 1 <= step ? 'active' : ''} ${i + 1 < step ? 'completed' : ''}`}>
-                            {i + 1 < step ? <FiCheck size={14} /> : i + 1}
-                        </div>
-                    ))}
+                <div className="acs-progress">
+                    <div className="acs-progress-bar" style={{ width: `${(step / totalSteps) * 100}%` }} />
                 </div>
             </div>
 
-            {/* Step Content */}
-            <div className="acs-wizard-content">
-                {/* STEP 1: Informations de base */}
+            {/* Content Card */}
+            <div className="acs-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
+
+                {/* Step 1: Informations de base */}
                 {step === 1 && (
-                    <div className="acs-wizard-step">
-                        <div className="acs-step-header">
-                            <FiBriefcase size={32} />
-                            <h2>{__('Informations de base', 'ai-content-studio')}</h2>
-                            <p>{__('Parlez-nous de vous ou de votre entreprise', 'ai-content-studio')}</p>
+                    <div>
+                        <div style={{ textAlign: 'center', marginBottom: 'var(--acs-spacing-6)' }}>
+                            <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-2)' }}>
+                                {__('Bienvenue sur AI Content Studio', 'ai-content-studio')} 👋
+                            </h2>
+                            <p style={{ color: 'var(--acs-gray-600)' }}>
+                                {__('Pour personnaliser votre expérience, dites-nous qui vous êtes', 'ai-content-studio')}
+                            </p>
                         </div>
 
-                        {/* Type d'utilisateur */}
-                        <div className="acs-form-group">
-                            <label>{__('Vous êtes', 'ai-content-studio')} *</label>
-                            <div className="acs-user-type-grid">
-                                {[
-                                    { value: 'business', icon: FiBriefcase, label: __('Entreprise', 'ai-content-studio'), desc: __('PME, startup, e-commerce', 'ai-content-studio') },
-                                    { value: 'creator', icon: FiUser, label: __('Créateur', 'ai-content-studio'), desc: __('Artiste, influenceur, coach', 'ai-content-studio') },
-                                    { value: 'freelance', icon: FiTrendingUp, label: __('Freelance', 'ai-content-studio'), desc: __('Consultant, indépendant', 'ai-content-studio') },
-                                    { value: 'agency', icon: FiBriefcase, label: __('Agence', 'ai-content-studio'), desc: __('Agence marketing, com', 'ai-content-studio') },
-                                ].map((type) => {
-                                    const Icon = type.icon;
-                                    return (
-                                        <div
-                                            key={type.value}
-                                            className={`acs-type-card ${formData.user_type === type.value ? 'selected' : ''}`}
-                                            onClick={() => updateField('user_type', type.value)}
-                                        >
-                                            <Icon size={28} />
-                                            <h3>{type.label}</h3>
-                                            <p>{type.desc}</p>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--acs-spacing-4)', marginBottom: 'var(--acs-spacing-5)' }}>
+                            {[
+                                { value: 'business', icon: FiBriefcase, label: __('Entreprise', 'ai-content-studio'), desc: __('PME, startup, e-commerce', 'ai-content-studio') },
+                                { value: 'creator', icon: FiUser, label: __('Créateur', 'ai-content-studio'), desc: __('Artiste, influenceur, coach', 'ai-content-studio') },
+                                { value: 'freelance', icon: FiTrendingUp, label: __('Freelance', 'ai-content-studio'), desc: __('Consultant, indépendant', 'ai-content-studio') },
+                                { value: 'agency', icon: FiBriefcase, label: __('Agence', 'ai-content-studio'), desc: __('Agence marketing, com', 'ai-content-studio') },
+                            ].map((type) => {
+                                const Icon = type.icon;
+                                return (
+                                    <div
+                                        key={type.value}
+                                        onClick={() => updateField('user_type', type.value)}
+                                        style={{
+                                            padding: 'var(--acs-spacing-4)',
+                                            border: `2px solid ${formData.user_type === type.value ? 'var(--acs-primary)' : 'var(--acs-gray-200)'}`,
+                                            borderRadius: 'var(--acs-radius-lg)',
+                                            textAlign: 'center',
+                                            cursor: 'pointer',
+                                            transition: 'var(--acs-transition)',
+                                            background: formData.user_type === type.value ? 'rgba(99, 102, 241, 0.05)' : 'var(--acs-white)',
+                                        }}
+                                    >
+                                        <Icon size={32} style={{ color: formData.user_type === type.value ? 'var(--acs-primary)' : 'var(--acs-gray-400)', marginBottom: 'var(--acs-spacing-2)' }} />
+                                        <h3 style={{ fontSize: 'var(--acs-font-size-lg)', fontWeight: 600, marginBottom: 'var(--acs-spacing-1)' }}>{type.label}</h3>
+                                        <p style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', margin: 0 }}>{type.desc}</p>
+                                    </div>
+                                );
+                            })}
                         </div>
 
-                        {/* Nom */}
                         <div className="acs-form-group">
-                            <label>{__('Nom de l\'entreprise / Votre nom', 'ai-content-studio')} *</label>
+                            <label className="acs-form-label">{__('Nom de votre entreprise/marque', 'ai-content-studio')} *</label>
                             <input
                                 type="text"
-                                className="acs-input"
+                                className="acs-form-control"
                                 value={formData.business_name}
                                 onChange={(e) => updateField('business_name', e.target.value)}
-                                placeholder={formData.user_type === 'creator' ? __('Ex: Marie Dupont', 'ai-content-studio') : __('Ex: Mon Entreprise', 'ai-content-studio')}
+                                placeholder={__('Ex: Mon Entreprise', 'ai-content-studio')}
                             />
                         </div>
 
-                        {/* Secteur */}
                         <div className="acs-form-group">
-                            <label>{__('Secteur d\'activité', 'ai-content-studio')} *</label>
-                            <select className="acs-select" value={formData.sector} onChange={(e) => updateField('sector', e.target.value)}>
-                                <option value="">{__('Sélectionnez votre secteur', 'ai-content-studio')}</option>
+                            <label className="acs-form-label">{__('Secteur d\'activité', 'ai-content-studio')} *</label>
+                            <select
+                                className="acs-select"
+                                value={formData.sector}
+                                onChange={(e) => updateField('sector', e.target.value)}
+                            >
+                                <option value="">{__('Sélectionnez un secteur', 'ai-content-studio')}</option>
                                 <option value="ecommerce">{__('E-commerce', 'ai-content-studio')}</option>
                                 <option value="services">{__('Services', 'ai-content-studio')}</option>
                                 <option value="tech">{__('Technologie', 'ai-content-studio')}</option>
@@ -190,248 +201,334 @@ export default function OnboardingWizard({ onComplete }) {
                                 <option value="fashion">{__('Mode & Beauté', 'ai-content-studio')}</option>
                                 <option value="education">{__('Éducation & Formation', 'ai-content-studio')}</option>
                                 <option value="finance">{__('Finance & Assurance', 'ai-content-studio')}</option>
-                                <option value="real-estate">{__('Immobilier', 'ai-content-studio')}</option>
+                                <option value="realestate">{__('Immobilier', 'ai-content-studio')}</option>
                                 <option value="travel">{__('Voyage & Tourisme', 'ai-content-studio')}</option>
                                 <option value="sports">{__('Sport & Fitness', 'ai-content-studio')}</option>
-                                <option value="entertainment">{__('Divertissement', 'ai-content-studio')}</option>
+                                <option value="entertainment">{__('Divertissement & Loisirs', 'ai-content-studio')}</option>
                                 <option value="other">{__('Autre', 'ai-content-studio')}</option>
                             </select>
                         </div>
 
-                        {/* Description */}
                         <div className="acs-form-group">
-                            <label>{__('Description de votre activité', 'ai-content-studio')} *</label>
+                            <label className="acs-form-label">{__('Décrivez votre activité en quelques mots', 'ai-content-studio')} *</label>
                             <textarea
                                 className="acs-textarea"
-                                rows="4"
                                 value={formData.description}
                                 onChange={(e) => updateField('description', e.target.value)}
-                                placeholder={__('Décrivez brièvement votre activité, vos services ou produits...', 'ai-content-studio')}
-                            ></textarea>
+                                placeholder={__('Ex: Nous aidons les entrepreneurs à développer leur présence en ligne grâce au marketing digital...', 'ai-content-studio')}
+                                rows={4}
+                            />
                         </div>
 
-                        {/* Site web */}
                         <div className="acs-form-group">
-                            <label>{__('Site web', 'ai-content-studio')} ({__('optionnel', 'ai-content-studio')})</label>
+                            <label className="acs-form-label">{__('Site web (optionnel)', 'ai-content-studio')}</label>
                             <input
                                 type="url"
-                                className="acs-input"
+                                className="acs-form-control"
                                 value={formData.website}
                                 onChange={(e) => updateField('website', e.target.value)}
-                                placeholder="https://www.example.com"
+                                placeholder="https://www.exemple.com"
                             />
                         </div>
                     </div>
                 )}
 
-                {/* STEP 2: Objectifs & Réseaux sociaux */}
+                {/* Step 2: Objectifs & Réseaux sociaux */}
                 {step === 2 && (
-                    <div className="acs-wizard-step">
-                        <div className="acs-step-header">
-                            <FiTarget size={32} />
-                            <h2>{__('Objectifs & Réseaux sociaux', 'ai-content-studio')}</h2>
-                            <p>{__('Définissez vos objectifs et les plateformes que vous utilisez', 'ai-content-studio')}</p>
+                    <div>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-2)' }}>
+                            {__('Quels sont vos objectifs?', 'ai-content-studio')}
+                        </h2>
+                        <p style={{ color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-5)' }}>
+                            {__('Sélectionnez tous les objectifs qui s\'appliquent', 'ai-content-studio')}
+                        </p>
+
+                        <div style={{ display: 'grid', gap: 'var(--acs-spacing-3)', marginBottom: 'var(--acs-spacing-6)' }}>
+                            {[
+                                { value: 'brand_awareness', label: __('Notoriété de marque', 'ai-content-studio'), icon: '🎯' },
+                                { value: 'lead_generation', label: __('Génération de leads', 'ai-content-studio'), icon: '📈' },
+                                { value: 'sales', label: __('Augmenter les ventes', 'ai-content-studio'), icon: '💰' },
+                                { value: 'engagement', label: __('Engagement communauté', 'ai-content-studio'), icon: '❤️' },
+                                { value: 'traffic', label: __('Trafic website', 'ai-content-studio'), icon: '🚀' },
+                                { value: 'seo', label: __('Référencement SEO', 'ai-content-studio'), icon: '🔍' },
+                                { value: 'education', label: __('Éduquer l\'audience', 'ai-content-studio'), icon: '📚' },
+                                { value: 'recruitment', label: __('Recrutement', 'ai-content-studio'), icon: '👥' },
+                            ].map((goal) => (
+                                <label
+                                    key={goal.value}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        padding: 'var(--acs-spacing-3)',
+                                        background: formData.goals.includes(goal.value) ? 'rgba(99, 102, 241, 0.1)' : 'var(--acs-gray-50)',
+                                        border: `2px solid ${formData.goals.includes(goal.value) ? 'var(--acs-primary)' : 'var(--acs-gray-200)'}`,
+                                        borderRadius: 'var(--acs-radius-lg)',
+                                        cursor: 'pointer',
+                                        transition: 'var(--acs-transition)',
+                                    }}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.goals.includes(goal.value)}
+                                        onChange={() => toggleArrayField('goals', goal.value)}
+                                        style={{ marginRight: 'var(--acs-spacing-3)', accentColor: 'var(--acs-primary)' }}
+                                    />
+                                    <span style={{ fontSize: '1.5rem', marginRight: 'var(--acs-spacing-2)' }}>{goal.icon}</span>
+                                    <span style={{ fontWeight: 500 }}>{goal.label}</span>
+                                </label>
+                            ))}
                         </div>
 
-                        {/* Objectifs */}
-                        <div className="acs-form-group">
-                            <label>{__('Vos objectifs principaux', 'ai-content-studio')} * ({__('Sélectionnez au moins un', 'ai-content-studio')})</label>
-                            <div className="acs-checkbox-grid">
-                                {[
-                                    { value: 'brand_awareness', label: __('Notoriété de marque', 'ai-content-studio') },
-                                    { value: 'lead_generation', label: __('Génération de leads', 'ai-content-studio') },
-                                    { value: 'sales', label: __('Ventes directes', 'ai-content-studio') },
-                                    { value: 'engagement', label: __('Engagement communautaire', 'ai-content-studio') },
-                                    { value: 'traffic', label: __('Trafic web', 'ai-content-studio') },
-                                    { value: 'seo', label: __('Référencement SEO', 'ai-content-studio') },
-                                    { value: 'education', label: __('Éducation / Information', 'ai-content-studio') },
-                                    { value: 'recruitment', label: __('Recrutement', 'ai-content-studio') },
-                                ].map((goal) => (
-                                    <label key={goal.value} className="acs-checkbox-label">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.goals.includes(goal.value)}
-                                            onChange={() => toggleArrayField('goals', goal.value)}
-                                        />
-                                        <span>{goal.label}</span>
-                                    </label>
-                                ))}
-                            </div>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-2)' }}>
+                            {__('Sur quels réseaux sociaux êtes-vous actif?', 'ai-content-studio')}
+                        </h2>
+                        <p style={{ color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-5)' }}>
+                            {__('Sélectionnez les plateformes que vous utilisez ou souhaitez utiliser', 'ai-content-studio')}
+                        </p>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--acs-spacing-3)', marginBottom: 'var(--acs-spacing-5)' }}>
+                            {[
+                                { value: 'facebook', label: 'Facebook', icon: '📘', color: '#1877F2' },
+                                { value: 'instagram', label: 'Instagram', icon: '📷', color: '#E4405F' },
+                                { value: 'twitter', label: 'X (Twitter)', icon: '🐦', color: '#000000' },
+                                { value: 'linkedin', label: 'LinkedIn', icon: '💼', color: '#0A66C2' },
+                                { value: 'tiktok', label: 'TikTok', icon: '🎵', color: '#000000' },
+                                { value: 'youtube', label: 'YouTube', icon: '📹', color: '#FF0000' },
+                                { value: 'pinterest', label: 'Pinterest', icon: '📌', color: '#E60023' },
+                                { value: 'snapchat', label: 'Snapchat', icon: '👻', color: '#FFFC00' },
+                            ].map((platform) => (
+                                <div
+                                    key={platform.value}
+                                    onClick={() => toggleArrayField('social_platforms', platform.value)}
+                                    style={{
+                                        padding: 'var(--acs-spacing-3)',
+                                        border: `2px solid ${formData.social_platforms.includes(platform.value) ? platform.color : 'var(--acs-gray-200)'}`,
+                                        borderRadius: 'var(--acs-radius-lg)',
+                                        textAlign: 'center',
+                                        cursor: 'pointer',
+                                        transition: 'var(--acs-transition)',
+                                        background: formData.social_platforms.includes(platform.value) ? 'rgba(99, 102, 241, 0.05)' : 'var(--acs-white)',
+                                    }}
+                                >
+                                    <div style={{ fontSize: '2rem', marginBottom: 'var(--acs-spacing-1)' }}>{platform.icon}</div>
+                                    <div style={{ fontSize: 'var(--acs-font-size-sm)', fontWeight: 600 }}>{platform.label}</div>
+                                </div>
+                            ))}
                         </div>
 
-                        {/* Réseaux sociaux */}
                         <div className="acs-form-group">
-                            <label>{__('Plateformes sociales', 'ai-content-studio')} * ({__('Sélectionnez au moins une', 'ai-content-studio')})</label>
-                            <div className="acs-checkbox-grid">
-                                {[
-                                    { value: 'facebook', label: 'Facebook' },
-                                    { value: 'instagram', label: 'Instagram' },
-                                    { value: 'twitter', label: 'Twitter / X' },
-                                    { value: 'linkedin', label: 'LinkedIn' },
-                                    { value: 'tiktok', label: 'TikTok' },
-                                    { value: 'youtube', label: 'YouTube' },
-                                    { value: 'pinterest', label: 'Pinterest' },
-                                    { value: 'snapchat', label: 'Snapchat' },
-                                ].map((platform) => (
-                                    <label key={platform.value} className="acs-checkbox-label">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.social_platforms.includes(platform.value)}
-                                            onChange={() => toggleArrayField('social_platforms', platform.value)}
-                                        />
-                                        <span>{platform.label}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Fréquence de publication */}
-                        <div className="acs-form-group">
-                            <label>{__('Fréquence de publication souhaitée', 'ai-content-studio')}</label>
-                            <div className="acs-radio-group">
-                                {[
-                                    { value: 'daily', label: __('Quotidien (7x/semaine)', 'ai-content-studio') },
-                                    { value: 'frequent', label: __('Fréquent (3-5x/semaine)', 'ai-content-studio') },
-                                    { value: 'weekly', label: __('Hebdomadaire (1-2x/semaine)', 'ai-content-studio') },
-                                    { value: 'occasional', label: __('Occasionnel (quelques fois/mois)', 'ai-content-studio') },
-                                ].map((freq) => (
-                                    <label key={freq.value} className="acs-radio-label">
-                                        <input
-                                            type="radio"
-                                            name="posting_frequency"
-                                            checked={formData.posting_frequency === freq.value}
-                                            onChange={() => updateField('posting_frequency', freq.value)}
-                                        />
-                                        <span>{freq.label}</span>
-                                    </label>
-                                ))}
-                            </div>
+                            <label className="acs-form-label">{__('Fréquence de publication souhaitée', 'ai-content-studio')}</label>
+                            <select
+                                className="acs-select"
+                                value={formData.posting_frequency}
+                                onChange={(e) => updateField('posting_frequency', e.target.value)}
+                            >
+                                <option value="daily">{__('Quotidienne (7 posts/semaine)', 'ai-content-studio')}</option>
+                                <option value="frequent">{__('Fréquente (4-5 posts/semaine)', 'ai-content-studio')}</option>
+                                <option value="weekly">{__('Régulière (2-3 posts/semaine)', 'ai-content-studio')}</option>
+                                <option value="occasional">{__('Occasionnelle (1 post/semaine)', 'ai-content-studio')}</option>
+                            </select>
                         </div>
                     </div>
                 )}
 
-                {/* STEP 3: SEO & Mots-clés */}
+                {/* Step 3: SEO & Mots-clés */}
                 {step === 3 && (
-                    <div className="acs-wizard-step">
-                        <div className="acs-step-header">
-                            <FiHash size={32} />
-                            <h2>{__('SEO & Mots-clés', 'ai-content-studio')}</h2>
-                            <p>{__('Optimisez votre présence en ligne avec le bon ciblage', 'ai-content-studio')}</p>
-                        </div>
+                    <div>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-5)' }}>
+                            {__('Stratégie SEO & Ciblage', 'ai-content-studio')}
+                        </h2>
 
-                        {/* Niche */}
                         <div className="acs-form-group">
-                            <label>{__('Votre niche / spécialité', 'ai-content-studio')} *</label>
+                            <label className="acs-form-label">{__('Votre niche / spécialité', 'ai-content-studio')} *</label>
                             <input
                                 type="text"
-                                className="acs-input"
+                                className="acs-form-control"
                                 value={formData.niche}
                                 onChange={(e) => updateField('niche', e.target.value)}
                                 placeholder={__('Ex: Coaching fitness pour femmes, Pâtisserie vegan, Marketing digital B2B...', 'ai-content-studio')}
                             />
                         </div>
 
-                        {/* Public cible */}
                         <div className="acs-form-group">
-                            <label>{__('Public cible', 'ai-content-studio')} *</label>
+                            <label className="acs-form-label">{__('Public cible', 'ai-content-studio')} *</label>
                             <input
                                 type="text"
-                                className="acs-input"
+                                className="acs-form-control"
                                 value={formData.target_audience}
                                 onChange={(e) => updateField('target_audience', e.target.value)}
                                 placeholder={__('Ex: Femmes 25-40 ans, Entrepreneurs, Parents...', 'ai-content-studio')}
                             />
                         </div>
 
-                        {/* Mots-clés principaux */}
                         <div className="acs-form-group">
-                            <label>{__('Mots-clés principaux', 'ai-content-studio')} ({__('max 5', 'ai-content-studio')})</label>
-                            <div className="acs-keyword-input">
+                            <label className="acs-form-label">{__('Mots-clés principaux', 'ai-content-studio')} ({__('max 5', 'ai-content-studio')})</label>
+                            <div style={{ display: 'flex', gap: 'var(--acs-spacing-2)', marginBottom: 'var(--acs-spacing-2)' }}>
                                 <input
                                     type="text"
-                                    className="acs-input"
+                                    className="acs-form-control"
                                     value={keywordInput}
                                     onChange={(e) => setKeywordInput(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addKeyword())}
                                     placeholder={__('Tapez un mot-clé et appuyez sur Entrée', 'ai-content-studio')}
                                     disabled={formData.primary_keywords.length >= 5}
+                                    style={{ flex: 1 }}
                                 />
                                 <button
                                     type="button"
-                                    className="acs-btn-secondary"
+                                    className="acs-btn acs-btn-secondary"
                                     onClick={addKeyword}
                                     disabled={formData.primary_keywords.length >= 5}
                                 >
                                     {__('Ajouter', 'ai-content-studio')}
                                 </button>
                             </div>
-                            <div className="acs-keyword-pills">
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--acs-spacing-2)' }}>
                                 {formData.primary_keywords.map((keyword, index) => (
-                                    <div key={index} className="acs-keyword-pill">
+                                    <span
+                                        key={index}
+                                        style={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            gap: 'var(--acs-spacing-2)',
+                                            background: 'linear-gradient(135deg, var(--acs-primary), var(--acs-secondary))',
+                                            color: 'var(--acs-white)',
+                                            padding: '6px 12px',
+                                            borderRadius: '16px',
+                                            fontSize: '13px',
+                                            fontWeight: 500,
+                                        }}
+                                    >
                                         {keyword}
-                                        <button type="button" onClick={() => removeKeyword(keyword)}>×</button>
-                                    </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => removeKeyword(keyword)}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                color: 'var(--acs-white)',
+                                                fontSize: '18px',
+                                                fontWeight: 'bold',
+                                                cursor: 'pointer',
+                                                padding: 0,
+                                                width: '18px',
+                                                height: '18px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                borderRadius: '50%',
+                                            }}
+                                        >
+                                            ×
+                                        </button>
+                                    </span>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Blog */}
                         <div className="acs-form-group">
-                            <label className="acs-checkbox-label">
+                            <label style={{ display: 'flex', alignItems: 'center', fontWeight: 600, cursor: 'pointer' }}>
                                 <input
                                     type="checkbox"
                                     checked={formData.has_blog}
                                     onChange={(e) => updateField('has_blog', e.target.checked)}
+                                    style={{ marginRight: 'var(--acs-spacing-2)', accentColor: 'var(--acs-primary)' }}
                                 />
                                 <span>{__('J\'ai un blog ou je souhaite publier des articles', 'ai-content-studio')}</span>
                             </label>
                         </div>
 
-                        {/* Blog topics (si blog activé) */}
                         {formData.has_blog && (
                             <>
                                 <div className="acs-form-group">
-                                    <label>{__('Sujets de blog préférés', 'ai-content-studio')}</label>
-                                    <div className="acs-keyword-input">
+                                    <label className="acs-form-label">{__('Sujets de blog préférés', 'ai-content-studio')}</label>
+                                    <div style={{ display: 'flex', gap: 'var(--acs-spacing-2)', marginBottom: 'var(--acs-spacing-2)' }}>
                                         <input
                                             type="text"
-                                            className="acs-input"
+                                            className="acs-form-control"
                                             value={blogTopicInput}
                                             onChange={(e) => setBlogTopicInput(e.target.value)}
                                             onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addBlogTopic())}
                                             placeholder={__('Ex: Conseils nutrition, Tutoriels...', 'ai-content-studio')}
+                                            style={{ flex: 1 }}
                                         />
-                                        <button type="button" className="acs-btn-secondary" onClick={addBlogTopic}>
+                                        <button type="button" className="acs-btn acs-btn-secondary" onClick={addBlogTopic}>
                                             {__('Ajouter', 'ai-content-studio')}
                                         </button>
                                     </div>
-                                    <div className="acs-keyword-pills">
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--acs-spacing-2)' }}>
                                         {formData.blog_topics.map((topic, index) => (
-                                            <div key={index} className="acs-keyword-pill">
+                                            <span
+                                                key={index}
+                                                style={{
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: 'var(--acs-spacing-2)',
+                                                    background: 'linear-gradient(135deg, var(--acs-primary), var(--acs-secondary))',
+                                                    color: 'var(--acs-white)',
+                                                    padding: '6px 12px',
+                                                    borderRadius: '16px',
+                                                    fontSize: '13px',
+                                                    fontWeight: 500,
+                                                }}
+                                            >
                                                 {topic}
-                                                <button type="button" onClick={() => removeBlogTopic(topic)}>×</button>
-                                            </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeBlogTopic(topic)}
+                                                    style={{
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        color: 'var(--acs-white)',
+                                                        fontSize: '18px',
+                                                        fontWeight: 'bold',
+                                                        cursor: 'pointer',
+                                                        padding: 0,
+                                                        width: '18px',
+                                                        height: '18px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        borderRadius: '50%',
+                                                    }}
+                                                >
+                                                    ×
+                                                </button>
+                                            </span>
                                         ))}
                                     </div>
                                 </div>
 
-                                {/* Objectifs SEO */}
                                 <div className="acs-form-group">
-                                    <label>{__('Objectifs SEO', 'ai-content-studio')}</label>
-                                    <div className="acs-checkbox-grid">
+                                    <label className="acs-form-label">{__('Objectifs SEO', 'ai-content-studio')}</label>
+                                    <div style={{ display: 'grid', gap: 'var(--acs-spacing-2)' }}>
                                         {[
-                                            { value: 'organic_traffic', label: __('Augmenter le trafic organique', 'ai-content-studio') },
-                                            { value: 'ranking', label: __('Améliorer le classement Google', 'ai-content-studio') },
-                                            { value: 'long_tail', label: __('Cibler des mots-clés longue traîne', 'ai-content-studio') },
-                                            { value: 'authority', label: __('Devenir une autorité dans ma niche', 'ai-content-studio') },
+                                            { value: 'organic_traffic', label: __('Augmenter le trafic organique', 'ai-content-studio'), icon: '📊' },
+                                            { value: 'ranking', label: __('Améliorer le classement Google', 'ai-content-studio'), icon: '🏆' },
+                                            { value: 'long_tail', label: __('Cibler des mots-clés longue traîne', 'ai-content-studio'), icon: '🎣' },
+                                            { value: 'authority', label: __('Devenir une autorité dans ma niche', 'ai-content-studio'), icon: '👑' },
                                         ].map((goal) => (
-                                            <label key={goal.value} className="acs-checkbox-label">
+                                            <label
+                                                key={goal.value}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    padding: 'var(--acs-spacing-3)',
+                                                    background: formData.seo_goals.includes(goal.value) ? 'rgba(99, 102, 241, 0.1)' : 'var(--acs-gray-50)',
+                                                    border: `2px solid ${formData.seo_goals.includes(goal.value) ? 'var(--acs-primary)' : 'var(--acs-gray-200)'}`,
+                                                    borderRadius: 'var(--acs-radius-lg)',
+                                                    cursor: 'pointer',
+                                                    transition: 'var(--acs-transition)',
+                                                }}
+                                            >
                                                 <input
                                                     type="checkbox"
                                                     checked={formData.seo_goals.includes(goal.value)}
                                                     onChange={() => toggleArrayField('seo_goals', goal.value)}
+                                                    style={{ marginRight: 'var(--acs-spacing-3)', accentColor: 'var(--acs-primary)' }}
                                                 />
-                                                <span>{goal.label}</span>
+                                                <span style={{ fontSize: '1.5rem', marginRight: 'var(--acs-spacing-2)' }}>{goal.icon}</span>
+                                                <span style={{ fontWeight: 500 }}>{goal.label}</span>
                                             </label>
                                         ))}
                                     </div>
@@ -440,33 +537,33 @@ export default function OnboardingWizard({ onComplete }) {
                         )}
                     </div>
                 )}
-            </div>
 
-            {/* Navigation */}
-            <div className="acs-wizard-footer">
-                {step > 1 && (
-                    <button className="acs-btn-secondary" onClick={() => setStep(step - 1)} disabled={loading}>
-                        {__('Précédent', 'ai-content-studio')}
-                    </button>
-                )}
-                <div style={{ flex: 1 }}></div>
-                {step < totalSteps ? (
-                    <button
-                        className="acs-btn-primary"
-                        onClick={() => setStep(step + 1)}
-                        disabled={!canProceed() || loading}
-                    >
-                        {__('Suivant', 'ai-content-studio')}
-                    </button>
-                ) : (
-                    <button
-                        className="acs-btn-primary"
-                        onClick={handleSubmit}
-                        disabled={!canProceed() || loading}
-                    >
-                        {loading ? __('Enregistrement...', 'ai-content-studio') : __('Terminer', 'ai-content-studio')}
-                    </button>
-                )}
+                {/* Navigation Buttons */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'var(--acs-spacing-6)', paddingTop: 'var(--acs-spacing-4)', borderTop: '1px solid var(--acs-gray-200)' }}>
+                    {step > 1 && (
+                        <button className="acs-btn acs-btn-secondary" onClick={() => setStep(step - 1)} disabled={loading}>
+                            {__('Précédent', 'ai-content-studio')}
+                        </button>
+                    )}
+                    <div style={{ flex: 1 }}></div>
+                    {step < totalSteps ? (
+                        <button
+                            className="acs-btn acs-btn-primary"
+                            onClick={() => setStep(step + 1)}
+                            disabled={!canProceed() || loading}
+                        >
+                            {__('Suivant', 'ai-content-studio')}
+                        </button>
+                    ) : (
+                        <button
+                            className="acs-btn acs-btn-primary"
+                            onClick={handleSubmit}
+                            disabled={!canProceed() || loading}
+                        >
+                            {loading ? __('Enregistrement...', 'ai-content-studio') : __('Terminer', 'ai-content-studio')}
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );
