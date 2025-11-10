@@ -191,97 +191,6 @@ export default function EnhancedPostGenerator({ profile }) {
                 </p>
             </div>
 
-            {/* Post Ideas Suggestions */}
-            {!loadingIdeas && postIdeas.length > 0 && (
-                <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                    <div className="acs-card-header">
-                        <h3 className="acs-card-title">💡 {__('Idées de posts basées sur vos précédents contenus', 'ai-content-studio')}</h3>
-                        <p style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', marginTop: 'var(--acs-spacing-1)', marginBottom: 0 }}>
-                            {__('Cliquez sur une idée pour l\'utiliser comme sujet', 'ai-content-studio')}
-                        </p>
-                    </div>
-
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                        gap: 'var(--acs-spacing-3)',
-                        marginTop: 'var(--acs-spacing-3)'
-                    }}>
-                        {postIdeas.map((idea, index) => {
-                            const typeColors = {
-                                educational: '#6366F1',
-                                promotional: '#EC4899',
-                                engagement: '#8B5CF6',
-                                storytelling: '#10B981',
-                                inspiration: '#F59E0B',
-                            };
-                            const color = typeColors[idea.type] || '#6366F1';
-
-                            return (
-                                <div
-                                    key={index}
-                                    onClick={() => setTopic(idea.description)}
-                                    style={{
-                                        padding: 'var(--acs-spacing-4)',
-                                        background: 'var(--acs-white)',
-                                        borderRadius: 'var(--acs-radius-lg)',
-                                        border: `2px solid var(--acs-gray-200)`,
-                                        cursor: 'pointer',
-                                        transition: 'var(--acs-transition)',
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.borderColor = color;
-                                        e.currentTarget.style.transform = 'translateY(-2px)';
-                                        e.currentTarget.style.boxShadow = `0 4px 12px ${color}20`;
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.borderColor = 'var(--acs-gray-200)';
-                                        e.currentTarget.style.transform = 'translateY(0)';
-                                        e.currentTarget.style.boxShadow = 'none';
-                                    }}
-                                >
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)', marginBottom: 'var(--acs-spacing-2)' }}>
-                                        <span style={{
-                                            padding: '4px 10px',
-                                            background: `${color}15`,
-                                            color: color,
-                                            borderRadius: '12px',
-                                            fontSize: 'var(--acs-font-size-sm)',
-                                            fontWeight: 600,
-                                        }}>
-                                            {idea.type}
-                                        </span>
-                                    </div>
-                                    <h4 style={{
-                                        fontWeight: 700,
-                                        marginBottom: 'var(--acs-spacing-2)',
-                                        color: 'var(--acs-gray-900)',
-                                        fontSize: 'var(--acs-font-size-base)'
-                                    }}>
-                                        {idea.title}
-                                    </h4>
-                                    <p style={{
-                                        fontSize: 'var(--acs-font-size-sm)',
-                                        color: 'var(--acs-gray-700)',
-                                        lineHeight: 1.6,
-                                        marginBottom: 'var(--acs-spacing-2)'
-                                    }}>
-                                        {idea.description}
-                                    </p>
-                                    <p style={{
-                                        fontSize: 'var(--acs-font-size-sm)',
-                                        color: 'var(--acs-gray-500)',
-                                        fontStyle: 'italic',
-                                        marginBottom: 0
-                                    }}>
-                                        💭 {idea.why}
-                                    </p>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            )}
 
             {/* Generator Form */}
             <div className="acs-card">
@@ -393,6 +302,58 @@ export default function EnhancedPostGenerator({ profile }) {
                 {/* Sujet */}
                 <div className="acs-form-group">
                     <label className="acs-form-label">{__('Sujet du post', 'ai-content-studio')}</label>
+
+                    {/* Post Ideas Tags - Affichage simple et rapide */}
+                    {!loadingIdeas && postIdeas.length > 0 && (
+                        <div style={{ marginBottom: 'var(--acs-spacing-3)' }}>
+                            <div style={{
+                                fontSize: 'var(--acs-font-size-sm)',
+                                color: 'var(--acs-gray-600)',
+                                marginBottom: 'var(--acs-spacing-2)',
+                                fontWeight: 500
+                            }}>
+                                💡 Suggestions rapides :
+                            </div>
+                            <div style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                gap: 'var(--acs-spacing-2)',
+                            }}>
+                                {postIdeas.map((idea, index) => (
+                                    <span
+                                        key={index}
+                                        onClick={() => setTopic(idea)}
+                                        style={{
+                                            padding: '8px 14px',
+                                            background: 'var(--acs-white)',
+                                            border: '1.5px solid var(--acs-gray-300)',
+                                            borderRadius: '20px',
+                                            fontSize: 'var(--acs-font-size-sm)',
+                                            color: 'var(--acs-gray-700)',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s ease',
+                                            userSelect: 'none',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.borderColor = 'var(--acs-primary)';
+                                            e.currentTarget.style.background = 'var(--acs-primary-light)';
+                                            e.currentTarget.style.color = 'var(--acs-primary)';
+                                            e.currentTarget.style.transform = 'translateY(-1px)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.borderColor = 'var(--acs-gray-300)';
+                                            e.currentTarget.style.background = 'var(--acs-white)';
+                                            e.currentTarget.style.color = 'var(--acs-gray-700)';
+                                            e.currentTarget.style.transform = 'translateY(0)';
+                                        }}
+                                    >
+                                        {idea}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     <textarea
                         className="acs-textarea"
                         placeholder={__('Exemple: 5 astuces pour améliorer sa productivité au travail', 'ai-content-studio')}

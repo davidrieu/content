@@ -387,64 +387,23 @@ Format JSON:
         $profile = $params['profile'] ?? [];
         $platform = $params['platform'] ?? 'instagram';
 
-        // Extract content from recent posts
+        // Extract content from recent posts (only first 50 chars for speed)
         $posts_summary = '';
-        foreach (array_slice($recent_posts, 0, 5) as $index => $post) {
-            $content = isset($post['content']) ? substr($post['content'], 0, 150) : '';
-            $platform_name = isset($post['platform']) ? $post['platform'] : 'inconnu';
-            $posts_summary .= sprintf("\n%d. [%s] %s...", $index + 1, $platform_name, $content);
+        foreach (array_slice($recent_posts, 0, 3) as $index => $post) {
+            $content = isset($post['content']) ? substr($post['content'], 0, 50) : '';
+            $posts_summary .= sprintf("\n%d. %s...", $index + 1, $content);
         }
 
         return sprintf(
-            "Tu es un expert en stratégie de contenu pour les réseaux sociaux.
+            "Basé sur le profil (%s - %s) et posts récents:%s
 
-Basé sur les posts précédents de l'utilisateur et son profil, génère 5 IDÉES DE SUJETS pour de nouveaux posts.
+Génère 4 titres de sujets pour %s (8-12 mots max par titre).
 
-PROFIL BUSINESS:
-- Nom: %s
-- Secteur: %s
-- Audience: %s
-- Niche: %s
-
-POSTS RÉCENTS:%s
-
-PLATEFORME CIBLE: %s
-
-CONSIGNES:
-- Analyse les thèmes et styles qui marchent dans les posts précédents
-- Propose des idées qui sont une ÉVOLUTION naturelle du contenu existant
-- Reste cohérent avec l'identité de marque
-- Chaque idée doit être concrète, actionnable et engageante
-- Varie les types de contenu (éducatif, storytelling, engagement, etc.)
-- Adapte les idées à %s
-
-Format JSON attendu:
-{
-    \"ideas\": [
-        {
-            \"title\": \"Titre court et accrocheur de l'idée\",
-            \"description\": \"Description détaillée en 2-3 phrases\",
-            \"type\": \"educational|promotional|engagement|storytelling|inspiration\",
-            \"platform\": \"%s\",
-            \"why\": \"Pourquoi cette idée est pertinente basée sur l'historique\"
-        },
-        {
-            \"title\": \"...\",
-            \"description\": \"...\",
-            \"type\": \"...\",
-            \"platform\": \"%s\",
-            \"why\": \"...\"
-        }
-    ]
-}",
+Format JSON simple:
+{\"ideas\": [\"Titre 1\", \"Titre 2\", \"Titre 3\", \"Titre 4\"]}",
             $profile['business_name'] ?? 'Business',
             $profile['sector'] ?? 'général',
-            $profile['target_audience'] ?? 'audience générale',
-            $profile['niche'] ?? 'niche non définie',
-            $posts_summary ?: "\n(Aucun post récent trouvé, propose des idées génériques adaptées au profil)",
-            $platform,
-            $platform,
-            $platform,
+            $posts_summary ?: "\n(Aucun)",
             $platform
         );
     }
