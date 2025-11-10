@@ -45,20 +45,29 @@ export default function EnhancedPostGenerator({ profile }) {
                     method: 'GET',
                 });
 
-                console.log('[Post Ideas] Response received:', response);
+                console.log('[Post Ideas] Full response object:', response);
+                console.log('[Post Ideas] response.success:', response.success);
+                console.log('[Post Ideas] response.data:', response.data);
+                console.log('[Post Ideas] Type of response.data:', typeof response.data);
+                console.log('[Post Ideas] Array.isArray(response.data):', Array.isArray(response.data));
 
                 if (response.success && response.data) {
-                    console.log('[Post Ideas] Setting ideas:', response.data);
+                    console.log('[Post Ideas] Setting ideas - Count:', response.data.length);
+                    console.log('[Post Ideas] Ideas content:', response.data);
                     setPostIdeas(response.data);
                 } else {
-                    console.warn('[Post Ideas] No data in response:', response);
+                    console.warn('[Post Ideas] No valid data in response');
+                    console.warn('[Post Ideas] Response structure:', JSON.stringify(response, null, 2));
                     setPostIdeas([]);
                 }
             } catch (err) {
-                console.error('[Post Ideas] Error fetching post ideas:', err);
+                console.error('[Post Ideas] Error caught:', err);
+                console.error('[Post Ideas] Error message:', err.message);
+                console.error('[Post Ideas] Full error:', JSON.stringify(err, null, 2));
                 setPostIdeas([]);
             } finally {
                 setLoadingIdeas(false);
+                console.log('[Post Ideas] Loading complete. postIdeas will be:', postIdeas);
             }
         };
 
@@ -319,45 +328,66 @@ export default function EnhancedPostGenerator({ profile }) {
                                 marginBottom: 'var(--acs-spacing-2)',
                                 fontWeight: 500
                             }}>
-                                💡 Suggestions rapides :
+                                💡 Suggestions rapides ({postIdeas.length}) :
                             </div>
                             <div style={{
                                 display: 'flex',
-                                flexWrap: 'wrap',
+                                flexDirection: 'column',
                                 gap: 'var(--acs-spacing-2)',
                             }}>
                                 {postIdeas.map((idea, index) => (
-                                    <span
+                                    <div
                                         key={index}
-                                        onClick={() => setTopic(idea)}
                                         style={{
-                                            padding: '8px 14px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 'var(--acs-spacing-2)',
+                                            padding: '10px 14px',
                                             background: 'var(--acs-white)',
                                             border: '1.5px solid var(--acs-gray-300)',
-                                            borderRadius: '20px',
+                                            borderRadius: '8px',
                                             fontSize: 'var(--acs-font-size-sm)',
                                             color: 'var(--acs-gray-700)',
-                                            cursor: 'pointer',
                                             transition: 'all 0.2s ease',
-                                            userSelect: 'none',
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.borderColor = 'var(--acs-primary)';
-                                            e.currentTarget.style.background = 'var(--acs-primary-light)';
-                                            e.currentTarget.style.color = 'var(--acs-primary)';
-                                            e.currentTarget.style.transform = 'translateY(-1px)';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.borderColor = 'var(--acs-gray-300)';
-                                            e.currentTarget.style.background = 'var(--acs-white)';
-                                            e.currentTarget.style.color = 'var(--acs-gray-700)';
-                                            e.currentTarget.style.transform = 'translateY(0)';
                                         }}
                                     >
-                                        {idea}
-                                    </span>
+                                        <span style={{ flex: 1 }}>{idea}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setTopic(idea);
+                                                // Visual feedback
+                                                const btn = event.target;
+                                                const originalText = btn.textContent;
+                                                btn.textContent = '✓ Copié';
+                                                setTimeout(() => {
+                                                    btn.textContent = originalText;
+                                                }, 1500);
+                                            }}
+                                            style={{
+                                                padding: '4px 12px',
+                                                background: 'var(--acs-primary)',
+                                                color: 'var(--acs-white)',
+                                                border: 'none',
+                                                borderRadius: '6px',
+                                                fontSize: 'var(--acs-font-size-sm)',
+                                                fontWeight: 500,
+                                                cursor: 'pointer',
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                        >
+                                            Copier
+                                        </button>
+                                    </div>
                                 ))}
                             </div>
+                        </div>
+                    )}
+
+                    {/* Debug: Show loading state */}
+                    {loadingIdeas && (
+                        <div style={{ marginBottom: 'var(--acs-spacing-3)', fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
+                            ⏳ Chargement des suggestions...
                         </div>
                     )}
 
