@@ -1,7 +1,8 @@
 import { useState, useEffect } from '@wordpress/element';
-import { FiHeart, FiCopy, FiTrash2, FiSearch, FiFilter, FiEdit } from 'react-icons/fi';
+import { FiHeart, FiCopy, FiTrash2, FiSearch, FiFilter, FiEdit, FiCalendar } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
+import SchedulePostModal from '../shared/SchedulePostModal';
 
 const PLATFORM_EMOJIS = {
     instagram: '📷',
@@ -19,6 +20,8 @@ export default function ContentLibrary({ profile }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterPlatform, setFilterPlatform] = useState('all');
     const [filterCategory, setFilterCategory] = useState('all');
+    const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+    const [postToSchedule, setPostToSchedule] = useState(null);
 
     useEffect(() => {
         loadLibraryContent();
@@ -76,6 +79,23 @@ export default function ContentLibrary({ profile }) {
     const copyToClipboard = (content) => {
         navigator.clipboard.writeText(content);
         alert(__('Copié dans le presse-papier !', 'ai-content-studio'));
+    };
+
+    const openScheduleModal = (post) => {
+        setPostToSchedule({
+            content: post.content,
+            hashtags: typeof post.hashtags === 'string' ? JSON.parse(post.hashtags) : post.hashtags,
+            platform: post.platform,
+            language: 'fr',
+            metadata: {
+                category: post.category,
+            },
+        });
+        setScheduleModalOpen(true);
+    };
+
+    const handleScheduleSuccess = (data) => {
+        alert(__('✅ Post planifié avec succès !', 'ai-content-studio'));
     };
 
     const filteredPosts = savedPosts.filter((post) => {
@@ -224,16 +244,23 @@ export default function ContentLibrary({ profile }) {
                                     </div>
                                 )}
 
-                                <div style={{ display: 'flex', gap: 'var(--acs-spacing-2)' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--acs-spacing-2)', marginBottom: 'var(--acs-spacing-2)' }}>
                                     <button
                                         className="acs-btn acs-btn-outline-primary acs-btn-sm"
                                         onClick={() => copyToClipboard(post.content)}
-                                        style={{ flex: 1 }}
                                     >
                                         <FiCopy /> {__('Copier', 'ai-content-studio')}
                                     </button>
-                                    <button className="acs-btn acs-btn-outline-primary acs-btn-sm">
-                                        <FiEdit />
+                                    <button
+                                        className="acs-btn acs-btn-outline-primary acs-btn-sm"
+                                        onClick={() => openScheduleModal(post)}
+                                    >
+                                        <FiCalendar /> {__('Planifier', 'ai-content-studio')}
+                                    </button>
+                                </div>
+                                <div style={{ display: 'flex', gap: 'var(--acs-spacing-2)' }}>
+                                    <button className="acs-btn acs-btn-outline-primary acs-btn-sm" style={{ flex: 1 }}>
+                                        <FiEdit /> {__('Éditer', 'ai-content-studio')}
                                     </button>
                                     <button
                                         className="acs-btn acs-btn-sm"
@@ -263,6 +290,16 @@ export default function ContentLibrary({ profile }) {
                     <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{__('Sets de hashtags', 'ai-content-studio')}</h3>
                     <p className="acs-text-muted">{__('Fonctionnalité à venir !', 'ai-content-studio')}</p>
                 </div>
+            )}
+
+            {/* Schedule Modal */}
+            {scheduleModalOpen && postToSchedule && (
+                <SchedulePostModal
+                    isOpen={scheduleModalOpen}
+                    onClose={() => setScheduleModalOpen(false)}
+                    post={postToSchedule}
+                    onSuccess={handleScheduleSuccess}
+                />
             )}
         </div>
     );

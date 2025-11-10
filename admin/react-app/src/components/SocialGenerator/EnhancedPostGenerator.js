@@ -3,6 +3,7 @@ import { FiZap, FiCopy, FiCheck, FiSave, FiCalendar, FiHeart, FiAlertTriangle, F
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { CONTENT_TYPES, POST_TEMPLATES, PLATFORM_SPECS } from '../../data/contentTemplates';
+import SchedulePostModal from '../shared/SchedulePostModal';
 
 export default function EnhancedPostGenerator({ profile }) {
     const [platform, setPlatform] = useState('instagram');
@@ -18,6 +19,8 @@ export default function EnhancedPostGenerator({ profile }) {
     const [selectedPostForSave, setSelectedPostForSave] = useState(null);
     const [postIdeas, setPostIdeas] = useState([]);
     const [loadingIdeas, setLoadingIdeas] = useState(true);
+    const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+    const [postToSchedule, setPostToSchedule] = useState(null);
 
     // Ref pour l'auto-scroll
     const generatedPostsRef = useRef(null);
@@ -121,6 +124,10 @@ export default function EnhancedPostGenerator({ profile }) {
 
             if (response.success) {
                 setGeneratedPosts(response.data);
+
+                // SAUVEGARDE AUTOMATIQUE dans la bibliothèque
+                await savePostsToLibrary(response.data);
+
                 // Auto-scroll vers les posts générés après un court délai
                 setTimeout(() => {
                     generatedPostsRef.current?.scrollIntoView({
@@ -166,6 +173,33 @@ export default function EnhancedPostGenerator({ profile }) {
         }
     };
 
+    /**
+     * Sauvegarde automatique de tous les posts générés dans la bibliothèque
+     */
+    const savePostsToLibrary = async (posts) => {
+        console.log('[Auto-save] Saving', posts.length, 'posts to library');
+
+        try {
+            for (const post of posts) {
+                await apiFetch({
+                    path: '/acs/v1/library/save',
+                    method: 'POST',
+                    data: {
+                        name: `${platform} - ${topic.substring(0, 30)}...`,
+                        content: post.content,
+                        hashtags: post.hashtags,
+                        platform: platform,
+                        category: contentType,
+                    },
+                });
+            }
+            console.log('[Auto-save] Successfully saved all posts to library');
+        } catch (err) {
+            console.error('[Auto-save] Error saving to library:', err);
+            // Ne pas bloquer l'utilisateur si la sauvegarde échoue
+        }
+    };
+
     const copyToClipboard = (content, hashtags, index) => {
         const fullContent = content + '\n\n' + (hashtags || []).join(' ');
         navigator.clipboard.writeText(fullContent);
@@ -173,11 +207,23 @@ export default function EnhancedPostGenerator({ profile }) {
         setTimeout(() => setCopiedIndex(null), 2000);
     };
 
-    const saveToCalendar = async (post, index) => {
-        setSelectedPostForSave(index);
-        // TODO: Ouvrir un modal pour choisir la date de planification
-        alert('Fonctionnalité de planification à venir!');
-        setTimeout(() => setSelectedPostForSave(null), 1000);
+    const openScheduleModal = (post) => {
+        setPostToSchedule({
+            content: post.content,
+            hashtags: post.hashtags,
+            platform: platform,
+            language: language,
+            metadata: {
+                topic: topic,
+                tone: tone,
+                content_type: contentType,
+            },
+        });
+        setScheduleModalOpen(true);
+    };
+
+    const handleScheduleSuccess = (data) => {
+        alert(__('✅ Post planifié avec succès !', 'ai-content-studio'));
     };
 
     const saveToLibrary = async (post, index) => {
@@ -186,6 +232,7 @@ export default function EnhancedPostGenerator({ profile }) {
                 path: '/acs/v1/library/save',
                 method: 'POST',
                 data: {
+                    name: `${platform} - ${topic.substring(0, 30)}...`,
                     content: post.content,
                     hashtags: post.hashtags,
                     platform,
@@ -662,7 +709,7 @@ export default function EnhancedPostGenerator({ profile }) {
                                     </div>
                                     <button
                                         className="acs-btn acs-btn-primary acs-btn-sm w-100"
-                                        onClick={() => saveToCalendar(post, index)}
+                                        onClick={() => openScheduleModal(post)}
                                     >
                                         <FiCalendar /> {__('Planifier ce post', 'ai-content-studio')}
                                     </button>
@@ -682,6 +729,16 @@ export default function EnhancedPostGenerator({ profile }) {
                         {__('Choisissez un type de contenu, un template et un sujet pour générer des posts professionnels', 'ai-content-studio')}
                     </p>
                 </div>
+            )}
+
+            {/* Schedule Modal */}
+            {scheduleModalOpen && postToSchedule && (
+                <SchedulePostModal
+                    isOpen={scheduleModalOpen}
+                    onClose={() => setScheduleModalOpen(false)}
+                    post={postToSchedule}
+                    onSuccess={handleScheduleSuccess}
+                />
             )}
         </div>
     );
