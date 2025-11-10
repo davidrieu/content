@@ -228,6 +228,35 @@ class Claude_Service {
     }
 
     /**
+     * Generate post ideas based on previous posts
+     *
+     * @param array $params Parameters with recent_posts, profile, platform
+     * @return array|WP_Error
+     */
+    public function generate_post_ideas($params) {
+        $prompt = Prompts_Library::get_post_ideas_prompt($params);
+
+        $response = $this->call_api($prompt, 1500);
+
+        if (is_wp_error($response)) {
+            return $response;
+        }
+
+        // Clean and parse JSON response
+        $clean_response = $this->clean_json_response($response);
+        $data = json_decode($clean_response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE || !isset($data['ideas'])) {
+            Logger::error('Failed to parse post ideas JSON', [
+                'json_error' => json_last_error_msg()
+            ], 'api');
+            return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
+        }
+
+        return $data['ideas'];
+    }
+
+    /**
      * Analyze trend relevance
      *
      * @param string $trend Trend keyword

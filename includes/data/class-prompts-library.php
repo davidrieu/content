@@ -377,6 +377,79 @@ Format JSON:
     }
 
     /**
+     * Get post ideas prompt based on previous posts
+     *
+     * @param array $params
+     * @return string
+     */
+    public static function get_post_ideas_prompt($params) {
+        $recent_posts = $params['recent_posts'] ?? [];
+        $profile = $params['profile'] ?? [];
+        $platform = $params['platform'] ?? 'instagram';
+
+        // Extract content from recent posts
+        $posts_summary = '';
+        foreach (array_slice($recent_posts, 0, 5) as $index => $post) {
+            $content = isset($post['content']) ? substr($post['content'], 0, 150) : '';
+            $platform_name = isset($post['platform']) ? $post['platform'] : 'inconnu';
+            $posts_summary .= sprintf("\n%d. [%s] %s...", $index + 1, $platform_name, $content);
+        }
+
+        return sprintf(
+            "Tu es un expert en stratégie de contenu pour les réseaux sociaux.
+
+Basé sur les posts précédents de l'utilisateur et son profil, génère 5 IDÉES DE SUJETS pour de nouveaux posts.
+
+PROFIL BUSINESS:
+- Nom: %s
+- Secteur: %s
+- Audience: %s
+- Niche: %s
+
+POSTS RÉCENTS:%s
+
+PLATEFORME CIBLE: %s
+
+CONSIGNES:
+- Analyse les thèmes et styles qui marchent dans les posts précédents
+- Propose des idées qui sont une ÉVOLUTION naturelle du contenu existant
+- Reste cohérent avec l'identité de marque
+- Chaque idée doit être concrète, actionnable et engageante
+- Varie les types de contenu (éducatif, storytelling, engagement, etc.)
+- Adapte les idées à %s
+
+Format JSON attendu:
+{
+    \"ideas\": [
+        {
+            \"title\": \"Titre court et accrocheur de l'idée\",
+            \"description\": \"Description détaillée en 2-3 phrases\",
+            \"type\": \"educational|promotional|engagement|storytelling|inspiration\",
+            \"platform\": \"%s\",
+            \"why\": \"Pourquoi cette idée est pertinente basée sur l'historique\"
+        },
+        {
+            \"title\": \"...\",
+            \"description\": \"...\",
+            \"type\": \"...\",
+            \"platform\": \"%s\",
+            \"why\": \"...\"
+        }
+    ]
+}",
+            $profile['business_name'] ?? 'Business',
+            $profile['sector'] ?? 'général',
+            $profile['target_audience'] ?? 'audience générale',
+            $profile['niche'] ?? 'niche non définie',
+            $posts_summary ?: "\n(Aucun post récent trouvé, propose des idées génériques adaptées au profil)",
+            $platform,
+            $platform,
+            $platform,
+            $platform
+        );
+    }
+
+    /**
      * Get trend analysis prompt
      *
      * @param string $trend

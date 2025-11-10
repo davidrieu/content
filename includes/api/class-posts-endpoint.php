@@ -35,6 +35,12 @@ class Posts_Endpoint extends REST_Controller {
             'permission_callback' => [$this, 'permission_check'],
         ]);
 
+        register_rest_route($this->namespace, '/posts/ideas', [
+            'methods' => 'GET',
+            'callback' => [$this, 'get_post_ideas'],
+            'permission_callback' => [$this, 'permission_check'],
+        ]);
+
         register_rest_route($this->namespace, '/posts/(?P<id>\d+)', [
             [
                 'methods' => 'GET',
@@ -172,6 +178,53 @@ class Posts_Endpoint extends REST_Controller {
         $usage_service->increment_post_usage($user_id);
 
         return $this->success($saved_posts, __('Posts générés avec succès', 'ai-content-studio'));
+    }
+
+    /**
+     * Get post ideas based on user's previous posts
+     */
+    public function get_post_ideas($request) {
+        $user_id = $this->get_current_user_id();
+        $platform = $request->get_param('platform') ?? 'instagram';
+
+        // Get user's recent posts
+        $post_model = new Social_Post();
+        $recent_posts = $post_model->get_by_user($user_id, [
+            'limit' => 5,
+            'offset' => 0,
+        ]);
+
+        // If no posts, return empty array
+        if (empty($recent_posts)) {
+            return $this->success([]);
+        }
+
+        // Get profile
+        $profile_model = new Business_Profile();
+        $profile = $profile_model->get_by_user($user_id);
+
+        if (!$profile) {
+            return $this->success([]);
+        }
+
+        // Generate ideas with Claude
+        $claude = new Claude_Service();
+        $ideas = $claude->generate_post_ideas([
+            'recent_posts' => $recent_posts,
+            'profile' => $profile,
+            'platform' => $platform,
+        ]);
+
+        if (is_wp_error($ideas)) {
+            \ACS\Utils\Logger::error('Post ideas generation failed', [
+                'user_id' => $user_id,
+                'error_message' => $ideas->get_error_message(),
+            ], 'generation');
+
+            return $this->success([]); // Return empty array on error instead of error response
+        }
+
+        return $this->success($ideas);
     }
 
     public function create_post($request) {

@@ -16,6 +16,8 @@ export default function EnhancedPostGenerator({ profile }) {
     const [error, setError] = useState('');
     const [copiedIndex, setCopiedIndex] = useState(null);
     const [selectedPostForSave, setSelectedPostForSave] = useState(null);
+    const [postIdeas, setPostIdeas] = useState([]);
+    const [loadingIdeas, setLoadingIdeas] = useState(true);
 
     // Ref pour l'auto-scroll
     const generatedPostsRef = useRef(null);
@@ -31,6 +33,30 @@ export default function EnhancedPostGenerator({ profile }) {
             setTemplate(availableTemplates[0].id);
         }
     }, [contentType, platform]);
+
+    // Charger les idées de posts au montage et quand la plateforme change
+    useEffect(() => {
+        const fetchIdeas = async () => {
+            setLoadingIdeas(true);
+            try {
+                const response = await apiFetch({
+                    path: `/acs/v1/posts/ideas?platform=${platform}`,
+                    method: 'GET',
+                });
+
+                if (response.success && response.data) {
+                    setPostIdeas(response.data);
+                }
+            } catch (err) {
+                console.error('Error fetching post ideas:', err);
+                // Silently fail - ideas are optional
+            } finally {
+                setLoadingIdeas(false);
+            }
+        };
+
+        fetchIdeas();
+    }, [platform]);
 
     const selectedTemplate = POST_TEMPLATES[template];
     const platformSpec = PLATFORM_SPECS[platform];
@@ -164,6 +190,98 @@ export default function EnhancedPostGenerator({ profile }) {
                     {__('Créez du contenu engageant avec des templates professionnels adaptés à vos objectifs', 'ai-content-studio')}
                 </p>
             </div>
+
+            {/* Post Ideas Suggestions */}
+            {!loadingIdeas && postIdeas.length > 0 && (
+                <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
+                    <div className="acs-card-header">
+                        <h3 className="acs-card-title">💡 {__('Idées de posts basées sur vos précédents contenus', 'ai-content-studio')}</h3>
+                        <p style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', marginTop: 'var(--acs-spacing-1)', marginBottom: 0 }}>
+                            {__('Cliquez sur une idée pour l\'utiliser comme sujet', 'ai-content-studio')}
+                        </p>
+                    </div>
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                        gap: 'var(--acs-spacing-3)',
+                        marginTop: 'var(--acs-spacing-3)'
+                    }}>
+                        {postIdeas.map((idea, index) => {
+                            const typeColors = {
+                                educational: '#6366F1',
+                                promotional: '#EC4899',
+                                engagement: '#8B5CF6',
+                                storytelling: '#10B981',
+                                inspiration: '#F59E0B',
+                            };
+                            const color = typeColors[idea.type] || '#6366F1';
+
+                            return (
+                                <div
+                                    key={index}
+                                    onClick={() => setTopic(idea.description)}
+                                    style={{
+                                        padding: 'var(--acs-spacing-4)',
+                                        background: 'var(--acs-white)',
+                                        borderRadius: 'var(--acs-radius-lg)',
+                                        border: `2px solid var(--acs-gray-200)`,
+                                        cursor: 'pointer',
+                                        transition: 'var(--acs-transition)',
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.borderColor = color;
+                                        e.currentTarget.style.transform = 'translateY(-2px)';
+                                        e.currentTarget.style.boxShadow = `0 4px 12px ${color}20`;
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.borderColor = 'var(--acs-gray-200)';
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = 'none';
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)', marginBottom: 'var(--acs-spacing-2)' }}>
+                                        <span style={{
+                                            padding: '4px 10px',
+                                            background: `${color}15`,
+                                            color: color,
+                                            borderRadius: '12px',
+                                            fontSize: 'var(--acs-font-size-sm)',
+                                            fontWeight: 600,
+                                        }}>
+                                            {idea.type}
+                                        </span>
+                                    </div>
+                                    <h4 style={{
+                                        fontWeight: 700,
+                                        marginBottom: 'var(--acs-spacing-2)',
+                                        color: 'var(--acs-gray-900)',
+                                        fontSize: 'var(--acs-font-size-base)'
+                                    }}>
+                                        {idea.title}
+                                    </h4>
+                                    <p style={{
+                                        fontSize: 'var(--acs-font-size-sm)',
+                                        color: 'var(--acs-gray-700)',
+                                        lineHeight: 1.6,
+                                        marginBottom: 'var(--acs-spacing-2)'
+                                    }}>
+                                        {idea.description}
+                                    </p>
+                                    <p style={{
+                                        fontSize: 'var(--acs-font-size-sm)',
+                                        color: 'var(--acs-gray-500)',
+                                        fontStyle: 'italic',
+                                        marginBottom: 0
+                                    }}>
+                                        💭 {idea.why}
+                                    </p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
 
             {/* Generator Form */}
             <div className="acs-card">
