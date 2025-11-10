@@ -183,6 +183,35 @@ body {
   text-align: center;
 }
 
+/* Navigation Sections */
+.acs-nav-section {
+  margin-bottom: var(--acs-spacing-6);
+}
+
+.acs-nav-section:last-child {
+  margin-bottom: 0;
+  margin-top: auto;
+  padding-top: var(--acs-spacing-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.acs-nav-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--acs-spacing-2);
+  padding: 0.5rem var(--acs-spacing-5);
+  margin-bottom: var(--acs-spacing-2);
+  font-size: var(--acs-font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.acs-nav-section-header svg {
+  opacity: 0.6;
+}
+
 .acs-main-wrapper {
   margin-left: var(--acs-sidebar-width);
   flex: 1;

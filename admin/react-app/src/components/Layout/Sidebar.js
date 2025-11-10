@@ -1,18 +1,44 @@
-import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark } from 'react-icons/fi';
+import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark, FiShare2, FiEdit } from 'react-icons/fi';
 import { __ } from '@wordpress/i18n';
 
 export default function Sidebar({ currentPath, onNavigate }) {
-    const menuItems = [
+    const socialMediaSection = [
         { path: '/', icon: FiHome, label: __('Tableau de bord', 'ai-content-studio') },
         { path: '/generate', icon: FiZap, label: __('Générer des posts', 'ai-content-studio') },
         { path: '/strategy', icon: FiTarget, label: __('Stratégie Auto', 'ai-content-studio') },
         { path: '/calendar', icon: FiCalendar, label: __('Calendrier', 'ai-content-studio') },
         { path: '/library', icon: FiBookmark, label: __('Bibliothèque', 'ai-content-studio') },
+    ];
+
+    const blogSeoSection = [
         { path: '/articles', icon: FiFileText, label: __('Articles de blog', 'ai-content-studio') },
         { path: '/images', icon: FiImage, label: __('Images IA', 'ai-content-studio') },
-        { path: '/trends', icon: FiTrendingUp, label: __('Tendances', 'ai-content-studio') },
+        { path: '/trends', icon: FiTrendingUp, label: __('Tendances SEO', 'ai-content-studio') },
+    ];
+
+    const settingsSection = [
         { path: '/settings', icon: FiSettings, label: __('Paramètres', 'ai-content-studio') },
     ];
+
+    const renderNavItem = (item) => {
+        const Icon = item.icon;
+        const isActive = currentPath === item.path;
+        return (
+            <div key={item.path} className="acs-nav-item">
+                <a
+                    href="#"
+                    className={`acs-nav-link ${isActive ? 'active' : ''}`}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onNavigate(item.path);
+                    }}
+                >
+                    <Icon className="acs-nav-icon" />
+                    <span>{item.label}</span>
+                </a>
+            </div>
+        );
+    };
 
     return (
         <div className="acs-sidebar">
@@ -23,25 +49,28 @@ export default function Sidebar({ currentPath, onNavigate }) {
                 </a>
             </div>
             <nav className="acs-sidebar-nav">
-                {menuItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = currentPath === item.path;
-                    return (
-                        <div key={item.path} className="acs-nav-item">
-                            <a
-                                href="#"
-                                className={`acs-nav-link ${isActive ? 'active' : ''}`}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    onNavigate(item.path);
-                                }}
-                            >
-                                <Icon className="acs-nav-icon" />
-                                <span>{item.label}</span>
-                            </a>
-                        </div>
-                    );
-                })}
+                {/* Section Réseaux Sociaux */}
+                <div className="acs-nav-section">
+                    <div className="acs-nav-section-header">
+                        <FiShare2 size={14} />
+                        <span>{__('Réseaux Sociaux', 'ai-content-studio')}</span>
+                    </div>
+                    {socialMediaSection.map(renderNavItem)}
+                </div>
+
+                {/* Section SEO & Blog */}
+                <div className="acs-nav-section">
+                    <div className="acs-nav-section-header">
+                        <FiEdit size={14} />
+                        <span>{__('SEO & Blog', 'ai-content-studio')}</span>
+                    </div>
+                    {blogSeoSection.map(renderNavItem)}
+                </div>
+
+                {/* Section Paramètres */}
+                <div className="acs-nav-section">
+                    {settingsSection.map(renderNavItem)}
+                </div>
             </nav>
         </div>
     );
