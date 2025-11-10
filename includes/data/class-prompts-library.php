@@ -136,15 +136,21 @@ Fournis une stratégie au format JSON avec:
             $template_structure = "\n\nStructure COULISSES:\n- Hook intriguant\n- Raconter un processus/moment\n- Détails authentiques\n- Leçon ou insight\n- Remerciement/question";
         }
 
-        // Specs plateforme
+        // Specs plateforme avec limite passée depuis le frontend
+        $max_length = $params['max_length'] ?? 2200;
+
         $platform_specs = [
-            'instagram' => 'Max 2200 caractères, optimal 125-150. Émojis OK. Style visuel.',
-            'facebook' => 'Optimal 40-80 caractères. Style conversationnel.',
-            'linkedin' => 'Optimal 150-300 caractères. Professionnel et insights.',
-            'twitter' => 'Max 280 caractères. Concis et percutant.',
+            'instagram' => sprintf('MAX %d caractères, optimal 125-150. Émojis OK. Style visuel et engageant.', $max_length),
+            'facebook' => sprintf('MAX %d caractères, optimal 40-80. Style conversationnel et personnel.', $max_length),
+            'linkedin' => sprintf('MAX %d caractères, optimal 150-300. Professionnel, insights et valeur ajoutée.', $max_length),
+            'twitter' => sprintf('MAX %d caractères, optimal 71-100. Concis, percutant et direct.', $max_length),
+            'tiktok' => sprintf('MAX %d caractères, optimal 80-120. Jeune, dynamique, avec émojis.', $max_length),
+            'youtube' => sprintf('MAX %d caractères, optimal 200-300. Descriptif et accrocheur.', $max_length),
+            'pinterest' => sprintf('MAX %d caractères, optimal 100-200. Inspirant et descriptif.', $max_length),
+            'snapchat' => sprintf('MAX %d caractères, optimal 80-150. Court, fun et authentique.', $max_length),
         ];
 
-        $specs = $platform_specs[$platform] ?? 'Format standard';
+        $specs = $platform_specs[$platform] ?? sprintf('MAX %d caractères. Format standard.', $max_length);
 
         return sprintf(
             "Génère 3 variantes de posts pour %s sur le sujet: %s
@@ -161,7 +167,8 @@ CONSIGNES IMPORTANTES:
 - Utilise des emojis de manière appropriée et moderne
 - Inclus un appel à l'action clair et engageant
 - Respecte scrupuleusement le ton demandé
-- Reste dans les limites de caractères
+- CRITIQUE: Respecte ABSOLUMENT la limite de %d caractères (contenu + hashtags)
+- Compte les caractères attentivement, ne dépasse JAMAIS la limite
 - Rends le contenu actionnable et utile
 - Pour les hashtags: mélange de popularité (70%% niche + 20%% broad + 10%% branded)
 
@@ -196,7 +203,8 @@ Retourne UNIQUEMENT un JSON valide (pas de texte avant ou après):
             $tone,
             $specs,
             $template_structure,
-            $platform
+            $platform,
+            $max_length
         );
     }
 

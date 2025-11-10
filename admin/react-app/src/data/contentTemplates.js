@@ -90,7 +90,7 @@ Structure:
 5. Call-to-action engageant
 
 Le post doit être pratique, actionnable et facile à suivre.`,
-        platforms: ['instagram', 'linkedin', 'facebook'],
+        platforms: ['instagram', 'linkedin', 'facebook', 'tiktok', 'youtube', 'pinterest'],
     },
 
     tips_list: {
@@ -116,7 +116,7 @@ Format:
 - Conclusion avec CTA
 
 Rends ça scannable et facile à digérer!`,
-        platforms: ['instagram', 'facebook', 'twitter', 'linkedin'],
+        platforms: ['instagram', 'facebook', 'twitter', 'linkedin', 'tiktok', 'pinterest', 'snapchat'],
     },
 
     mistake_avoid: {
@@ -171,7 +171,7 @@ Structure:
 5. CTA clair avec lien/action
 
 Crée de l'enthousiasme sans être trop vendeur!`,
-        platforms: ['instagram', 'facebook', 'linkedin'],
+        platforms: ['instagram', 'facebook', 'linkedin', 'tiktok', 'youtube', 'snapchat'],
     },
 
     special_offer: {
@@ -198,7 +198,7 @@ Structure:
 5. CTA fort et clair
 
 Utilise des émojis pour attirer l'attention!`,
-        platforms: ['instagram', 'facebook', 'twitter'],
+        platforms: ['instagram', 'facebook', 'twitter', 'tiktok', 'snapchat'],
     },
 
     // ========== ENGAGEMENT ==========
@@ -226,7 +226,7 @@ Structure:
 5. Émoji pour chaque option
 
 La question doit inviter à l'interaction!`,
-        platforms: ['instagram', 'facebook', 'linkedin'],
+        platforms: ['instagram', 'facebook', 'linkedin', 'tiktok', 'youtube', 'snapchat'],
     },
 
     poll: {
@@ -252,7 +252,7 @@ Structure:
 5. Pourquoi c'est intéressant de participer
 
 Rends ça fun et facile à répondre!`,
-        platforms: ['instagram', 'facebook', 'twitter', 'linkedin'],
+        platforms: ['instagram', 'facebook', 'twitter', 'linkedin', 'tiktok', 'youtube', 'snapchat'],
     },
 
     fill_blank: {
@@ -307,7 +307,7 @@ Structure:
 5. Remerciement ou question à l'audience
 
 Sois authentique et personnel!`,
-        platforms: ['instagram', 'facebook', 'linkedin'],
+        platforms: ['instagram', 'facebook', 'linkedin', 'tiktok', 'youtube', 'snapchat'],
     },
 
     customer_story: {
@@ -363,7 +363,7 @@ Structure:
 5. Question ou CTA doux
 
 Inspire sans être cliché!`,
-        platforms: ['instagram', 'facebook', 'linkedin'],
+        platforms: ['instagram', 'facebook', 'linkedin', 'tiktok', 'pinterest', 'snapchat'],
     },
 
     // ========== NEWS ==========
@@ -514,23 +514,63 @@ export const PLATFORM_SPECS = {
         optimal_length: '125-150 caractères',
         image_ratio: ['1:1', '4:5', '9:16'],
         features: ['Carousel', 'Reels', 'Stories'],
+        emoji: '📷',
+        color: '#E4405F',
     },
     facebook: {
         max_length: 63206,
         optimal_length: '40-80 caractères',
         image_ratio: ['1.91:1', '1:1'],
         features: ['Video', 'Live', 'Stories'],
+        emoji: '📘',
+        color: '#1877F2',
     },
     linkedin: {
         max_length: 3000,
         optimal_length: '150-300 caractères',
         image_ratio: ['1.91:1', '1:1'],
         features: ['Article', 'Document', 'Poll'],
+        emoji: '💼',
+        color: '#0A66C2',
     },
     twitter: {
         max_length: 280,
         optimal_length: '71-100 caractères',
         image_ratio: ['16:9', '1:1'],
         features: ['Thread', 'Poll', 'Spaces'],
+        emoji: '🐦',
+        color: '#000000',
+    },
+    tiktok: {
+        max_length: 2200,
+        optimal_length: '80-120 caractères',
+        image_ratio: ['9:16'],
+        features: ['Video court', 'Duet', 'Stitch'],
+        emoji: '🎵',
+        color: '#000000',
+    },
+    youtube: {
+        max_length: 5000,
+        optimal_length: '200-300 caractères',
+        image_ratio: ['16:9'],
+        features: ['Video', 'Shorts', 'Community'],
+        emoji: '📹',
+        color: '#FF0000',
+    },
+    pinterest: {
+        max_length: 500,
+        optimal_length: '100-200 caractères',
+        image_ratio: ['2:3', '1:1'],
+        features: ['Pin', 'Board', 'Idea Pin'],
+        emoji: '📌',
+        color: '#E60023',
+    },
+    snapchat: {
+        max_length: 250,
+        optimal_length: '80-150 caractères',
+        image_ratio: ['9:16'],
+        features: ['Snap', 'Story', 'Spotlight'],
+        emoji: '👻',
+        color: '#FFFC00',
     },
 };

@@ -1,5 +1,5 @@
-import { useState, useEffect } from '@wordpress/element';
-import { FiZap, FiCopy, FiCheck, FiSave, FiCalendar, FiHeart } from 'react-icons/fi';
+import { useState, useEffect, useRef } from '@wordpress/element';
+import { FiZap, FiCopy, FiCheck, FiSave, FiCalendar, FiHeart, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { CONTENT_TYPES, POST_TEMPLATES, PLATFORM_SPECS } from '../../data/contentTemplates';
@@ -10,12 +10,15 @@ export default function EnhancedPostGenerator({ profile }) {
     const [template, setTemplate] = useState('');
     const [topic, setTopic] = useState('');
     const [tone, setTone] = useState('professional');
-    const [language, setLanguage] = useState('en');
+    const [language, setLanguage] = useState('fr');
     const [generating, setGenerating] = useState(false);
     const [generatedPosts, setGeneratedPosts] = useState([]);
     const [error, setError] = useState('');
     const [copiedIndex, setCopiedIndex] = useState(null);
     const [selectedPostForSave, setSelectedPostForSave] = useState(null);
+
+    // Ref pour l'auto-scroll
+    const generatedPostsRef = useRef(null);
 
     // Filtrer les templates disponibles selon le type de contenu sélectionné
     const availableTemplates = Object.values(POST_TEMPLATES).filter(
@@ -31,6 +34,18 @@ export default function EnhancedPostGenerator({ profile }) {
 
     const selectedTemplate = POST_TEMPLATES[template];
     const platformSpec = PLATFORM_SPECS[platform];
+
+    // Calculer si un post dépasse la limite
+    const isOverLimit = (content, hashtags) => {
+        const fullContent = content + '\n\n' + (hashtags || []).join(' ');
+        return fullContent.length > platformSpec.max_length;
+    };
+
+    // Calculer le pourcentage d'utilisation de la limite
+    const getLimitPercentage = (content, hashtags) => {
+        const fullContent = content + '\n\n' + (hashtags || []).join(' ');
+        return Math.min((fullContent.length / platformSpec.max_length) * 100, 100);
+    };
 
     const handleGenerate = async () => {
         if (!topic.trim()) {
@@ -53,6 +68,7 @@ export default function EnhancedPostGenerator({ profile }) {
                     language,
                     content_type: contentType,
                     template_id: template,
+                    max_length: platformSpec.max_length, // IMPORTANT: Passer la limite au backend
                     profile_data: {
                         sector: profile?.sector || '',
                         target_audience: profile?.target_audience || '',
@@ -63,6 +79,13 @@ export default function EnhancedPostGenerator({ profile }) {
 
             if (response.success) {
                 setGeneratedPosts(response.data);
+                // Auto-scroll vers les posts générés après un court délai
+                setTimeout(() => {
+                    generatedPostsRef.current?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 100);
             } else {
                 setError(response.error?.message || __('Erreur lors de la génération', 'ai-content-studio'));
             }
@@ -101,8 +124,9 @@ export default function EnhancedPostGenerator({ profile }) {
         }
     };
 
-    const copyToClipboard = (content, index) => {
-        navigator.clipboard.writeText(content);
+    const copyToClipboard = (content, hashtags, index) => {
+        const fullContent = content + '\n\n' + (hashtags || []).join(' ');
+        navigator.clipboard.writeText(fullContent);
         setCopiedIndex(index);
         setTimeout(() => setCopiedIndex(null), 2000);
     };
@@ -147,33 +171,35 @@ export default function EnhancedPostGenerator({ profile }) {
                     <h3 className="acs-card-title">{__('Paramètres de génération', 'ai-content-studio')}</h3>
                 </div>
 
-                {/* Plateforme */}
+                {/* Plateforme - Toutes les 8 plateformes */}
                 <div className="acs-form-group">
                     <label className="acs-form-label">{__('Plateforme', 'ai-content-studio')}</label>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
-                        {['instagram', 'facebook', 'linkedin', 'twitter'].map((p) => (
-                            <div
-                                key={p}
-                                onClick={() => setPlatform(p)}
-                                style={{
-                                    padding: 'var(--acs-spacing-3)',
-                                    border: `2px solid ${platform === p ? 'var(--acs-primary)' : 'var(--acs-gray-200)'}`,
-                                    borderRadius: 'var(--acs-radius-lg)',
-                                    textAlign: 'center',
-                                    cursor: 'pointer',
-                                    transition: 'var(--acs-transition)',
-                                    background: platform === p ? 'rgba(99, 102, 241, 0.05)' : 'var(--acs-white)',
-                                }}
-                            >
-                                <div style={{ fontSize: '1.5rem', marginBottom: 'var(--acs-spacing-1)' }}>
-                                    {p === 'instagram' && '📷'}
-                                    {p === 'facebook' && '📘'}
-                                    {p === 'linkedin' && '💼'}
-                                    {p === 'twitter' && '🐦'}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
+                        {Object.keys(PLATFORM_SPECS).map((p) => {
+                            const spec = PLATFORM_SPECS[p];
+                            return (
+                                <div
+                                    key={p}
+                                    onClick={() => setPlatform(p)}
+                                    style={{
+                                        padding: 'var(--acs-spacing-3)',
+                                        border: `2px solid ${platform === p ? spec.color : 'var(--acs-gray-200)'}`,
+                                        borderRadius: 'var(--acs-radius-lg)',
+                                        textAlign: 'center',
+                                        cursor: 'pointer',
+                                        transition: 'var(--acs-transition)',
+                                        background: platform === p ? `${spec.color}10` : 'var(--acs-white)',
+                                    }}
+                                >
+                                    <div style={{ fontSize: '1.5rem', marginBottom: 'var(--acs-spacing-1)' }}>
+                                        {spec.emoji}
+                                    </div>
+                                    <div style={{ fontSize: 'var(--acs-font-size-sm)', fontWeight: 600, textTransform: 'capitalize' }}>
+                                        {p === 'linkedin' ? 'LinkedIn' : p.charAt(0).toUpperCase() + p.slice(1)}
+                                    </div>
                                 </div>
-                                <div style={{ fontSize: 'var(--acs-font-size-sm)', fontWeight: 600, textTransform: 'capitalize' }}>{p}</div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -309,21 +335,31 @@ export default function EnhancedPostGenerator({ profile }) {
                     </div>
                 </div>
 
-                {/* Platform specs info */}
+                {/* Platform specs info - Amélioré */}
                 {platformSpec && (
                     <div
                         style={{
-                            padding: 'var(--acs-spacing-3)',
+                            padding: 'var(--acs-spacing-4)',
                             background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05))',
-                            borderRadius: 'var(--acs-radius)',
+                            borderRadius: 'var(--acs-radius-lg)',
                             border: '1px solid rgba(99, 102, 241, 0.2)',
                             marginBottom: 'var(--acs-spacing-4)',
                         }}
                     >
-                        <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
-                            <strong>📊 Specs {platform.charAt(0).toUpperCase() + platform.slice(1)} :</strong>
-                            {' '}Longueur optimale: {platformSpec.optimal_length}
-                            {' '}• Max: {platformSpec.max_length} caractères
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-3)' }}>
+                            <div style={{ fontSize: '2rem' }}>{platformSpec.emoji}</div>
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: 600, marginBottom: 'var(--acs-spacing-1)', color: 'var(--acs-gray-900)' }}>
+                                    Spécifications {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                                </div>
+                                <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
+                                    📏 Longueur optimale: <strong>{platformSpec.optimal_length}</strong>
+                                    {' '}• Maximum: <strong>{platformSpec.max_length} caractères</strong>
+                                </div>
+                                <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', marginTop: 'var(--acs-spacing-1)' }}>
+                                    ✨ {platformSpec.features.join(' • ')}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -348,66 +384,175 @@ export default function EnhancedPostGenerator({ profile }) {
                 </button>
             </div>
 
-            {/* Generated Posts */}
+            {/* Generated Posts - Design amélioré */}
             {generatedPosts.length > 0 && (
-                <div style={{ marginTop: 'var(--acs-spacing-5)' }}>
+                <div ref={generatedPostsRef} style={{ marginTop: 'var(--acs-spacing-5)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--acs-spacing-4)' }}>
-                        <h2 className="acs-card-title">{__('Posts générés', 'ai-content-studio')}</h2>
-                        <span className="acs-badge acs-badge-success">{generatedPosts.length} variantes</span>
+                        <div>
+                            <h2 className="acs-card-title" style={{ marginBottom: 'var(--acs-spacing-1)' }}>
+                                {__('Posts générés', 'ai-content-studio')} ✨
+                            </h2>
+                            <p style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', margin: 0 }}>
+                                Sélectionnez le post qui correspond le mieux à votre style
+                            </p>
+                        </div>
+                        <span className="acs-badge acs-badge-success">
+                            {generatedPosts.length} variantes
+                        </span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: 'var(--acs-spacing-4)' }}>
-                        {generatedPosts.map((post, index) => (
-                            <div key={post.id || index} className="acs-post-card">
-                                <div className="acs-post-header">
-                                    <span className="acs-badge acs-badge-primary">
-                                        {__('Variante', 'ai-content-studio')} {index + 1}
-                                    </span>
-                                    <span style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
-                                        {post.content?.length || 0} caractères
-                                    </span>
-                                </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: 'var(--acs-spacing-4)' }}>
+                        {generatedPosts.map((post, index) => {
+                            const fullContent = post.content + '\n\n' + (post.hashtags || []).join(' ');
+                            const charCount = fullContent.length;
+                            const isOver = isOverLimit(post.content, post.hashtags);
+                            const percentage = getLimitPercentage(post.content, post.hashtags);
 
-                                <div className="acs-post-content">{post.content}</div>
-
-                                {post.hashtags && post.hashtags.length > 0 && (
-                                    <div className="acs-hashtags">
-                                        {post.hashtags.map((tag, i) => (
-                                            <span key={i} className="acs-hashtag">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-
-                                <div style={{ marginTop: 'var(--acs-spacing-3)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--acs-spacing-2)' }}>
-                                    <button
-                                        className="acs-btn acs-btn-outline-primary acs-btn-sm"
-                                        onClick={() => copyToClipboard(post.content + '\n\n' + (post.hashtags || []).join(' '), index)}
-                                    >
-                                        {copiedIndex === index ? (
-                                            <>
-                                                <FiCheck /> {__('Copié!', 'ai-content-studio')}
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FiCopy /> {__('Copier', 'ai-content-studio')}
-                                            </>
-                                        )}
-                                    </button>
-                                    <button className="acs-btn acs-btn-outline-primary acs-btn-sm" onClick={() => saveToLibrary(post, index)}>
-                                        <FiHeart /> {__('Sauvegarder', 'ai-content-studio')}
-                                    </button>
-                                </div>
-                                <button
-                                    className="acs-btn acs-btn-primary acs-btn-sm w-100"
-                                    style={{ marginTop: 'var(--acs-spacing-2)' }}
-                                    onClick={() => saveToCalendar(post, index)}
+                            return (
+                                <div
+                                    key={post.id || index}
+                                    style={{
+                                        background: 'var(--acs-white)',
+                                        borderRadius: 'var(--acs-radius-lg)',
+                                        padding: 'var(--acs-spacing-4)',
+                                        boxShadow: 'var(--acs-shadow)',
+                                        border: `2px solid ${isOver ? 'var(--acs-danger)' : 'var(--acs-gray-100)'}`,
+                                        transition: 'var(--acs-transition)',
+                                    }}
                                 >
-                                    <FiCalendar /> {__('Planifier ce post', 'ai-content-studio')}
-                                </button>
-                            </div>
-                        ))}
+                                    {/* En-tête du post */}
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        marginBottom: 'var(--acs-spacing-3)',
+                                        paddingBottom: 'var(--acs-spacing-3)',
+                                        borderBottom: '1px solid var(--acs-gray-100)',
+                                    }}>
+                                        <span style={{
+                                            background: 'linear-gradient(135deg, var(--acs-primary), var(--acs-secondary))',
+                                            color: 'var(--acs-white)',
+                                            padding: '4px 12px',
+                                            borderRadius: '12px',
+                                            fontSize: 'var(--acs-font-size-sm)',
+                                            fontWeight: 600,
+                                        }}>
+                                            {__('Variante', 'ai-content-studio')} {index + 1}
+                                        </span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)' }}>
+                                            {isOver ? (
+                                                <FiAlertTriangle style={{ color: 'var(--acs-danger)', fontSize: '1.25rem' }} />
+                                            ) : (
+                                                <FiCheckCircle style={{ color: 'var(--acs-success)', fontSize: '1.25rem' }} />
+                                            )}
+                                            <span style={{
+                                                fontSize: 'var(--acs-font-size-sm)',
+                                                color: isOver ? 'var(--acs-danger)' : 'var(--acs-gray-600)',
+                                                fontWeight: isOver ? 600 : 400,
+                                            }}>
+                                                {charCount} / {platformSpec.max_length}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Barre de progression de la limite */}
+                                    <div style={{ marginBottom: 'var(--acs-spacing-3)' }}>
+                                        <div className="acs-progress" style={{ height: '6px' }}>
+                                            <div
+                                                className={`acs-progress-bar ${isOver ? 'danger' : percentage > 80 ? 'warning' : ''}`}
+                                                style={{ width: `${percentage}%` }}
+                                            />
+                                        </div>
+                                        {isOver && (
+                                            <div style={{
+                                                fontSize: 'var(--acs-font-size-sm)',
+                                                color: 'var(--acs-danger)',
+                                                marginTop: 'var(--acs-spacing-1)',
+                                                fontWeight: 500,
+                                            }}>
+                                                ⚠️ Ce post dépasse la limite de {platformSpec.max_length} caractères pour {platform}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Contenu du post */}
+                                    <div style={{
+                                        background: 'var(--acs-gray-50)',
+                                        padding: 'var(--acs-spacing-4)',
+                                        borderRadius: 'var(--acs-radius)',
+                                        marginBottom: 'var(--acs-spacing-3)',
+                                        lineHeight: 1.7,
+                                        color: 'var(--acs-gray-800)',
+                                        borderLeft: `3px solid ${platformSpec.color}`,
+                                        whiteSpace: 'pre-wrap',
+                                        wordWrap: 'break-word',
+                                    }}>
+                                        {post.content}
+                                    </div>
+
+                                    {/* Hashtags */}
+                                    {post.hashtags && post.hashtags.length > 0 && (
+                                        <div style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            gap: 'var(--acs-spacing-2)',
+                                            marginBottom: 'var(--acs-spacing-3)',
+                                        }}>
+                                            {post.hashtags.map((tag, i) => (
+                                                <span
+                                                    key={i}
+                                                    style={{
+                                                        background: `${platformSpec.color}15`,
+                                                        color: platformSpec.color,
+                                                        padding: '4px 10px',
+                                                        borderRadius: '12px',
+                                                        fontSize: 'var(--acs-font-size-sm)',
+                                                        fontWeight: 500,
+                                                    }}
+                                                >
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Boutons d'action */}
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: '1fr 1fr',
+                                        gap: 'var(--acs-spacing-2)',
+                                        marginBottom: 'var(--acs-spacing-2)',
+                                    }}>
+                                        <button
+                                            className="acs-btn acs-btn-outline-primary acs-btn-sm"
+                                            onClick={() => copyToClipboard(post.content, post.hashtags, index)}
+                                        >
+                                            {copiedIndex === index ? (
+                                                <>
+                                                    <FiCheck /> {__('Copié!', 'ai-content-studio')}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <FiCopy /> {__('Copier', 'ai-content-studio')}
+                                                </>
+                                            )}
+                                        </button>
+                                        <button
+                                            className="acs-btn acs-btn-outline-primary acs-btn-sm"
+                                            onClick={() => saveToLibrary(post, index)}
+                                        >
+                                            <FiHeart /> {__('Favoris', 'ai-content-studio')}
+                                        </button>
+                                    </div>
+                                    <button
+                                        className="acs-btn acs-btn-primary acs-btn-sm w-100"
+                                        onClick={() => saveToCalendar(post, index)}
+                                    >
+                                        <FiCalendar /> {__('Planifier ce post', 'ai-content-studio')}
+                                    </button>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             )}
