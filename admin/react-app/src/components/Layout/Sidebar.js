@@ -1,4 +1,4 @@
-import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark, FiList } from 'react-icons/fi';
+import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark, FiList, FiTool } from 'react-icons/fi';
 import { __ } from '@wordpress/i18n';
 
 export default function Sidebar({ currentPath, onNavigate }) {
@@ -12,6 +12,7 @@ export default function Sidebar({ currentPath, onNavigate }) {
         { path: '/images', icon: FiImage, label: __('Images IA', 'ai-content-studio') },
         { path: '/trends', icon: FiTrendingUp, label: __('Tendances', 'ai-content-studio') },
         { path: '/logs', icon: FiList, label: __('Logs Système', 'ai-content-studio') },
+        { path: '/diagnostic', icon: FiTool, label: __('Diagnostic', 'ai-content-studio') },
         { path: '/settings', icon: FiSettings, label: __('Paramètres', 'ai-content-studio') },
     ];
 
