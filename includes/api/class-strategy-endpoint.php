@@ -13,7 +13,7 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
-use ACS\Services\ClaudeService;
+use ACS\Services\Claude_Service;
 use ACS\Utils\Sanitizer;
 
 if (!defined('ABSPATH')) {
@@ -108,7 +108,7 @@ class Strategy_Endpoint extends WP_REST_Controller {
         $prompt = $this->build_strategy_prompt($month, $year, $goal, $posts_per_week, $profile);
 
         try {
-            $claude = new ClaudeService();
+            $claude = new Claude_Service();
             $response = $claude->generate_completion($prompt);
 
             // Parser la réponse JSON de Claude
@@ -374,7 +374,7 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.
 PROMPT;
 
         try {
-            $claude = new ClaudeService();
+            $claude = new Claude_Service();
             // Utiliser Haiku pour la rapidité
             $response = $claude->generate_completion($prompt, 'claude-3-5-haiku-20241022');
 

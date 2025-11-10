@@ -342,6 +342,24 @@ class Claude_Service {
     }
 
     /**
+     * Generic completion method for custom prompts
+     *
+     * @param string $prompt The prompt to send to Claude
+     * @param string $model_override Optional model to use (e.g., 'claude-3-5-haiku-20241022')
+     * @param int $max_tokens Maximum tokens to generate
+     * @return string|WP_Error The text response or error
+     */
+    public function generate_completion($prompt, $model_override = '', $max_tokens = 4096) {
+        $response = $this->call_api($prompt, $max_tokens, '', $model_override);
+
+        if (is_wp_error($response)) {
+            return $response;
+        }
+
+        return $response;
+    }
+
+    /**
      * Clean JSON response from Claude (remove markdown code blocks)
      *
      * @param string $response Raw response from Claude
