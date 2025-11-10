@@ -116,23 +116,28 @@ $level_colors = [
                 <?php else: ?>
                     <?php foreach ($logs as $log): ?>
                     <tr>
-                        <td><?php echo esc_html(date('Y-m-d H:i:s', strtotime($log['created_at']))); ?></td>
+                        <td><?php echo esc_html($log['created_at'] ?? '-'); ?></td>
                         <td>
-                            <span class="acs-badge" style="background: <?php echo esc_attr($level_colors[$log['level']] ?? '#6b7280'); ?>; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase;">
-                                <?php echo esc_html($log['level']); ?>
+                            <span class="acs-badge" style="background: <?php echo esc_attr($level_colors[$log['level'] ?? 'info'] ?? '#6b7280'); ?>; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase;">
+                                <?php echo esc_html($log['level'] ?? 'info'); ?>
                             </span>
                         </td>
-                        <td><?php echo esc_html($log['category']); ?></td>
+                        <td><?php echo esc_html($log['category'] ?? 'general'); ?></td>
                         <td>
-                            <?php echo esc_html($log['message']); ?>
+                            <?php echo esc_html($log['message'] ?? ''); ?>
                             <?php if (!empty($log['context'])): ?>
-                                <button class="button button-small acs-view-context" data-context="<?php echo esc_attr(wp_json_encode(json_decode($log['context'], true))); ?>" style="margin-left: 8px;">
+                                <?php
+                                $context_data = json_decode($log['context'], true);
+                                if (json_last_error() === JSON_ERROR_NONE && !empty($context_data)):
+                                ?>
+                                <button class="button button-small acs-view-context" data-context="<?php echo esc_attr(wp_json_encode($context_data)); ?>" style="margin-left: 8px;">
                                     <?php _e('Contexte', 'ai-content-studio'); ?>
                                 </button>
+                                <?php endif; ?>
                             <?php endif; ?>
                         </td>
-                        <td><?php echo esc_html($log['user_id'] ?: 'System'); ?></td>
-                        <td><?php echo esc_html($log['file'] ? $log['file'] . ':' . $log['line'] : '-'); ?></td>
+                        <td><?php echo esc_html($log['user_id'] ?? 'System'); ?></td>
+                        <td><?php echo esc_html(!empty($log['file']) ? $log['file'] . ':' . ($log['line'] ?? '') : '-'); ?></td>
                     </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
