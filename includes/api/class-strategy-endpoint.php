@@ -53,6 +53,14 @@ class Strategy_Endpoint extends WP_REST_Controller {
             ],
         ]);
 
+        register_rest_route($this->namespace, '/' . $this->rest_base . '/current', [
+            [
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => [$this, 'get_current_strategy'],
+                'permission_callback' => [$this, 'check_user_permission'],
+            ],
+        ]);
+
         register_rest_route($this->namespace, '/' . $this->rest_base . '/content-ideas', [
             [
                 'methods'             => WP_REST_Server::CREATABLE,
@@ -314,6 +322,47 @@ PROMPT;
         return rest_ensure_response([
             'success' => true,
             'message' => __('Stratégie appliquée avec succès!', 'ai-content-studio'),
+        ]);
+    }
+
+    /**
+     * Get current strategy for the user
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function get_current_strategy($request) {
+        $user_id = get_current_user_id();
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'acs_content_plans';
+
+        // Récupérer la stratégie la plus récente de l'utilisateur
+        $strategy = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM {$table}
+             WHERE user_id = %d
+             ORDER BY created_at DESC
+             LIMIT 1",
+            $user_id
+        ), ARRAY_A);
+
+        if (!$strategy) {
+            return rest_ensure_response([
+                'success' => false,
+                'data' => null,
+                'message' => __('Aucune stratégie trouvée', 'ai-content-studio'),
+            ]);
+        }
+
+        // Parse JSON fields
+        $strategy['strategy'] = json_decode($strategy['strategy'], true);
+        $strategy['weekly_themes'] = json_decode($strategy['weekly_themes'], true);
+        $strategy['content_mix'] = json_decode($strategy['content_mix'], true);
+        $strategy['platforms'] = json_decode($strategy['platforms'], true);
+
+        return rest_ensure_response([
+            'success' => true,
+            'data' => $strategy['strategy'],
         ]);
     }
 
