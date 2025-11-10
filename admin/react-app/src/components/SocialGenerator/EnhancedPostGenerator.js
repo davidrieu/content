@@ -39,17 +39,24 @@ export default function EnhancedPostGenerator({ profile }) {
         const fetchIdeas = async () => {
             setLoadingIdeas(true);
             try {
+                console.log('[Post Ideas] Fetching ideas for platform:', platform);
                 const response = await apiFetch({
                     path: `/acs/v1/posts/ideas?platform=${platform}`,
                     method: 'GET',
                 });
 
+                console.log('[Post Ideas] Response received:', response);
+
                 if (response.success && response.data) {
+                    console.log('[Post Ideas] Setting ideas:', response.data);
                     setPostIdeas(response.data);
+                } else {
+                    console.warn('[Post Ideas] No data in response:', response);
+                    setPostIdeas([]);
                 }
             } catch (err) {
-                console.error('Error fetching post ideas:', err);
-                // Silently fail - ideas are optional
+                console.error('[Post Ideas] Error fetching post ideas:', err);
+                setPostIdeas([]);
             } finally {
                 setLoadingIdeas(false);
             }

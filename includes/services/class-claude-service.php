@@ -229,7 +229,7 @@ class Claude_Service {
 
     /**
      * Generate post ideas based on previous posts
-     * Uses Claude Haiku for ultra-fast and cost-efficient generation
+     * Uses Claude 3.5 Haiku for ultra-fast and cost-efficient generation
      *
      * @param array $params Parameters with recent_posts, profile, platform
      * @return array|WP_Error
@@ -237,30 +237,46 @@ class Claude_Service {
     public function generate_post_ideas($params) {
         $prompt = Prompts_Library::get_post_ideas_prompt($params);
 
-        // Use Haiku model for faster and cheaper idea generation
+        // Use Claude 3.5 Haiku for faster and cheaper idea generation
         $response = $this->call_api(
             $prompt,
             500,  // Reduced tokens for simple titles
             '',   // Default system prompt
-            'claude-haiku-4-20250514'  // Fast Haiku model
+            'claude-3-5-haiku-20241022'  // Fast Haiku 3.5 model
         );
 
         if (is_wp_error($response)) {
+            Logger::error('Post ideas generation failed at API call', [
+                'error_message' => $response->get_error_message(),
+                'error_code' => $response->get_error_code(),
+            ], 'api');
             return $response;
         }
 
         // Clean and parse JSON response
         $clean_response = $this->clean_json_response($response);
+
+        Logger::info('Post ideas raw response', [
+            'raw_length' => strlen($response),
+            'cleaned_length' => strlen($clean_response),
+            'raw_preview' => substr($response, 0, 100),
+            'cleaned_preview' => substr($clean_response, 0, 100),
+        ], 'api');
+
         $data = json_decode($clean_response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE || !isset($data['ideas'])) {
             Logger::error('Failed to parse post ideas JSON', [
-                'raw_response' => substr($response, 0, 200),
-                'cleaned_response' => substr($clean_response, 0, 200),
+                'raw_response' => substr($response, 0, 300),
+                'cleaned_response' => substr($clean_response, 0, 300),
                 'json_error' => json_last_error_msg()
             ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
         }
+
+        Logger::info('Post ideas successfully parsed', [
+            'ideas_count' => count($data['ideas']),
+        ], 'api');
 
         return $data['ideas'];
     }
