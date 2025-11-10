@@ -9,26 +9,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Get diagnostic data via API
-$api_url = rest_url('acs/v1/diagnostic');
-$response = wp_remote_get($api_url, [
-    'headers' => [
-        'X-WP-Nonce' => wp_create_nonce('wp_rest'),
-    ],
-]);
-
-$diagnostic = null;
-$recommendations = [];
-
-if (!is_wp_error($response)) {
-    $body = wp_remote_retrieve_body($response);
-    $data = json_decode($body, true);
-
-    if (isset($data['success']) && $data['success']) {
-        $diagnostic = $data['data'];
-        $recommendations = $data['recommendations'] ?? [];
-    }
+// Load Diagnostic_Endpoint class if not already loaded
+if (!class_exists('ACS\\API\\Diagnostic_Endpoint')) {
+    require_once ACS_PLUGIN_DIR . 'includes/api/class-diagnostic-endpoint.php';
 }
+
+// Get diagnostic data directly
+$diagnostic = \ACS\API\Diagnostic_Endpoint::get_diagnostic_data();
+$recommendations = \ACS\API\Diagnostic_Endpoint::get_recommendations_data($diagnostic);
 ?>
 
 <div class="wrap">

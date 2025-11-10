@@ -9,45 +9,33 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Get logs via API
-$api_url = rest_url('acs/v1/logs');
-$response = wp_remote_get($api_url, [
-    'headers' => [
-        'X-WP-Nonce' => wp_create_nonce('wp_rest'),
-    ],
-]);
+// Load Logger class if not already loaded
+if (!class_exists('ACS\\Utils\\Logger')) {
+    require_once ACS_PLUGIN_DIR . 'includes/utils/class-logger.php';
+}
 
-$logs = [];
+// Get logs directly
+$logs = \ACS\Utils\Logger::get_recent_logs(100);
+
+// Calculate stats
 $stats = [
-    'total' => 0,
+    'total' => count($logs),
     'by_level' => [],
     'by_category' => [],
 ];
 
-if (!is_wp_error($response)) {
-    $body = wp_remote_retrieve_body($response);
-    $data = json_decode($body, true);
-
-    if (isset($data['success']) && $data['success'] && isset($data['data'])) {
-        $logs = $data['data'];
+foreach ($logs as $log) {
+    // Count by level
+    if (!isset($stats['by_level'][$log['level']])) {
+        $stats['by_level'][$log['level']] = 0;
     }
-}
+    $stats['by_level'][$log['level']]++;
 
-// Get stats
-$stats_url = rest_url('acs/v1/logs/stats');
-$stats_response = wp_remote_get($stats_url, [
-    'headers' => [
-        'X-WP-Nonce' => wp_create_nonce('wp_rest'),
-    ],
-]);
-
-if (!is_wp_error($stats_response)) {
-    $stats_body = wp_remote_retrieve_body($stats_response);
-    $stats_data = json_decode($stats_body, true);
-
-    if (isset($stats_data['success']) && $stats_data['success'] && isset($stats_data['data'])) {
-        $stats = $stats_data['data'];
+    // Count by category
+    if (!isset($stats['by_category'][$log['category']])) {
+        $stats['by_category'][$log['category']] = 0;
     }
+    $stats['by_category'][$log['category']]++;
 }
 
 // Level badges colors

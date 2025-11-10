@@ -74,12 +74,11 @@ class Diagnostic_Endpoint extends WP_REST_Controller {
     }
 
     /**
-     * Get diagnostic information
+     * Get diagnostic data (static method for direct PHP calls)
      *
-     * @param WP_REST_Request $request Request object.
-     * @return WP_REST_Response|WP_Error
+     * @return array
      */
-    public function get_diagnostic($request) {
+    public static function get_diagnostic_data() {
         global $wpdb;
 
         $diagnostic = [];
@@ -145,6 +144,18 @@ class Diagnostic_Endpoint extends WP_REST_Controller {
             'prefix' => $wpdb->prefix,
         ];
 
+        return $diagnostic;
+    }
+
+    /**
+     * Get diagnostic information (REST API endpoint)
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function get_diagnostic($request) {
+        $diagnostic = self::get_diagnostic_data();
+
         return rest_ensure_response([
             'success' => true,
             'data' => $diagnostic,
@@ -206,7 +217,7 @@ class Diagnostic_Endpoint extends WP_REST_Controller {
      * @param array $diagnostic Diagnostic data
      * @return array
      */
-    private function get_recommendations($diagnostic) {
+    public static function get_recommendations_data($diagnostic) {
         $recommendations = [];
 
         // Check if table exists
@@ -246,5 +257,15 @@ class Diagnostic_Endpoint extends WP_REST_Controller {
         }
 
         return $recommendations;
+    }
+
+    /**
+     * Get recommendations (instance method for REST API)
+     *
+     * @param array $diagnostic Diagnostic data
+     * @return array
+     */
+    private function get_recommendations($diagnostic) {
+        return self::get_recommendations_data($diagnostic);
     }
 }
