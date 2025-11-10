@@ -236,7 +236,8 @@ export default function StrategyGenerator({ profile }) {
                             <h4 style={{ marginBottom: 'var(--acs-spacing-3)' }}>📊 {__('Mix de contenu recommandé', 'ai-content-studio')}</h4>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
                                 {Object.entries(getContentMix()).map(([type, percentage]) => {
-                                    const contentType = CONTENT_TYPES[type] || CONTENT_TYPES.educational;
+                                    // Convertir le type en majuscules pour matcher les clés de CONTENT_TYPES
+                                    const contentType = CONTENT_TYPES[type.toUpperCase()] || CONTENT_TYPES.EDUCATIONAL;
                                     return (
                                         <div
                                             key={type}
