@@ -434,6 +434,24 @@ class Plugin {
 
         add_submenu_page(
             'ai-content-studio',
+            __('Logs Système', 'ai-content-studio'),
+            __('Logs Système', 'ai-content-studio'),
+            'manage_options',
+            'ai-content-studio-logs',
+            [$this, 'render_logs_page']
+        );
+
+        add_submenu_page(
+            'ai-content-studio',
+            __('Diagnostic Système', 'ai-content-studio'),
+            __('Diagnostic Système', 'ai-content-studio'),
+            'manage_options',
+            'ai-content-studio-diagnostic',
+            [$this, 'render_diagnostic_page']
+        );
+
+        add_submenu_page(
+            'ai-content-studio',
             __('Réglages', 'ai-content-studio'),
             __('Réglages', 'ai-content-studio'),
             'manage_options',
@@ -467,5 +485,31 @@ class Plugin {
         echo '<h1>' . esc_html__('Réglages AI Content Studio', 'ai-content-studio') . '</h1>';
         echo '<div id="acs-settings-root"></div>'; // Settings UI will be here
         echo '</div>';
+    }
+
+    /**
+     * Render logs page
+     *
+     * @return void
+     */
+    public function render_logs_page() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Vous n\'avez pas les permissions nécessaires pour accéder à cette page.', 'ai-content-studio'));
+        }
+
+        require_once ACS_PLUGIN_DIR . 'includes/admin/views/logs-page.php';
+    }
+
+    /**
+     * Render diagnostic page
+     *
+     * @return void
+     */
+    public function render_diagnostic_page() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Vous n\'avez pas les permissions nécessaires pour accéder à cette page.', 'ai-content-studio'));
+        }
+
+        require_once ACS_PLUGIN_DIR . 'includes/admin/views/diagnostic-page.php';
     }
 }
