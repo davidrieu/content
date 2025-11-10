@@ -332,26 +332,26 @@ export default function EnhancedPostGenerator({ profile }) {
                             </div>
                             <div style={{
                                 display: 'flex',
-                                flexDirection: 'column',
+                                flexWrap: 'wrap',
                                 gap: 'var(--acs-spacing-2)',
                             }}>
                                 {postIdeas.map((idea, index) => (
                                     <div
                                         key={index}
                                         style={{
-                                            display: 'flex',
+                                            display: 'inline-flex',
                                             alignItems: 'center',
-                                            gap: 'var(--acs-spacing-2)',
-                                            padding: '10px 14px',
+                                            gap: '8px',
+                                            padding: '8px 12px',
                                             background: 'var(--acs-white)',
                                             border: '1.5px solid var(--acs-gray-300)',
-                                            borderRadius: '8px',
+                                            borderRadius: '20px',
                                             fontSize: 'var(--acs-font-size-sm)',
                                             color: 'var(--acs-gray-700)',
                                             transition: 'all 0.2s ease',
                                         }}
                                     >
-                                        <span style={{ flex: 1 }}>{idea}</span>
+                                        <span>{idea}</span>
                                         <button
                                             type="button"
                                             onClick={() => {
@@ -359,19 +359,19 @@ export default function EnhancedPostGenerator({ profile }) {
                                                 // Visual feedback
                                                 const btn = event.target;
                                                 const originalText = btn.textContent;
-                                                btn.textContent = '✓ Copié';
+                                                btn.textContent = '✓';
                                                 setTimeout(() => {
                                                     btn.textContent = originalText;
                                                 }, 1500);
                                             }}
                                             style={{
-                                                padding: '4px 12px',
+                                                padding: '2px 8px',
                                                 background: 'var(--acs-primary)',
                                                 color: 'var(--acs-white)',
                                                 border: 'none',
-                                                borderRadius: '6px',
-                                                fontSize: 'var(--acs-font-size-sm)',
-                                                fontWeight: 500,
+                                                borderRadius: '12px',
+                                                fontSize: '11px',
+                                                fontWeight: 600,
                                                 cursor: 'pointer',
                                                 whiteSpace: 'nowrap',
                                             }}
