@@ -111,9 +111,11 @@ class Library_Endpoint extends WP_REST_Controller {
         global $wpdb;
         $table = $wpdb->prefix . 'acs_saved_templates';
 
+        // Récupérer TOUS les posts sauvegardés (plus de filtre sur category)
+        // Cela inclut les posts générés automatiquement ET ceux sauvegardés manuellement
         $posts = $wpdb->get_results($wpdb->prepare(
             "SELECT * FROM {$table}
-             WHERE user_id = %d AND category = 'post'
+             WHERE user_id = %d
              ORDER BY created_at DESC",
             $user_id
         ), ARRAY_A);

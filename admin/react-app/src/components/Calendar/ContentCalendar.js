@@ -11,6 +11,7 @@ import {
 } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
+import PostDetailModal from '../shared/PostDetailModal';
 
 const DAYS_OF_WEEK = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 const MONTHS = [
@@ -51,6 +52,9 @@ export default function ContentCalendar({ profile }) {
     const [view, setView] = useState('month'); // month, week, list
     const [filterPlatform, setFilterPlatform] = useState('all');
     const [filterStatus, setFilterStatus] = useState('all');
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [postDetailModalOpen, setPostDetailModalOpen] = useState(false);
+    const [draggedPost, setDraggedPost] = useState(null);
 
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
@@ -106,6 +110,69 @@ export default function ContentCalendar({ profile }) {
         });
     };
 
+    const handlePostClick = (post, e) => {
+        e.stopPropagation();
+        setSelectedPost(post);
+        setPostDetailModalOpen(true);
+    };
+
+    const handlePostUpdate = (updatedPost) => {
+        setPosts(posts.map(p => p.id === updatedPost.id ? updatedPost : p));
+        loadPosts(); // Reload to get fresh data
+    };
+
+    const handlePostDelete = (postId) => {
+        setPosts(posts.filter(p => p.id !== postId));
+    };
+
+    const handleDragStart = (post, e) => {
+        e.stopPropagation();
+        setDraggedPost(post);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    };
+
+    const handleDrop = async (day, e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!draggedPost) return;
+
+        const newDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        // Keep the same time, just change the date
+        const oldDate = new Date(draggedPost.scheduled_for);
+        const newScheduledFor = `${newDate} ${String(oldDate.getHours()).padStart(2, '0')}:${String(oldDate.getMinutes()).padStart(2, '0')}:00`;
+
+        try {
+            const response = await apiFetch({
+                path: `/acs/v1/calendar/posts/${draggedPost.id}`,
+                method: 'PUT',
+                data: {
+                    scheduled_for: newScheduledFor,
+                },
+            });
+
+            if (response.success) {
+                // Update local state
+                setPosts(posts.map(p =>
+                    p.id === draggedPost.id
+                        ? { ...p, scheduled_for: newScheduledFor }
+                        : p
+                ));
+            }
+        } catch (err) {
+            console.error('Error moving post:', err);
+            alert(__('Erreur lors du déplacement du post', 'ai-content-studio'));
+        } finally {
+            setDraggedPost(null);
+        }
+    };
+
     const renderCalendarDays = () => {
         const daysInMonth = getDaysInMonth(currentYear, currentMonth);
         const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
@@ -156,6 +223,8 @@ export default function ContentCalendar({ profile }) {
                         e.currentTarget.style.transform = 'translateY(0)';
                     }}
                     onClick={() => setSelectedDate(day)}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(day, e)}
                 >
                     <div
                         style={{
@@ -173,6 +242,9 @@ export default function ContentCalendar({ profile }) {
                         {dayPosts.slice(0, 3).map((post, idx) => (
                             <div
                                 key={post.id}
+                                draggable
+                                onDragStart={(e) => handleDragStart(post, e)}
+                                onClick={(e) => handlePostClick(post, e)}
                                 style={{
                                     fontSize: 'var(--acs-font-size-sm)',
                                     padding: '4px 6px',
@@ -185,6 +257,16 @@ export default function ContentCalendar({ profile }) {
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '4px',
+                                    cursor: 'grab',
+                                    transition: 'all 0.2s',
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.opacity = '0.8';
+                                    e.currentTarget.style.transform = 'scale(1.02)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.opacity = '1';
+                                    e.currentTarget.style.transform = 'scale(1)';
                                 }}
                             >
                                 <span>{PLATFORM_EMOJIS[post.platform] || '📝'}</span>
@@ -486,6 +568,17 @@ export default function ContentCalendar({ profile }) {
                     </div>
                 </div>
             </div>
+
+            {/* Post Detail Modal */}
+            {postDetailModalOpen && selectedPost && (
+                <PostDetailModal
+                    isOpen={postDetailModalOpen}
+                    onClose={() => setPostDetailModalOpen(false)}
+                    post={selectedPost}
+                    onUpdate={handlePostUpdate}
+                    onDelete={handlePostDelete}
+                />
+            )}
         </div>
     );
 }
