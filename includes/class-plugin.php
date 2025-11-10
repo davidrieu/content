@@ -379,13 +379,21 @@ class Plugin {
         $asset_file = ACS_PLUGIN_DIR . 'admin/js/admin-script.asset.php';
 
         if (file_exists($asset_file)) {
+            // Force le rechargement en bypassing le cache opcache
+            if (function_exists('opcache_invalidate')) {
+                opcache_invalidate($asset_file, true);
+            }
+
             $asset = require $asset_file;
+
+            // Ajouter un timestamp pour forcer le rechargement navigateur
+            $version = $asset['version'] . '.' . filemtime(ACS_PLUGIN_DIR . 'admin/js/admin-script.js');
 
             wp_enqueue_script(
                 'acs-admin-script',
                 ACS_PLUGIN_URL . 'admin/js/admin-script.js',
                 $asset['dependencies'],
-                $asset['version'],
+                $version,
                 true
             );
 
@@ -393,7 +401,7 @@ class Plugin {
                 'acs-admin-style',
                 ACS_PLUGIN_URL . 'admin/css/admin-style.css',
                 [],
-                $asset['version']
+                $version
             );
 
             // Localize script
