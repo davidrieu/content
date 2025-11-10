@@ -355,14 +355,19 @@ PROMPT;
         }
 
         // Parse JSON fields
-        $strategy['strategy'] = json_decode($strategy['strategy'], true);
-        $strategy['weekly_themes'] = json_decode($strategy['weekly_themes'], true);
-        $strategy['content_mix'] = json_decode($strategy['content_mix'], true);
-        $strategy['platforms'] = json_decode($strategy['platforms'], true);
+        $strategy_data = json_decode($strategy['strategy'], true);
+        $strategy_data['weekly_themes'] = json_decode($strategy['weekly_themes'], true);
+        $strategy_data['content_mix'] = json_decode($strategy['content_mix'], true);
+        $strategy_data['platforms'] = json_decode($strategy['platforms'], true);
+
+        // Récupérer les content_ideas si elles existent (stockées dans key_topics ou un autre champ)
+        if (isset($strategy_data['content_ideas'])) {
+            $strategy_data['content_ideas'] = $strategy_data['content_ideas'];
+        }
 
         return rest_ensure_response([
             'success' => true,
-            'data' => $strategy['strategy'],
+            'data' => $strategy_data,
         ]);
     }
 
@@ -442,6 +447,9 @@ PROMPT;
                 throw new \Exception('Format de réponse invalide');
             }
 
+            // Sauvegarder les idées dans la stratégie existante
+            $this->save_content_ideas_to_strategy($data['ideas']);
+
             return rest_ensure_response([
                 'success' => true,
                 'data' => $data['ideas'],
@@ -453,6 +461,46 @@ PROMPT;
                 ['status' => 500]
             );
         }
+    }
+
+    /**
+     * Sauvegarder les content ideas dans la stratégie existante
+     *
+     * @param array $ideas Les 50 idées générées
+     * @return void
+     */
+    private function save_content_ideas_to_strategy($ideas) {
+        $user_id = get_current_user_id();
+        global $wpdb;
+        $table = $wpdb->prefix . 'acs_content_plans';
+
+        // Récupérer la stratégie existante
+        $strategy = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM {$table}
+             WHERE user_id = %d
+             ORDER BY created_at DESC
+             LIMIT 1",
+            $user_id
+        ), ARRAY_A);
+
+        if (!$strategy) {
+            return;
+        }
+
+        // Parser la stratégie existante
+        $strategy_data = json_decode($strategy['strategy'], true);
+
+        // Ajouter les content_ideas
+        $strategy_data['content_ideas'] = $ideas;
+
+        // Mettre à jour la stratégie
+        $wpdb->update(
+            $table,
+            ['strategy' => wp_json_encode($strategy_data)],
+            ['id' => $strategy['id']],
+            ['%s'],
+            ['%d']
+        );
     }
 
     /**

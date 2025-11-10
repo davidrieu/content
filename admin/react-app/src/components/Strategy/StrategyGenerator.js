@@ -30,6 +30,10 @@ export default function StrategyGenerator({ profile }) {
             if (response.success && response.data) {
                 // Stratégie existante trouvée
                 setStrategy(response.data);
+                // Charger les content_ideas si elles existent
+                if (response.data.content_ideas && Array.isArray(response.data.content_ideas)) {
+                    setContentIdeas(response.data.content_ideas);
+                }
             } else {
                 // Pas de stratégie : générer automatiquement
                 await generateStrategyAutomatically();
@@ -245,31 +249,30 @@ export default function StrategyGenerator({ profile }) {
                     </div>
                 </div>
 
-                {/* Generate Ideas Button */}
-                <div style={{ textAlign: 'center' }}>
-                    <button className="acs-btn acs-btn-primary acs-btn-lg" onClick={generateContentIdeas} disabled={generatingIdeas}>
-                        {generatingIdeas ? (
-                            <>
-                                <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
-                                {__('Génération...', 'ai-content-studio')}
-                            </>
-                        ) : (
-                            <>
-                                💡 {__('Générer 50 idées de posts', 'ai-content-studio')}
-                            </>
-                        )}
-                    </button>
-                </div>
+                {/* Generate Ideas Button - Masqué si des idées existent déjà */}
+                {contentIdeas.length === 0 && (
+                    <div style={{ textAlign: 'center' }}>
+                        <button className="acs-btn acs-btn-primary acs-btn-lg" onClick={generateContentIdeas} disabled={generatingIdeas}>
+                            {generatingIdeas ? (
+                                <>
+                                    <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
+                                    {__('Génération...', 'ai-content-studio')}
+                                </>
+                            ) : (
+                                <>
+                                    💡 {__('Générer 50 idées de posts', 'ai-content-studio')}
+                                </>
+                            )}
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Content Ideas List */}
             {contentIdeas.length > 0 && (
                 <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--acs-spacing-4)' }}>
+                    <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
                         <h3 className="acs-card-title">💡 {__('50 Idées de Posts', 'ai-content-studio')}</h3>
-                        <button className="acs-btn acs-btn-sm" onClick={() => setContentIdeas([])}>
-                            {__('Fermer', 'ai-content-studio')}
-                        </button>
                     </div>
                     <p className="acs-text-muted" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
                         {__('Cliquez sur "Générer" pour créer un post complet à partir d\'une idée', 'ai-content-studio')}
