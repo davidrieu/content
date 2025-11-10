@@ -125,15 +125,10 @@ $level_colors = [
                         <td><?php echo esc_html($log['category'] ?? 'general'); ?></td>
                         <td>
                             <?php echo esc_html($log['message'] ?? ''); ?>
-                            <?php if (!empty($log['context'])): ?>
-                                <?php
-                                $context_data = json_decode($log['context'], true);
-                                if (json_last_error() === JSON_ERROR_NONE && !empty($context_data)):
-                                ?>
-                                <button class="button button-small acs-view-context" data-context="<?php echo esc_attr(wp_json_encode($context_data)); ?>" style="margin-left: 8px;">
+                            <?php if (!empty($log['context']) && is_array($log['context'])): ?>
+                                <button class="button button-small acs-view-context" data-context="<?php echo esc_attr(wp_json_encode($log['context'])); ?>" style="margin-left: 8px;">
                                     <?php _e('Contexte', 'ai-content-studio'); ?>
                                 </button>
-                                <?php endif; ?>
                             <?php endif; ?>
                         </td>
                         <td><?php echo esc_html($log['user_id'] ?? 'System'); ?></td>
