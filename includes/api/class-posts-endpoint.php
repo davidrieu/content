@@ -187,30 +187,26 @@ class Posts_Endpoint extends REST_Controller {
         $user_id = $this->get_current_user_id();
         $platform = $request->get_param('platform') ?? 'instagram';
 
-        // Get user's recent posts
+        // Get profile (required)
+        $profile_model = new Business_Profile();
+        $profile = $profile_model->get_by_user($user_id);
+
+        if (!$profile) {
+            // No profile = can't generate relevant ideas
+            return $this->success([]);
+        }
+
+        // Get user's recent posts (optional - will generate generic ideas if none)
         $post_model = new Social_Post();
         $recent_posts = $post_model->get_by_user($user_id, [
             'limit' => 5,
             'offset' => 0,
         ]);
 
-        // If no posts, return empty array
-        if (empty($recent_posts)) {
-            return $this->success([]);
-        }
-
-        // Get profile
-        $profile_model = new Business_Profile();
-        $profile = $profile_model->get_by_user($user_id);
-
-        if (!$profile) {
-            return $this->success([]);
-        }
-
-        // Generate ideas with Claude
+        // Generate ideas with Claude (works with or without previous posts)
         $claude = new Claude_Service();
         $ideas = $claude->generate_post_ideas([
-            'recent_posts' => $recent_posts,
+            'recent_posts' => $recent_posts, // Can be empty array
             'profile' => $profile,
             'platform' => $platform,
         ]);
@@ -219,6 +215,7 @@ class Posts_Endpoint extends REST_Controller {
             \ACS\Utils\Logger::error('Post ideas generation failed', [
                 'user_id' => $user_id,
                 'error_message' => $ideas->get_error_message(),
+                'error_code' => $ideas->get_error_code(),
             ], 'generation');
 
             return $this->success([]); // Return empty array on error instead of error response

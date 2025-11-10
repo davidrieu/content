@@ -229,6 +229,7 @@ class Claude_Service {
 
     /**
      * Generate post ideas based on previous posts
+     * Uses Claude Haiku for ultra-fast and cost-efficient generation
      *
      * @param array $params Parameters with recent_posts, profile, platform
      * @return array|WP_Error
@@ -236,7 +237,13 @@ class Claude_Service {
     public function generate_post_ideas($params) {
         $prompt = Prompts_Library::get_post_ideas_prompt($params);
 
-        $response = $this->call_api($prompt, 1500);
+        // Use Haiku model for faster and cheaper idea generation
+        $response = $this->call_api(
+            $prompt,
+            500,  // Reduced tokens for simple titles
+            '',   // Default system prompt
+            'claude-haiku-4-20250514'  // Fast Haiku model
+        );
 
         if (is_wp_error($response)) {
             return $response;
@@ -248,6 +255,8 @@ class Claude_Service {
 
         if (json_last_error() !== JSON_ERROR_NONE || !isset($data['ideas'])) {
             Logger::error('Failed to parse post ideas JSON', [
+                'raw_response' => substr($response, 0, 200),
+                'cleaned_response' => substr($clean_response, 0, 200),
                 'json_error' => json_last_error_msg()
             ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
@@ -336,9 +345,10 @@ class Claude_Service {
      * @param string $user_message User message
      * @param int $max_tokens Maximum tokens
      * @param string $system_prompt System prompt
+     * @param string $model_override Optional model override (e.g., 'claude-haiku-4-20250514' for fast responses)
      * @return string|WP_Error
      */
-    private function call_api($user_message, $max_tokens = 4096, $system_prompt = '') {
+    private function call_api($user_message, $max_tokens = 4096, $system_prompt = '', $model_override = '') {
         if (empty($this->api_key)) {
             Logger::error('Claude API key not configured', [], 'api');
             return new \WP_Error('no_api_key', __('Clé API Claude non configurée', 'ai-content-studio'));
@@ -348,8 +358,11 @@ class Claude_Service {
             $system_prompt = 'Tu es un assistant expert en création de contenu. Tu fournis toujours des réponses au format JSON valide quand demandé.';
         }
 
+        // Use model override if provided (for faster/cheaper models)
+        $model_to_use = !empty($model_override) ? $model_override : $this->model;
+
         $body = [
-            'model' => $this->model,
+            'model' => $model_to_use,
             'max_tokens' => $max_tokens,
             'system' => $system_prompt,
             'messages' => [
@@ -361,7 +374,7 @@ class Claude_Service {
         ];
 
         Logger::info('Calling Claude API', [
-            'model' => $this->model,
+            'model' => $model_to_use,
             'max_tokens' => $max_tokens,
         ], 'api');
 
