@@ -53,6 +53,14 @@ class Strategy_Endpoint extends WP_REST_Controller {
             ],
         ]);
 
+        register_rest_route($this->namespace, '/' . $this->rest_base . '/content-ideas', [
+            [
+                'methods'             => WP_REST_Server::CREATABLE,
+                'callback'            => [$this, 'generate_content_ideas'],
+                'permission_callback' => [$this, 'check_user_permission'],
+            ],
+        ]);
+
         register_rest_route($this->namespace, '/' . $this->rest_base . '/apply', [
             [
                 'methods'             => WP_REST_Server::CREATABLE,
@@ -307,6 +315,95 @@ PROMPT;
             'success' => true,
             'message' => __('Stratégie appliquée avec succès!', 'ai-content-studio'),
         ]);
+    }
+
+    /**
+     * Générer 50 idées de titres de posts
+     *
+     * @param WP_REST_Request $request Request object.
+     * @return WP_REST_Response|WP_Error
+     */
+    public function generate_content_ideas($request) {
+        $params = $request->get_json_params();
+        $profile = $params['profile'] ?? [];
+
+        $sector = $profile['sector'] ?? 'général';
+        $target_audience = $profile['target_audience'] ?? 'large public';
+        $goal = sanitize_text_field($params['goal'] ?? 'engagement');
+        $platforms = is_array($profile['platforms']) ? implode(', ', $profile['platforms']) : 'Instagram, Facebook';
+
+        $goal_descriptions = [
+            'brand_awareness' => 'notoriété de marque et visibilité',
+            'lead_generation' => 'génération de leads qualifiés',
+            'sales' => 'augmentation des ventes',
+            'engagement' => 'engagement et création de communauté',
+            'authority' => 'positionnement en expert et leader d\'opinion',
+        ];
+
+        $goal_description = $goal_descriptions[$goal] ?? 'engagement';
+
+        $prompt = <<<PROMPT
+Tu es un expert en création de contenu pour les réseaux sociaux.
+
+MISSION: Générer 50 titres/sujets de posts percutants et variés
+
+PROFIL CLIENT:
+- Secteur: {$sector}
+- Audience cible: {$target_audience}
+- Plateformes: {$platforms}
+- Objectif: {$goal_description}
+
+CONTRAINTES:
+- 50 titres courts et accrocheurs (5-10 mots max)
+- Variété de types: éducatif, inspirant, questions, conseils, storytelling
+- Adaptés aux plateformes et à l'audience
+- Actionnables et engageants
+
+GÉNÈRE exactement 50 titres au format JSON avec cette structure:
+
+{
+    "ideas": [
+        "Titre 1",
+        "Titre 2",
+        ...
+        "Titre 50"
+    ]
+}
+
+IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.
+PROMPT;
+
+        try {
+            $claude = new ClaudeService();
+            // Utiliser Haiku pour la rapidité
+            $response = $claude->generate_completion($prompt, 'claude-3-5-haiku-20241022');
+
+            // Parser la réponse
+            $response = trim($response);
+            $response = preg_replace('/^```json\s*/i', '', $response);
+            $response = preg_replace('/\s*```$/', '', $response);
+
+            $data = json_decode($response, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Erreur lors du parsing des idées: ' . json_last_error_msg());
+            }
+
+            if (!isset($data['ideas']) || !is_array($data['ideas'])) {
+                throw new \Exception('Format de réponse invalide');
+            }
+
+            return rest_ensure_response([
+                'success' => true,
+                'data' => $data['ideas'],
+            ]);
+        } catch (\Exception $e) {
+            return new WP_Error(
+                'content_ideas_generation_failed',
+                $e->getMessage(),
+                ['status' => 500]
+            );
+        }
     }
 
     /**

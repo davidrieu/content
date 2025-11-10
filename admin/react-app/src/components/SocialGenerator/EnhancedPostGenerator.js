@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { FiZap, FiCopy, FiCheck, FiSave, FiCalendar, FiHeart, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
+import { useLocation } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { CONTENT_TYPES, POST_TEMPLATES, PLATFORM_SPECS } from '../../data/contentTemplates';
 import SchedulePostModal from '../shared/SchedulePostModal';
 
 export default function EnhancedPostGenerator({ profile }) {
+    const location = useLocation();
     const [platform, setPlatform] = useState('instagram');
     const [contentType, setContentType] = useState('educational');
     const [template, setTemplate] = useState('');
@@ -24,6 +26,15 @@ export default function EnhancedPostGenerator({ profile }) {
 
     // Ref pour l'auto-scroll
     const generatedPostsRef = useRef(null);
+
+    // Initialiser le topic depuis location.state (navigation depuis Strategy)
+    useEffect(() => {
+        if (location.state?.topic) {
+            setTopic(location.state.topic);
+            // Nettoyer le state pour éviter de le réutiliser
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
 
     // Filtrer les templates disponibles selon le type de contenu sélectionné
     const availableTemplates = Object.values(POST_TEMPLATES).filter(

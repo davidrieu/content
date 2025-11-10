@@ -1,16 +1,20 @@
 import { useState, useEffect } from '@wordpress/element';
 import { FiZap, FiCalendar, FiTarget, FiTrendingUp, FiDownload, FiRefreshCw } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { CONTENT_TYPES, CONTENT_MIX_RECOMMENDATIONS, BEST_POSTING_TIMES } from '../../data/contentTemplates';
 
 export default function StrategyGenerator({ profile }) {
+    const navigate = useNavigate();
     const [generating, setGenerating] = useState(false);
     const [strategy, setStrategy] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedGoal, setSelectedGoal] = useState('');
     const [postsPerWeek, setPostsPerWeek] = useState(3);
+    const [contentIdeas, setContentIdeas] = useState([]);
+    const [generatingIdeas, setGeneratingIdeas] = useState(false);
 
     useEffect(() => {
         if (profile?.goals && profile.goals.length > 0) {
@@ -86,6 +90,41 @@ export default function StrategyGenerator({ profile }) {
         a.href = url;
         a.download = `strategie-${selectedMonth}-${selectedYear}.json`;
         a.click();
+    };
+
+    const generateContentIdeas = async () => {
+        setGeneratingIdeas(true);
+        try {
+            const response = await apiFetch({
+                path: '/acs/v1/strategy/content-ideas',
+                method: 'POST',
+                data: {
+                    goal: selectedGoal,
+                    profile: {
+                        user_type: profile?.user_type || 'business',
+                        sector: profile?.sector || '',
+                        target_audience: profile?.target_audience || '',
+                        platforms: profile?.social_platforms || profile?.platforms || ['instagram', 'facebook'],
+                        keywords: profile?.primary_keywords || [],
+                    },
+                },
+            });
+
+            if (response.success) {
+                setContentIdeas(response.data);
+            } else {
+                alert(__('Erreur lors de la génération des idées', 'ai-content-studio'));
+            }
+        } catch (err) {
+            alert(err.message || __('Erreur lors de la génération des idées', 'ai-content-studio'));
+        } finally {
+            setGeneratingIdeas(false);
+        }
+    };
+
+    const handleGeneratePostFromIdea = (idea) => {
+        // Navigate to generator tab with topic pre-filled via state
+        navigate('/generate', { state: { topic: idea } });
     };
 
     const getContentMix = () => {
@@ -237,19 +276,108 @@ export default function StrategyGenerator({ profile }) {
                             </div>
                         )}
 
-                        <button className="acs-btn acs-btn-primary acs-btn-lg w-100" onClick={generateStrategy} disabled={generating || !selectedGoal}>
-                            {generating ? (
-                                <>
-                                    <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
-                                    {__('Génération en cours...', 'ai-content-studio')}
-                                </>
-                            ) : (
-                                <>
-                                    <FiZap /> {__('Générer ma stratégie automatiquement', 'ai-content-studio')}
-                                </>
-                            )}
-                        </button>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--acs-spacing-3)' }}>
+                            <button className="acs-btn acs-btn-primary acs-btn-lg" onClick={generateStrategy} disabled={generating || !selectedGoal}>
+                                {generating ? (
+                                    <>
+                                        <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
+                                        {__('Génération...', 'ai-content-studio')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <FiZap /> {__('Stratégie complète', 'ai-content-studio')}
+                                    </>
+                                )}
+                            </button>
+                            <button className="acs-btn acs-btn-outline-primary acs-btn-lg" onClick={generateContentIdeas} disabled={generatingIdeas || !selectedGoal}>
+                                {generatingIdeas ? (
+                                    <>
+                                        <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
+                                        {__('Génération...', 'ai-content-studio')}
+                                    </>
+                                ) : (
+                                    <>
+                                        💡 {__('50 idées de posts', 'ai-content-studio')}
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </div>
+
+                    {/* Content Ideas List */}
+                    {contentIdeas.length > 0 && (
+                        <div className="acs-card" style={{ marginTop: 'var(--acs-spacing-4)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--acs-spacing-4)' }}>
+                                <h3 className="acs-card-title">💡 {__('50 Idées de Posts', 'ai-content-studio')}</h3>
+                                <button className="acs-btn acs-btn-sm" onClick={() => setContentIdeas([])}>
+                                    {__('Fermer', 'ai-content-studio')}
+                                </button>
+                            </div>
+                            <p className="acs-text-muted" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
+                                {__('Cliquez sur "Générer" à côté d\'une idée pour créer le post complet', 'ai-content-studio')}
+                            </p>
+                            <div
+                                style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                                    gap: 'var(--acs-spacing-3)',
+                                    maxHeight: '600px',
+                                    overflow: 'auto',
+                                    padding: '2px',
+                                }}
+                            >
+                                {contentIdeas.map((idea, index) => (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 'var(--acs-spacing-2)',
+                                            padding: 'var(--acs-spacing-3)',
+                                            background: 'var(--acs-gray-50)',
+                                            borderRadius: 'var(--acs-radius)',
+                                            border: '1px solid var(--acs-gray-200)',
+                                            transition: 'all 0.2s',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.borderColor = 'var(--acs-primary)';
+                                            e.currentTarget.style.background = 'var(--acs-white)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.borderColor = 'var(--acs-gray-200)';
+                                            e.currentTarget.style.background = 'var(--acs-gray-50)';
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                background: 'var(--acs-primary)',
+                                                color: 'var(--acs-white)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontSize: 'var(--acs-font-size-sm)',
+                                                fontWeight: 600,
+                                                flexShrink: 0,
+                                            }}
+                                        >
+                                            {index + 1}
+                                        </div>
+                                        <div style={{ flex: 1, fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-800)' }}>{idea}</div>
+                                        <button
+                                            className="acs-btn acs-btn-primary acs-btn-sm"
+                                            onClick={() => handleGeneratePostFromIdea(idea)}
+                                            style={{ flexShrink: 0 }}
+                                        >
+                                            {__('Générer', 'ai-content-studio')}
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* How it works */}
                     <div className="acs-card" style={{ marginTop: 'var(--acs-spacing-4)' }}>
