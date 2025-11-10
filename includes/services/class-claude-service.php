@@ -71,11 +71,16 @@ class Claude_Service {
             return $response;
         }
 
-        // Parse JSON response
-        $strategy = json_decode($response, true);
+        // Clean and parse JSON response
+        $clean_response = $this->clean_json_response($response);
+        $strategy = json_decode($clean_response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            Logger::error('Failed to parse strategy JSON', ['response' => $response]);
+            Logger::error('Failed to parse strategy JSON', [
+                'raw_response' => substr($response, 0, 200),
+                'cleaned_response' => substr($clean_response, 0, 200),
+                'json_error' => json_last_error_msg()
+            ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
         }
 
@@ -97,10 +102,16 @@ class Claude_Service {
             return $response;
         }
 
-        $data = json_decode($response, true);
+        // Clean and parse JSON response
+        $clean_response = $this->clean_json_response($response);
+        $data = json_decode($clean_response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE || !isset($data['variants'])) {
-            Logger::error('Failed to parse social posts JSON', ['response' => $response]);
+            Logger::error('Failed to parse social posts JSON', [
+                'raw_response' => substr($response, 0, 200),
+                'cleaned_response' => substr($clean_response, 0, 200),
+                'json_error' => json_last_error_msg()
+            ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
         }
 
@@ -123,9 +134,14 @@ class Claude_Service {
             return $response;
         }
 
-        $data = json_decode($response, true);
+        // Clean and parse JSON response
+        $clean_response = $this->clean_json_response($response);
+        $data = json_decode($clean_response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE || !isset($data['ideas'])) {
+            Logger::error('Failed to parse article ideas JSON', [
+                'json_error' => json_last_error_msg()
+            ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
         }
 
@@ -147,9 +163,14 @@ class Claude_Service {
             return $response;
         }
 
-        $article = json_decode($response, true);
+        // Clean and parse JSON response
+        $clean_response = $this->clean_json_response($response);
+        $article = json_decode($clean_response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
+            Logger::error('Failed to parse article JSON', [
+                'json_error' => json_last_error_msg()
+            ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
         }
 
@@ -192,9 +213,14 @@ class Claude_Service {
             return $response;
         }
 
-        $data = json_decode($response, true);
+        // Clean and parse JSON response
+        $clean_response = $this->clean_json_response($response);
+        $data = json_decode($clean_response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE || !isset($data['hashtags'])) {
+            Logger::error('Failed to parse hashtags JSON', [
+                'json_error' => json_last_error_msg()
+            ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
         }
 
@@ -217,9 +243,14 @@ class Claude_Service {
             return $response;
         }
 
-        $analysis = json_decode($response, true);
+        // Clean and parse JSON response
+        $clean_response = $this->clean_json_response($response);
+        $analysis = json_decode($clean_response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
+            Logger::error('Failed to parse trend analysis JSON', [
+                'json_error' => json_last_error_msg()
+            ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
         }
 
@@ -242,13 +273,32 @@ class Claude_Service {
             return $response;
         }
 
-        $analysis = json_decode($response, true);
+        // Clean and parse JSON response
+        $clean_response = $this->clean_json_response($response);
+        $analysis = json_decode($clean_response, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
+            Logger::error('Failed to parse SEO analysis JSON', [
+                'json_error' => json_last_error_msg()
+            ], 'api');
             return new \WP_Error('json_parse_error', __('Erreur de parsing JSON', 'ai-content-studio'));
         }
 
         return $analysis;
+    }
+
+    /**
+     * Clean JSON response from Claude (remove markdown code blocks)
+     *
+     * @param string $response Raw response from Claude
+     * @return string Cleaned JSON string
+     */
+    private function clean_json_response($response) {
+        // Remove markdown code blocks (```json ... ``` or ``` ... ```)
+        $cleaned = preg_replace('/^```(?:json)?\s*\n/m', '', $response);
+        $cleaned = preg_replace('/\n```\s*$/m', '', $cleaned);
+
+        return trim($cleaned);
     }
 
     /**
