@@ -130,17 +130,30 @@ class Shortcode {
      * @return void
      */
     private function enqueue_app_scripts() {
+        $js_file = ACS_PLUGIN_DIR . 'admin/js/admin-script.js';
+        $css_file = ACS_PLUGIN_DIR . 'admin/css/admin-style.css';
         $asset_file = ACS_PLUGIN_DIR . 'admin/js/admin-script.asset.php';
+
+        // Clear all possible PHP caches
+        if (function_exists('opcache_invalidate')) {
+            opcache_invalidate($asset_file, true);
+        }
+        clearstatcache(true, $asset_file);
+        clearstatcache(true, $js_file);
+        clearstatcache(true, $css_file);
 
         if (file_exists($asset_file)) {
             $asset = require $asset_file;
+
+            // Use timestamp + time to force reload
+            $cache_buster = filemtime($js_file) . '.' . time();
 
             // Enqueue React app
             wp_enqueue_script(
                 'acs-frontend-app',
                 ACS_PLUGIN_URL . 'admin/js/admin-script.js',
                 $asset['dependencies'],
-                $asset['version'],
+                $cache_buster,
                 true
             );
 
@@ -148,7 +161,7 @@ class Shortcode {
                 'acs-frontend-style',
                 ACS_PLUGIN_URL . 'admin/css/admin-style.css',
                 [],
-                $asset['version']
+                filemtime($css_file) . '.' . time()
             );
 
             // Localize script with frontend-specific data

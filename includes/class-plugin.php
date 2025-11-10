@@ -375,25 +375,30 @@ class Plugin {
             return;
         }
 
-        // Enqueue React app (built with @wordpress/scripts)
+        // Use direct file timestamp - no caching possible
+        $js_file = ACS_PLUGIN_DIR . 'admin/js/admin-script.js';
+        $css_file = ACS_PLUGIN_DIR . 'admin/css/admin-style.css';
         $asset_file = ACS_PLUGIN_DIR . 'admin/js/admin-script.asset.php';
 
-        if (file_exists($asset_file)) {
-            // Force le rechargement en bypassing le cache opcache
-            if (function_exists('opcache_invalidate')) {
-                opcache_invalidate($asset_file, true);
-            }
+        // Clear all possible PHP caches for asset file
+        if (function_exists('opcache_invalidate')) {
+            opcache_invalidate($asset_file, true);
+        }
+        clearstatcache(true, $asset_file);
+        clearstatcache(true, $js_file);
+        clearstatcache(true, $css_file);
 
+        if (file_exists($asset_file)) {
             $asset = require $asset_file;
 
-            // Ajouter un timestamp pour forcer le rechargement navigateur
-            $version = $asset['version'] . '.' . filemtime(ACS_PLUGIN_DIR . 'admin/js/admin-script.js');
+            // Use timestamp + random to absolutely force reload
+            $cache_buster = filemtime($js_file) . '.' . time();
 
             wp_enqueue_script(
                 'acs-admin-script',
                 ACS_PLUGIN_URL . 'admin/js/admin-script.js',
                 $asset['dependencies'],
-                $version,
+                $cache_buster,  // Force unique version every time
                 true
             );
 
@@ -401,7 +406,7 @@ class Plugin {
                 'acs-admin-style',
                 ACS_PLUGIN_URL . 'admin/css/admin-style.css',
                 [],
-                $version
+                filemtime($css_file) . '.' . time()
             );
 
             // Localize script
