@@ -20,7 +20,11 @@ export default function DiagnosticPanel() {
             });
 
             if (response.success) {
-                setDiagnostic(response.data);
+                // Store both data and recommendations
+                setDiagnostic({
+                    ...response.data,
+                    recommendations: response.recommendations || []
+                });
             }
         } catch (error) {
             console.error('Error fetching diagnostic:', error);
