@@ -1,6 +1,6 @@
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { FiMail, FiLock, FiUser, FiUserPlus, FiCheck } from 'react-icons/fi';
+import { FiMail, FiLock, FiUser, FiUserPlus, FiCheck, FiGlobe } from 'react-icons/fi';
 
 export default function RegisterForm({ onSwitchToLogin }) {
     const [formData, setFormData] = useState({
@@ -8,6 +8,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
         email: '',
         password: '',
         confirmPassword: '',
+        language: 'fr',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -61,6 +62,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
                     username: formData.username,
                     email: formData.email,
                     password: formData.password,
+                    language: formData.language,
                     authNonce: window.acsData.authNonce,
                 }),
             });
@@ -165,6 +167,53 @@ export default function RegisterForm({ onSwitchToLogin }) {
                                 required
                                 placeholder={__('votre@email.com', 'ai-content-studio')}
                             />
+                        </div>
+                    </div>
+
+                    <div className="acs-form-group">
+                        <label className="acs-form-label">
+                            {__('Langue de l\'interface', 'ai-content-studio')}
+                        </label>
+                        <div className="acs-input-with-icon">
+                            <FiGlobe className="acs-input-icon" />
+                            <select
+                                name="language"
+                                className="acs-form-control acs-with-icon"
+                                value={formData.language}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="fr">Français</option>
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                                <option value="pt">Português</option>
+                                <option value="de">Deutsch</option>
+                                <option value="it">Italiano</option>
+                                <option value="zh">中文 (Mandarin)</option>
+                                <option value="ja">日本語</option>
+                                <option value="ko">한국어</option>
+                                <option value="ar">العربية</option>
+                                <option value="ru">Русский</option>
+                                <option value="hi">हिन्दी</option>
+                                <option value="bn">বাংলা</option>
+                                <option value="id">Bahasa Indonesia</option>
+                                <option value="tr">Türkçe</option>
+                                <option value="vi">Tiếng Việt</option>
+                                <option value="pl">Polski</option>
+                                <option value="uk">Українська</option>
+                                <option value="nl">Nederlands</option>
+                                <option value="th">ไทย</option>
+                                <option value="sv">Svenska</option>
+                                <option value="el">Ελληνικά</option>
+                                <option value="cs">Čeština</option>
+                                <option value="ro">Română</option>
+                                <option value="hu">Magyar</option>
+                                <option value="da">Dansk</option>
+                                <option value="fi">Suomi</option>
+                                <option value="no">Norsk</option>
+                                <option value="he">עברית</option>
+                                <option value="ca">Català</option>
+                            </select>
                         </div>
                     </div>
 

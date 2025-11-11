@@ -95,11 +95,13 @@ class Auth_Ajax {
         $username = sanitize_user($_POST['username'] ?? '');
         $email = sanitize_email($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
+        $language = sanitize_text_field($_POST['language'] ?? 'fr');
 
         \ACS\Utils\Logger::info('Register data received', [
             'username' => $username,
             'email' => $email,
             'password_length' => strlen($password),
+            'language' => $language,
         ]);
 
         if (empty($username) || empty($email) || empty($password)) {
@@ -145,6 +147,10 @@ class Auth_Ajax {
         }
 
         \ACS\Utils\Logger::info('User created successfully', ['user_id' => $user_id]);
+
+        // Save user language preference
+        update_user_meta($user_id, 'acs_preferred_language', $language);
+        \ACS\Utils\Logger::info('User language preference saved', ['language' => $language]);
 
         // If WooCommerce is active, set the user as a customer
         if (class_exists('WooCommerce')) {
