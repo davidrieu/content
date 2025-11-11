@@ -357,7 +357,20 @@ class Database {
             KEY idx_favorite (user_id, is_favorite)
         ) $charset_collate ENGINE=InnoDB;";
 
-        // 17. System Logs (Table dédiée pour les logs système)
+        // 17. Blog Strategies (Stratégies de contenu blog)
+        $sql_blog_strategies = "CREATE TABLE {$table_prefix}blog_strategies (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            ideas LONGTEXT NOT NULL COMMENT 'JSON: Array de 50 sujets d articles',
+            language VARCHAR(10) DEFAULT 'fr' COMMENT 'Langue de la stratégie',
+            goal VARCHAR(50) COMMENT 'Objectif principal: engagement, brand_awareness, etc',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY user_id (user_id)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 18. System Logs (Table dédiée pour les logs système)
         $sql_system_logs = "CREATE TABLE {$table_prefix}system_logs (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             user_id BIGINT(20) UNSIGNED DEFAULT 0 COMMENT 'ID utilisateur (0 pour logs système)',
@@ -396,6 +409,7 @@ class Database {
         dbDelta($sql_favorites);
         dbDelta($sql_content_plans);
         dbDelta($sql_saved_templates);
+        dbDelta($sql_blog_strategies);
         dbDelta($sql_system_logs);
 
         // Store database version

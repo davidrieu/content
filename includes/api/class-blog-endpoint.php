@@ -88,6 +88,20 @@ class Blog_Endpoint {
             'callback' => [$this, 'generate_blog_strategy_ideas'],
             'permission_callback' => [$this, 'check_permissions'],
         ]);
+
+        // Get current blog strategy
+        register_rest_route('acs/v1', '/blog/strategy/current', [
+            'methods' => 'GET',
+            'callback' => [$this, 'get_current_blog_strategy'],
+            'permission_callback' => [$this, 'check_permissions'],
+        ]);
+
+        // Save blog strategy
+        register_rest_route('acs/v1', '/blog/strategy/save', [
+            'methods' => 'POST',
+            'callback' => [$this, 'save_blog_strategy'],
+            'permission_callback' => [$this, 'check_permissions'],
+        ]);
     }
 
     /**
@@ -825,5 +839,105 @@ PROMPT;
                 'message' => $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Get current blog strategy for user
+     *
+     * @param WP_REST_Request $request
+     * @return array
+     */
+    public function get_current_blog_strategy($request) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'acs_blog_strategies';
+        $user_id = get_current_user_id();
+
+        $strategy = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM {$table} WHERE user_id = %d",
+            $user_id
+        ), ARRAY_A);
+
+        if (!$strategy) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => 'Aucune stratégie trouvée',
+            ]);
+        }
+
+        // Decode ideas JSON
+        $strategy['ideas'] = json_decode($strategy['ideas'], true);
+
+        return rest_ensure_response([
+            'success' => true,
+            'data' => $strategy,
+        ]);
+    }
+
+    /**
+     * Save blog strategy
+     *
+     * @param WP_REST_Request $request
+     * @return array
+     */
+    public function save_blog_strategy($request) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'acs_blog_strategies';
+        $user_id = get_current_user_id();
+
+        $params = $request->get_json_params();
+        $ideas = $params['ideas'] ?? [];
+        $language = sanitize_text_field($params['language'] ?? 'fr');
+        $goal = sanitize_text_field($params['goal'] ?? 'engagement');
+
+        if (empty($ideas)) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => 'Les idées sont requises',
+            ]);
+        }
+
+        $data = [
+            'user_id' => $user_id,
+            'ideas' => wp_json_encode($ideas),
+            'language' => $language,
+            'goal' => $goal,
+        ];
+
+        // Check if strategy exists
+        $exists = $wpdb->get_var($wpdb->prepare(
+            "SELECT id FROM {$table} WHERE user_id = %d",
+            $user_id
+        ));
+
+        if ($exists) {
+            // Update existing strategy
+            $result = $wpdb->update(
+                $table,
+                $data,
+                ['user_id' => $user_id],
+                ['%d', '%s', '%s', '%s'],
+                ['%d']
+            );
+        } else {
+            // Insert new strategy
+            $result = $wpdb->insert(
+                $table,
+                $data,
+                ['%d', '%s', '%s', '%s']
+            );
+        }
+
+        if ($result === false) {
+            error_log('Failed to save blog strategy: ' . $wpdb->last_error);
+            return rest_ensure_response([
+                'success' => false,
+                'message' => 'Erreur lors de la sauvegarde',
+            ]);
+        }
+
+        return rest_ensure_response([
+            'success' => true,
+            'message' => 'Stratégie sauvegardée avec succès',
+        ]);
     }
 }

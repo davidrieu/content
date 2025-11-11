@@ -31,12 +31,12 @@ export default function BlogStrategyGenerator({ profile }) {
         fetchUserLanguage();
     }, []);
 
-    // Générer les idées de blog au montage (quand langue est chargée)
+    // Charger ou générer la stratégie au montage (quand langue est chargée)
     useEffect(() => {
         if (!profile || !languageLoaded) return;
-        console.log('Auto-generating blog ideas on mount with language:', language);
+        console.log('Loading or generating blog strategy with language:', language);
         console.log('Profile data:', profile);
-        generateBlogIdeas();
+        loadOrGenerateStrategy();
     }, [profile, languageLoaded]);
 
     // Régénérer automatiquement les idées quand la langue change
@@ -47,6 +47,36 @@ export default function BlogStrategyGenerator({ profile }) {
         console.log('Language changed, regenerating blog ideas...');
         generateBlogIdeas();
     }, [language]);
+
+    const loadOrGenerateStrategy = async () => {
+        setLoading(true);
+        try {
+            // Essayer de charger la stratégie existante
+            const response = await apiFetch({
+                path: '/acs/v1/blog/strategy/current',
+                method: 'GET',
+            });
+
+            if (response.success && response.data && response.data.ideas) {
+                console.log('Loaded existing blog strategy from database');
+                setBlogIdeas(response.data.ideas);
+                // Mettre à jour la langue si différente
+                if (response.data.language !== language) {
+                    setLanguage(response.data.language);
+                }
+            } else {
+                // Pas de stratégie existante, générer une nouvelle
+                console.log('No existing strategy found, generating new one');
+                await generateBlogIdeas();
+            }
+        } catch (err) {
+            // Erreur ou pas de stratégie, générer une nouvelle
+            console.log('Error loading strategy, generating new one:', err);
+            await generateBlogIdeas();
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const generateBlogIdeas = async () => {
         setLoading(true);
@@ -78,6 +108,22 @@ export default function BlogStrategyGenerator({ profile }) {
 
             if (response.success && response.data) {
                 setBlogIdeas(response.data);
+
+                // Sauvegarder automatiquement la stratégie
+                try {
+                    await apiFetch({
+                        path: '/acs/v1/blog/strategy/save',
+                        method: 'POST',
+                        data: {
+                            ideas: response.data,
+                            language: language,
+                            goal: mainGoal,
+                        },
+                    });
+                    console.log('Blog strategy saved successfully');
+                } catch (saveErr) {
+                    console.error('Error saving blog strategy:', saveErr);
+                }
             } else {
                 console.error('Failed to generate blog ideas');
                 setBlogIdeas([]);
