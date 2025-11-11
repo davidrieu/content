@@ -133,8 +133,8 @@ Réponds maintenant avec le JSON uniquement :";
             ]);
         }
 
-        // Parse JSON response
-        $content = isset($response['content'][0]['text']) ? $response['content'][0]['text'] : '';
+        // $response is already the text content, not an array
+        $content = $response;
 
         // Log the raw response for debugging
         error_log('Claude raw response: ' . $content);
@@ -344,8 +344,8 @@ Réponds maintenant avec le JSON uniquement :";
             ]);
         }
 
-        // Parse JSON response
-        $response_text = isset($response['content'][0]['text']) ? $response['content'][0]['text'] : '';
+        // $response is already the text content, not an array
+        $response_text = $response;
 
         // Log the raw response for debugging
         error_log('Claude SEO raw response: ' . $response_text);
