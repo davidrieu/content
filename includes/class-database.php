@@ -473,6 +473,18 @@ class Database {
             $wpdb->query("ALTER TABLE {$table} ADD KEY idx_sector (sector)");
         }
 
+        // Upgrade blog_articles table - Add subject column if missing
+        $blog_articles_table = $table_prefix . 'blog_articles';
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$blog_articles_table}'") === $blog_articles_table) {
+            $blog_columns = $wpdb->get_col("DESCRIBE {$blog_articles_table}", 0);
+
+            if (!in_array('subject', $blog_columns)) {
+                error_log('ACS: Adding missing subject column to blog_articles table');
+                $wpdb->query("ALTER TABLE {$blog_articles_table} ADD COLUMN subject VARCHAR(255) NOT NULL COMMENT 'Sujet original de l article' AFTER user_id");
+                error_log('ACS: Subject column added successfully');
+            }
+        }
+
         // Create system_logs table if it doesn't exist (added in v1.2.0)
         self::create_system_logs_table();
     }

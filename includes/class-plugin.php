@@ -66,6 +66,12 @@ class Plugin {
         // Load dependencies
         $this->load_dependencies();
 
+        // Always run upgrade_tables to catch any missing columns
+        // This is safe as it checks for column existence before altering
+        if (class_exists('ACS\\Database')) {
+            Database::upgrade_tables();
+        }
+
         // Initialize components
         $this->init_admin();
         $this->init_api();
