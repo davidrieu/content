@@ -129,6 +129,13 @@ class Plugin {
                 require_once $settings_file;
                 new Admin\Settings();
             }
+
+            // Load subscriptions admin page
+            $subscriptions_file = ACS_PLUGIN_DIR . 'includes/admin/class-subscriptions-admin.php';
+            if (file_exists($subscriptions_file)) {
+                require_once $subscriptions_file;
+                new Admin\Subscriptions_Admin();
+            }
         }
 
         // Load auth AJAX handler (works for both admin and frontend)
@@ -245,6 +252,12 @@ class Plugin {
         if (class_exists('WooCommerce')) {
             $wc_dir = ACS_PLUGIN_DIR . 'includes/woocommerce/';
 
+            // Load product generator
+            if (file_exists($wc_dir . 'class-product-generator.php')) {
+                require_once $wc_dir . 'class-product-generator.php';
+            }
+
+            // Load subscription handler
             if (file_exists($wc_dir . 'class-subscription-handler.php')) {
                 require_once $wc_dir . 'class-subscription-handler.php';
                 new WooCommerce\Subscription_Handler();
