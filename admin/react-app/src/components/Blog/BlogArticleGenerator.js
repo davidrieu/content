@@ -49,6 +49,7 @@ export default function BlogArticleGenerator() {
                 method: 'POST',
                 data: {
                     subject: subject.trim(),
+                    language: language,
                 },
             });
 
@@ -155,6 +156,7 @@ export default function BlogArticleGenerator() {
                     title: suggestedTitle,
                     content: articleContent,
                     main_keyword: mainKeyword,
+                    language: language,
                 },
             });
 
@@ -162,6 +164,8 @@ export default function BlogArticleGenerator() {
                 setSeoTitle(response.data.seo_title);
                 setMetaDescription(response.data.meta_description);
                 setSeoUrl(response.data.url_slug);
+                // Auto-sauvegarder après génération SEO
+                await saveArticle();
             } else {
                 alert(response.message || __('Erreur lors de la génération SEO', 'ai-content-studio'));
             }
@@ -257,6 +261,23 @@ export default function BlogArticleGenerator() {
                         </h2>
 
                         <div className="acs-form-group">
+                            <label>{__('Langue de l\'article', 'ai-content-studio')}</label>
+                            <select
+                                className="acs-form-control"
+                                value={language}
+                                onChange={(e) => setLanguage(e.target.value)}
+                                disabled={generatingSuggestions || generatingArticle}
+                            >
+                                <option value="fr">{__('Français', 'ai-content-studio')}</option>
+                                <option value="en">{__('Anglais', 'ai-content-studio')}</option>
+                                <option value="es">{__('Espagnol', 'ai-content-studio')}</option>
+                                <option value="de">{__('Allemand', 'ai-content-studio')}</option>
+                                <option value="it">{__('Italien', 'ai-content-studio')}</option>
+                                <option value="pt">{__('Portugais', 'ai-content-studio')}</option>
+                            </select>
+                        </div>
+
+                        <div className="acs-form-group">
                             <label>{__('Sujet principal', 'ai-content-studio')}</label>
                             <input
                                 type="text"
@@ -345,23 +366,6 @@ export default function BlogArticleGenerator() {
                                     <option value="2000-3000">{__('2000-3000 mots', 'ai-content-studio')}</option>
                                     <option value="3000-4000">{__('3000-4000 mots', 'ai-content-studio')}</option>
                                     <option value="4000-5000">{__('4000-5000 mots', 'ai-content-studio')}</option>
-                                </select>
-                            </div>
-
-                            <div className="acs-form-group">
-                                <label>{__('Langue de l\'article', 'ai-content-studio')}</label>
-                                <select
-                                    className="acs-form-control"
-                                    value={language}
-                                    onChange={(e) => setLanguage(e.target.value)}
-                                    disabled={generatingArticle}
-                                >
-                                    <option value="fr">{__('Français', 'ai-content-studio')}</option>
-                                    <option value="en">{__('Anglais', 'ai-content-studio')}</option>
-                                    <option value="es">{__('Espagnol', 'ai-content-studio')}</option>
-                                    <option value="de">{__('Allemand', 'ai-content-studio')}</option>
-                                    <option value="it">{__('Italien', 'ai-content-studio')}</option>
-                                    <option value="pt">{__('Portugais', 'ai-content-studio')}</option>
                                 </select>
                             </div>
 

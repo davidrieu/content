@@ -494,6 +494,7 @@ Réponds maintenant avec le JSON uniquement :";
             'main_keyword' => sanitize_text_field($request->get_param('main_keyword')),
             'first_person' => (int) $request->get_param('first_person'),
             'word_count' => str_word_count($request->get_param('content')),
+            'language' => sanitize_text_field($request->get_param('language') ?: 'fr'),
             'seo_title' => sanitize_text_field($request->get_param('seo_title')),
             'meta_description' => sanitize_text_field($request->get_param('meta_description')),
             'url_slug' => sanitize_title($request->get_param('url_slug')),
@@ -501,8 +502,13 @@ Réponds maintenant avec le JSON uniquement :";
         ];
 
         $result = $wpdb->insert($table, $data, [
-            '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s'
+            '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s'
         ]);
+
+        // Log any errors
+        if ($result === false) {
+            error_log('Blog article save error: ' . $wpdb->last_error);
+        }
 
         if ($result === false) {
             return rest_ensure_response([
