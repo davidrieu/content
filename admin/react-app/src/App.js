@@ -9,6 +9,7 @@ import EnhancedPostGenerator from './components/SocialGenerator/EnhancedPostGene
 import ContentCalendar from './components/Calendar/ContentCalendar';
 import StrategyGenerator from './components/Strategy/StrategyGenerator';
 import ContentLibrary from './components/Library/ContentLibrary';
+import BlogArticleGenerator from './components/Blog/BlogArticleGenerator';
 import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
 import LoadingSpinner from './components/common/LoadingSpinner';
@@ -44,7 +45,7 @@ function AppContent({ profile }) {
                         <Route path="/calendar" element={<ContentCalendar profile={profile} />} />
                         <Route path="/strategy" element={<StrategyGenerator profile={profile} />} />
                         <Route path="/library" element={<ContentLibrary profile={profile} />} />
-                        <Route path="/articles" element={<PlaceholderPage title="Articles de blog" />} />
+                        <Route path="/articles" element={<BlogArticleGenerator profile={profile} />} />
                         <Route path="/images" element={<PlaceholderPage title="Images IA" />} />
                         <Route path="/trends" element={<PlaceholderPage title="Tendances" />} />
                         <Route path="/settings" element={<PlaceholderPage title="Paramètres" />} />

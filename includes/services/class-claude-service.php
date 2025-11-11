@@ -485,4 +485,77 @@ class Claude_Service {
 
         return new \WP_Error('max_retries', __('Nombre maximum de tentatives atteint', 'ai-content-studio'));
     }
+
+    /**
+     * Stream completion from Claude API (for real-time article generation)
+     *
+     * @param string $prompt
+     * @param string $model_override
+     * @param int $max_tokens
+     * @param callable $callback Function to call for each chunk
+     * @return void
+     */
+    public function stream_completion($prompt, $model_override = '', $max_tokens = 8192, $callback = null) {
+        $model = !empty($model_override) ? $model_override : $this->model;
+
+        $body = [
+            'model' => $model,
+            'max_tokens' => $max_tokens,
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => $prompt,
+                ],
+            ],
+            'stream' => true, // Enable streaming
+        ];
+
+        $url = $this->api_url;
+
+        // Use cURL for streaming
+        $ch = curl_init($url);
+
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($body),
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'x-api-key: ' . $this->api_key,
+                'anthropic-version: 2023-06-01',
+            ],
+            CURLOPT_RETURNTRANSFER => false,
+            CURLOPT_WRITEFUNCTION => function($curl, $data) use ($callback) {
+                $lines = explode("\n", $data);
+
+                foreach ($lines as $line) {
+                    $line = trim($line);
+
+                    if (empty($line)) {
+                        continue;
+                    }
+
+                    // SSE format: "data: {...}"
+                    if (strpos($line, 'data: ') === 0) {
+                        $json_str = substr($line, 6); // Remove "data: " prefix
+
+                        $chunk = json_decode($json_str, true);
+
+                        if ($chunk && $callback) {
+                            call_user_func($callback, $chunk);
+                        }
+                    }
+                }
+
+                return strlen($data);
+            },
+        ]);
+
+        curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            Logger::error('cURL error in streaming', ['error' => curl_error($ch)], 'api');
+        }
+
+        curl_close($ch);
+    }
 }
