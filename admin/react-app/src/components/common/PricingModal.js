@@ -1,0 +1,208 @@
+import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { FiX, FiCheck, FiZap, FiStar } from 'react-icons/fi';
+import apiFetch from '@wordpress/api-fetch';
+import './PricingModal.css';
+
+export default function PricingModal({ isOpen, onClose, currentPlan = 'free_trial', triggerType = 'limit_reached' }) {
+    const [loading, setLoading] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState(null);
+
+    if (!isOpen) return null;
+
+    const plans = [
+        {
+            slug: 'starter',
+            name: __('Starter', 'ai-content-studio'),
+            price: 29,
+            description: __('Pour les entrepreneurs et créateurs', 'ai-content-studio'),
+            features: [
+                __('50 posts sociaux/mois', 'ai-content-studio'),
+                __('5 articles de blog/mois', 'ai-content-studio'),
+                __('25 images AI/mois', 'ai-content-studio'),
+                __('Toutes les langues', 'ai-content-studio'),
+                __('Toutes les plateformes', 'ai-content-studio'),
+                __('Planification & calendrier', 'ai-content-studio'),
+                __('Support email', 'ai-content-studio'),
+            ],
+            popular: false,
+        },
+        {
+            slug: 'professional',
+            name: __('Professional', 'ai-content-studio'),
+            price: 59,
+            description: __('Pour les professionnels du marketing', 'ai-content-studio'),
+            features: [
+                __('300 posts sociaux/mois', 'ai-content-studio'),
+                __('30 articles de blog/mois', 'ai-content-studio'),
+                __('150 images AI/mois', 'ai-content-studio'),
+                __('Toutes les fonctionnalités Starter', 'ai-content-studio'),
+                __('Analytics avancées', 'ai-content-studio'),
+                __('Analyse de la concurrence', 'ai-content-studio'),
+                __('Support prioritaire', 'ai-content-studio'),
+            ],
+            popular: true,
+        },
+        {
+            slug: 'business',
+            name: __('Business', 'ai-content-studio'),
+            price: 149,
+            description: __('Pour les agences et entreprises', 'ai-content-studio'),
+            features: [
+                __('Posts ILLIMITÉS', 'ai-content-studio'),
+                __('Articles ILLIMITÉS', 'ai-content-studio'),
+                __('Images ILLIMITÉES', 'ai-content-studio'),
+                __('Toutes les fonctionnalités Pro', 'ai-content-studio'),
+                __('5 membres d\'équipe', 'ai-content-studio'),
+                __('API access', 'ai-content-studio'),
+                __('Support dédié', 'ai-content-studio'),
+            ],
+            popular: false,
+        },
+    ];
+
+    const handleSelectPlan = async (planSlug) => {
+        setSelectedPlan(planSlug);
+        setLoading(true);
+
+        try {
+            // Get the product checkout URL
+            const response = await apiFetch({
+                path: '/acs/v1/subscription/checkout-url',
+                method: 'POST',
+                data: {
+                    plan: planSlug,
+                },
+            });
+
+            if (response.success && response.data.checkout_url) {
+                // Redirect to WooCommerce checkout
+                window.location.href = response.data.checkout_url;
+            } else {
+                alert(__('Erreur lors de la création du lien de paiement', 'ai-content-studio'));
+                setLoading(false);
+            }
+        } catch (error) {
+            console.error('Error getting checkout URL:', error);
+            alert(__('Une erreur s\'est produite', 'ai-content-studio'));
+            setLoading(false);
+        }
+    };
+
+    const getModalTitle = () => {
+        switch (triggerType) {
+            case 'article_limit':
+                return __('Vous avez atteint votre limite d\'articles', 'ai-content-studio');
+            case 'post_limit':
+                return __('Vous avez atteint votre limite de posts', 'ai-content-studio');
+            case 'upgrade':
+                return __('Choisissez votre plan', 'ai-content-studio');
+            default:
+                return __('Améliorez votre plan pour continuer', 'ai-content-studio');
+        }
+    };
+
+    const getModalSubtitle = () => {
+        switch (triggerType) {
+            case 'article_limit':
+                return __('Passez à un plan supérieur pour générer plus d\'articles de blog', 'ai-content-studio');
+            case 'post_limit':
+                return __('Passez à un plan supérieur pour générer plus de posts sociaux', 'ai-content-studio');
+            default:
+                return __('Choisissez le plan qui correspond à vos besoins', 'ai-content-studio');
+        }
+    };
+
+    return (
+        <div className="acs-pricing-modal-overlay" onClick={onClose}>
+            <div className="acs-pricing-modal" onClick={(e) => e.stopPropagation()}>
+                {/* Close button */}
+                <button className="acs-pricing-modal-close" onClick={onClose} disabled={loading}>
+                    <FiX size={24} />
+                </button>
+
+                {/* Header */}
+                <div className="acs-pricing-modal-header">
+                    <h2 className="acs-pricing-modal-title">{getModalTitle()}</h2>
+                    <p className="acs-pricing-modal-subtitle">{getModalSubtitle()}</p>
+                </div>
+
+                {/* Plans Grid */}
+                <div className="acs-pricing-grid">
+                    {plans.map((plan) => (
+                        <div
+                            key={plan.slug}
+                            className={`acs-pricing-card ${plan.popular ? 'popular' : ''} ${
+                                selectedPlan === plan.slug ? 'loading' : ''
+                            }`}
+                        >
+                            {plan.popular && (
+                                <div className="acs-pricing-badge">
+                                    <FiStar size={14} />
+                                    {__('POPULAIRE', 'ai-content-studio')}
+                                </div>
+                            )}
+
+                            <div className="acs-pricing-card-header">
+                                <h3 className="acs-pricing-plan-name">{plan.name}</h3>
+                                <div className="acs-pricing-price">
+                                    <span className="acs-pricing-currency">$</span>
+                                    <span className="acs-pricing-amount">{plan.price}</span>
+                                    <span className="acs-pricing-period">/mois</span>
+                                </div>
+                                <p className="acs-pricing-description">{plan.description}</p>
+                            </div>
+
+                            <ul className="acs-pricing-features">
+                                {plan.features.map((feature, index) => (
+                                    <li key={index} className="acs-pricing-feature">
+                                        <FiCheck className="acs-pricing-check" />
+                                        <span>{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <button
+                                className={`acs-pricing-button ${plan.popular ? 'primary' : 'secondary'}`}
+                                onClick={() => handleSelectPlan(plan.slug)}
+                                disabled={loading}
+                            >
+                                {selectedPlan === plan.slug ? (
+                                    <>
+                                        <div className="acs-spinner-small"></div>
+                                        {__('Redirection...', 'ai-content-studio')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <FiZap size={18} />
+                                        {__('Choisir ce plan', 'ai-content-studio')}
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Footer */}
+                <div className="acs-pricing-modal-footer">
+                    <p>
+                        <FiCheck className="acs-pricing-check" style={{ display: 'inline' }} />
+                        {__('Sans engagement • Annulation en 1 clic', 'ai-content-studio')}
+                    </p>
+                    <p>
+                        <FiCheck className="acs-pricing-check" style={{ display: 'inline' }} />
+                        {__('Satisfait ou remboursé 14 jours', 'ai-content-studio')}
+                    </p>
+                </div>
+
+                {!loading && (
+                    <div className="acs-pricing-modal-dismiss">
+                        <button onClick={onClose} className="acs-pricing-dismiss-button">
+                            {__('Je décide plus tard', 'ai-content-studio')}
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

@@ -1,0 +1,350 @@
+/* Pricing Modal Overlay */
+.acs-pricing-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Pricing Modal Container */
+.acs-pricing-modal {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 1200px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Close Button */
+.acs-pricing-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #f1f3f5;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.acs-pricing-modal-close:hover {
+    background: #e9ecef;
+    transform: rotate(90deg);
+}
+
+.acs-pricing-modal-close:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Modal Header */
+.acs-pricing-modal-header {
+    text-align: center;
+    padding: 40px 40px 30px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.acs-pricing-modal-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 10px;
+}
+
+.acs-pricing-modal-subtitle {
+    font-size: 16px;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Pricing Grid */
+.acs-pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    padding: 40px;
+}
+
+@media (max-width: 1024px) {
+    .acs-pricing-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Pricing Card */
+.acs-pricing-card {
+    position: relative;
+    background: #fff;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 30px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.acs-pricing-card:hover {
+    border-color: #2271b1;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(34, 113, 177, 0.15);
+}
+
+.acs-pricing-card.popular {
+    border-color: #2271b1;
+    border-width: 3px;
+    box-shadow: 0 8px 16px rgba(34, 113, 177, 0.1);
+}
+
+.acs-pricing-card.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Popular Badge */
+.acs-pricing-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2271b1;
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Card Header */
+.acs-pricing-card-header {
+    text-align: center;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #f1f3f5;
+    margin-bottom: 24px;
+}
+
+.acs-pricing-plan-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 16px;
+}
+
+.acs-pricing-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.acs-pricing-currency {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2271b1;
+}
+
+.acs-pricing-amount {
+    font-size: 48px;
+    font-weight: 700;
+    color: #2271b1;
+    margin: 0 4px;
+}
+
+.acs-pricing-period {
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.acs-pricing-description {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Features List */
+.acs-pricing-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    flex-grow: 1;
+}
+
+.acs-pricing-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #495057;
+}
+
+.acs-pricing-check {
+    flex-shrink: 0;
+    color: #28a745;
+    margin-top: 2px;
+}
+
+/* Pricing Button */
+.acs-pricing-button {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+}
+
+.acs-pricing-button.primary {
+    background: #2271b1;
+    color: #fff;
+}
+
+.acs-pricing-button.primary:hover:not(:disabled) {
+    background: #135e96;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 113, 177, 0.3);
+}
+
+.acs-pricing-button.secondary {
+    background: #fff;
+    color: #2271b1;
+    border: 2px solid #2271b1;
+}
+
+.acs-pricing-button.secondary:hover:not(:disabled) {
+    background: #f8f9fa;
+}
+
+.acs-pricing-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Modal Footer */
+.acs-pricing-modal-footer {
+    text-align: center;
+    padding: 20px 40px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.acs-pricing-modal-footer p {
+    font-size: 14px;
+    color: #495057;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Dismiss Button */
+.acs-pricing-modal-dismiss {
+    text-align: center;
+    padding: 16px 40px 30px;
+}
+
+.acs-pricing-dismiss-button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.acs-pricing-dismiss-button:hover {
+    color: #495057;
+}
+
+/* Small Spinner */
+.acs-spinner-small {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    width: 16px;
+    height: 16px;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .acs-pricing-modal {
+        margin: 10px;
+        border-radius: 12px;
+    }
+
+    .acs-pricing-modal-header {
+        padding: 30px 20px 20px;
+    }
+
+    .acs-pricing-modal-title {
+        font-size: 24px;
+    }
+
+    .acs-pricing-grid {
+        padding: 20px;
+        gap: 16px;
+    }
+
+    .acs-pricing-card {
+        padding: 20px;
+    }
+
+    .acs-pricing-amount {
+        font-size: 36px;
+    }
+}
