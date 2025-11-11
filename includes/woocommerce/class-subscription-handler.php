@@ -117,14 +117,14 @@ class Subscription_Handler {
 
         $subscription_service = new Subscription_Service();
 
-        // Downgrade to free plan
-        $subscription_service->update_user_plan($user_id, 'free');
+        // Downgrade to free trial plan
+        $subscription_service->update_user_plan($user_id, 'free_trial');
         $subscription_service->update_subscription_status($user_id, 'canceled');
 
         // Clear WC subscription ID
         delete_user_meta($user_id, 'acs_wc_subscription_id');
 
-        Logger::info('Subscription cancelled - downgraded to free', [
+        Logger::info('Subscription cancelled - downgraded to free_trial', [
             'user_id' => $user_id,
             'subscription_id' => $subscription->get_id(),
         ]);
@@ -142,13 +142,13 @@ class Subscription_Handler {
 
         $subscription_service = new Subscription_Service();
 
-        // Downgrade to free plan
-        $subscription_service->update_user_plan($user_id, 'free');
+        // Downgrade to free trial plan
+        $subscription_service->update_user_plan($user_id, 'free_trial');
         $subscription_service->update_subscription_status($user_id, 'expired');
 
         delete_user_meta($user_id, 'acs_wc_subscription_id');
 
-        Logger::info('Subscription expired - downgraded to free', [
+        Logger::info('Subscription expired - downgraded to free_trial', [
             'user_id' => $user_id,
             'subscription_id' => $subscription->get_id(),
         ]);
@@ -286,7 +286,7 @@ class Subscription_Handler {
 
         // Fallback: try to match by product ID
         $starter_id = get_option('acs_product_starter_id');
-        $pro_id = get_option('acs_product_pro_id');
+        $professional_id = get_option('acs_product_professional_id');
         $business_id = get_option('acs_product_business_id');
 
         foreach ($items as $item) {
@@ -294,8 +294,8 @@ class Subscription_Handler {
 
             if ($product_id == $starter_id) {
                 return 'starter';
-            } elseif ($product_id == $pro_id) {
-                return 'pro';
+            } elseif ($product_id == $professional_id) {
+                return 'professional';
             } elseif ($product_id == $business_id) {
                 return 'business';
             }

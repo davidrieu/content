@@ -23,90 +23,69 @@ class Plans_Config {
      */
     public static function get_plans() {
         return [
-            'free' => [
-                'name' => __('Gratuit', 'ai-content-studio'),
+            'free_trial' => [
+                'name' => __('Free Trial', 'ai-content-studio'),
                 'price' => 0,
-                'description' => __('Pour découvrir AI Content Studio', 'ai-content-studio'),
+                'description' => __('Essai gratuit - 1 article + 1 post', 'ai-content-studio'),
+                'is_trial' => true,
                 'limits' => [
-                    'posts_per_month' => 5,
+                    'posts_per_month' => 1,
                     'articles_per_month' => 1,
-                    'images_per_month' => 2,
+                    'images_per_month' => 0,
                     'videos_per_month' => 0,
-                    'languages' => 1,
-                    'platforms' => 2,
+                    'languages' => -1, // Toutes les langues en trial
+                    'platforms' => -1, // Toutes les plateformes en trial
                     'scheduling' => false,
                     'auto_publish' => false,
                     'brand_kit' => false,
-                    'templates' => 50,
+                    'templates' => -1,
                     'trends' => true,
                     'hashtags' => true,
                     'analytics' => 'basic',
                     'social_connections' => 0,
-                    'support' => 'community',
+                    'support' => 'none',
                 ],
             ],
             'starter' => [
                 'name' => __('Starter', 'ai-content-studio'),
-                'price' => 19,
-                'description' => __('Pour les créateurs de contenu', 'ai-content-studio'),
+                'price' => 29, // USD
+                'currency' => 'USD',
+                'description' => __('Pour les entrepreneurs et créateurs', 'ai-content-studio'),
                 'wc_product_id' => get_option('acs_product_starter_id'),
                 'stripe_price_id' => get_option('acs_stripe_price_starter'),
                 'limits' => [
                     'posts_per_month' => 50,
                     'articles_per_month' => 5,
-                    'images_per_month' => 20,
+                    'images_per_month' => 25,
                     'videos_per_month' => 0,
-                    'languages' => 3,
-                    'platforms' => 5,
-                    'scheduling' => true,
-                    'auto_publish' => true,
-                    'brand_kit' => 'basic',
-                    'templates' => 200,
-                    'trends' => true,
-                    'hashtags' => true,
-                    'analytics' => 'standard',
-                    'social_connections' => 3,
-                    'competitor_analysis' => 0,
-                    'support' => 'email',
-                ],
-            ],
-            'pro' => [
-                'name' => __('Pro', 'ai-content-studio'),
-                'price' => 49,
-                'description' => __('Pour les professionnels du marketing', 'ai-content-studio'),
-                'wc_product_id' => get_option('acs_product_pro_id'),
-                'stripe_price_id' => get_option('acs_stripe_price_pro'),
-                'limits' => [
-                    'posts_per_month' => 200,
-                    'articles_per_month' => 20,
-                    'images_per_month' => 100,
-                    'videos_per_month' => 0,
-                    'languages' => -1, // Illimité
+                    'languages' => -1,
                     'platforms' => -1,
                     'scheduling' => true,
                     'auto_publish' => true,
-                    'brand_kit' => 'complete',
+                    'brand_kit' => 'basic',
                     'templates' => -1,
                     'trends' => true,
                     'hashtags' => true,
-                    'analytics' => 'advanced',
-                    'social_connections' => 10,
-                    'competitor_analysis' => 3,
-                    'ab_testing' => true,
-                    'support' => 'priority',
+                    'analytics' => 'standard',
+                    'social_connections' => 5,
+                    'competitor_analysis' => 0,
+                    'support' => 'email',
+                    'team_members' => 1,
                 ],
             ],
-            'business' => [
-                'name' => __('Business', 'ai-content-studio'),
-                'price' => 99,
-                'description' => __('Pour les agences et entreprises', 'ai-content-studio'),
-                'wc_product_id' => get_option('acs_product_business_id'),
-                'stripe_price_id' => get_option('acs_stripe_price_business'),
+            'professional' => [
+                'name' => __('Professional', 'ai-content-studio'),
+                'price' => 59, // USD
+                'currency' => 'USD',
+                'description' => __('Pour les professionnels du marketing', 'ai-content-studio'),
+                'wc_product_id' => get_option('acs_product_professional_id'),
+                'stripe_price_id' => get_option('acs_stripe_price_professional'),
+                'popular' => true, // Badge "Populaire"
                 'limits' => [
-                    'posts_per_month' => -1, // Illimité
-                    'articles_per_month' => -1,
-                    'images_per_month' => -1,
-                    'videos_per_month' => 50,
+                    'posts_per_month' => 300,
+                    'articles_per_month' => 30,
+                    'images_per_month' => 150,
+                    'videos_per_month' => 0,
                     'languages' => -1,
                     'platforms' => -1,
                     'scheduling' => true,
@@ -117,9 +96,37 @@ class Plans_Config {
                     'hashtags' => true,
                     'analytics' => 'advanced',
                     'social_connections' => -1,
-                    'competitor_analysis' => 10,
+                    'competitor_analysis' => 3,
                     'ab_testing' => true,
-                    'team_members' => 3,
+                    'support' => 'priority',
+                    'team_members' => 1,
+                ],
+            ],
+            'business' => [
+                'name' => __('Business', 'ai-content-studio'),
+                'price' => 149, // USD
+                'currency' => 'USD',
+                'description' => __('Pour les agences et entreprises', 'ai-content-studio'),
+                'wc_product_id' => get_option('acs_product_business_id'),
+                'stripe_price_id' => get_option('acs_stripe_price_business'),
+                'limits' => [
+                    'posts_per_month' => -1, // Illimité
+                    'articles_per_month' => -1,
+                    'images_per_month' => -1,
+                    'videos_per_month' => 0,
+                    'languages' => -1,
+                    'platforms' => -1,
+                    'scheduling' => true,
+                    'auto_publish' => true,
+                    'brand_kit' => 'complete',
+                    'templates' => -1,
+                    'trends' => true,
+                    'hashtags' => true,
+                    'analytics' => 'advanced',
+                    'social_connections' => -1,
+                    'competitor_analysis' => -1,
+                    'ab_testing' => true,
+                    'team_members' => 5,
                     'api_access' => true,
                     'white_label' => false,
                     'support' => 'dedicated',
@@ -168,7 +175,7 @@ class Plans_Config {
      * @return string
      */
     public static function get_default_plan() {
-        return 'free';
+        return 'free_trial';
     }
 
     /**
