@@ -27,6 +27,24 @@ export default function EnhancedPostGenerator({ profile }) {
     // Ref pour l'auto-scroll
     const generatedPostsRef = useRef(null);
 
+    // Charger la langue de l'utilisateur au montage
+    useEffect(() => {
+        const fetchUserLanguage = async () => {
+            try {
+                const response = await apiFetch({
+                    path: '/acs/v1/profile/language',
+                    method: 'GET',
+                });
+                if (response.success && response.data.language) {
+                    setLanguage(response.data.language);
+                }
+            } catch (err) {
+                console.log('Could not fetch user language, using default');
+            }
+        };
+        fetchUserLanguage();
+    }, []);
+
     // Initialiser le topic depuis location.state (navigation depuis Strategy)
     useEffect(() => {
         if (location.state?.topic) {
@@ -48,14 +66,14 @@ export default function EnhancedPostGenerator({ profile }) {
         }
     }, [contentType, platform]);
 
-    // Charger les idées de posts au montage et quand la plateforme change
+    // Charger les idées de posts au montage et quand la plateforme ou la langue change
     useEffect(() => {
         const fetchIdeas = async () => {
             setLoadingIdeas(true);
             try {
-                console.log('[Post Ideas] Fetching ideas for platform:', platform);
+                console.log('[Post Ideas] Fetching ideas for platform:', platform, 'language:', language);
                 const response = await apiFetch({
-                    path: `/acs/v1/posts/ideas?platform=${platform}`,
+                    path: `/acs/v1/posts/ideas?platform=${platform}&language=${language}`,
                     method: 'GET',
                 });
 
@@ -86,7 +104,7 @@ export default function EnhancedPostGenerator({ profile }) {
         };
 
         fetchIdeas();
-    }, [platform]);
+    }, [platform, language]);
 
     const selectedTemplate = POST_TEMPLATES[template];
     const platformSpec = PLATFORM_SPECS[platform];

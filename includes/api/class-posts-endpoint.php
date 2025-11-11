@@ -186,6 +186,7 @@ class Posts_Endpoint extends REST_Controller {
     public function get_post_ideas($request) {
         $user_id = $this->get_current_user_id();
         $platform = $request->get_param('platform') ?? 'instagram';
+        $language = $request->get_param('language') ?? 'fr';
 
         // Get profile (required)
         $profile_model = new Business_Profile();
@@ -209,6 +210,7 @@ class Posts_Endpoint extends REST_Controller {
             'recent_posts' => $recent_posts, // Can be empty array
             'profile' => $profile,
             'platform' => $platform,
+            'language' => $language,
         ]);
 
         if (is_wp_error($ideas)) {

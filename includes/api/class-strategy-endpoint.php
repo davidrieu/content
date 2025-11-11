@@ -110,10 +110,11 @@ class Strategy_Endpoint extends WP_REST_Controller {
         $year = isset($params['year']) ? intval($params['year']) : date('Y');
         $goal = sanitize_text_field($params['goal'] ?? 'brand_awareness');
         $posts_per_week = isset($params['posts_per_week']) ? intval($params['posts_per_week']) : 3;
+        $language = sanitize_text_field($params['language'] ?? 'fr');
         $profile = $params['profile'] ?? [];
 
         // Construire le prompt pour Claude
-        $prompt = $this->build_strategy_prompt($month, $year, $goal, $posts_per_week, $profile);
+        $prompt = $this->build_strategy_prompt($month, $year, $goal, $posts_per_week, $profile, $language);
 
         try {
             $claude = new Claude_Service();
@@ -150,9 +151,10 @@ class Strategy_Endpoint extends WP_REST_Controller {
      * @param string $goal Objectif
      * @param int $posts_per_week Posts par semaine
      * @param array $profile Profil utilisateur
+     * @param string $language Langue de génération
      * @return string
      */
-    private function build_strategy_prompt($month, $year, $goal, $posts_per_week, $profile) {
+    private function build_strategy_prompt($month, $year, $goal, $posts_per_week, $profile, $language = 'fr') {
         $month_name = date('F', mktime(0, 0, 0, $month, 1));
         $total_posts = $posts_per_week * 4;
 
@@ -160,6 +162,19 @@ class Strategy_Endpoint extends WP_REST_Controller {
         $user_type = $profile['user_type'] ?? 'business';
         $sector = $profile['sector'] ?? '';
         $target_audience = $profile['target_audience'] ?? '';
+
+        // Language names mapping
+        $language_names = [
+            'fr' => 'français', 'en' => 'anglais', 'es' => 'espagnol', 'pt' => 'portugais',
+            'de' => 'allemand', 'it' => 'italien', 'zh' => 'chinois', 'ja' => 'japonais',
+            'ko' => 'coréen', 'ar' => 'arabe', 'ru' => 'russe', 'hi' => 'hindi',
+            'bn' => 'bengali', 'id' => 'indonésien', 'tr' => 'turc', 'vi' => 'vietnamien',
+            'pl' => 'polonais', 'uk' => 'ukrainien', 'nl' => 'néerlandais', 'th' => 'thaï',
+            'sv' => 'suédois', 'el' => 'grec', 'cs' => 'tchèque', 'ro' => 'roumain',
+            'hu' => 'hongrois', 'da' => 'danois', 'fi' => 'finnois', 'no' => 'norvégien',
+            'he' => 'hébreu', 'ca' => 'catalan'
+        ];
+        $language_name = $language_names[$language] ?? $language;
 
         $goal_descriptions = [
             'brand_awareness' => 'notoriété de marque et visibilité',
@@ -189,6 +204,8 @@ CONTRAINTES:
 - Mix de contenu adapté à l'objectif
 - Thèmes hebdomadaires cohérents
 - Conseils pratiques et actionnables
+
+IMPORTANT: Génère tout le contenu en {$language_name}.
 
 GÉNÈRE une stratégie complète au format JSON avec cette structure EXACTE:
 
@@ -384,7 +401,21 @@ PROMPT;
         $sector = $profile['sector'] ?? 'général';
         $target_audience = $profile['target_audience'] ?? 'large public';
         $goal = sanitize_text_field($params['goal'] ?? 'engagement');
+        $language = sanitize_text_field($params['language'] ?? 'fr');
         $platforms = is_array($profile['platforms']) ? implode(', ', $profile['platforms']) : 'Instagram, Facebook';
+
+        // Language names mapping
+        $language_names = [
+            'fr' => 'français', 'en' => 'anglais', 'es' => 'espagnol', 'pt' => 'portugais',
+            'de' => 'allemand', 'it' => 'italien', 'zh' => 'chinois', 'ja' => 'japonais',
+            'ko' => 'coréen', 'ar' => 'arabe', 'ru' => 'russe', 'hi' => 'hindi',
+            'bn' => 'bengali', 'id' => 'indonésien', 'tr' => 'turc', 'vi' => 'vietnamien',
+            'pl' => 'polonais', 'uk' => 'ukrainien', 'nl' => 'néerlandais', 'th' => 'thaï',
+            'sv' => 'suédois', 'el' => 'grec', 'cs' => 'tchèque', 'ro' => 'roumain',
+            'hu' => 'hongrois', 'da' => 'danois', 'fi' => 'finnois', 'no' => 'norvégien',
+            'he' => 'hébreu', 'ca' => 'catalan'
+        ];
+        $language_name = $language_names[$language] ?? $language;
 
         $goal_descriptions = [
             'brand_awareness' => 'notoriété de marque et visibilité',
@@ -412,6 +443,8 @@ CONTRAINTES:
 - Variété de types: éducatif, inspirant, questions, conseils, storytelling
 - Adaptés aux plateformes et à l'audience
 - Actionnables et engageants
+
+IMPORTANT: Génère tous les titres en {$language_name}.
 
 GÉNÈRE exactement 50 titres au format JSON avec cette structure:
 

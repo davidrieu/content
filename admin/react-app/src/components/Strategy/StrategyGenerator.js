@@ -11,6 +11,25 @@ export default function StrategyGenerator({ profile }) {
     const [strategy, setStrategy] = useState(null);
     const [contentIdeas, setContentIdeas] = useState([]);
     const [generatingIdeas, setGeneratingIdeas] = useState(false);
+    const [language, setLanguage] = useState('fr');
+
+    // Charger la langue de l'utilisateur au montage
+    useEffect(() => {
+        const fetchUserLanguage = async () => {
+            try {
+                const response = await apiFetch({
+                    path: '/acs/v1/profile/language',
+                    method: 'GET',
+                });
+                if (response.success && response.data.language) {
+                    setLanguage(response.data.language);
+                }
+            } catch (err) {
+                console.log('Could not fetch user language, using default');
+            }
+        };
+        fetchUserLanguage();
+    }, []);
 
     // Charger ou générer automatiquement la stratégie au montage
     useEffect(() => {
@@ -60,6 +79,7 @@ export default function StrategyGenerator({ profile }) {
                     year: new Date().getFullYear(),
                     goal: mainGoal,
                     posts_per_week: 3,
+                    language: language,
                     profile: {
                         user_type: profile?.user_type || 'business',
                         sector: profile?.sector || '',
@@ -91,6 +111,7 @@ export default function StrategyGenerator({ profile }) {
                 method: 'POST',
                 data: {
                     goal: mainGoal,
+                    language: language,
                     profile: {
                         user_type: profile?.user_type || 'business',
                         sector: profile?.sector || '',
@@ -159,6 +180,49 @@ export default function StrategyGenerator({ profile }) {
                 <p className="acs-text-muted">
                     {__('Stratégie personnalisée basée sur votre profil et vos objectifs', 'ai-content-studio')}
                 </p>
+            </div>
+
+            {/* Language Selector */}
+            <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
+                <div className="acs-form-group" style={{ marginBottom: 0 }}>
+                    <label className="acs-form-label">{__('Langue de génération', 'ai-content-studio')}</label>
+                    <select className="acs-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                        <optgroup label="🌍 Europe">
+                            <option value="fr">🇫🇷 Français</option>
+                            <option value="en">🇬🇧 English</option>
+                            <option value="es">🇪🇸 Español</option>
+                            <option value="de">🇩🇪 Deutsch</option>
+                            <option value="it">🇮🇹 Italiano</option>
+                            <option value="pt">🇵🇹 Português</option>
+                            <option value="ru">🇷🇺 Русский</option>
+                            <option value="pl">🇵🇱 Polski</option>
+                            <option value="nl">🇳🇱 Nederlands</option>
+                            <option value="tr">🇹🇷 Türkçe</option>
+                            <option value="uk">🇺🇦 Українська</option>
+                            <option value="el">🇬🇷 Ελληνικά</option>
+                            <option value="sv">🇸🇪 Svenska</option>
+                            <option value="da">🇩🇰 Dansk</option>
+                            <option value="fi">🇫🇮 Suomi</option>
+                            <option value="no">🇳🇴 Norsk</option>
+                            <option value="cs">🇨🇿 Čeština</option>
+                            <option value="ro">🇷🇴 Română</option>
+                            <option value="hu">🇭🇺 Magyar</option>
+                            <option value="ca">🇪🇸 Català</option>
+                        </optgroup>
+                        <optgroup label="🌏 Asie">
+                            <option value="zh">🇨🇳 中文 (Mandarin)</option>
+                            <option value="ja">🇯🇵 日本語</option>
+                            <option value="ko">🇰🇷 한국어</option>
+                            <option value="hi">🇮🇳 हिन्दी</option>
+                            <option value="ar">🇸🇦 العربية</option>
+                            <option value="vi">🇻🇳 Tiếng Việt</option>
+                            <option value="id">🇮🇩 Bahasa Indonesia</option>
+                            <option value="th">🇹🇭 ไทย</option>
+                            <option value="bn">🇧🇩 বাংলা</option>
+                            <option value="he">🇮🇱 עברית</option>
+                        </optgroup>
+                    </select>
+                </div>
             </div>
 
             {/* Strategy Overview */}

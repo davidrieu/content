@@ -386,6 +386,20 @@ Format JSON:
         $recent_posts = $params['recent_posts'] ?? [];
         $profile = $params['profile'] ?? [];
         $platform = $params['platform'] ?? 'instagram';
+        $language = $params['language'] ?? 'fr';
+
+        // Language names mapping
+        $language_names = [
+            'fr' => 'français', 'en' => 'anglais', 'es' => 'espagnol', 'pt' => 'portugais',
+            'de' => 'allemand', 'it' => 'italien', 'zh' => 'chinois', 'ja' => 'japonais',
+            'ko' => 'coréen', 'ar' => 'arabe', 'ru' => 'russe', 'hi' => 'hindi',
+            'bn' => 'bengali', 'id' => 'indonésien', 'tr' => 'turc', 'vi' => 'vietnamien',
+            'pl' => 'polonais', 'uk' => 'ukrainien', 'nl' => 'néerlandais', 'th' => 'thaï',
+            'sv' => 'suédois', 'el' => 'grec', 'cs' => 'tchèque', 'ro' => 'roumain',
+            'hu' => 'hongrois', 'da' => 'danois', 'fi' => 'finnois', 'no' => 'norvégien',
+            'he' => 'hébreu', 'ca' => 'catalan'
+        ];
+        $language_name = $language_names[$language] ?? $language;
 
         // Extract content from recent posts (only first 50 chars for speed)
         $posts_summary = '';
@@ -398,13 +412,15 @@ Format JSON:
             "Basé sur le profil (%s - %s) et posts récents:%s
 
 Génère 4 titres de sujets pour %s (8-12 mots max par titre).
+IMPORTANT: Les titres doivent être en %s.
 
 Format JSON simple:
 {\"ideas\": [\"Titre 1\", \"Titre 2\", \"Titre 3\", \"Titre 4\"]}",
             $profile['business_name'] ?? 'Business',
             $profile['sector'] ?? 'général',
             $posts_summary ?: "\n(Aucun)",
-            $platform
+            $platform,
+            $language_name
         );
     }
 

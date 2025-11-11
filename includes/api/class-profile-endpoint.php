@@ -25,6 +25,14 @@ class Profile_Endpoint extends REST_Controller {
                 'permission_callback' => [$this, 'permission_check'],
             ],
         ]);
+
+        register_rest_route($this->namespace, '/profile/language', [
+            [
+                'methods' => 'GET',
+                'callback' => [$this, 'get_user_language'],
+                'permission_callback' => [$this, 'permission_check'],
+            ],
+        ]);
     }
 
     public function get_profile($request) {
@@ -110,5 +118,23 @@ class Profile_Endpoint extends REST_Controller {
         }
 
         return $this->success(['id' => $result], $message);
+    }
+
+    /**
+     * Get user's preferred language
+     *
+     * @param \WP_REST_Request $request
+     * @return \WP_REST_Response
+     */
+    public function get_user_language($request) {
+        $user_id = $this->get_current_user_id();
+        $language = get_user_meta($user_id, 'acs_preferred_language', true);
+
+        // Default to French if no language is set
+        if (empty($language)) {
+            $language = 'fr';
+        }
+
+        return $this->success(['language' => $language]);
     }
 }
