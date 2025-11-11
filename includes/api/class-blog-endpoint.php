@@ -784,14 +784,18 @@ PROMPT;
 
         try {
             // Utiliser Haiku pour la rapidité
-            $response = $this->claude->call_api($prompt, 2048, '', 'claude-3-5-haiku-20241022');
+            $response = $this->claude->generate_completion(
+                $prompt,
+                'claude-3-5-haiku-20241022',
+                2048
+            );
 
             if (is_wp_error($response)) {
                 error_log('Blog strategy ideas generation failed: ' . $response->get_error_message());
-                return [
+                return rest_ensure_response([
                     'success' => false,
                     'message' => $response->get_error_message(),
-                ];
+                ]);
             }
 
             // Parser la réponse
@@ -804,22 +808,22 @@ PROMPT;
             if (json_last_error() !== JSON_ERROR_NONE || !isset($data['ideas'])) {
                 error_log('Failed to parse blog ideas JSON: ' . json_last_error_msg());
                 error_log('Response preview: ' . substr($response, 0, 500));
-                return [
+                return rest_ensure_response([
                     'success' => false,
                     'message' => 'Erreur de parsing JSON',
-                ];
+                ]);
             }
 
-            return [
+            return rest_ensure_response([
                 'success' => true,
                 'data' => $data['ideas'],
-            ];
+            ]);
         } catch (\Exception $e) {
             error_log('Blog strategy ideas exception: ' . $e->getMessage());
-            return [
+            return rest_ensure_response([
                 'success' => false,
                 'message' => $e->getMessage(),
-            ];
+            ]);
         }
     }
 }
