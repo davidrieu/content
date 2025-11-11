@@ -58,27 +58,12 @@ export default function StrategyGenerator({ profile }) {
     const loadOrGenerateStrategy = async () => {
         setLoading(true);
         try {
-            // Essayer de charger la stratégie existante
-            const response = await apiFetch({
-                path: '/acs/v1/strategy/current',
-                method: 'GET',
-            });
-
-            if (response.success && response.data) {
-                // Stratégie existante trouvée
-                setStrategy(response.data);
-                // Charger les content_ideas si elles existent
-                if (response.data.content_ideas && Array.isArray(response.data.content_ideas)) {
-                    setContentIdeas(response.data.content_ideas);
-                }
-            } else {
-                // Pas de stratégie : générer automatiquement
-                await generateStrategyAutomatically();
-            }
-        } catch (err) {
-            // Erreur ou pas de stratégie : générer automatiquement
-            console.log('No existing strategy, generating new one...');
+            // Toujours régénérer la stratégie dans la langue actuelle de l'utilisateur
+            // Cela garantit que la stratégie est toujours dans la bonne langue
+            console.log('Generating strategy in user language:', language);
             await generateStrategyAutomatically();
+        } catch (err) {
+            console.error('Error loading/generating strategy:', err);
         } finally {
             setLoading(false);
         }
