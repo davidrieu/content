@@ -375,6 +375,26 @@ class Plugin {
             return;
         }
 
+        // FORCE: Désactiver TOUS les caches WordPress
+        if (!defined('DONOTCACHEPAGE')) {
+            define('DONOTCACHEPAGE', true);
+        }
+        if (!defined('DONOTCACHEDB')) {
+            define('DONOTCACHEDB', true);
+        }
+        if (!defined('DONOTMINIFY')) {
+            define('DONOTMINIFY', true);
+        }
+        if (!defined('DONOTCDN')) {
+            define('DONOTCDN', true);
+        }
+        if (!defined('DONOTCACHEOBJECT')) {
+            define('DONOTCACHEOBJECT', true);
+        }
+
+        // Nettoyer le cache WordPress
+        wp_cache_flush();
+
         // Use direct file timestamp - no caching possible
         $js_file = ACS_PLUGIN_DIR . 'admin/js/admin-script.js';
         $css_file = ACS_PLUGIN_DIR . 'admin/css/admin-style.css';
@@ -383,6 +403,8 @@ class Plugin {
         // Clear all possible PHP caches for asset file
         if (function_exists('opcache_invalidate')) {
             opcache_invalidate($asset_file, true);
+            opcache_invalidate($js_file, true);
+            opcache_invalidate($css_file, true);
         }
         clearstatcache(true, $asset_file);
         clearstatcache(true, $js_file);
@@ -391,22 +413,31 @@ class Plugin {
         if (file_exists($asset_file)) {
             $asset = require $asset_file;
 
-            // Use timestamp + random to absolutely force reload
-            $cache_buster = filemtime($js_file) . '.' . time();
+            // Use timestamp + random + microtime to absolutely force reload EVERY TIME
+            $cache_buster = filemtime($js_file) . '.' . time() . '.' . wp_rand(1000, 9999);
 
+            // Désactiver complètement la mise en cache de ces ressources
             wp_enqueue_script(
                 'acs-admin-script',
                 ACS_PLUGIN_URL . 'admin/js/admin-script.js',
                 $asset['dependencies'],
-                $cache_buster,  // Force unique version every time
+                $cache_buster,  // Force unique version every single page load
                 true
             );
+
+            // Ajouter les headers no-cache
+            add_filter('script_loader_tag', function($tag, $handle) {
+                if ($handle === 'acs-admin-script') {
+                    return str_replace('<script ', '<script data-no-cache="true" ', $tag);
+                }
+                return $tag;
+            }, 10, 2);
 
             wp_enqueue_style(
                 'acs-admin-style',
                 ACS_PLUGIN_URL . 'admin/css/admin-style.css',
                 [],
-                filemtime($css_file) . '.' . time()
+                filemtime($css_file) . '.' . time() . '.' . wp_rand(1000, 9999)
             );
 
             // Localize script
@@ -416,6 +447,11 @@ class Plugin {
                 'currentUser' => get_current_user_id(),
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'pluginUrl' => ACS_PLUGIN_URL,
+                'cacheDebug' => [
+                    'jsFile' => filemtime($js_file),
+                    'currentTime' => time(),
+                    'version' => $cache_buster,
+                ],
             ]);
         }
     }
