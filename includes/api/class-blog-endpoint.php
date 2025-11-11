@@ -81,6 +81,13 @@ class Blog_Endpoint {
             'callback' => [$this, 'delete_article'],
             'permission_callback' => [$this, 'check_permissions'],
         ]);
+
+        // Generate blog strategy ideas (50 subjects)
+        register_rest_route('acs/v1', '/blog/strategy-ideas', [
+            'methods' => 'POST',
+            'callback' => [$this, 'generate_blog_strategy_ideas'],
+            'permission_callback' => [$this, 'check_permissions'],
+        ]);
     }
 
     /**
@@ -674,5 +681,109 @@ Réponds maintenant avec le JSON uniquement :";
             'author_url' => $data['user']['links']['html'],
             'download_location' => $data['links']['download_location'], // Required for attribution
         ];
+    }
+
+    /**
+     * Generate 50 blog strategy ideas
+     *
+     * @param WP_REST_Request $request
+     * @return array|WP_Error
+     */
+    public function generate_blog_strategy_ideas($request) {
+        $params = $request->get_json_params();
+        $profile = $params['profile'] ?? [];
+        $language = sanitize_text_field($params['language'] ?? 'fr');
+
+        $sector = $profile['sector'] ?? 'général';
+        $target_audience = $profile['target_audience'] ?? 'large public';
+        $business_name = $profile['business_name'] ?? 'Business';
+        $keywords = is_array($profile['keywords']) ? implode(', ', $profile['keywords']) : '';
+
+        // Language names mapping
+        $language_names = [
+            'fr' => 'français', 'en' => 'anglais', 'es' => 'espagnol', 'pt' => 'portugais',
+            'de' => 'allemand', 'it' => 'italien', 'zh' => 'chinois', 'ja' => 'japonais',
+            'ko' => 'coréen', 'ar' => 'arabe', 'ru' => 'russe', 'hi' => 'hindi',
+            'bn' => 'bengali', 'id' => 'indonésien', 'tr' => 'turc', 'vi' => 'vietnamien',
+            'pl' => 'polonais', 'uk' => 'ukrainien', 'nl' => 'néerlandais', 'th' => 'thaï',
+            'sv' => 'suédois', 'el' => 'grec', 'cs' => 'tchèque', 'ro' => 'roumain',
+            'hu' => 'hongrois', 'da' => 'danois', 'fi' => 'finnois', 'no' => 'norvégien',
+            'he' => 'hébreu', 'ca' => 'catalan'
+        ];
+        $language_name = $language_names[$language] ?? $language;
+
+        $prompt = <<<PROMPT
+Tu es un expert en stratégie de contenu blog et SEO.
+
+MISSION: Générer 50 sujets d'articles de blog percutants et optimisés SEO
+
+PROFIL CLIENT:
+- Business: {$business_name}
+- Secteur: {$sector}
+- Audience cible: {$target_audience}
+- Mots-clés: {$keywords}
+
+CONTRAINTES:
+- 50 sujets d'articles de blog
+- Sujets variés: guides pratiques, tutoriels, analyses, comparatifs, listes, études de cas
+- Optimisés pour le SEO et l'engagement
+- Adaptés au secteur et à l'audience
+- Titres accrocheurs et clairs (8-15 mots)
+
+IMPORTANT: Génère tous les sujets en {$language_name}.
+
+GÉNÈRE exactement 50 sujets au format JSON avec cette structure:
+
+{
+    "ideas": [
+        "Sujet 1",
+        "Sujet 2",
+        ...
+        "Sujet 50"
+    ]
+}
+
+IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.
+PROMPT;
+
+        try {
+            // Utiliser Haiku pour la rapidité
+            $response = $this->claude->call_api($prompt, 2048, '', 'claude-3-5-haiku-20241022');
+
+            if (is_wp_error($response)) {
+                error_log('Blog strategy ideas generation failed: ' . $response->get_error_message());
+                return [
+                    'success' => false,
+                    'message' => $response->get_error_message(),
+                ];
+            }
+
+            // Parser la réponse
+            $response = trim($response);
+            $response = preg_replace('/^```json\s*/i', '', $response);
+            $response = preg_replace('/\s*```$/', '', $response);
+
+            $data = json_decode($response, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE || !isset($data['ideas'])) {
+                error_log('Failed to parse blog ideas JSON: ' . json_last_error_msg());
+                error_log('Response preview: ' . substr($response, 0, 500));
+                return [
+                    'success' => false,
+                    'message' => 'Erreur de parsing JSON',
+                ];
+            }
+
+            return [
+                'success' => true,
+                'data' => $data['ideas'],
+            ];
+        } catch (\Exception $e) {
+            error_log('Blog strategy ideas exception: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+        }
     }
 }

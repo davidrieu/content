@@ -1,4 +1,4 @@
-import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark, FiShare2, FiEdit } from 'react-icons/fi';
+import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark, FiShare2, FiEdit, FiBookOpen } from 'react-icons/fi';
 import { __ } from '@wordpress/i18n';
 
 export default function Sidebar({ currentPath, onNavigate }) {
@@ -11,7 +11,8 @@ export default function Sidebar({ currentPath, onNavigate }) {
     ];
 
     const blogSeoSection = [
-        { path: '/articles', icon: FiEdit, label: __('Créer un article', 'ai-content-studio') },
+        { path: '/blog-generator', icon: FiEdit, label: __('Créer un article', 'ai-content-studio') },
+        { path: '/blog-strategy', icon: FiBookOpen, label: __('Stratégie Blog', 'ai-content-studio') },
         { path: '/blog-library', icon: FiFileText, label: __('Mes articles', 'ai-content-studio') },
         { path: '/images', icon: FiImage, label: __('Images IA', 'ai-content-studio') },
         { path: '/trends', icon: FiTrendingUp, label: __('Tendances SEO', 'ai-content-studio') },

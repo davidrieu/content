@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
+import { useLocation } from 'react-router-dom';
 import { FiFileText, FiEdit, FiImage, FiSave, FiLoader, FiCheckCircle } from 'react-icons/fi';
 
 export default function BlogArticleGenerator() {
+    const location = useLocation();
     const [subject, setSubject] = useState('');
     const [suggestedTitle, setSuggestedTitle] = useState('');
     const [keywords, setKeywords] = useState([]);
@@ -11,6 +13,15 @@ export default function BlogArticleGenerator() {
     const [firstPerson, setFirstPerson] = useState(false);
     const [length, setLength] = useState('2000-3000');
     const [language, setLanguage] = useState('fr');
+
+    // Initialiser le sujet depuis location.state (navigation depuis BlogStrategy)
+    useEffect(() => {
+        if (location.state?.subject) {
+            setSubject(location.state.subject);
+            // Nettoyer le state pour éviter de le réutiliser
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
 
     const [generatingSuggestions, setGeneratingSuggestions] = useState(false);
     const [generatingArticle, setGeneratingArticle] = useState(false);
