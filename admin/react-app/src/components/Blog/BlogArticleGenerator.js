@@ -10,7 +10,7 @@ export default function BlogArticleGenerator() {
     const [mainKeyword, setMainKeyword] = useState('');
     const [firstPerson, setFirstPerson] = useState(false);
     const [length, setLength] = useState('2000-3000');
-    const [includeImages, setIncludeImages] = useState(false);
+    const [language, setLanguage] = useState('fr');
 
     const [generatingSuggestions, setGeneratingSuggestions] = useState(false);
     const [generatingArticle, setGeneratingArticle] = useState(false);
@@ -92,7 +92,7 @@ export default function BlogArticleGenerator() {
                     main_keyword: mainKeyword,
                     first_person: firstPerson,
                     length: length,
-                    include_images: includeImages,
+                    language: language,
                 }),
             });
 
@@ -193,6 +193,7 @@ export default function BlogArticleGenerator() {
                     main_keyword: mainKeyword,
                     first_person: firstPerson,
                     length: length,
+                    language: language,
                     seo_title: seoTitle,
                     meta_description: metaDescription,
                     url_slug: seoUrl,
@@ -348,15 +349,20 @@ export default function BlogArticleGenerator() {
                             </div>
 
                             <div className="acs-form-group">
-                                <label className="acs-checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        checked={includeImages}
-                                        onChange={(e) => setIncludeImages(e.target.checked)}
-                                        disabled={generatingArticle}
-                                    />
-                                    {__('Inclure des images du web (avec crédits)', 'ai-content-studio')}
-                                </label>
+                                <label>{__('Langue de l\'article', 'ai-content-studio')}</label>
+                                <select
+                                    className="acs-form-control"
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value)}
+                                    disabled={generatingArticle}
+                                >
+                                    <option value="fr">{__('Français', 'ai-content-studio')}</option>
+                                    <option value="en">{__('Anglais', 'ai-content-studio')}</option>
+                                    <option value="es">{__('Espagnol', 'ai-content-studio')}</option>
+                                    <option value="de">{__('Allemand', 'ai-content-studio')}</option>
+                                    <option value="it">{__('Italien', 'ai-content-studio')}</option>
+                                    <option value="pt">{__('Portugais', 'ai-content-studio')}</option>
+                                </select>
                             </div>
 
                             <button

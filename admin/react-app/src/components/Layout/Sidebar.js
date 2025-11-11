@@ -11,7 +11,8 @@ export default function Sidebar({ currentPath, onNavigate }) {
     ];
 
     const blogSeoSection = [
-        { path: '/articles', icon: FiFileText, label: __('Articles de blog', 'ai-content-studio') },
+        { path: '/articles', icon: FiEdit, label: __('Créer un article', 'ai-content-studio') },
+        { path: '/blog-library', icon: FiFileText, label: __('Mes articles', 'ai-content-studio') },
         { path: '/images', icon: FiImage, label: __('Images IA', 'ai-content-studio') },
         { path: '/trends', icon: FiTrendingUp, label: __('Tendances SEO', 'ai-content-studio') },
     ];

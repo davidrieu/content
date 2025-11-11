@@ -74,6 +74,13 @@ class Blog_Endpoint {
             'callback' => [$this, 'get_articles'],
             'permission_callback' => [$this, 'check_permissions'],
         ]);
+
+        // Delete article
+        register_rest_route('acs/v1', '/blog/articles/(?P<id>\d+)', [
+            'methods' => 'DELETE',
+            'callback' => [$this, 'delete_article'],
+            'permission_callback' => [$this, 'check_permissions'],
+        ]);
     }
 
     /**
@@ -93,6 +100,7 @@ class Blog_Endpoint {
      */
     public function generate_suggestions($request) {
         $subject = sanitize_text_field($request->get_param('subject'));
+        $language = sanitize_text_field($request->get_param('language') ?: 'fr');
 
         if (empty($subject)) {
             return rest_ensure_response([
@@ -101,9 +109,22 @@ class Blog_Endpoint {
             ]);
         }
 
+        // Language instructions
+        $language_names = [
+            'fr' => 'français',
+            'en' => 'anglais',
+            'es' => 'espagnol',
+            'de' => 'allemand',
+            'it' => 'italien',
+            'pt' => 'portugais'
+        ];
+        $language_name = $language_names[$language] ?? 'français';
+
         $prompt = "Tu es un expert en rédaction de contenu et SEO.
 
 Sujet de l'article : {$subject}
+
+LANGUE : Génère le titre et les mots-clés en {$language_name}.
 
 Ta tâche :
 1. Génère un titre d'article de blog accrocheur et optimisé SEO (60-70 caractères max)
@@ -204,7 +225,7 @@ Réponds maintenant avec le JSON uniquement :";
         $main_keyword = sanitize_text_field($request->get_param('main_keyword'));
         $first_person = (bool) $request->get_param('first_person');
         $length = sanitize_text_field($request->get_param('length'));
-        $include_images = (bool) $request->get_param('include_images');
+        $language = sanitize_text_field($request->get_param('language') ?: 'fr');
 
         // Parse length range
         list($min_words, $max_words) = explode('-', $length);
@@ -217,7 +238,20 @@ Réponds maintenant avec le JSON uniquement :";
         $keywords_list = implode(', ', $keywords);
         $point_of_view = $first_person ? 'première personne (je, nous)' : 'troisième personne';
 
+        // Language instructions
+        $language_names = [
+            'fr' => 'français',
+            'en' => 'anglais',
+            'es' => 'espagnol',
+            'de' => 'allemand',
+            'it' => 'italien',
+            'pt' => 'portugais'
+        ];
+        $language_name = $language_names[$language] ?? 'français';
+
         $prompt = "Tu es un rédacteur web expert en SEO.
+
+LANGUE : Rédige l'article ENTIÈREMENT en {$language_name}.
 
 CONSIGNES :
 - Titre de l'article : {$title}
@@ -345,16 +379,30 @@ Commence la rédaction maintenant :";
         $title = sanitize_text_field($request->get_param('title'));
         $content = $request->get_param('content');
         $main_keyword = sanitize_text_field($request->get_param('main_keyword'));
+        $language = sanitize_text_field($request->get_param('language') ?: 'fr');
 
         // Truncate content for prompt (first 500 words)
         $content_words = explode(' ', $content);
         $content_excerpt = implode(' ', array_slice($content_words, 0, 500));
+
+        // Language instructions
+        $language_names = [
+            'fr' => 'français',
+            'en' => 'anglais',
+            'es' => 'espagnol',
+            'de' => 'allemand',
+            'it' => 'italien',
+            'pt' => 'portugais'
+        ];
+        $language_name = $language_names[$language] ?? 'français';
 
         $prompt = "Tu es un expert SEO.
 
 Titre de l'article : {$title}
 Mot-clé principal : {$main_keyword}
 Début de l'article : {$content_excerpt}...
+
+LANGUE : Génère les éléments SEO en {$language_name}.
 
 Ta tâche :
 1. Génère un titre SEO optimisé (55-60 caractères, avec le mot-clé)
@@ -500,6 +548,52 @@ Réponds maintenant avec le JSON uniquement :";
             'success' => true,
             'data' => $articles,
         ]);
+    }
+
+    /**
+     * Delete an article
+     *
+     * @param WP_REST_Request $request
+     * @return array
+     */
+    public function delete_article($request) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'acs_blog_articles';
+        $article_id = $request->get_param('id');
+        $user_id = get_current_user_id();
+
+        // Verify article exists and belongs to user
+        $article = $wpdb->get_row($wpdb->prepare(
+            "SELECT id FROM {$table} WHERE id = %d AND user_id = %d",
+            $article_id,
+            $user_id
+        ));
+
+        if (!$article) {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __('Article non trouvé ou vous n\'avez pas les permissions.', 'ai-content-studio'),
+            ]);
+        }
+
+        // Delete the article
+        $result = $wpdb->delete(
+            $table,
+            ['id' => $article_id, 'user_id' => $user_id],
+            ['%d', '%d']
+        );
+
+        if ($result !== false) {
+            return rest_ensure_response([
+                'success' => true,
+                'message' => __('Article supprimé avec succès.', 'ai-content-studio'),
+            ]);
+        } else {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => __('Erreur lors de la suppression de l\'article.', 'ai-content-studio'),
+            ]);
+        }
     }
 
     /**
