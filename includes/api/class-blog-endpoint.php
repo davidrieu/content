@@ -105,17 +105,19 @@ class Blog_Endpoint {
 
 Sujet de l'article : {$subject}
 
-Génère :
-1. Un titre d'article de blog accrocheur et optimisé SEO (60-70 caractères max)
-2. Exactement 5 mots-clés pertinents pour ce sujet (le premier sera le mot-clé principal)
+Ta tâche :
+1. Génère un titre d'article de blog accrocheur et optimisé SEO (60-70 caractères max)
+2. Génère exactement 5 mots-clés pertinents pour ce sujet (le premier sera le mot-clé principal)
 
-Format de réponse STRICT (JSON uniquement) :
-{
-  \"title\": \"Le titre ici\",
-  \"keywords\": [\"mot-clé 1\", \"mot-clé 2\", \"mot-clé 3\", \"mot-clé 4\", \"mot-clé 5\"]
-}
+RÈGLES STRICTES :
+- Réponds UNIQUEMENT avec un objet JSON
+- N'ajoute AUCUN texte avant ou après le JSON
+- N'utilise PAS de bloc de code markdown
+- Respecte EXACTEMENT ce format :
 
-IMPORTANT : Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.";
+{\"title\":\"Le titre ici\",\"keywords\":[\"mot-clé 1\",\"mot-clé 2\",\"mot-clé 3\",\"mot-clé 4\",\"mot-clé 5\"]}
+
+Réponds maintenant avec le JSON uniquement :";
 
         // Use Haiku for speed
         $response = $this->claude->generate_completion(
@@ -134,21 +136,43 @@ IMPORTANT : Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.";
         // Parse JSON response
         $content = isset($response['content'][0]['text']) ? $response['content'][0]['text'] : '';
 
-        // Extract JSON from response
-        preg_match('/\{.*\}/s', $content, $matches);
-        if (empty($matches)) {
+        // Log the raw response for debugging
+        error_log('Claude raw response: ' . $content);
+
+        // Try to extract JSON from response (handle markdown code blocks)
+        $json_str = $content;
+
+        // Remove markdown code blocks if present
+        $json_str = preg_replace('/```json\s*/i', '', $json_str);
+        $json_str = preg_replace('/```\s*$/i', '', $json_str);
+
+        // Extract JSON object
+        if (preg_match('/\{[^}]*"title"[^}]*"keywords"[^}]*\}/s', $json_str, $matches)) {
+            $json_str = $matches[0];
+        } elseif (preg_match('/\{.*\}/s', $json_str, $matches)) {
+            $json_str = $matches[0];
+        }
+
+        // Trim whitespace
+        $json_str = trim($json_str);
+
+        error_log('Extracted JSON: ' . $json_str);
+
+        $data = json_decode($json_str, true);
+
+        if (!$data || !isset($data['title']) || !isset($data['keywords'])) {
+            error_log('JSON decode error: ' . json_last_error_msg());
             return rest_ensure_response([
                 'success' => false,
-                'message' => __('Format de réponse invalide', 'ai-content-studio'),
+                'message' => __('Impossible de parser la réponse. Réponse reçue: ', 'ai-content-studio') . substr($content, 0, 200),
             ]);
         }
 
-        $data = json_decode($matches[0], true);
-
-        if (!$data || !isset($data['title']) || !isset($data['keywords'])) {
+        // Validate keywords is an array
+        if (!is_array($data['keywords']) || count($data['keywords']) !== 5) {
             return rest_ensure_response([
                 'success' => false,
-                'message' => __('Impossible de parser la réponse', 'ai-content-studio'),
+                'message' => __('Le format des mots-clés est invalide', 'ai-content-studio'),
             ]);
         }
 
@@ -291,19 +315,20 @@ Titre de l'article : {$title}
 Mot-clé principal : {$main_keyword}
 Début de l'article : {$content_excerpt}...
 
-Génère :
-1. Un titre SEO optimisé (55-60 caractères, avec le mot-clé)
-2. Une meta description engageante (150-160 caractères, avec le mot-clé)
-3. Un slug d'URL optimisé (mots-clés séparés par des tirets, en minuscules)
+Ta tâche :
+1. Génère un titre SEO optimisé (55-60 caractères, avec le mot-clé)
+2. Génère une meta description engageante (150-160 caractères, avec le mot-clé)
+3. Génère un slug d'URL optimisé (mots-clés séparés par des tirets, en minuscules)
 
-Format de réponse STRICT (JSON uniquement) :
-{
-  \"seo_title\": \"Le titre SEO ici\",
-  \"meta_description\": \"La meta description ici\",
-  \"url_slug\": \"le-slug-url-ici\"
-}
+RÈGLES STRICTES :
+- Réponds UNIQUEMENT avec un objet JSON
+- N'ajoute AUCUN texte avant ou après le JSON
+- N'utilise PAS de bloc de code markdown
+- Respecte EXACTEMENT ce format :
 
-IMPORTANT : Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.";
+{\"seo_title\":\"Le titre SEO ici\",\"meta_description\":\"La meta description ici\",\"url_slug\":\"le-slug-url-ici\"}
+
+Réponds maintenant avec le JSON uniquement :";
 
         // Use Haiku for speed
         $response = $this->claude->generate_completion(
@@ -322,21 +347,35 @@ IMPORTANT : Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.";
         // Parse JSON response
         $response_text = isset($response['content'][0]['text']) ? $response['content'][0]['text'] : '';
 
-        // Extract JSON from response
-        preg_match('/\{.*\}/s', $response_text, $matches);
-        if (empty($matches)) {
-            return rest_ensure_response([
-                'success' => false,
-                'message' => __('Format de réponse invalide', 'ai-content-studio'),
-            ]);
+        // Log the raw response for debugging
+        error_log('Claude SEO raw response: ' . $response_text);
+
+        // Try to extract JSON from response (handle markdown code blocks)
+        $json_str = $response_text;
+
+        // Remove markdown code blocks if present
+        $json_str = preg_replace('/```json\s*/i', '', $json_str);
+        $json_str = preg_replace('/```\s*$/i', '', $json_str);
+
+        // Extract JSON object
+        if (preg_match('/\{[^}]*"seo_title"[^}]*"meta_description"[^}]*"url_slug"[^}]*\}/s', $json_str, $matches)) {
+            $json_str = $matches[0];
+        } elseif (preg_match('/\{.*\}/s', $json_str, $matches)) {
+            $json_str = $matches[0];
         }
 
-        $data = json_decode($matches[0], true);
+        // Trim whitespace
+        $json_str = trim($json_str);
+
+        error_log('Extracted SEO JSON: ' . $json_str);
+
+        $data = json_decode($json_str, true);
 
         if (!$data || !isset($data['seo_title']) || !isset($data['meta_description']) || !isset($data['url_slug'])) {
+            error_log('SEO JSON decode error: ' . json_last_error_msg());
             return rest_ensure_response([
                 'success' => false,
-                'message' => __('Impossible de parser la réponse', 'ai-content-studio'),
+                'message' => __('Impossible de parser la réponse SEO. Réponse reçue: ', 'ai-content-studio') . substr($response_text, 0, 200),
             ]);
         }
 
