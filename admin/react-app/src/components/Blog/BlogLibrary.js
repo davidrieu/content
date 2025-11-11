@@ -79,14 +79,16 @@ export default function BlogLibrary() {
         return formatted;
     };
 
-    // Map des langues
+    // Map des langues - Complet
     const languageNames = {
-        fr: 'Français',
-        en: 'English',
-        es: 'Español',
-        de: 'Deutsch',
-        it: 'Italiano',
-        pt: 'Português'
+        fr: 'Français', en: 'English', es: 'Español', pt: 'Português',
+        de: 'Deutsch', it: 'Italiano', zh: '中文 (Mandarin)', ja: '日本語',
+        ko: '한국어', ar: 'العربية', ru: 'Русский', hi: 'हिन्दी',
+        bn: 'বাংলা', id: 'Bahasa Indonesia', tr: 'Türkçe', vi: 'Tiếng Việt',
+        pl: 'Polski', uk: 'Українська', nl: 'Nederlands', th: 'ไทย',
+        sv: 'Svenska', el: 'Ελληνικά', cs: 'Čeština', ro: 'Română',
+        hu: 'Magyar', da: 'Dansk', fi: 'Suomi', no: 'Norsk',
+        he: 'עברית', ca: 'Català'
     };
 
     if (loading) {

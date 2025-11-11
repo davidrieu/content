@@ -109,14 +109,16 @@ class Blog_Endpoint {
             ]);
         }
 
-        // Language instructions
+        // Language instructions - Complete mapping
         $language_names = [
-            'fr' => 'français',
-            'en' => 'anglais',
-            'es' => 'espagnol',
-            'de' => 'allemand',
-            'it' => 'italien',
-            'pt' => 'portugais'
+            'fr' => 'français', 'en' => 'anglais', 'es' => 'espagnol', 'pt' => 'portugais',
+            'de' => 'allemand', 'it' => 'italien', 'zh' => 'chinois (mandarin)', 'ja' => 'japonais',
+            'ko' => 'coréen', 'ar' => 'arabe', 'ru' => 'russe', 'hi' => 'hindi',
+            'bn' => 'bengali', 'id' => 'indonésien', 'tr' => 'turc', 'vi' => 'vietnamien',
+            'pl' => 'polonais', 'uk' => 'ukrainien', 'nl' => 'néerlandais', 'th' => 'thaï',
+            'sv' => 'suédois', 'el' => 'grec', 'cs' => 'tchèque', 'ro' => 'roumain',
+            'hu' => 'hongrois', 'da' => 'danois', 'fi' => 'finnois', 'no' => 'norvégien',
+            'he' => 'hébreu', 'ca' => 'catalan'
         ];
         $language_name = $language_names[$language] ?? 'français';
 
@@ -238,14 +240,16 @@ Réponds maintenant avec le JSON uniquement :";
         $keywords_list = implode(', ', $keywords);
         $point_of_view = $first_person ? 'première personne (je, nous)' : 'troisième personne';
 
-        // Language instructions
+        // Language instructions - Complete mapping
         $language_names = [
-            'fr' => 'français',
-            'en' => 'anglais',
-            'es' => 'espagnol',
-            'de' => 'allemand',
-            'it' => 'italien',
-            'pt' => 'portugais'
+            'fr' => 'français', 'en' => 'anglais', 'es' => 'espagnol', 'pt' => 'portugais',
+            'de' => 'allemand', 'it' => 'italien', 'zh' => 'chinois (mandarin)', 'ja' => 'japonais',
+            'ko' => 'coréen', 'ar' => 'arabe', 'ru' => 'russe', 'hi' => 'hindi',
+            'bn' => 'bengali', 'id' => 'indonésien', 'tr' => 'turc', 'vi' => 'vietnamien',
+            'pl' => 'polonais', 'uk' => 'ukrainien', 'nl' => 'néerlandais', 'th' => 'thaï',
+            'sv' => 'suédois', 'el' => 'grec', 'cs' => 'tchèque', 'ro' => 'roumain',
+            'hu' => 'hongrois', 'da' => 'danois', 'fi' => 'finnois', 'no' => 'norvégien',
+            'he' => 'hébreu', 'ca' => 'catalan'
         ];
         $language_name = $language_names[$language] ?? 'français';
 
@@ -385,14 +389,16 @@ Commence la rédaction maintenant :";
         $content_words = explode(' ', $content);
         $content_excerpt = implode(' ', array_slice($content_words, 0, 500));
 
-        // Language instructions
+        // Language instructions - Complete mapping
         $language_names = [
-            'fr' => 'français',
-            'en' => 'anglais',
-            'es' => 'espagnol',
-            'de' => 'allemand',
-            'it' => 'italien',
-            'pt' => 'portugais'
+            'fr' => 'français', 'en' => 'anglais', 'es' => 'espagnol', 'pt' => 'portugais',
+            'de' => 'allemand', 'it' => 'italien', 'zh' => 'chinois (mandarin)', 'ja' => 'japonais',
+            'ko' => 'coréen', 'ar' => 'arabe', 'ru' => 'russe', 'hi' => 'hindi',
+            'bn' => 'bengali', 'id' => 'indonésien', 'tr' => 'turc', 'vi' => 'vietnamien',
+            'pl' => 'polonais', 'uk' => 'ukrainien', 'nl' => 'néerlandais', 'th' => 'thaï',
+            'sv' => 'suédois', 'el' => 'grec', 'cs' => 'tchèque', 'ro' => 'roumain',
+            'hu' => 'hongrois', 'da' => 'danois', 'fi' => 'finnois', 'no' => 'norvégien',
+            'he' => 'hébreu', 'ca' => 'catalan'
         ];
         $language_name = $language_names[$language] ?? 'français';
 
@@ -485,6 +491,13 @@ Réponds maintenant avec le JSON uniquement :";
         $table = $wpdb->prefix . 'acs_blog_articles';
         $user_id = get_current_user_id();
 
+        // Log incoming data for debugging
+        error_log('Save article request - User ID: ' . $user_id);
+        error_log('Save article request - Subject: ' . $request->get_param('subject'));
+        error_log('Save article request - Title: ' . $request->get_param('title'));
+        error_log('Save article request - Language: ' . $request->get_param('language'));
+        error_log('Save article request - Keywords: ' . print_r($request->get_param('keywords'), true));
+
         $data = [
             'user_id' => $user_id,
             'subject' => sanitize_text_field($request->get_param('subject')),
@@ -495,32 +508,37 @@ Réponds maintenant avec le JSON uniquement :";
             'first_person' => (int) $request->get_param('first_person'),
             'word_count' => str_word_count($request->get_param('content')),
             'language' => sanitize_text_field($request->get_param('language') ?: 'fr'),
-            'seo_title' => sanitize_text_field($request->get_param('seo_title')),
-            'meta_description' => sanitize_text_field($request->get_param('meta_description')),
-            'url_slug' => sanitize_title($request->get_param('url_slug')),
+            'seo_title' => sanitize_text_field($request->get_param('seo_title') ?: ''),
+            'meta_description' => sanitize_text_field($request->get_param('meta_description') ?: ''),
+            'url_slug' => sanitize_title($request->get_param('url_slug') ?: ''),
             'created_at' => current_time('mysql'),
         ];
+
+        error_log('Attempting to insert article data into: ' . $table);
 
         $result = $wpdb->insert($table, $data, [
             '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s'
         ]);
 
-        // Log any errors
+        // Log any errors with detailed information
         if ($result === false) {
-            error_log('Blog article save error: ' . $wpdb->last_error);
-        }
+            error_log('Blog article save FAILED!');
+            error_log('SQL Error: ' . $wpdb->last_error);
+            error_log('Last query: ' . $wpdb->last_query);
 
-        if ($result === false) {
             return rest_ensure_response([
                 'success' => false,
-                'message' => __('Erreur lors de la sauvegarde', 'ai-content-studio'),
+                'message' => __('Erreur lors de la sauvegarde: ', 'ai-content-studio') . $wpdb->last_error,
             ]);
         }
+
+        $insert_id = $wpdb->insert_id;
+        error_log('Article saved successfully with ID: ' . $insert_id);
 
         return rest_ensure_response([
             'success' => true,
             'data' => [
-                'id' => $wpdb->insert_id,
+                'id' => $insert_id,
             ],
             'message' => __('Article sauvegardé avec succès', 'ai-content-studio'),
         ]);

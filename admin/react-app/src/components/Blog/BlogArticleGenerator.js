@@ -180,38 +180,48 @@ export default function BlogArticleGenerator() {
     // Sauvegarder l'article
     const saveArticle = async () => {
         if (!articleContent) {
+            console.warn('Save attempt failed: No article content');
             alert(__('Aucun article à sauvegarder', 'ai-content-studio'));
             return;
         }
+
+        const saveData = {
+            subject: subject,
+            title: suggestedTitle,
+            content: articleContent,
+            keywords: keywords,
+            main_keyword: mainKeyword,
+            first_person: firstPerson,
+            length: length,
+            language: language,
+            seo_title: seoTitle || '',
+            meta_description: metaDescription || '',
+            url_slug: seoUrl || '',
+        };
+
+        console.log('Saving article with data:', saveData);
 
         setSavingArticle(true);
         try {
             const response = await apiFetch({
                 path: '/acs/v1/blog/save-article',
                 method: 'POST',
-                data: {
-                    subject: subject,
-                    title: suggestedTitle,
-                    content: articleContent,
-                    keywords: keywords,
-                    main_keyword: mainKeyword,
-                    first_person: firstPerson,
-                    length: length,
-                    language: language,
-                    seo_title: seoTitle,
-                    meta_description: metaDescription,
-                    url_slug: seoUrl,
-                },
+                data: saveData,
             });
+
+            console.log('Save response:', response);
 
             if (response.success) {
                 setSaved(true);
+                console.log('Article saved successfully with ID:', response.data?.id);
                 setTimeout(() => setSaved(false), 3000);
             } else {
+                console.error('Save failed:', response.message);
                 alert(response.message || __('Erreur lors de la sauvegarde', 'ai-content-studio'));
             }
         } catch (error) {
             console.error('Error saving article:', error);
+            console.error('Error details:', error.message, error.stack);
             alert(__('Erreur lors de la sauvegarde de l\'article', 'ai-content-studio'));
         } finally {
             setSavingArticle(false);
@@ -271,9 +281,33 @@ export default function BlogArticleGenerator() {
                                 <option value="fr">{__('Français', 'ai-content-studio')}</option>
                                 <option value="en">{__('Anglais', 'ai-content-studio')}</option>
                                 <option value="es">{__('Espagnol', 'ai-content-studio')}</option>
+                                <option value="pt">{__('Portugais', 'ai-content-studio')}</option>
                                 <option value="de">{__('Allemand', 'ai-content-studio')}</option>
                                 <option value="it">{__('Italien', 'ai-content-studio')}</option>
-                                <option value="pt">{__('Portugais', 'ai-content-studio')}</option>
+                                <option value="zh">{__('Chinois (Mandarin)', 'ai-content-studio')}</option>
+                                <option value="ja">{__('Japonais', 'ai-content-studio')}</option>
+                                <option value="ko">{__('Coréen', 'ai-content-studio')}</option>
+                                <option value="ar">{__('Arabe', 'ai-content-studio')}</option>
+                                <option value="ru">{__('Russe', 'ai-content-studio')}</option>
+                                <option value="hi">{__('Hindi', 'ai-content-studio')}</option>
+                                <option value="bn">{__('Bengali', 'ai-content-studio')}</option>
+                                <option value="id">{__('Indonésien', 'ai-content-studio')}</option>
+                                <option value="tr">{__('Turc', 'ai-content-studio')}</option>
+                                <option value="vi">{__('Vietnamien', 'ai-content-studio')}</option>
+                                <option value="pl">{__('Polonais', 'ai-content-studio')}</option>
+                                <option value="uk">{__('Ukrainien', 'ai-content-studio')}</option>
+                                <option value="nl">{__('Néerlandais', 'ai-content-studio')}</option>
+                                <option value="th">{__('Thaï', 'ai-content-studio')}</option>
+                                <option value="sv">{__('Suédois', 'ai-content-studio')}</option>
+                                <option value="el">{__('Grec', 'ai-content-studio')}</option>
+                                <option value="cs">{__('Tchèque', 'ai-content-studio')}</option>
+                                <option value="ro">{__('Roumain', 'ai-content-studio')}</option>
+                                <option value="hu">{__('Hongrois', 'ai-content-studio')}</option>
+                                <option value="da">{__('Danois', 'ai-content-studio')}</option>
+                                <option value="fi">{__('Finnois', 'ai-content-studio')}</option>
+                                <option value="no">{__('Norvégien', 'ai-content-studio')}</option>
+                                <option value="he">{__('Hébreu', 'ai-content-studio')}</option>
+                                <option value="ca">{__('Catalan', 'ai-content-studio')}</option>
                             </select>
                         </div>
 
