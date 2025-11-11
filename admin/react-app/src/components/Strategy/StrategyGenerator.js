@@ -12,6 +12,7 @@ export default function StrategyGenerator({ profile }) {
     const [contentIdeas, setContentIdeas] = useState([]);
     const [generatingIdeas, setGeneratingIdeas] = useState(false);
     const [language, setLanguage] = useState('fr');
+    const [languageLoaded, setLanguageLoaded] = useState(false);
 
     // Charger la langue de l'utilisateur au montage
     useEffect(() => {
@@ -26,16 +27,33 @@ export default function StrategyGenerator({ profile }) {
                 }
             } catch (err) {
                 console.log('Could not fetch user language, using default');
+            } finally {
+                setLanguageLoaded(true);
             }
         };
         fetchUserLanguage();
     }, []);
 
-    // Charger ou générer automatiquement la stratégie au montage
+    // Charger ou générer automatiquement la stratégie au montage (quand langue est chargée)
     useEffect(() => {
-        if (!profile) return;
+        if (!profile || !languageLoaded) return;
         loadOrGenerateStrategy();
-    }, [profile]);
+    }, [profile, languageLoaded]);
+
+    // Régénérer automatiquement la stratégie quand la langue change
+    useEffect(() => {
+        if (!languageLoaded || !profile) return; // Skip initial load
+        if (!strategy) return; // Skip if no strategy yet
+
+        console.log('Language changed, regenerating strategy...');
+        generateStrategyAutomatically();
+
+        // Régénérer aussi les content ideas si elles existent
+        if (contentIdeas && contentIdeas.length > 0) {
+            console.log('Language changed, regenerating content ideas...');
+            generateContentIdeas();
+        }
+    }, [language]);
 
     const loadOrGenerateStrategy = async () => {
         setLoading(true);
@@ -67,6 +85,7 @@ export default function StrategyGenerator({ profile }) {
     };
 
     const generateStrategyAutomatically = async () => {
+        setLoading(true);
         try {
             const goals = profile?.goals ? (typeof profile.goals === 'string' ? JSON.parse(profile.goals) : profile.goals) : [];
             const mainGoal = goals[0] || 'brand_awareness';
@@ -97,6 +116,8 @@ export default function StrategyGenerator({ profile }) {
             }
         } catch (err) {
             console.error('Error generating strategy:', err);
+        } finally {
+            setLoading(false);
         }
     };
 
