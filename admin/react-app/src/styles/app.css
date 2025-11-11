@@ -1737,3 +1737,134 @@ body.admin-bar #acs-frontend-root .acs-app {
     height: 600px;
   }
 }
+
+/* Article Preview Headings */
+.acs-preview-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--acs-gray-900);
+  margin: var(--acs-spacing-6) 0 var(--acs-spacing-4) 0;
+  line-height: 1.3;
+  border-bottom: 3px solid var(--acs-primary);
+  padding-bottom: var(--acs-spacing-3);
+}
+
+.acs-preview-content h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--acs-gray-900);
+  margin: var(--acs-spacing-5) 0 var(--acs-spacing-3) 0;
+  line-height: 1.3;
+  border-left: 4px solid var(--acs-primary);
+  padding-left: var(--acs-spacing-3);
+}
+
+.acs-preview-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--acs-gray-800);
+  margin: var(--acs-spacing-4) 0 var(--acs-spacing-3) 0;
+  line-height: 1.4;
+}
+
+/* Completion Modal */
+.acs-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.acs-modal {
+  background: var(--acs-white);
+  border-radius: var(--acs-radius-xl);
+  box-shadow: var(--acs-shadow-xl);
+  max-width: 500px;
+  width: 90%;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.acs-completion-modal .acs-modal-header {
+  text-align: center;
+  padding: var(--acs-spacing-6) var(--acs-spacing-6) var(--acs-spacing-4);
+  border-bottom: 1px solid var(--acs-gray-200);
+}
+
+.acs-completion-modal .acs-modal-header svg {
+  margin-bottom: var(--acs-spacing-3);
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.acs-completion-modal .acs-modal-header h2 {
+  margin: 0;
+  color: var(--acs-gray-900);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.acs-completion-modal .acs-modal-body {
+  padding: var(--acs-spacing-5) var(--acs-spacing-6);
+  text-align: center;
+}
+
+.acs-completion-modal .acs-modal-body p {
+  margin: 0 0 var(--acs-spacing-2) 0;
+  font-size: 1rem;
+  color: var(--acs-gray-700);
+}
+
+.acs-completion-modal .acs-modal-footer {
+  padding: var(--acs-spacing-4) var(--acs-spacing-6) var(--acs-spacing-6);
+  display: flex;
+  justify-content: center;
+}
+
+/* Article Images */
+.acs-article-image {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: var(--acs-radius-lg);
+  margin: var(--acs-spacing-5) 0;
+  box-shadow: var(--acs-shadow);
+  display: block;
+}

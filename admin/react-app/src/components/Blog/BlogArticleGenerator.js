@@ -24,6 +24,7 @@ export default function BlogArticleGenerator() {
 
     const [savingArticle, setSavingArticle] = useState(false);
     const [saved, setSaved] = useState(false);
+    const [showCompletionModal, setShowCompletionModal] = useState(false);
 
     const contentRef = useRef(null);
 
@@ -120,6 +121,7 @@ export default function BlogArticleGenerator() {
                                 setArticleContent(prev => prev + data.content);
                             } else if (data.type === 'done') {
                                 setArticleGenerated(true);
+                                setShowCompletionModal(true); // Show popup when done
                             } else if (data.type === 'error') {
                                 throw new Error(data.message);
                             }
@@ -209,6 +211,31 @@ export default function BlogArticleGenerator() {
         } finally {
             setSavingArticle(false);
         }
+    };
+
+    // Format content with proper HTML tags for headings and images
+    const formatArticleContent = (content) => {
+        if (!content) return '';
+
+        // Convert markdown-style headings to HTML
+        let formatted = content;
+
+        // H1 (# Title)
+        formatted = formatted.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+        // H2 (## Title)
+        formatted = formatted.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+
+        // H3 (### Title)
+        formatted = formatted.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+
+        // Images from Unsplash: [IMAGE: url]
+        formatted = formatted.replace(/\[IMAGE:\s*([^\]]+)\]/g, '<img src="$1" alt="Article illustration" class="acs-article-image" />');
+
+        // Replace line breaks with <br />
+        formatted = formatted.replace(/\n/g, '<br />');
+
+        return formatted;
     };
 
     return (
@@ -462,7 +489,7 @@ export default function BlogArticleGenerator() {
 
                                 <div
                                     className="acs-preview-content"
-                                    dangerouslySetInnerHTML={{ __html: articleContent.replace(/\n/g, '<br />') }}
+                                    dangerouslySetInnerHTML={{ __html: formatArticleContent(articleContent) }}
                                 />
 
                                 {generatingArticle && (
@@ -476,6 +503,32 @@ export default function BlogArticleGenerator() {
                     </div>
                 </div>
             </div>
+
+            {/* Completion Modal */}
+            {showCompletionModal && (
+                <div className="acs-modal-overlay" onClick={() => setShowCompletionModal(false)}>
+                    <div className="acs-modal acs-completion-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="acs-modal-header">
+                            <FiCheckCircle size={48} style={{ color: 'var(--acs-success)' }} />
+                            <h2>{__('Article Terminé !', 'ai-content-studio')}</h2>
+                        </div>
+                        <div className="acs-modal-body">
+                            <p>{__('Votre article a été généré avec succès.', 'ai-content-studio')}</p>
+                            <p className="acs-text-muted">
+                                {__('Vous pouvez maintenant générer les meta SEO et sauvegarder l\'article.', 'ai-content-studio')}
+                            </p>
+                        </div>
+                        <div className="acs-modal-footer">
+                            <button
+                                className="acs-btn acs-btn-primary"
+                                onClick={() => setShowCompletionModal(false)}
+                            >
+                                {__('Continuer', 'ai-content-studio')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

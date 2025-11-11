@@ -228,9 +228,10 @@ CONSIGNES :
 
 STRUCTURE OBLIGATOIRE :
 1. Introduction engageante (10% du texte)
-2. 3-5 sections principales avec sous-titres H2
-3. Chaque section doit contenir 2-3 paragraphes
-4. Conclusion avec appel à l'action
+2. 3-5 sections principales avec sous-titres H2 (utilise ## devant le titre)
+3. Chaque section peut avoir des sous-sections H3 (utilise ### devant le titre)
+4. Chaque section doit contenir 2-3 paragraphes
+5. Conclusion avec appel à l'action
 
 RÈGLES SEO :
 - Densité du mot-clé principal : 1-2% (environ {$keyword_occurrences} occurrences)
@@ -239,25 +240,65 @@ RÈGLES SEO :
 - Phrases courtes et claires
 - Paragraphes de 3-5 lignes maximum
 
-IMPORTANT :
-- N'utilise PAS de markdown
-- N'utilise PAS de balises HTML (sauf si c'est pour les images)
-- Écris du texte brut avec des sauts de ligne entre les paragraphes
-- Ne mets PAS de titre au début (il est déjà affiché)
+FORMAT DE RÉPONSE :
+- Utilise ## pour les titres de section (H2)
+- Utilise ### pour les sous-titres (H3)
+- Sauts de ligne entre les paragraphes
+- Texte brut sans balises HTML
+- Ne mets PAS de titre H1 au début (il est déjà affiché)
+
+EXEMPLE DE FORMAT :
+Introduction ici...
+
+## Première section
+
+Paragraphe 1 de la section...
+
+Paragraphe 2 de la section...
+
+### Sous-section si nécessaire
+
+Contenu de la sous-section...
+
+## Deuxième section
+
+Etc.
 
 Commence la rédaction maintenant :";
 
+        // Add images if requested
+        $images_inserted = [];
+
         // Stream the response
         try {
+            $section_count = 0;
+            $last_content = '';
+
             $this->claude->stream_completion(
                 $prompt,
                 'claude-sonnet-4-20250514', // Sonnet 4
                 $target_words * 5, // Tokens approximation
-                function($chunk) {
+                function($chunk) use ($include_images, &$images_inserted, &$section_count, &$last_content, $keywords) {
                     if (isset($chunk['type'])) {
                         if ($chunk['type'] === 'content_block_delta') {
                             $text = $chunk['delta']['text'] ?? '';
                             if (!empty($text)) {
+                                $last_content .= $text;
+
+                                // Check if we just completed a H2 section and should insert an image
+                                if ($include_images && preg_match('/##\s+.+\n/', $last_content, $matches)) {
+                                    $section_count++;
+
+                                    // Insert image after every 2nd H2 section
+                                    if ($section_count % 2 === 0 && count($images_inserted) < 3) {
+                                        $image_data = $this->fetch_unsplash_image($keywords[0]);
+                                        if ($image_data) {
+                                            $images_inserted[] = $image_data;
+                                            $text .= "\n\n[IMAGE: " . $image_data['url'] . "]\nPhoto par " . $image_data['author'] . " sur Unsplash\n\n";
+                                        }
+                                    }
+                                }
+
                                 echo "data: " . json_encode([
                                     'type' => 'content',
                                     'content' => $text
@@ -459,5 +500,61 @@ Réponds maintenant avec le JSON uniquement :";
             'success' => true,
             'data' => $articles,
         ]);
+    }
+
+    /**
+     * Fetch image from Unsplash API
+     *
+     * @param string $keyword
+     * @return array|null
+     */
+    private function fetch_unsplash_image($keyword) {
+        // Unsplash Access Key (you need to add this in WordPress settings)
+        $access_key = get_option('acs_unsplash_access_key', '');
+
+        if (empty($access_key)) {
+            error_log('Unsplash Access Key not configured');
+            return null;
+        }
+
+        $url = 'https://api.unsplash.com/photos/random?' . http_build_query([
+            'query' => $keyword,
+            'orientation' => 'landscape',
+            'content_filter' => 'high',
+        ]);
+
+        $response = wp_remote_get($url, [
+            'headers' => [
+                'Authorization' => 'Client-ID ' . $access_key,
+            ],
+            'timeout' => 10,
+        ]);
+
+        if (is_wp_error($response)) {
+            error_log('Unsplash API error: ' . $response->get_error_message());
+            return null;
+        }
+
+        $status_code = wp_remote_retrieve_response_code($response);
+        if ($status_code !== 200) {
+            error_log('Unsplash API returned status: ' . $status_code);
+            return null;
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+
+        if (!$data || !isset($data['urls']['regular'])) {
+            error_log('Invalid Unsplash response');
+            return null;
+        }
+
+        return [
+            'url' => $data['urls']['regular'],
+            'thumb' => $data['urls']['small'],
+            'author' => $data['user']['name'],
+            'author_url' => $data['user']['links']['html'],
+            'download_location' => $data['links']['download_location'], // Required for attribution
+        ];
     }
 }
