@@ -302,7 +302,7 @@ class Subscription_Service {
      * @return bool
      */
     public function can_upgrade($from_plan, $to_plan) {
-        $plan_hierarchy = ['free', 'starter', 'pro', 'business'];
+        $plan_hierarchy = ['free_trial', 'starter', 'professional', 'business'];
 
         $from_index = array_search($from_plan, $plan_hierarchy);
         $to_index = array_search($to_plan, $plan_hierarchy);
