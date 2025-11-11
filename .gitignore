@@ -65,3 +65,4 @@ coverage/
 
 # API Keys (never commit)
 config/api-keys.php
+ai-content-studio-latest.zip
