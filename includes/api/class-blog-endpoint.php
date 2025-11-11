@@ -102,6 +102,15 @@ class Blog_Endpoint {
             'callback' => [$this, 'save_blog_strategy'],
             'permission_callback' => [$this, 'check_permissions'],
         ]);
+
+        // Migration endpoint (temporary) - Create blog_strategies table
+        register_rest_route('acs/v1', '/blog/migrate-table', [
+            'methods' => 'POST',
+            'callback' => [$this, 'migrate_blog_strategies_table'],
+            'permission_callback' => function() {
+                return current_user_can('manage_options');
+            },
+        ]);
     }
 
     /**
@@ -939,5 +948,48 @@ PROMPT;
             'success' => true,
             'message' => 'Stratégie sauvegardée avec succès',
         ]);
+    }
+
+    /**
+     * Migrate blog_strategies table (temporary endpoint)
+     *
+     * @param WP_REST_Request $request
+     * @return array
+     */
+    public function migrate_blog_strategies_table($request) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'acs_blog_strategies';
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            ideas LONGTEXT NOT NULL COMMENT 'JSON: Array de 50 sujets d articles',
+            language VARCHAR(10) DEFAULT 'fr' COMMENT 'Langue de la stratégie',
+            goal VARCHAR(50) COMMENT 'Objectif principal: engagement, brand_awareness, etc',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY user_id (user_id)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+
+        // Vérifier que la table existe
+        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '{$table_name}'");
+
+        if ($table_exists === $table_name) {
+            return rest_ensure_response([
+                'success' => true,
+                'message' => "Table {$table_name} créée avec succès",
+            ]);
+        } else {
+            return rest_ensure_response([
+                'success' => false,
+                'message' => "Erreur lors de la création de la table",
+            ]);
+        }
     }
 }
