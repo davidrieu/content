@@ -1,5 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
-import { FiBookOpen, FiLoader } from 'react-icons/fi';
+import { FiBookOpen, FiLoader, FiZap } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
@@ -34,6 +34,8 @@ export default function BlogStrategyGenerator({ profile }) {
     // Générer les idées de blog au montage (quand langue est chargée)
     useEffect(() => {
         if (!profile || !languageLoaded) return;
+        console.log('Auto-generating blog ideas on mount with language:', language);
+        console.log('Profile data:', profile);
         generateBlogIdeas();
     }, [profile, languageLoaded]);
 
@@ -158,14 +160,37 @@ export default function BlogStrategyGenerator({ profile }) {
 
             {/* Blog Ideas Grid */}
             <div className="acs-card">
-                <h3 style={{ marginBottom: 'var(--acs-spacing-4)', display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)' }}>
-                    <FiBookOpen />
-                    {__('Idées d\'articles pour votre blog', 'ai-content-studio')}
-                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--acs-spacing-4)' }}>
+                    <h3 style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)', margin: 0 }}>
+                        <FiBookOpen />
+                        {__('Idées d\'articles pour votre blog', 'ai-content-studio')}
+                    </h3>
+                    <button
+                        className="acs-btn acs-btn-primary"
+                        onClick={generateBlogIdeas}
+                        disabled={loading}
+                        style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)' }}
+                    >
+                        {loading ? (
+                            <>
+                                <FiLoader style={{ animation: 'spin 1s linear infinite' }} />
+                                {__('Génération...', 'ai-content-studio')}
+                            </>
+                        ) : (
+                            <>
+                                <FiZap />
+                                {blogIdeas.length === 0
+                                    ? __('Générer les idées', 'ai-content-studio')
+                                    : __('Régénérer', 'ai-content-studio')
+                                }
+                            </>
+                        )}
+                    </button>
+                </div>
 
                 {blogIdeas.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: 'var(--acs-spacing-6)', color: 'var(--acs-gray-500)' }}>
-                        {__('Aucune idée générée pour le moment', 'ai-content-studio')}
+                        {__('Cliquez sur "Générer les idées" pour obtenir 50 sujets d\'articles personnalisés', 'ai-content-studio')}
                     </div>
                 ) : (
                     <div style={{ display: 'grid', gap: 'var(--acs-spacing-3)' }}>
