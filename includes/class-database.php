@@ -473,15 +473,44 @@ class Database {
             $wpdb->query("ALTER TABLE {$table} ADD KEY idx_sector (sector)");
         }
 
-        // Upgrade blog_articles table - Add subject column if missing
+        // Upgrade blog_articles table - Add all missing columns
         $blog_articles_table = $table_prefix . 'blog_articles';
         if ($wpdb->get_var("SHOW TABLES LIKE '{$blog_articles_table}'") === $blog_articles_table) {
             $blog_columns = $wpdb->get_col("DESCRIBE {$blog_articles_table}", 0);
 
-            if (!in_array('subject', $blog_columns)) {
-                error_log('ACS: Adding missing subject column to blog_articles table');
-                $wpdb->query("ALTER TABLE {$blog_articles_table} ADD COLUMN subject VARCHAR(255) NOT NULL COMMENT 'Sujet original de l article' AFTER user_id");
-                error_log('ACS: Subject column added successfully');
+            // List of all required columns with their definitions
+            $required_columns = [
+                'subject' => "ADD COLUMN subject VARCHAR(255) NOT NULL COMMENT 'Sujet original de l article' AFTER user_id",
+                'keywords' => "ADD COLUMN keywords LONGTEXT COMMENT 'JSON: [keyword1, keyword2, keyword3, keyword4, keyword5]' AFTER content",
+                'main_keyword' => "ADD COLUMN main_keyword VARCHAR(100) COMMENT 'Mot-clé principal' AFTER keywords",
+                'first_person' => "ADD COLUMN first_person TINYINT(1) DEFAULT 0 COMMENT 'Écrit à la première personne' AFTER main_keyword",
+                'word_count' => "ADD COLUMN word_count INT COMMENT 'Nombre de mots' AFTER first_person",
+                'seo_title' => "ADD COLUMN seo_title VARCHAR(255) COMMENT 'Titre SEO optimisé' AFTER word_count",
+                'meta_description' => "ADD COLUMN meta_description VARCHAR(160) COMMENT 'Meta description SEO' AFTER seo_title",
+                'url_slug' => "ADD COLUMN url_slug VARCHAR(255) COMMENT 'Slug URL optimisé' AFTER meta_description",
+                'language' => "ADD COLUMN language VARCHAR(10) DEFAULT 'fr' AFTER url_slug",
+                'status' => "ADD COLUMN status VARCHAR(20) DEFAULT 'draft' COMMENT 'draft, scheduled, published' AFTER language",
+                'scheduled_for' => "ADD COLUMN scheduled_for DATETIME AFTER status",
+                'published_post_id' => "ADD COLUMN published_post_id BIGINT(20) UNSIGNED COMMENT 'ID du post WordPress créé' AFTER scheduled_for",
+                'created_at' => "ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP AFTER published_post_id",
+                'updated_at' => "ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at",
+            ];
+
+            error_log('ACS: Checking blog_articles table for missing columns...');
+            $columns_added = 0;
+
+            foreach ($required_columns as $column_name => $alter_statement) {
+                if (!in_array($column_name, $blog_columns)) {
+                    error_log("ACS: Adding missing column '{$column_name}' to blog_articles table");
+                    $wpdb->query("ALTER TABLE {$blog_articles_table} {$alter_statement}");
+                    $columns_added++;
+                }
+            }
+
+            if ($columns_added > 0) {
+                error_log("ACS: Added {$columns_added} missing column(s) to blog_articles table");
+            } else {
+                error_log('ACS: blog_articles table is up to date');
             }
         }
 
