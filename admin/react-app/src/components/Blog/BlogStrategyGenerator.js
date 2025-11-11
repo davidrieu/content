@@ -49,16 +49,27 @@ export default function BlogStrategyGenerator({ profile }) {
     const generateBlogIdeas = async () => {
         setLoading(true);
         try {
+            // Parse goals si c'est une string JSON
+            const goals = profile?.goals ? (typeof profile.goals === 'string' ? JSON.parse(profile.goals) : profile.goals) : [];
+            const mainGoal = goals[0] || 'engagement';
+
             const response = await apiFetch({
                 path: '/acs/v1/blog/strategy-ideas',
                 method: 'POST',
                 data: {
                     language: language,
+                    goal: mainGoal,
                     profile: {
-                        sector: profile?.sector || '',
-                        target_audience: profile?.target_audience || '',
+                        user_type: profile?.user_type || 'business',
                         business_name: profile?.business_name || '',
+                        sector: profile?.sector || '',
+                        description: profile?.description || '',
+                        target_audience: profile?.target_audience || '',
+                        niche: profile?.niche || '',
                         keywords: profile?.primary_keywords || [],
+                        blog_topics: profile?.blog_topics || [],
+                        goals: goals,
+                        platforms: profile?.social_platforms || profile?.platforms || [],
                     },
                 },
             });

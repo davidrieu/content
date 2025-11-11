@@ -693,11 +693,18 @@ Réponds maintenant avec le JSON uniquement :";
         $params = $request->get_json_params();
         $profile = $params['profile'] ?? [];
         $language = sanitize_text_field($params['language'] ?? 'fr');
+        $goal = sanitize_text_field($params['goal'] ?? 'engagement');
 
-        $sector = $profile['sector'] ?? 'général';
-        $target_audience = $profile['target_audience'] ?? 'large public';
+        // Extraire les informations du profil
+        $user_type = $profile['user_type'] ?? 'business';
         $business_name = $profile['business_name'] ?? 'Business';
+        $sector = $profile['sector'] ?? 'général';
+        $description = $profile['description'] ?? '';
+        $target_audience = $profile['target_audience'] ?? 'large public';
+        $niche = $profile['niche'] ?? '';
         $keywords = is_array($profile['keywords']) ? implode(', ', $profile['keywords']) : '';
+        $blog_topics = is_array($profile['blog_topics']) ? implode(', ', $profile['blog_topics']) : '';
+        $goals = is_array($profile['goals']) ? implode(', ', $profile['goals']) : '';
 
         // Language names mapping
         $language_names = [
@@ -712,23 +719,52 @@ Réponds maintenant avec le JSON uniquement :";
         ];
         $language_name = $language_names[$language] ?? $language;
 
+        // Goal descriptions
+        $goal_descriptions = [
+            'brand_awareness' => 'notoriété de marque et visibilité',
+            'lead_generation' => 'génération de leads qualifiés',
+            'sales' => 'augmentation des ventes',
+            'engagement' => 'engagement et création de communauté',
+            'authority' => 'positionnement en expert et leader d\'opinion',
+        ];
+        $goal_description = $goal_descriptions[$goal] ?? 'engagement';
+
+        // Construire le contexte enrichi
+        $context_parts = [];
+        if (!empty($description)) {
+            $context_parts[] = "Description: {$description}";
+        }
+        if (!empty($niche)) {
+            $context_parts[] = "Niche: {$niche}";
+        }
+        if (!empty($blog_topics)) {
+            $context_parts[] = "Sujets de blog préférés: {$blog_topics}";
+        }
+        if (!empty($goals)) {
+            $context_parts[] = "Objectifs: {$goals}";
+        }
+        $context = !empty($context_parts) ? "\n" . implode("\n", $context_parts) : '';
+
         $prompt = <<<PROMPT
 Tu es un expert en stratégie de contenu blog et SEO.
 
 MISSION: Générer 50 sujets d'articles de blog percutants et optimisés SEO
 
 PROFIL CLIENT:
+- Type: {$user_type}
 - Business: {$business_name}
 - Secteur: {$sector}
 - Audience cible: {$target_audience}
-- Mots-clés: {$keywords}
+- Mots-clés SEO: {$keywords}
+- Objectif principal: {$goal_description}{$context}
 
 CONTRAINTES:
 - 50 sujets d'articles de blog
 - Sujets variés: guides pratiques, tutoriels, analyses, comparatifs, listes, études de cas
 - Optimisés pour le SEO et l'engagement
-- Adaptés au secteur et à l'audience
+- Adaptés au secteur, à la niche et à l'audience
 - Titres accrocheurs et clairs (8-15 mots)
+- Alignés avec l'objectif principal ({$goal_description})
 
 IMPORTANT: Génère tous les sujets en {$language_name}.
 
