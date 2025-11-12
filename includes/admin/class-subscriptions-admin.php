@@ -9,6 +9,7 @@ namespace ACS\Admin;
 
 use ACS\WooCommerce\Product_Generator;
 use ACS\Config\Plans_Config;
+use ACS\Utils\Plan_Migration;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -26,6 +27,7 @@ class Subscriptions_Admin {
         add_action('admin_menu', [$this, 'add_subscriptions_page']);
         add_action('admin_post_acs_generate_products', [$this, 'handle_generate_products']);
         add_action('admin_post_acs_delete_products', [$this, 'handle_delete_products']);
+        add_action('admin_post_acs_migrate_plans', [$this, 'handle_migrate_plans']);
     }
 
     /**
@@ -74,6 +76,24 @@ class Subscriptions_Admin {
                 <?php elseif ($_GET['message'] === 'products_deleted'): ?>
                     <div class="notice notice-success is-dismissible">
                         <p><?php _e('✅ Les produits d\'abonnement ont été supprimés.', 'ai-content-studio'); ?></p>
+                    </div>
+                <?php elseif (strpos($_GET['message'], 'plans_migrated') === 0): ?>
+                    <div class="notice notice-success is-dismissible">
+                        <p>
+                            <?php
+                            $free = isset($_GET['free']) ? intval($_GET['free']) : 0;
+                            $pro = isset($_GET['pro']) ? intval($_GET['pro']) : 0;
+                            echo sprintf(
+                                __('✅ Migration réussie ! %d utilisateur(s) "free" → "free_trial", %d utilisateur(s) "pro" → "professional"', 'ai-content-studio'),
+                                $free,
+                                $pro
+                            );
+                            ?>
+                        </p>
+                    </div>
+                <?php elseif ($_GET['message'] === 'migration_error'): ?>
+                    <div class="notice notice-error is-dismissible">
+                        <p><?php _e('❌ Erreur lors de la migration des plans.', 'ai-content-studio'); ?></p>
                     </div>
                 <?php elseif ($_GET['message'] === 'error'): ?>
                     <div class="notice notice-error is-dismissible">
@@ -286,6 +306,67 @@ class Subscriptions_Admin {
                     <p><strong><?php _e('Note:', 'ai-content-studio'); ?></strong> <?php _e('Le plan "Free Trial" n\'est pas un produit WooCommerce car il est gratuit et attribué automatiquement à l\'inscription.', 'ai-content-studio'); ?></p>
                 </div>
 
+                <!-- User Plan Migration -->
+                <div class="card" style="max-width: 100%; margin-top: 20px;">
+                    <h2><?php _e('Migration des Utilisateurs', 'ai-content-studio'); ?></h2>
+
+                    <p><?php _e('Cette section permet de migrer les utilisateurs existants des anciens noms de plans vers les nouveaux:', 'ai-content-studio'); ?></p>
+
+                    <ul style="list-style: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li><code>free</code> → <code>free_trial</code></li>
+                        <li><code>pro</code> → <code>professional</code></li>
+                    </ul>
+
+                    <?php
+                    $migration_needed = Plan_Migration::check_migration_needed();
+                    if ($migration_needed['total'] > 0):
+                    ?>
+                        <div class="notice notice-warning inline" style="margin: 15px 0; padding: 10px;">
+                            <p>
+                                <span class="dashicons dashicons-warning" style="color: #f0b849;"></span>
+                                <?php echo sprintf(__('<strong>%d utilisateur(s)</strong> utilisent encore les anciens noms de plans et doivent être migrés.', 'ai-content-studio'), $migration_needed['total']); ?>
+                            </p>
+                        </div>
+
+                        <table class="widefat" style="margin: 15px 0; max-width: 500px;">
+                            <tr>
+                                <td style="padding: 10px;">
+                                    <span class="dashicons dashicons-admin-users" style="color: #2271b1;"></span>
+                                    Utilisateurs avec plan "free"
+                                </td>
+                                <td style="padding: 10px; text-align: right;">
+                                    <strong><?php echo esc_html($migration_needed['free_users']); ?></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; background: #f6f7f7;">
+                                    <span class="dashicons dashicons-admin-users" style="color: #2271b1;"></span>
+                                    Utilisateurs avec plan "pro"
+                                </td>
+                                <td style="padding: 10px; text-align: right; background: #f6f7f7;">
+                                    <strong><?php echo esc_html($migration_needed['pro_users']); ?></strong>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <form method="post" action="<?php echo admin_url('admin-post.php'); ?>" onsubmit="return confirm('Êtes-vous sûr de vouloir migrer <?php echo esc_js($migration_needed['total']); ?> utilisateur(s) ?');">
+                            <?php wp_nonce_field('acs_migrate_plans', 'acs_nonce'); ?>
+                            <input type="hidden" name="action" value="acs_migrate_plans">
+                            <button type="submit" class="button button-primary">
+                                <span class="dashicons dashicons-update" style="margin-top: 3px;"></span>
+                                <?php _e('Migrer les utilisateurs maintenant', 'ai-content-studio'); ?>
+                            </button>
+                        </form>
+                    <?php else: ?>
+                        <div class="notice notice-success inline" style="margin: 15px 0; padding: 10px;">
+                            <p>
+                                <span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
+                                <?php _e('Tous les utilisateurs sont déjà sur les nouveaux plans. Aucune migration nécessaire.', 'ai-content-studio'); ?>
+                            </p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
             <?php endif; ?>
         </div>
 
@@ -356,6 +437,35 @@ class Subscriptions_Admin {
             wp_redirect(admin_url('admin.php?page=ai-content-studio-subscriptions&message=products_deleted'));
         } else {
             wp_redirect(admin_url('admin.php?page=ai-content-studio-subscriptions&message=error'));
+        }
+        exit;
+    }
+
+    /**
+     * Handle plan migration
+     */
+    public function handle_migrate_plans() {
+        // Security check
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Vous n\'avez pas les permissions nécessaires.', 'ai-content-studio'));
+        }
+
+        if (!isset($_POST['acs_nonce']) || !wp_verify_nonce($_POST['acs_nonce'], 'acs_migrate_plans')) {
+            wp_die(__('Nonce invalide.', 'ai-content-studio'));
+        }
+
+        // Migrate plans
+        $result = Plan_Migration::migrate_user_plans();
+
+        if (count($result['errors']) === 0) {
+            $message = sprintf(
+                'plans_migrated&free=%d&pro=%d',
+                $result['free_to_trial'],
+                $result['pro_to_professional']
+            );
+            wp_redirect(admin_url('admin.php?page=ai-content-studio-subscriptions&message=' . $message));
+        } else {
+            wp_redirect(admin_url('admin.php?page=ai-content-studio-subscriptions&message=migration_error'));
         }
         exit;
     }
