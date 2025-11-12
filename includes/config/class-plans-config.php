@@ -143,6 +143,16 @@ class Plans_Config {
      */
     public static function get_plan($plan_slug) {
         $plans = self::get_plans();
+
+        // Fallback: ancien plan 'free' -> 'free_trial' pour rétrocompatibilité
+        if ($plan_slug === 'free' && !isset($plans['free'])) {
+            $plan_slug = 'free_trial';
+        }
+        // Fallback: ancien plan 'pro' -> 'professional'
+        if ($plan_slug === 'pro' && !isset($plans['pro'])) {
+            $plan_slug = 'professional';
+        }
+
         return $plans[$plan_slug] ?? null;
     }
 

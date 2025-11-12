@@ -356,8 +356,8 @@ class Plugin {
      * @return void
      */
     public function on_user_register($user_id) {
-        // Assign free plan by default
-        update_user_meta($user_id, 'acs_subscription_plan', 'free');
+        // Assign free_trial plan by default
+        update_user_meta($user_id, 'acs_subscription_plan', 'free_trial');
         update_user_meta($user_id, 'acs_subscription_status', 'active');
         update_user_meta($user_id, 'acs_onboarding_completed', false);
         update_user_meta($user_id, 'acs_mode', 'simple');

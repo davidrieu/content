@@ -5,6 +5,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { CONTENT_TYPES, POST_TEMPLATES, PLATFORM_SPECS } from '../../data/contentTemplates';
 import SchedulePostModal from '../shared/SchedulePostModal';
+import PricingModal from '../common/PricingModal';
 
 export default function EnhancedPostGenerator({ profile }) {
     const location = useLocation();
@@ -23,6 +24,8 @@ export default function EnhancedPostGenerator({ profile }) {
     const [loadingIdeas, setLoadingIdeas] = useState(true);
     const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
     const [postToSchedule, setPostToSchedule] = useState(null);
+    const [showPricingModal, setShowPricingModal] = useState(false);
+    const [pricingTriggerType, setPricingTriggerType] = useState('limit_reached');
 
     // Ref pour l'auto-scroll
     const generatedPostsRef = useRef(null);
@@ -186,6 +189,9 @@ export default function EnhancedPostGenerator({ profile }) {
                 errorMessage = '📝 Vous devez d\'abord créer votre profil business via l\'assistant de démarrage ou dans les Paramètres.';
             } else if (errorCode === 'limit_reached' || errorMessage.includes('limite')) {
                 errorMessage = '📊 ' + errorMessage;
+                // Ouvrir la popup de pricing
+                setPricingTriggerType('post_limit');
+                setShowPricingModal(true);
             } else if (errorMessage.includes('API key') || errorMessage.includes('api_key') || errorMessage.includes('no_api_key')) {
                 errorMessage = '❌ Clé API Claude non configurée. Contactez l\'administrateur.';
             } else if (errorMessage.includes('401') || errorMessage.includes('403')) {
@@ -769,6 +775,14 @@ export default function EnhancedPostGenerator({ profile }) {
                     onSuccess={handleScheduleSuccess}
                 />
             )}
+
+            {/* Pricing Modal */}
+            <PricingModal
+                isOpen={showPricingModal}
+                onClose={() => setShowPricingModal(false)}
+                currentPlan={profile?.subscription_plan || 'free_trial'}
+                triggerType={pricingTriggerType}
+            />
         </div>
     );
 }

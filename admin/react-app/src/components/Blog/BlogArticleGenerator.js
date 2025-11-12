@@ -3,6 +3,7 @@ import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { useLocation } from 'react-router-dom';
 import { FiFileText, FiEdit, FiImage, FiSave, FiLoader, FiCheckCircle } from 'react-icons/fi';
+import PricingModal from '../common/PricingModal';
 
 export default function BlogArticleGenerator() {
     const location = useLocation();
@@ -36,6 +37,8 @@ export default function BlogArticleGenerator() {
     const [savingArticle, setSavingArticle] = useState(false);
     const [saved, setSaved] = useState(false);
     const [showCompletionModal, setShowCompletionModal] = useState(false);
+    const [showPricingModal, setShowPricingModal] = useState(false);
+    const [pricingTriggerType, setPricingTriggerType] = useState('limit_reached');
 
     const contentRef = useRef(null);
 
@@ -135,6 +138,11 @@ export default function BlogArticleGenerator() {
                                 setArticleGenerated(true);
                                 setShowCompletionModal(true); // Show popup when done
                             } else if (data.type === 'error') {
+                                // Vérifier si c'est une erreur de limite
+                                if (data.code === 'limit_reached' || (data.message && data.message.includes('limite'))) {
+                                    setPricingTriggerType('article_limit');
+                                    setShowPricingModal(true);
+                                }
                                 throw new Error(data.message);
                             }
                         } catch (e) {
@@ -145,7 +153,12 @@ export default function BlogArticleGenerator() {
             }
         } catch (error) {
             console.error('Error generating article:', error);
-            alert(__('Erreur lors de la génération de l\'article', 'ai-content-studio'));
+            // Vérifier si c'est une erreur de limite
+            if (error.message && (error.message.includes('limite') || error.message.includes('limit'))) {
+                setPricingTriggerType('article_limit');
+                setShowPricingModal(true);
+            }
+            alert(__('Erreur lors de la génération de l\'article', 'ai-content-studio') + ': ' + error.message);
         } finally {
             setGeneratingArticle(false);
         }
@@ -584,6 +597,14 @@ export default function BlogArticleGenerator() {
                     </div>
                 </div>
             )}
+
+            {/* Pricing Modal */}
+            <PricingModal
+                isOpen={showPricingModal}
+                onClose={() => setShowPricingModal(false)}
+                currentPlan={'free_trial'}
+                triggerType={pricingTriggerType}
+            />
         </div>
     );
 }
