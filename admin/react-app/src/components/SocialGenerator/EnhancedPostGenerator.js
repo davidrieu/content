@@ -30,6 +30,31 @@ export default function EnhancedPostGenerator({ profile }) {
     // Ref pour l'auto-scroll
     const generatedPostsRef = useRef(null);
 
+    // Vérifier le quota au chargement de la page
+    useEffect(() => {
+        const checkQuota = async () => {
+            try {
+                const response = await apiFetch({
+                    path: '/acs/v1/subscription/usage',
+                    method: 'GET',
+                });
+
+                if (response.success && response.data) {
+                    const { posts } = response.data;
+                    // Si limit_reached ou si utilisé >= limite
+                    if (posts.limit !== -1 && posts.used >= posts.limit) {
+                        setPricingTriggerType('post_limit');
+                        setShowPricingModal(true);
+                    }
+                }
+            } catch (err) {
+                console.log('Could not check quota:', err);
+            }
+        };
+
+        checkQuota();
+    }, []); // Exécuter une seule fois au montage
+
     // Charger la langue de l'utilisateur au montage
     useEffect(() => {
         const fetchUserLanguage = async () => {

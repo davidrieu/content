@@ -42,6 +42,31 @@ export default function BlogArticleGenerator() {
 
     const contentRef = useRef(null);
 
+    // Vérifier le quota au chargement de la page
+    useEffect(() => {
+        const checkQuota = async () => {
+            try {
+                const response = await apiFetch({
+                    path: '/acs/v1/subscription/usage',
+                    method: 'GET',
+                });
+
+                if (response.success && response.data) {
+                    const { articles } = response.data;
+                    // Si limit_reached ou si utilisé >= limite
+                    if (articles.limit !== -1 && articles.used >= articles.limit) {
+                        setPricingTriggerType('article_limit');
+                        setShowPricingModal(true);
+                    }
+                }
+            } catch (err) {
+                console.log('Could not check quota:', err);
+            }
+        };
+
+        checkQuota();
+    }, []); // Exécuter une seule fois au montage
+
     // Auto-scroll pendant la génération
     useEffect(() => {
         if (generatingArticle && contentRef.current) {

@@ -1,39 +1,42 @@
-/* Pricing Modal Overlay */
+/* ========================================
+   Pricing Modal - Modern Style (2025)
+   Utilise les variables CSS de l'app
+   ======================================== */
+
+/* Overlay */
 .acs-pricing-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 99999;
-    padding: 20px;
+    padding: var(--acs-spacing-4);
     animation: fadeIn 0.2s ease-out;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-/* Pricing Modal Container */
+/* Modal Container */
 .acs-pricing-modal {
-    background: #fff;
-    border-radius: 16px;
+    background: var(--acs-glass-bg);
+    border-radius: var(--acs-radius-xl);
     max-width: 1200px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--acs-shadow-xl);
+    border: 1px solid var(--acs-glass-border);
+    backdrop-filter: blur(10px);
     animation: slideUp 0.3s ease-out;
 }
 
@@ -51,9 +54,9 @@
 /* Close Button */
 .acs-pricing-modal-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: #f1f3f5;
+    top: var(--acs-spacing-4);
+    right: var(--acs-spacing-4);
+    background: var(--acs-gray-100);
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -62,13 +65,15 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: var(--acs-transition);
     z-index: 10;
+    color: var(--acs-gray-600);
 }
 
 .acs-pricing-modal-close:hover {
-    background: #e9ecef;
+    background: var(--acs-gray-200);
     transform: rotate(90deg);
+    color: var(--acs-gray-900);
 }
 
 .acs-pricing-modal-close:disabled {
@@ -79,20 +84,25 @@
 /* Modal Header */
 .acs-pricing-modal-header {
     text-align: center;
-    padding: 40px 40px 30px;
-    border-bottom: 1px solid #e9ecef;
+    padding: var(--acs-spacing-6) var(--acs-spacing-5) var(--acs-spacing-5);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+    border-bottom: 1px solid var(--acs-glass-border);
 }
 
 .acs-pricing-modal-title {
-    font-size: 32px;
+    font-size: 2rem;
     font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 10px;
+    color: var(--acs-gray-900);
+    margin: 0 0 var(--acs-spacing-2);
+    background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .acs-pricing-modal-subtitle {
-    font-size: 16px;
-    color: #6c757d;
+    font-size: var(--acs-font-size-base);
+    color: var(--acs-gray-600);
     margin: 0;
 }
 
@@ -100,8 +110,8 @@
 .acs-pricing-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    padding: 40px;
+    gap: var(--acs-spacing-5);
+    padding: var(--acs-spacing-6) var(--acs-spacing-5);
 }
 
 @media (max-width: 1024px) {
@@ -113,25 +123,38 @@
 /* Pricing Card */
 .acs-pricing-card {
     position: relative;
-    background: #fff;
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
-    padding: 30px;
-    transition: all 0.3s;
+    background: var(--acs-glass-bg);
+    border: 2px solid var(--acs-glass-border);
+    border-radius: var(--acs-radius-xl);
+    padding: var(--acs-spacing-6);
+    transition: var(--acs-transition);
     display: flex;
     flex-direction: column;
+    backdrop-filter: blur(10px);
 }
 
 .acs-pricing-card:hover {
-    border-color: #2271b1;
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(34, 113, 177, 0.15);
+    box-shadow: var(--acs-shadow-xl);
+    border-color: var(--acs-primary-light);
 }
 
 .acs-pricing-card.popular {
-    border-color: #2271b1;
+    border-color: var(--acs-primary);
     border-width: 3px;
-    box-shadow: 0 8px 16px rgba(34, 113, 177, 0.1);
+    box-shadow: var(--acs-shadow-lg);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+}
+
+.acs-pricing-card.popular::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--acs-primary), var(--acs-secondary));
+    border-radius: var(--acs-radius-xl) var(--acs-radius-xl) 0 0;
 }
 
 .acs-pricing-card.loading {
@@ -142,63 +165,70 @@
 /* Popular Badge */
 .acs-pricing-badge {
     position: absolute;
-    top: -12px;
+    top: -14px;
     left: 50%;
     transform: translateX(-50%);
-    background: #2271b1;
-    color: #fff;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 12px;
+    background: linear-gradient(135deg, var(--acs-primary), var(--acs-primary-dark));
+    color: var(--acs-white);
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--acs-radius-lg);
+    font-size: 0.75rem;
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.375rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 /* Card Header */
 .acs-pricing-card-header {
     text-align: center;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #f1f3f5;
-    margin-bottom: 24px;
+    padding-bottom: var(--acs-spacing-5);
+    border-bottom: 1px solid var(--acs-glass-border);
+    margin-bottom: var(--acs-spacing-5);
 }
 
 .acs-pricing-plan-name {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 16px;
+    color: var(--acs-gray-900);
+    margin: 0 0 var(--acs-spacing-4);
 }
 
 .acs-pricing-price {
     display: flex;
     align-items: baseline;
     justify-content: center;
-    margin-bottom: 12px;
+    margin-bottom: var(--acs-spacing-3);
 }
 
 .acs-pricing-currency {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 600;
-    color: #2271b1;
+    color: var(--acs-primary);
 }
 
 .acs-pricing-amount {
-    font-size: 48px;
+    font-size: 3rem;
     font-weight: 700;
-    color: #2271b1;
-    margin: 0 4px;
+    background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0.25rem;
+    line-height: 1;
 }
 
 .acs-pricing-period {
-    font-size: 16px;
-    color: #6c757d;
+    font-size: var(--acs-font-size-base);
+    color: var(--acs-gray-600);
 }
 
 .acs-pricing-description {
-    font-size: 14px;
-    color: #6c757d;
+    font-size: var(--acs-font-size-sm);
+    color: var(--acs-gray-600);
     margin: 0;
 }
 
@@ -206,60 +236,80 @@
 .acs-pricing-features {
     list-style: none;
     padding: 0;
-    margin: 0 0 24px;
+    margin: 0 0 var(--acs-spacing-5);
     flex-grow: 1;
 }
 
 .acs-pricing-feature {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    padding: 10px 0;
-    font-size: 14px;
-    color: #495057;
+    gap: var(--acs-spacing-3);
+    padding: var(--acs-spacing-2) 0;
+    font-size: var(--acs-font-size-sm);
+    color: var(--acs-gray-700);
 }
 
 .acs-pricing-check {
     flex-shrink: 0;
-    color: #28a745;
+    color: var(--acs-success);
     margin-top: 2px;
 }
 
 /* Pricing Button */
 .acs-pricing-button {
     width: 100%;
-    padding: 14px 24px;
-    border-radius: 8px;
-    font-size: 16px;
+    padding: 1rem 1.5rem;
+    border-radius: var(--acs-radius-lg);
+    font-size: var(--acs-font-size-base);
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: var(--acs-transition);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--acs-spacing-2);
     border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.acs-pricing-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.3s ease;
+}
+
+.acs-pricing-button:hover::before {
+    left: 100%;
 }
 
 .acs-pricing-button.primary {
-    background: #2271b1;
-    color: #fff;
+    background: linear-gradient(135deg, var(--acs-primary), var(--acs-primary-dark));
+    color: var(--acs-white);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .acs-pricing-button.primary:hover:not(:disabled) {
-    background: #135e96;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(34, 113, 177, 0.3);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
 }
 
 .acs-pricing-button.secondary {
-    background: #fff;
-    color: #2271b1;
-    border: 2px solid #2271b1;
+    background: var(--acs-white);
+    color: var(--acs-primary);
+    border: 2px solid var(--acs-primary);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
 }
 
 .acs-pricing-button.secondary:hover:not(:disabled) {
-    background: #f8f9fa;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
 .acs-pricing-button:disabled {
@@ -270,81 +320,80 @@
 /* Modal Footer */
 .acs-pricing-modal-footer {
     text-align: center;
-    padding: 20px 40px;
-    background: #f8f9fa;
-    border-top: 1px solid #e9ecef;
+    padding: var(--acs-spacing-5) var(--acs-spacing-5);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
+    border-top: 1px solid var(--acs-glass-border);
 }
 
 .acs-pricing-modal-footer p {
-    font-size: 14px;
-    color: #495057;
-    margin: 8px 0;
+    font-size: var(--acs-font-size-sm);
+    color: var(--acs-gray-600);
+    margin: var(--acs-spacing-2) 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--acs-spacing-2);
 }
 
 /* Dismiss Button */
 .acs-pricing-modal-dismiss {
     text-align: center;
-    padding: 16px 40px 30px;
+    padding: var(--acs-spacing-3) var(--acs-spacing-5) var(--acs-spacing-5);
 }
 
 .acs-pricing-dismiss-button {
     background: none;
     border: none;
-    color: #6c757d;
-    font-size: 14px;
+    color: var(--acs-gray-600);
+    font-size: var(--acs-font-size-sm);
     cursor: pointer;
     text-decoration: underline;
+    transition: var(--acs-transition);
 }
 
 .acs-pricing-dismiss-button:hover {
-    color: #495057;
+    color: var(--acs-gray-900);
 }
 
 /* Small Spinner */
 .acs-spinner-small {
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
-    border-top-color: #fff;
+    border-top-color: var(--acs-white);
     width: 16px;
     height: 16px;
     animation: spin 0.6s linear infinite;
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .acs-pricing-modal {
-        margin: 10px;
-        border-radius: 12px;
+        margin: var(--acs-spacing-2);
+        border-radius: var(--acs-radius-lg);
     }
 
     .acs-pricing-modal-header {
-        padding: 30px 20px 20px;
+        padding: var(--acs-spacing-5) var(--acs-spacing-4) var(--acs-spacing-4);
     }
 
     .acs-pricing-modal-title {
-        font-size: 24px;
+        font-size: 1.5rem;
     }
 
     .acs-pricing-grid {
-        padding: 20px;
-        gap: 16px;
+        padding: var(--acs-spacing-4);
+        gap: var(--acs-spacing-4);
     }
 
     .acs-pricing-card {
-        padding: 20px;
+        padding: var(--acs-spacing-5);
     }
 
     .acs-pricing-amount {
-        font-size: 36px;
+        font-size: 2.25rem;
     }
 }
