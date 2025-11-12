@@ -172,29 +172,44 @@ export default function EnhancedPostGenerator({ profile }) {
             }
         } catch (err) {
             console.error('Generation error:', err);
+            console.log('Error structure:', { err, data: err.data, code: err.code, message: err.message });
 
-            // Extract error message from response - structure: { data: { error: { code, message } } }
+            // Extract error message and code from various possible structures
             let errorMessage = __('Erreur lors de la génération', 'ai-content-studio');
             let errorCode = '';
 
+            // Try different error structures
             if (err.data && err.data.error) {
+                // Structure: { data: { error: { code, message } } }
                 errorMessage = err.data.error.message || err.data.error;
                 errorCode = err.data.error.code || '';
+            } else if (err.data && err.data.code) {
+                // Structure: { data: { code, message } }
+                errorCode = err.data.code;
+                errorMessage = err.data.message || err.message;
+            } else if (err.code && err.message) {
+                // Structure: { code, message }
+                errorCode = err.code;
+                errorMessage = err.message;
             } else if (err.message) {
                 errorMessage = err.message;
             }
 
-            // Messages d'erreur plus clairs basés sur le code d'erreur
-            if (errorCode === 'no_profile' || errorMessage.includes('profil business')) {
-                errorMessage = '📝 Vous devez d\'abord créer votre profil business via l\'assistant de démarrage ou dans les Paramètres.';
-            } else if (errorCode === 'limit_reached' || errorMessage.includes('limite')) {
+            // Check errorCode FIRST before checking message content
+            if (errorCode === 'limit_reached') {
                 errorMessage = '📊 ' + errorMessage;
-                // Ouvrir la popup de pricing
+                setPricingTriggerType('post_limit');
+                setShowPricingModal(true);
+            } else if (errorCode === 'no_profile' || errorMessage.includes('profil business')) {
+                errorMessage = '📝 Vous devez d\'abord créer votre profil business via l\'assistant de démarrage ou dans les Paramètres.';
+            } else if (errorMessage.includes('limite')) {
+                // Fallback: check message for "limite" keyword
+                errorMessage = '📊 ' + errorMessage;
                 setPricingTriggerType('post_limit');
                 setShowPricingModal(true);
             } else if (errorMessage.includes('API key') || errorMessage.includes('api_key') || errorMessage.includes('no_api_key')) {
                 errorMessage = '❌ Clé API Claude non configurée. Contactez l\'administrateur.';
-            } else if (errorMessage.includes('401') || errorMessage.includes('403')) {
+            } else if (errorMessage.includes('401')) {
                 errorMessage = '🔑 Clé API invalide ou expirée. Contactez l\'administrateur.';
             } else if (errorMessage.includes('429')) {
                 errorMessage = '⏰ Limite d\'utilisation atteinte. Attendez quelques minutes ou passez à un plan supérieur.';

@@ -1,8 +1,9 @@
 import { useState, useEffect } from '@wordpress/element';
-import { FiBookOpen, FiLoader, FiZap } from 'react-icons/fi';
+import { FiBookOpen, FiLoader, FiZap, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
+import PricingModal from '../common/PricingModal';
 
 export default function BlogStrategyGenerator({ profile }) {
     const navigate = useNavigate();
@@ -10,6 +11,10 @@ export default function BlogStrategyGenerator({ profile }) {
     const [blogIdeas, setBlogIdeas] = useState([]);
     const [language, setLanguage] = useState('fr');
     const [languageLoaded, setLanguageLoaded] = useState(false);
+    const [showPricingModal, setShowPricingModal] = useState(false);
+
+    // Check if user has access to strategy features
+    const hasStrategyAccess = profile?.subscription_plan && profile.subscription_plan !== 'free_trial';
 
     // Charger la langue de l'utilisateur au montage
     useEffect(() => {
@@ -34,10 +39,15 @@ export default function BlogStrategyGenerator({ profile }) {
     // Charger ou générer la stratégie au montage (quand langue est chargée)
     useEffect(() => {
         if (!profile || !languageLoaded) return;
-        console.log('Loading or generating blog strategy with language:', language);
-        console.log('Profile data:', profile);
-        loadOrGenerateStrategy();
-    }, [profile, languageLoaded]);
+        // Ne charger la stratégie que si l'utilisateur a accès
+        if (hasStrategyAccess) {
+            console.log('Loading or generating blog strategy with language:', language);
+            console.log('Profile data:', profile);
+            loadOrGenerateStrategy();
+        } else {
+            setLoading(false); // Arrêter le chargement pour afficher le lock screen
+        }
+    }, [profile, languageLoaded, hasStrategyAccess]);
 
     // Régénérer automatiquement les idées quand la langue change
     useEffect(() => {
@@ -292,6 +302,77 @@ export default function BlogStrategyGenerator({ profile }) {
                     </div>
                 )}
             </div>
+
+            {/* Lock Overlay for Free Trial Users */}
+            {!hasStrategyAccess && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(255, 255, 255, 0.95)',
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 9999,
+                    padding: 'var(--acs-spacing-4)',
+                }}>
+                    <div style={{
+                        textAlign: 'center',
+                        maxWidth: '500px',
+                        background: 'white',
+                        padding: 'var(--acs-spacing-6)',
+                        borderRadius: 'var(--acs-radius-lg)',
+                        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+                    }}>
+                        <div style={{
+                            width: '80px',
+                            height: '80px',
+                            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            margin: '0 auto var(--acs-spacing-4)',
+                        }}>
+                            <FiLock size={40} color="white" />
+                        </div>
+                        <h2 style={{ marginBottom: 'var(--acs-spacing-2)', color: 'var(--acs-gray-900)' }}>
+                            {__('Fonctionnalité Premium', 'ai-content-studio')}
+                        </h2>
+                        <p style={{ color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-4)', lineHeight: '1.6' }}>
+                            {__('La génération de stratégies de blog est réservée aux abonnés. Passez à un plan payant pour débloquer cette fonctionnalité et bien plus encore.', 'ai-content-studio')}
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--acs-spacing-2)' }}>
+                            <button
+                                className="acs-btn acs-btn-primary"
+                                onClick={() => setShowPricingModal(true)}
+                                style={{ width: '100%' }}
+                            >
+                                {__('Voir les plans', 'ai-content-studio')}
+                            </button>
+                            <button
+                                className="acs-btn acs-btn-outline-secondary"
+                                onClick={() => navigate('/dashboard')}
+                                style={{ width: '100%' }}
+                            >
+                                {__('Retour au tableau de bord', 'ai-content-studio')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Pricing Modal */}
+            <PricingModal
+                isOpen={showPricingModal}
+                onClose={() => setShowPricingModal(false)}
+                currentPlan={profile?.subscription_plan || 'free_trial'}
+                triggerType="blog_strategy_locked"
+            />
 
             <style>{`
                 @keyframes spin {

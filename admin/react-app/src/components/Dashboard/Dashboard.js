@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { FiFileText, FiTrendingUp, FiImage, FiZap, FiArrowUp, FiArrowDown } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
+import PricingModal from '../common/PricingModal';
 
 export default function Dashboard({ profile }) {
     const navigate = useNavigate();
     const [subscription, setSubscription] = useState(null);
     const [usage, setUsage] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showPricingModal, setShowPricingModal] = useState(false);
 
     useEffect(() => {
         loadData();
@@ -157,18 +159,21 @@ export default function Dashboard({ profile }) {
                 <div className="acs-card">
                     <div className="acs-card-header">
                         <h3 className="acs-card-title">{__('Votre plan', 'ai-content-studio')}</h3>
-                        <span className={`acs-badge acs-badge-${subscription?.plan === 'free' ? 'primary' : 'success'}`}>
-                            {subscription?.plan_name || 'Free'}
+                        <span className={`acs-badge acs-badge-${subscription?.plan === 'free_trial' ? 'primary' : 'success'}`}>
+                            {subscription?.plan_name || 'Free Trial'}
                         </span>
                     </div>
                     <p className="acs-text-muted mb-3">
-                        {subscription?.plan === 'free'
+                        {subscription?.plan === 'free_trial'
                             ? __('Passez à un plan supérieur pour plus de fonctionnalités', 'ai-content-studio')
                             : __('Vous profitez de toutes les fonctionnalités', 'ai-content-studio')
                         }
                     </p>
-                    <button className="acs-btn acs-btn-secondary w-100">
-                        {subscription?.plan === 'free' ? __('Upgrader', 'ai-content-studio') : __('Gérer', 'ai-content-studio')}
+                    <button
+                        className="acs-btn acs-btn-secondary w-100"
+                        onClick={() => setShowPricingModal(true)}
+                    >
+                        {subscription?.plan === 'free_trial' ? __('Upgrader', 'ai-content-studio') : __('Gérer', 'ai-content-studio')}
                     </button>
                 </div>
             </div>
@@ -185,6 +190,14 @@ export default function Dashboard({ profile }) {
                     </button>
                 </div>
             </div>
+
+            {/* Pricing Modal */}
+            <PricingModal
+                isOpen={showPricingModal}
+                onClose={() => setShowPricingModal(false)}
+                currentPlan={subscription?.plan || profile?.subscription_plan || 'free_trial'}
+                triggerType="upgrade"
+            />
         </div>
     );
 }

@@ -245,6 +245,30 @@ Réponds maintenant avec le JSON uniquement :";
      * @return void
      */
     public function generate_article_stream($request) {
+        // VÉRIFICATION LIMITE CRITIQUE
+        $user_id = get_current_user_id();
+        $subscription_service = new \ACS\Services\Subscription_Service();
+
+        if (!$subscription_service->can_generate_article($user_id)) {
+            $plan = $subscription_service->get_user_plan($user_id);
+            $limits = $subscription_service->get_plan_limits($plan);
+
+            // Send error event for SSE
+            header('Content-Type: text/event-stream');
+            header('Cache-Control: no-cache');
+            header('Connection: keep-alive');
+            header('X-Accel-Buffering: no');
+
+            echo "event: error\n";
+            echo "data: " . wp_json_encode([
+                'type' => 'error',
+                'code' => 'limit_reached',
+                'message' => sprintf(__('Vous avez atteint votre limite de %d articles pour le plan %s. Passez à un plan supérieur.', 'ai-content-studio'), $limits['articles_per_month'] ?? 0, $plan),
+            ]) . "\n\n";
+            flush();
+            exit;
+        }
+
         // Set headers for SSE
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
