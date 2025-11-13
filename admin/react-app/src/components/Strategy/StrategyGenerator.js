@@ -155,7 +155,7 @@ export default function StrategyGenerator({ profile }) {
         navigate('/generate', { state: { topic: idea } });
     };
 
-    if (loading) {
+    if (loading && hasStrategyAccess) {
         return (
             <div>
                 <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
@@ -167,19 +167,6 @@ export default function StrategyGenerator({ profile }) {
                 <div className="acs-card" style={{ textAlign: 'center', padding: 'var(--acs-spacing-6)' }}>
                     <div className="acs-spinner" style={{ width: '40px', height: '40px', margin: '0 auto var(--acs-spacing-3)' }} />
                     <p>{__('Analyse de votre profil et création de votre stratégie...', 'ai-content-studio')}</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (!strategy) {
-        return (
-            <div>
-                <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                    <h1 className="acs-page-title">{__('Votre Stratégie de Contenu', 'ai-content-studio')}</h1>
-                </div>
-                <div className="acs-card" style={{ textAlign: 'center', padding: 'var(--acs-spacing-6)' }}>
-                    <p>{__('Impossible de générer votre stratégie. Veuillez réessayer plus tard.', 'ai-content-studio')}</p>
                 </div>
             </div>
         );
