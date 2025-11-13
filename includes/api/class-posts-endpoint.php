@@ -9,6 +9,7 @@ namespace ACS\API;
 
 use ACS\Models\Social_Post;
 use ACS\Models\Business_Profile;
+use ACS\Models\Project;
 use ACS\Services\Claude_Service;
 use ACS\Services\Subscription_Service;
 use ACS\Services\Usage_Service;
@@ -129,16 +130,25 @@ class Posts_Endpoint extends REST_Controller {
             'template_id' => $params['template_id'] ?? '',
         ], 'generation');
 
-        // Get profile and strategy
-        $profile_model = new Business_Profile();
-        $profile = $profile_model->get_by_user($user_id);
-
-        if (!$profile) {
-            \ACS\Utils\Logger::error('Post generation failed: no profile found', [
+        // Get active project (required for multi-project support)
+        if (!$project_id) {
+            \ACS\Utils\Logger::error('Post generation failed: no active project', [
                 'user_id' => $user_id,
             ], 'generation');
 
-            return $this->error(__('Créez d\'abord votre profil business', 'ai-content-studio'), 'no_profile', 400);
+            return $this->error(__('Aucun projet actif. Veuillez sélectionner ou créer un projet.', 'ai-content-studio'), 'no_project', 400);
+        }
+
+        $project_model = new Project();
+        $profile = $project_model->get_by_id($project_id);
+
+        if (!$profile) {
+            \ACS\Utils\Logger::error('Post generation failed: project not found', [
+                'user_id' => $user_id,
+                'project_id' => $project_id,
+            ], 'generation');
+
+            return $this->error(__('Projet introuvable', 'ai-content-studio'), 'project_not_found', 404);
         }
 
         $params['profile'] = $profile;
@@ -195,12 +205,17 @@ class Posts_Endpoint extends REST_Controller {
         $platform = $request->get_param('platform') ?? 'instagram';
         $language = $request->get_param('language') ?? 'fr';
 
-        // Get profile (required)
-        $profile_model = new Business_Profile();
-        $profile = $profile_model->get_by_user($user_id);
+        // Get active project (required for multi-project support)
+        if (!$project_id) {
+            // No active project = can't generate relevant ideas
+            return $this->success([]);
+        }
+
+        $project_model = new Project();
+        $profile = $project_model->get_by_id($project_id);
 
         if (!$profile) {
-            // No profile = can't generate relevant ideas
+            // Project not found = can't generate relevant ideas
             return $this->success([]);
         }
 
