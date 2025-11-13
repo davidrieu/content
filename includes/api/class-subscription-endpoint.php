@@ -92,7 +92,10 @@ class Subscription_Endpoint extends REST_Controller {
         if (!$product) {
             $is_admin = current_user_can('manage_options');
             $error_message = $is_admin
-                ? __('Le produit WooCommerce (ID: ' . $product_id . ') n\'existe plus. Veuillez recréer les produits dans "AI Content Studio > Abonnements".', 'ai-content-studio')
+                ? sprintf(
+                    __('Le produit WooCommerce (ID: %d) n\'existe plus. Veuillez recréer les produits dans "AI Content Studio > Abonnements".', 'ai-content-studio'),
+                    $product_id
+                )
                 : __('Le produit d\'abonnement n\'existe plus. Veuillez contacter l\'administrateur du site.', 'ai-content-studio');
 
             return $this->error($error_message, 'product_not_exists', 404);
