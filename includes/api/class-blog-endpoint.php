@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 /**
  * Blog_Endpoint class
  */
-class Blog_Endpoint {
+class Blog_Endpoint extends REST_Controller {
 
     /**
      * Claude service instance
@@ -547,10 +547,12 @@ Réponds maintenant avec le JSON uniquement :";
     public function save_article($request) {
         global $wpdb;
         $table = $wpdb->prefix . 'acs_blog_articles';
-        $user_id = get_current_user_id();
+        $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
 
         // Log incoming data for debugging
         error_log('Save article request - User ID: ' . $user_id);
+        error_log('Save article request - Project ID: ' . $project_id);
         error_log('Save article request - Subject: ' . $request->get_param('subject'));
         error_log('Save article request - Title: ' . $request->get_param('title'));
         error_log('Save article request - Language: ' . $request->get_param('language'));
@@ -558,6 +560,7 @@ Réponds maintenant avec le JSON uniquement :";
 
         $data = [
             'user_id' => $user_id,
+            'project_id' => $project_id,
             'subject' => sanitize_text_field($request->get_param('subject')),
             'title' => sanitize_text_field($request->get_param('title')),
             'content' => wp_kses_post($request->get_param('content')),
@@ -575,7 +578,7 @@ Réponds maintenant avec le JSON uniquement :";
         error_log('Attempting to insert article data into: ' . $table);
 
         $result = $wpdb->insert($table, $data, [
-            '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s'
+            '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s'
         ]);
 
         // Log any errors with detailed information
@@ -611,15 +614,28 @@ Réponds maintenant avec le JSON uniquement :";
     public function get_articles($request) {
         global $wpdb;
         $table = $wpdb->prefix . 'acs_blog_articles';
-        $user_id = get_current_user_id();
+        $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
 
-        $articles = $wpdb->get_results($wpdb->prepare(
-            "SELECT * FROM {$table}
-             WHERE user_id = %d
-             ORDER BY created_at DESC
-             LIMIT 50",
-            $user_id
-        ), ARRAY_A);
+        // Filter by project_id
+        if ($project_id) {
+            $articles = $wpdb->get_results($wpdb->prepare(
+                "SELECT * FROM {$table}
+                 WHERE user_id = %d AND project_id = %d
+                 ORDER BY created_at DESC
+                 LIMIT 50",
+                $user_id,
+                $project_id
+            ), ARRAY_A);
+        } else {
+            $articles = $wpdb->get_results($wpdb->prepare(
+                "SELECT * FROM {$table}
+                 WHERE user_id = %d AND project_id IS NULL
+                 ORDER BY created_at DESC
+                 LIMIT 50",
+                $user_id
+            ), ARRAY_A);
+        }
 
         // Decode keywords
         foreach ($articles as &$article) {
@@ -887,12 +903,22 @@ PROMPT;
     public function get_current_blog_strategy($request) {
         global $wpdb;
         $table = $wpdb->prefix . 'acs_blog_strategies';
-        $user_id = get_current_user_id();
+        $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
 
-        $strategy = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$table} WHERE user_id = %d",
-            $user_id
-        ), ARRAY_A);
+        // Filter by project_id
+        if ($project_id) {
+            $strategy = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$table} WHERE user_id = %d AND project_id = %d",
+                $user_id,
+                $project_id
+            ), ARRAY_A);
+        } else {
+            $strategy = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$table} WHERE user_id = %d AND project_id IS NULL",
+                $user_id
+            ), ARRAY_A);
+        }
 
         if (!$strategy) {
             return rest_ensure_response([
@@ -919,7 +945,8 @@ PROMPT;
     public function save_blog_strategy($request) {
         global $wpdb;
         $table = $wpdb->prefix . 'acs_blog_strategies';
-        $user_id = get_current_user_id();
+        $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
 
         $params = $request->get_json_params();
         $ideas = $params['ideas'] ?? [];
@@ -935,16 +962,25 @@ PROMPT;
 
         $data = [
             'user_id' => $user_id,
+            'project_id' => $project_id,
             'ideas' => wp_json_encode($ideas),
             'language' => $language,
             'goal' => $goal,
         ];
 
-        // Check if strategy exists
-        $exists = $wpdb->get_var($wpdb->prepare(
-            "SELECT id FROM {$table} WHERE user_id = %d",
-            $user_id
-        ));
+        // Check if strategy exists for this project
+        if ($project_id) {
+            $exists = $wpdb->get_var($wpdb->prepare(
+                "SELECT id FROM {$table} WHERE user_id = %d AND project_id = %d",
+                $user_id,
+                $project_id
+            ));
+        } else {
+            $exists = $wpdb->get_var($wpdb->prepare(
+                "SELECT id FROM {$table} WHERE user_id = %d AND project_id IS NULL",
+                $user_id
+            ));
+        }
 
         if ($exists) {
             // Update existing strategy
