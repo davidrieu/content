@@ -93,6 +93,7 @@ class Projects_Endpoint extends REST_Controller {
 
     /**
      * Get active project for current user
+     * Auto-migrates from business_profile if no projects exist
      */
     public function get_active_project($request) {
         $user_id = $this->get_current_user_id();
@@ -105,17 +106,64 @@ class Projects_Endpoint extends REST_Controller {
             $all_projects = $project_model->get_by_user($user_id);
 
             if (empty($all_projects)) {
-                return $this->success([
-                    'project' => null,
-                    'has_projects' => false,
-                    'message' => __('Aucun projet trouvé. Veuillez créer un projet.', 'ai-content-studio'),
-                ]);
-            }
+                // No projects at all - check if user has a business_profile (auto-migration)
+                global $wpdb;
+                $profiles_table = $wpdb->prefix . ACS_TABLE_PREFIX . 'business_profiles';
 
-            // User has projects but none active - activate the first one
-            $first_project = $all_projects[0];
-            $project_model->set_active_project($user_id, $first_project['id']);
-            $active_project = $project_model->get_by_id($first_project['id']);
+                $profile = $wpdb->get_row($wpdb->prepare(
+                    "SELECT * FROM {$profiles_table} WHERE user_id = %d",
+                    $user_id
+                ), ARRAY_A);
+
+                if ($profile) {
+                    // Auto-migrate: Create project from business_profile
+                    $project_data = [
+                        'user_id' => $user_id,
+                        'project_name' => $profile['business_name'],
+                        'user_type' => $profile['user_type'] ?? '',
+                        'sector' => $profile['sector'] ?? '',
+                        'description' => $profile['description'] ?? '',
+                        'website' => $profile['website'] ?? '',
+                        'goals' => $profile['goals'] ?? '[]',
+                        'platforms' => $profile['social_platforms'] ?? '[]',
+                        'posting_frequency' => $profile['posting_frequency'] ?? 'weekly',
+                        'has_blog' => !empty($profile['has_blog']) ? 1 : 0,
+                        'blog_topics' => $profile['blog_topics'] ?? '[]',
+                        'seo_goals' => $profile['seo_goals'] ?? '[]',
+                        'primary_keywords' => $profile['primary_keywords'] ?? '[]',
+                        'niche' => $profile['niche'] ?? '',
+                        'target_audience' => $profile['target_audience'] ?? '',
+                        'languages' => $profile['languages'] ?? '["fr"]',
+                    ];
+
+                    $project_id = $project_model->create($project_data);
+
+                    if ($project_id) {
+                        $active_project = $project_model->get_by_id($project_id);
+
+                        // Log auto-migration
+                        if (class_exists('ACS\\Utils\\Logger')) {
+                            \ACS\Utils\Logger::info('Auto-migrated user profile to project', [
+                                'user_id' => $user_id,
+                                'project_id' => $project_id,
+                            ]);
+                        }
+                    }
+                }
+
+                if (!$active_project) {
+                    return $this->success([
+                        'project' => null,
+                        'has_projects' => false,
+                        'message' => __('Aucun projet trouvé. Veuillez créer un projet.', 'ai-content-studio'),
+                    ]);
+                }
+            } else {
+                // User has projects but none active - activate the first one
+                $first_project = $all_projects[0];
+                $project_model->set_active_project($user_id, $first_project['id']);
+                $active_project = $project_model->get_by_id($first_project['id']);
+            }
         }
 
         return $this->success([
