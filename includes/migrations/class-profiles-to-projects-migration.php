@@ -9,7 +9,7 @@
 
 namespace ACS\Migrations;
 
-use ACS\Models\Project_Model;
+use ACS\Models\Project;
 use ACS\Utils\Logger;
 
 if (!defined('ABSPATH')) {
@@ -82,7 +82,7 @@ class Profiles_To_Projects_Migration {
             ];
         }
 
-        $project_model = new Project_Model();
+        $project_model = new Project();
         $migrated_count = 0;
         $errors = [];
 

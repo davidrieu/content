@@ -146,7 +146,12 @@ class Plugin {
             // Load migrations admin page
             $migrations_file = ACS_PLUGIN_DIR . 'includes/admin/class-migrations-page.php';
             if (file_exists($migrations_file)) {
-                // Load migration class first
+                // Load Project model first
+                $project_model = ACS_PLUGIN_DIR . 'includes/models/class-project.php';
+                if (file_exists($project_model)) {
+                    require_once $project_model;
+                }
+                // Load migration class
                 $migration_class = ACS_PLUGIN_DIR . 'includes/migrations/class-profiles-to-projects-migration.php';
                 if (file_exists($migration_class)) {
                     require_once $migration_class;
@@ -173,6 +178,12 @@ class Plugin {
         add_action('rest_api_init', function() {
             $api_dir = ACS_PLUGIN_DIR . 'includes/api/';
 
+            // Load Project model for projects endpoint
+            $project_model = ACS_PLUGIN_DIR . 'includes/models/class-project.php';
+            if (file_exists($project_model)) {
+                require_once $project_model;
+            }
+
             // List of API endpoint files
             $endpoints = [
                 'class-rest-controller.php',
@@ -189,6 +200,7 @@ class Plugin {
                 'class-analytics-endpoint.php',
                 'class-social-connections-endpoint.php',
                 'class-subscription-endpoint.php',
+                'class-projects-endpoint.php',
                 'class-library-endpoint.php',
                 'class-logs-endpoint.php',
                 'class-diagnostic-endpoint.php',

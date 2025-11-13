@@ -8,7 +8,7 @@
 namespace ACS\API;
 
 use ACS\Models\Business_Profile;
-use ACS\Models\Project_Model;
+use ACS\Models\Project;
 use ACS\Services\Claude_Service;
 
 class Profile_Endpoint extends REST_Controller {
@@ -40,7 +40,7 @@ class Profile_Endpoint extends REST_Controller {
         $user_id = $this->get_current_user_id();
 
         // Try to get active project first (new system)
-        $project_model = new Project_Model();
+        $project_model = new Project();
         $active_project = $project_model->get_active_project($user_id);
 
         if ($active_project) {
