@@ -241,11 +241,8 @@ export default function StrategyGenerator({ profile }) {
                 </div>
             </div>
 
-            {/* Afficher le contenu seulement si l'utilisateur a accès */}
-            {hasStrategyAccess ? (
-                <>
-                    {/* Strategy Overview */}
-                    <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
+            {/* Strategy Overview */}
+            <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--acs-spacing-3)', marginBottom: 'var(--acs-spacing-5)' }}>
                     <div className="acs-stat-card primary">
                         <div className="acs-stat-header">
@@ -498,15 +495,6 @@ export default function StrategyGenerator({ profile }) {
                     })}
                 </div>
             </div>
-                </>
-            ) : (
-                /* Message simple pour les utilisateurs sans accès */
-                <div className="acs-card" style={{ textAlign: 'center', padding: 'var(--acs-spacing-6)' }}>
-                    <p style={{ color: 'var(--acs-gray-600)' }}>
-                        {__('Cette fonctionnalité est réservée aux abonnés premium.', 'ai-content-studio')}
-                    </p>
-                </div>
-            )}
 
             {/* Lock Overlay for Free Trial Users */}
             {!hasStrategyAccess && (
