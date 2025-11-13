@@ -101,6 +101,16 @@ class Subscription_Endpoint extends REST_Controller {
             return $this->error($error_message, 'product_not_exists', 404);
         }
 
+        // Initialize WooCommerce session and cart if needed (for REST API context)
+        if (!WC()->session) {
+            WC()->session = new \WC_Session_Handler();
+            WC()->session->init();
+        }
+
+        if (!WC()->cart) {
+            WC()->cart = new \WC_Cart();
+        }
+
         // Clear cart
         WC()->cart->empty_cart();
 
