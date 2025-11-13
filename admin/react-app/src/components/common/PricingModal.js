@@ -79,13 +79,27 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                 // Redirect to WooCommerce checkout
                 window.location.href = response.data.checkout_url;
             } else {
-                alert(__('Erreur lors de la création du lien de paiement', 'ai-content-studio'));
+                // Display specific error message from server
+                const errorMessage = response.message || __('Erreur lors de la création du lien de paiement', 'ai-content-studio');
+                alert(errorMessage);
                 setLoading(false);
+                setSelectedPlan(null);
             }
         } catch (error) {
             console.error('Error getting checkout URL:', error);
-            alert(__('Une erreur s\'est produite', 'ai-content-studio'));
+
+            // Try to extract error message from API response
+            let errorMessage = __('Une erreur s\'est produite', 'ai-content-studio');
+
+            if (error.message) {
+                errorMessage = error.message;
+            } else if (error.data && error.data.message) {
+                errorMessage = error.data.message;
+            }
+
+            alert(errorMessage);
             setLoading(false);
+            setSelectedPlan(null);
         }
     };
 
