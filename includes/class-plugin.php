@@ -159,6 +159,13 @@ class Plugin {
                 require_once $migrations_file;
                 new Admin\Migrations_Page();
             }
+
+            // Load diagnostic admin page
+            $diagnostic_file = ACS_PLUGIN_DIR . 'includes/admin/class-diagnostic-page.php';
+            if (file_exists($diagnostic_file)) {
+                require_once $diagnostic_file;
+                new Admin\Diagnostic_Page();
+            }
         }
 
         // Load auth AJAX handler (works for both admin and frontend)
