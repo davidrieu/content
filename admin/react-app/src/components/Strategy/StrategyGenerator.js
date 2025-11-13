@@ -155,7 +155,7 @@ export default function StrategyGenerator({ profile }) {
         navigate('/generate', { state: { topic: idea } });
     };
 
-    if (loading && hasStrategyAccess) {
+    if (loading) {
         return (
             <div>
                 <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
@@ -411,7 +411,7 @@ export default function StrategyGenerator({ profile }) {
             <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
                 <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>📅 {__('Thèmes hebdomadaires', 'ai-content-studio')}</h3>
                 <div style={{ display: 'grid', gap: 'var(--acs-spacing-3)' }}>
-                    {(strategy.weekly_themes || [
+                    {(strategy?.weekly_themes || [
                         { week: 1, theme: 'Introduction & Accueil', description: 'Présentez votre activité et créez du lien' },
                         { week: 2, theme: 'Éducation & Valeur', description: 'Partagez votre expertise et des conseils' },
                         { week: 3, theme: 'Engagement & Communauté', description: 'Interagissez et créez de l\'engagement' },
@@ -451,7 +451,7 @@ export default function StrategyGenerator({ profile }) {
             <div className="acs-card">
                 <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>⏰ {__('Meilleurs moments de publication', 'ai-content-studio')}</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
-                    {(strategy.platforms || ['instagram', 'facebook']).map((platform) => {
+                    {(strategy?.platforms || ['instagram', 'facebook']).map((platform) => {
                         const times = BEST_POSTING_TIMES[platform]?.[profile?.user_type || 'business'] || BEST_POSTING_TIMES[platform]?.business;
                         return (
                             <div
