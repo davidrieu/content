@@ -62,7 +62,10 @@ class Posts_Endpoint extends REST_Controller {
 
     public function get_posts($request) {
         $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
+
         $filters = [
+            'project_id' => $project_id,
             'platform' => $request->get_param('platform'),
             'status' => $request->get_param('status'),
             'limit' => $request->get_param('limit') ?? 50,
@@ -89,9 +92,11 @@ class Posts_Endpoint extends REST_Controller {
 
     public function generate_posts($request) {
         $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
 
         \ACS\Utils\Logger::info('Post generation started', [
             'user_id' => $user_id,
+            'project_id' => $project_id,
         ], 'generation');
 
         // VÉRIFICATION LIMITE CRITIQUE
@@ -159,6 +164,7 @@ class Posts_Endpoint extends REST_Controller {
         foreach ($variants as $variant) {
             $post_data = [
                 'user_id' => $user_id,
+                'project_id' => $project_id,
                 'platform' => $params['platform'],
                 'content' => $variant['content'],
                 'hashtags' => $variant['hashtags'] ?? [],
@@ -185,6 +191,7 @@ class Posts_Endpoint extends REST_Controller {
      */
     public function get_post_ideas($request) {
         $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
         $platform = $request->get_param('platform') ?? 'instagram';
         $language = $request->get_param('language') ?? 'fr';
 
@@ -197,9 +204,10 @@ class Posts_Endpoint extends REST_Controller {
             return $this->success([]);
         }
 
-        // Get user's recent posts (optional - will generate generic ideas if none)
+        // Get user's recent posts for the active project (optional - will generate generic ideas if none)
         $post_model = new Social_Post();
         $recent_posts = $post_model->get_by_user($user_id, [
+            'project_id' => $project_id,
             'limit' => 5,
             'offset' => 0,
         ]);
@@ -229,6 +237,7 @@ class Posts_Endpoint extends REST_Controller {
     public function create_post($request) {
         $params = $request->get_json_params();
         $params['user_id'] = $this->get_current_user_id();
+        $params['project_id'] = $this->get_active_project_id();
 
         $model = new Social_Post();
         $id = $model->create($params);

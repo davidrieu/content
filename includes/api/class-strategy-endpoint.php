@@ -8,7 +8,6 @@
 
 namespace ACS\API;
 
-use WP_REST_Controller;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -23,14 +22,7 @@ if (!defined('ABSPATH')) {
 /**
  * Strategy Endpoint class
  */
-class Strategy_Endpoint extends WP_REST_Controller {
-
-    /**
-     * Namespace
-     *
-     * @var string
-     */
-    protected $namespace = 'acs/v1';
+class Strategy_Endpoint extends REST_Controller {
 
     /**
      * Rest base
@@ -49,7 +41,7 @@ class Strategy_Endpoint extends WP_REST_Controller {
             [
                 'methods'             => WP_REST_Server::CREATABLE,
                 'callback'            => [$this, 'generate_strategy'],
-                'permission_callback' => [$this, 'check_user_permission'],
+                'permission_callback' => [$this, 'permission_check'],
             ],
         ]);
 
@@ -57,7 +49,7 @@ class Strategy_Endpoint extends WP_REST_Controller {
             [
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [$this, 'get_current_strategy'],
-                'permission_callback' => [$this, 'check_user_permission'],
+                'permission_callback' => [$this, 'permission_check'],
             ],
         ]);
 
@@ -65,7 +57,7 @@ class Strategy_Endpoint extends WP_REST_Controller {
             [
                 'methods'             => WP_REST_Server::CREATABLE,
                 'callback'            => [$this, 'generate_content_ideas'],
-                'permission_callback' => [$this, 'check_user_permission'],
+                'permission_callback' => [$this, 'permission_check'],
             ],
         ]);
 
@@ -73,7 +65,7 @@ class Strategy_Endpoint extends WP_REST_Controller {
             [
                 'methods'             => WP_REST_Server::CREATABLE,
                 'callback'            => [$this, 'apply_strategy'],
-                'permission_callback' => [$this, 'check_user_permission'],
+                'permission_callback' => [$this, 'permission_check'],
             ],
         ]);
 
@@ -81,19 +73,9 @@ class Strategy_Endpoint extends WP_REST_Controller {
             [
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [$this, 'get_strategy'],
-                'permission_callback' => [$this, 'check_user_permission'],
+                'permission_callback' => [$this, 'permission_check'],
             ],
         ]);
-    }
-
-    /**
-     * Check if user has permission
-     *
-     * @param WP_REST_Request $request Request object.
-     * @return bool
-     */
-    public function check_user_permission($request) {
-        return is_user_logged_in();
     }
 
     /**
@@ -301,6 +283,9 @@ PROMPT;
         global $wpdb;
         $table = $wpdb->prefix . 'acs_content_plans';
 
+        // Récupérer le project_id actif
+        $project_id = $this->get_active_project_id();
+
         $month_names = [
             1 => 'Janvier', 2 => 'Février', 3 => 'Mars', 4 => 'Avril',
             5 => 'Mai', 6 => 'Juin', 7 => 'Juillet', 8 => 'Août',
@@ -309,6 +294,7 @@ PROMPT;
 
         $data = [
             'user_id' => $user_id,
+            'project_id' => $project_id,
             'name' => 'Plan ' . $month_names[$month] . ' ' . $year,
             'month' => $month,
             'year' => $year,
@@ -349,19 +335,32 @@ PROMPT;
      * @return WP_REST_Response|WP_Error
      */
     public function get_current_strategy($request) {
-        $user_id = get_current_user_id();
+        $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
 
         global $wpdb;
         $table = $wpdb->prefix . 'acs_content_plans';
 
-        // Récupérer la stratégie la plus récente de l'utilisateur
-        $strategy = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$table}
-             WHERE user_id = %d
-             ORDER BY created_at DESC
-             LIMIT 1",
-            $user_id
-        ), ARRAY_A);
+        // Récupérer la stratégie la plus récente de l'utilisateur pour le projet actif
+        if ($project_id) {
+            $strategy = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$table}
+                 WHERE user_id = %d AND project_id = %d
+                 ORDER BY created_at DESC
+                 LIMIT 1",
+                $user_id,
+                $project_id
+            ), ARRAY_A);
+        } else {
+            // Fallback pour les anciennes données sans project_id
+            $strategy = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$table}
+                 WHERE user_id = %d AND project_id IS NULL
+                 ORDER BY created_at DESC
+                 LIMIT 1",
+                $user_id
+            ), ARRAY_A);
+        }
 
         if (!$strategy) {
             return rest_ensure_response([
@@ -503,18 +502,31 @@ PROMPT;
      * @return void
      */
     private function save_content_ideas_to_strategy($ideas) {
-        $user_id = get_current_user_id();
+        $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
+
         global $wpdb;
         $table = $wpdb->prefix . 'acs_content_plans';
 
-        // Récupérer la stratégie existante
-        $strategy = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$table}
-             WHERE user_id = %d
-             ORDER BY created_at DESC
-             LIMIT 1",
-            $user_id
-        ), ARRAY_A);
+        // Récupérer la stratégie existante pour le projet actif
+        if ($project_id) {
+            $strategy = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$table}
+                 WHERE user_id = %d AND project_id = %d
+                 ORDER BY created_at DESC
+                 LIMIT 1",
+                $user_id,
+                $project_id
+            ), ARRAY_A);
+        } else {
+            $strategy = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$table}
+                 WHERE user_id = %d AND project_id IS NULL
+                 ORDER BY created_at DESC
+                 LIMIT 1",
+                $user_id
+            ), ARRAY_A);
+        }
 
         if (!$strategy) {
             return;
@@ -544,16 +556,27 @@ PROMPT;
      */
     public function get_strategy($request) {
         $strategy_id = $request['id'];
-        $user_id = get_current_user_id();
+        $user_id = $this->get_current_user_id();
+        $project_id = $this->get_active_project_id();
 
         global $wpdb;
         $table = $wpdb->prefix . 'acs_content_plans';
 
-        $strategy = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$table} WHERE id = %d AND user_id = %d",
-            $strategy_id,
-            $user_id
-        ), ARRAY_A);
+        // Filtrer par project_id si disponible
+        if ($project_id) {
+            $strategy = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$table} WHERE id = %d AND user_id = %d AND project_id = %d",
+                $strategy_id,
+                $user_id,
+                $project_id
+            ), ARRAY_A);
+        } else {
+            $strategy = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$table} WHERE id = %d AND user_id = %d AND project_id IS NULL",
+                $strategy_id,
+                $user_id
+            ), ARRAY_A);
+        }
 
         if (!$strategy) {
             return new WP_Error('not_found', 'Strategy not found', ['status' => 404]);

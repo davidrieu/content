@@ -30,6 +30,28 @@ abstract class REST_Controller extends \WP_REST_Controller {
     }
 
     /**
+     * Get active project ID for current user
+     *
+     * @return int|null Project ID or null if no active project
+     */
+    protected function get_active_project_id() {
+        global $wpdb;
+        $user_id = $this->get_current_user_id();
+
+        if (!$user_id) {
+            return null;
+        }
+
+        $table = $wpdb->prefix . ACS_TABLE_PREFIX . 'projects';
+        $project_id = $wpdb->get_var($wpdb->prepare(
+            "SELECT id FROM {$table} WHERE user_id = %d AND is_active = 1 LIMIT 1",
+            $user_id
+        ));
+
+        return $project_id ? (int) $project_id : null;
+    }
+
+    /**
      * Success response
      */
     protected function success($data, $message = '', $status = 200) {

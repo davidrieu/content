@@ -563,8 +563,67 @@ class Database {
             }
         }
 
+        // Add project_id column to all tables for multi-project support (v1.3.0)
+        self::add_project_id_columns();
+
         // Create system_logs table if it doesn't exist (added in v1.2.0)
         self::create_system_logs_table();
+    }
+
+    /**
+     * Add project_id column to all tables for multi-project support
+     *
+     * @return void
+     */
+    public static function add_project_id_columns() {
+        global $wpdb;
+        $table_prefix = $wpdb->prefix . ACS_TABLE_PREFIX;
+
+        // Tables to add project_id to
+        $tables_to_upgrade = [
+            'strategies',
+            'content_plans',
+            'blog_strategies',
+            'social_posts',
+            'blog_articles',
+            'generated_images',
+            'calendar_events',
+            'analytics',
+        ];
+
+        foreach ($tables_to_upgrade as $table_name) {
+            $table = $table_prefix . $table_name;
+
+            // Check if table exists
+            if ($wpdb->get_var("SHOW TABLES LIKE '{$table}'") !== $table) {
+                continue;
+            }
+
+            // Check if project_id column exists
+            $columns = $wpdb->get_col("DESCRIBE {$table}", 0);
+            if (!in_array('project_id', $columns)) {
+                // Add project_id column after user_id
+                $result = $wpdb->query("ALTER TABLE {$table} ADD COLUMN project_id BIGINT(20) UNSIGNED NULL COMMENT 'ID du projet associé (NULL pour données legacy)' AFTER user_id");
+
+                if ($result !== false) {
+                    error_log("ACS: Added project_id column to {$table_name} table");
+
+                    // Add index on project_id
+                    $wpdb->query("ALTER TABLE {$table} ADD KEY idx_project_id (project_id)");
+
+                    // For strategies table, we want project_id to be part of uniqueness
+                    if ($table_name === 'strategies') {
+                        // Drop old unique key on user_id only
+                        $wpdb->query("ALTER TABLE {$table} DROP INDEX user_id");
+                        // Add composite unique key on user_id + project_id
+                        $wpdb->query("ALTER TABLE {$table} ADD UNIQUE KEY user_project (user_id, project_id)");
+                        error_log("ACS: Updated strategies table unique key to include project_id");
+                    }
+                } else {
+                    error_log("ACS: Failed to add project_id column to {$table_name} table");
+                }
+            }
+        }
     }
 
     /**

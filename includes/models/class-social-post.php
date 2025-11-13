@@ -27,6 +27,7 @@ class Social_Post {
 
         $sanitized = [
             'user_id' => Sanitizer::int($data['user_id']),
+            'project_id' => isset($data['project_id']) ? Sanitizer::int($data['project_id']) : null,
             'platform' => Sanitizer::platform($data['platform']),
             'content' => Sanitizer::textarea($data['content']),
             'hashtags' => Sanitizer::json(wp_json_encode($data['hashtags'] ?? [])),
@@ -36,7 +37,8 @@ class Social_Post {
             'metadata' => Sanitizer::json(wp_json_encode($data['metadata'] ?? [])),
         ];
 
-        $result = $wpdb->insert($this->table_name, $sanitized, ['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s']);
+        $formats = ['%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s'];
+        $result = $wpdb->insert($this->table_name, $sanitized, $formats);
         return $result ? $wpdb->insert_id : false;
     }
 
@@ -60,6 +62,15 @@ class Social_Post {
     public function get_by_user($user_id, $filters = []) {
         global $wpdb;
         $where = $wpdb->prepare("user_id = %d", $user_id);
+
+        // Filter by project_id if provided
+        if (isset($filters['project_id'])) {
+            if ($filters['project_id'] === null) {
+                $where .= " AND project_id IS NULL";
+            } else {
+                $where .= $wpdb->prepare(" AND project_id = %d", $filters['project_id']);
+            }
+        }
 
         if (!empty($filters['platform'])) {
             $where .= $wpdb->prepare(" AND platform = %s", $filters['platform']);
