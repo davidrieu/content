@@ -402,6 +402,10 @@ Commence la rédaction maintenant :";
                                 flush();
                             }
                         } elseif ($chunk['type'] === 'message_stop') {
+                            // Incrémenter le compteur d'articles générés
+                            $usage_service = new \ACS\Services\Usage_Service();
+                            $usage_service->increment_article_usage(get_current_user_id());
+
                             echo "data: " . json_encode(['type' => 'done']) . "\n\n";
 
                             if (ob_get_level() > 0) {
