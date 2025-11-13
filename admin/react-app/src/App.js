@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'r
 import apiFetch from '@wordpress/api-fetch';
 import Sidebar from './components/Layout/Sidebar';
 import Topbar from './components/Layout/Topbar';
+import ProjectSwitcher from './components/common/ProjectSwitcher';
 import OnboardingWizard from './components/Onboarding/OnboardingWizard';
 import Dashboard from './components/Dashboard/Dashboard';
 import EnhancedPostGenerator from './components/SocialGenerator/EnhancedPostGenerator';
@@ -16,7 +17,7 @@ import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
-function AppContent({ profile }) {
+function AppContent({ profile, onAddProject }) {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -43,6 +44,15 @@ function AppContent({ profile }) {
             <div className="acs-main-wrapper">
                 <Topbar currentPage={getPageTitle()} profile={profile} />
                 <div className="acs-content">
+                    {/* Project Switcher - dropdown pour sélectionner/ajouter des projets */}
+                    <ProjectSwitcher
+                        onProjectChange={(newProject) => {
+                            // Project changed, page will reload automatically
+                            console.log('Project changed to:', newProject);
+                        }}
+                        onAddProject={onAddProject}
+                    />
+
                     <Routes>
                         <Route path="/" element={<Dashboard profile={profile} />} />
                         <Route path="/generate" element={<EnhancedPostGenerator profile={profile} />} />
@@ -78,6 +88,7 @@ function App() {
     const [needsOnboarding, setNeedsOnboarding] = useState(true);
     const [loading, setLoading] = useState(true);
     const [profile, setProfile] = useState(null);
+    const [showAddProjectWizard, setShowAddProjectWizard] = useState(false);
 
     useEffect(() => {
         checkAuthAndOnboarding();
@@ -146,14 +157,18 @@ function App() {
         );
     }
 
-    // Show onboarding if needed
-    if (needsOnboarding) {
+    // Show onboarding if needed (first time or adding project)
+    if (needsOnboarding || showAddProjectWizard) {
         return (
             <OnboardingWizard
                 onComplete={(newProfile) => {
                     setProfile(newProfile);
                     setNeedsOnboarding(false);
+                    setShowAddProjectWizard(false);
+                    // Reload to refresh with new project
+                    window.location.reload();
                 }}
+                isAddingProject={showAddProjectWizard}
             />
         );
     }
@@ -161,7 +176,10 @@ function App() {
     // Show main app
     return (
         <HashRouter>
-            <AppContent profile={profile} />
+            <AppContent
+                profile={profile}
+                onAddProject={() => setShowAddProjectWizard(true)}
+            />
         </HashRouter>
     );
 }

@@ -142,6 +142,18 @@ class Plugin {
                 require_once $subscriptions_file;
                 new Admin\Subscriptions_Admin();
             }
+
+            // Load migrations admin page
+            $migrations_file = ACS_PLUGIN_DIR . 'includes/admin/class-migrations-page.php';
+            if (file_exists($migrations_file)) {
+                // Load migration class first
+                $migration_class = ACS_PLUGIN_DIR . 'includes/migrations/class-profiles-to-projects-migration.php';
+                if (file_exists($migration_class)) {
+                    require_once $migration_class;
+                }
+                require_once $migrations_file;
+                new Admin\Migrations_Page();
+            }
         }
 
         // Load auth AJAX handler (works for both admin and frontend)
@@ -213,6 +225,11 @@ class Plugin {
             if (class_exists('ACS\\API\\Subscription_Endpoint')) {
                 $subscription = new API\Subscription_Endpoint();
                 $subscription->register_routes();
+            }
+
+            if (class_exists('ACS\\API\\Projects_Endpoint')) {
+                $projects = new API\Projects_Endpoint();
+                $projects->register_routes();
             }
 
             if (class_exists('ACS\\API\\Calendar_Endpoint')) {

@@ -3,7 +3,7 @@ import { FiCheck, FiBriefcase, FiUser, FiTarget, FiTrendingUp } from 'react-icon
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 
-export default function OnboardingWizard({ onComplete }) {
+export default function OnboardingWizard({ onComplete, isAddingProject = false }) {
     const [step, setStep] = useState(1);
 
     // Scroll to top when step changes to 2
@@ -54,18 +54,40 @@ export default function OnboardingWizard({ onComplete }) {
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            const response = await apiFetch({
-                path: '/acs/v1/profile',
-                method: 'POST',
-                data: formData,
-            });
+            if (isAddingProject) {
+                // Adding a new project
+                const projectData = {
+                    project_name: formData.business_name,
+                    ...formData,
+                };
 
-            if (response.success) {
-                onComplete(formData);
+                const response = await apiFetch({
+                    path: '/acs/v1/projects',
+                    method: 'POST',
+                    data: projectData,
+                });
+
+                if (response.success) {
+                    onComplete(response.data.project);
+                }
+            } else {
+                // Initial profile creation (first time onboarding)
+                const response = await apiFetch({
+                    path: '/acs/v1/profile',
+                    method: 'POST',
+                    data: formData,
+                });
+
+                if (response.success) {
+                    onComplete(formData);
+                }
             }
         } catch (error) {
-            console.error('Profile save error:', error);
-            alert(__('Erreur lors de la sauvegarde du profil', 'ai-content-studio') + ': ' + (error.message || 'Unknown error'));
+            console.error('Save error:', error);
+            const errorMessage = isAddingProject
+                ? __('Erreur lors de la création du projet', 'ai-content-studio')
+                : __('Erreur lors de la sauvegarde du profil', 'ai-content-studio');
+            alert(errorMessage + ': ' + (error.message || 'Unknown error'));
         } finally {
             setLoading(false);
         }
@@ -85,7 +107,9 @@ export default function OnboardingWizard({ onComplete }) {
             <div style={{ maxWidth: '800px', margin: '0 auto var(--acs-spacing-6)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--acs-spacing-2)' }}>
                     <span style={{ fontSize: 'var(--acs-font-size-sm)', fontWeight: 600, color: 'var(--acs-primary)' }}>
-                        {__('Configuration de votre profil', 'ai-content-studio')}
+                        {isAddingProject
+                            ? __('Ajouter un nouveau projet', 'ai-content-studio')
+                            : __('Configuration de votre profil', 'ai-content-studio')}
                     </span>
                     <span style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
                         {step}/{totalSteps}
@@ -104,10 +128,14 @@ export default function OnboardingWizard({ onComplete }) {
                     <div>
                         <div style={{ textAlign: 'center', marginBottom: 'var(--acs-spacing-6)' }}>
                             <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-2)' }}>
-                                {__('Bienvenue sur AI Content Studio', 'ai-content-studio')} 👋
+                                {isAddingProject
+                                    ? __('Créer un nouveau projet', 'ai-content-studio') + ' 🚀'
+                                    : __('Bienvenue sur AI Content Studio', 'ai-content-studio') + ' 👋'}
                             </h2>
                             <p style={{ color: 'var(--acs-gray-600)' }}>
-                                {__('Pour personnaliser votre expérience, dites-nous qui vous êtes', 'ai-content-studio')}
+                                {isAddingProject
+                                    ? __('Remplissez les informations de votre nouveau projet client', 'ai-content-studio')
+                                    : __('Pour personnaliser votre expérience, dites-nous qui vous êtes', 'ai-content-studio')}
                             </p>
                         </div>
 
@@ -142,13 +170,19 @@ export default function OnboardingWizard({ onComplete }) {
                         </div>
 
                         <div className="acs-form-group">
-                            <label className="acs-form-label">{__('Nom de votre entreprise/marque', 'ai-content-studio')} *</label>
+                            <label className="acs-form-label">
+                                {isAddingProject
+                                    ? __('Nom du projet client', 'ai-content-studio')
+                                    : __('Nom de votre entreprise/marque', 'ai-content-studio')} *
+                            </label>
                             <input
                                 type="text"
                                 className="acs-form-control"
                                 value={formData.business_name}
                                 onChange={(e) => updateField('business_name', e.target.value)}
-                                placeholder={__('Ex: Mon Entreprise', 'ai-content-studio')}
+                                placeholder={isAddingProject
+                                    ? __('Ex: Client ABC', 'ai-content-studio')
+                                    : __('Ex: Mon Entreprise', 'ai-content-studio')}
                             />
                         </div>
 

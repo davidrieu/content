@@ -8,6 +8,7 @@
 namespace ACS\API;
 
 use ACS\Models\Business_Profile;
+use ACS\Models\Project_Model;
 use ACS\Services\Claude_Service;
 
 class Profile_Endpoint extends REST_Controller {
@@ -36,8 +37,43 @@ class Profile_Endpoint extends REST_Controller {
     }
 
     public function get_profile($request) {
+        $user_id = $this->get_current_user_id();
+
+        // Try to get active project first (new system)
+        $project_model = new Project_Model();
+        $active_project = $project_model->get_active_project($user_id);
+
+        if ($active_project) {
+            // User has projects, return active project data
+            // Convert project format to profile format for backward compatibility
+            $profile_data = [
+                'id' => $active_project['id'],
+                'user_id' => $active_project['user_id'],
+                'business_name' => $active_project['project_name'],
+                'user_type' => $active_project['user_type'],
+                'sector' => $active_project['sector'],
+                'description' => $active_project['description'],
+                'website' => $active_project['website'],
+                'goals' => $active_project['goals'],
+                'social_platforms' => $active_project['platforms'],
+                'posting_frequency' => $active_project['posting_frequency'],
+                'has_blog' => $active_project['has_blog'],
+                'blog_topics' => $active_project['blog_topics'],
+                'seo_goals' => $active_project['seo_goals'],
+                'primary_keywords' => $active_project['primary_keywords'],
+                'niche' => $active_project['niche'],
+                'target_audience' => $active_project['target_audience'],
+                'languages' => $active_project['languages'],
+                'created_at' => $active_project['created_at'],
+                'updated_at' => $active_project['updated_at'],
+            ];
+
+            return $this->success($profile_data);
+        }
+
+        // Fallback to old business_profiles system (for backwards compatibility)
         $model = new Business_Profile();
-        $profile = $model->get_by_user($this->get_current_user_id());
+        $profile = $model->get_by_user($user_id);
 
         if (!$profile) {
             return $this->error(__('Profil non trouvé', 'ai-content-studio'), 'not_found', 404);
