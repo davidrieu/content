@@ -184,12 +184,9 @@ class Projects_Endpoint extends REST_Controller {
         // Add user_id to data
         $data['user_id'] = $user_id;
 
-        // Check if this should be the active project
-        $existing_projects = $project_model->get_by_user($user_id);
-        $is_first_project = empty($existing_projects);
-
-        // First project is automatically active
-        $data['is_active'] = $is_first_project || ($data['is_active'] ?? false);
+        // Nouveau projet = toujours activé automatiquement
+        // (l'utilisateur vient de créer un projet, il veut travailler dessus)
+        $data['is_active'] = true;
 
         $project_id = $project_model->create($data);
 
@@ -200,6 +197,9 @@ class Projects_Endpoint extends REST_Controller {
                 500
             );
         }
+
+        // Le modèle Project.create() va désactiver automatiquement les autres projets
+        // grâce à set_active_project() appelé si is_active=true (ligne 78-79)
 
         $project = $project_model->get_by_id($project_id);
 
