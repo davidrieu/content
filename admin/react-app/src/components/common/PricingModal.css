@@ -27,7 +27,7 @@
 
 /* Modal Container */
 .acs-pricing-modal {
-    background: var(--acs-glass-bg);
+    background: #ffffff;
     border-radius: var(--acs-radius-xl);
     max-width: 1200px;
     width: 100%;
@@ -35,8 +35,7 @@
     overflow-y: auto;
     position: relative;
     box-shadow: var(--acs-shadow-xl);
-    border: 1px solid var(--acs-glass-border);
-    backdrop-filter: blur(10px);
+    border: 1px solid var(--acs-gray-300);
     animation: slideUp 0.3s ease-out;
 }
 
@@ -123,14 +122,13 @@
 /* Pricing Card */
 .acs-pricing-card {
     position: relative;
-    background: var(--acs-glass-bg);
-    border: 2px solid var(--acs-glass-border);
+    background: #ffffff;
+    border: 1px solid #000000;
     border-radius: var(--acs-radius-xl);
     padding: var(--acs-spacing-6);
     transition: var(--acs-transition);
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(10px);
 }
 
 .acs-pricing-card:hover {
@@ -140,10 +138,10 @@
 }
 
 .acs-pricing-card.popular {
-    border-color: var(--acs-primary);
-    border-width: 3px;
+    border-color: #000000;
+    border-width: 2px;
     box-shadow: var(--acs-shadow-lg);
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+    background: #ffffff;
 }
 
 .acs-pricing-card.popular::before {
