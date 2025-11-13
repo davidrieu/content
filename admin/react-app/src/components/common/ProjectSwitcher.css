@@ -1,4 +1,4 @@
-/* Project Switcher */
+/* Project Switcher - Modern 2025 Glassmorphism */
 .acs-project-switcher {
     position: relative;
     margin-bottom: var(--acs-spacing-4);
@@ -8,10 +8,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--acs-spacing-3);
-    background: var(--acs-white);
-    border-radius: var(--acs-radius);
-    border: 1px solid var(--acs-gray-200);
+    padding: var(--acs-spacing-4);
+    background: var(--acs-glass-bg);
+    border-radius: var(--acs-radius-lg);
+    border: 1px solid var(--acs-glass-border);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--acs-glass-shadow);
 }
 
 .acs-project-switcher-trigger {
@@ -20,65 +22,69 @@
     align-items: center;
     justify-content: space-between;
     padding: var(--acs-spacing-4);
-    background: var(--acs-white);
-    border: 2px solid var(--acs-gray-300);
-    border-radius: var(--acs-radius);
+    background: var(--acs-glass-bg);
+    border: 1px solid var(--acs-glass-border);
+    border-radius: var(--acs-radius-lg);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: var(--acs-transition);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--acs-glass-shadow);
 }
 
 .acs-project-switcher-trigger:hover {
-    border-color: var(--acs-primary);
-    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.15);
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
+    box-shadow: var(--acs-shadow-lg);
+    transform: translateY(-2px);
+    border-color: rgba(99, 102, 241, 0.3);
 }
 
 .acs-project-switcher-trigger:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
 }
 
 .acs-project-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2px;
+    gap: 4px;
     flex: 1;
 }
 
 .acs-project-label {
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 10px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--acs-primary);
-    margin-bottom: 2px;
+    letter-spacing: 0.8px;
+    background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .acs-project-name {
     font-weight: 600;
-    font-size: var(--acs-font-size-base);
+    font-size: var(--acs-font-size-lg);
     color: var(--acs-gray-900);
     line-height: 1.3;
 }
 
 .acs-project-meta {
     font-size: var(--acs-font-size-sm);
-    color: var(--acs-gray-600);
-    margin-top: 2px;
+    color: var(--acs-gray-500);
 }
 
 .acs-project-chevron {
     flex-shrink: 0;
-    transition: transform 0.2s ease;
-    color: var(--acs-gray-600);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--acs-primary);
 }
 
 .acs-project-chevron.open {
     transform: rotate(180deg);
 }
 
-/* Dropdown */
+/* Dropdown - Modern Glassmorphism */
 .acs-project-switcher-overlay {
     position: fixed;
     top: 0;
@@ -86,6 +92,8 @@
     right: 0;
     bottom: 0;
     z-index: 999;
+    background: rgba(0, 0, 0, 0.02);
+    backdrop-filter: blur(2px);
 }
 
 .acs-project-switcher-dropdown {
@@ -93,15 +101,28 @@
     top: calc(100% + 8px);
     left: 0;
     right: 0;
-    background: var(--acs-white);
-    border: 1px solid var(--acs-gray-200);
-    border-radius: var(--acs-radius);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    background: var(--acs-glass-bg);
+    border: 1px solid var(--acs-glass-border);
+    border-radius: var(--acs-radius-lg);
+    box-shadow: var(--acs-shadow-xl);
+    backdrop-filter: blur(10px);
     z-index: 1000;
     overflow: hidden;
     max-height: 400px;
     display: flex;
     flex-direction: column;
+    animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .acs-project-list {
@@ -121,16 +142,18 @@
     border: none;
     border-radius: var(--acs-radius);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: var(--acs-transition);
     text-align: left;
 }
 
 .acs-project-item:hover {
-    background: var(--acs-gray-50);
+    background: rgba(99, 102, 241, 0.05);
+    transform: translateX(4px);
 }
 
 .acs-project-item.active {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.12));
+    border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
 .acs-project-item:disabled {
@@ -142,7 +165,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--acs-spacing-1);
+    gap: 4px;
 }
 
 .acs-project-item-name {
@@ -159,11 +182,13 @@
 .acs-project-check {
     flex-shrink: 0;
     color: var(--acs-primary);
+    filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3));
 }
 
 .acs-project-switcher-footer {
-    border-top: 1px solid var(--acs-gray-200);
+    border-top: 1px solid rgba(99, 102, 241, 0.1);
     padding: var(--acs-spacing-2);
+    background: rgba(99, 102, 241, 0.02);
 }
 
 .acs-project-add-button {
@@ -173,17 +198,35 @@
     justify-content: flex-start;
     gap: var(--acs-spacing-3);
     padding: var(--acs-spacing-4);
-    background: linear-gradient(135deg, var(--acs-primary), var(--acs-secondary));
+    background: linear-gradient(135deg, var(--acs-primary) 0%, var(--acs-secondary) 100%);
     color: var(--acs-white);
     border: none;
     border-radius: var(--acs-radius);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: var(--acs-transition);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+
+.acs-project-add-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.acs-project-add-button:hover::before {
+    left: 100%;
 }
 
 .acs-project-add-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
 }
 
 .acs-project-add-button:disabled {
@@ -199,6 +242,8 @@
     gap: 4px;
     flex: 1;
     text-align: left;
+    position: relative;
+    z-index: 1;
 }
 
 .acs-project-add-title {
@@ -208,10 +253,10 @@
 }
 
 .acs-project-add-subtitle {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 400;
-    opacity: 0.9;
-    line-height: 1.2;
+    opacity: 0.85;
+    line-height: 1.3;
 }
 
 /* Responsive */
