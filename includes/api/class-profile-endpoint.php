@@ -39,6 +39,11 @@ class Profile_Endpoint extends REST_Controller {
     public function get_profile($request) {
         $user_id = $this->get_current_user_id();
 
+        // Get subscription info
+        $subscription_service = new \ACS\Services\Subscription_Service();
+        $subscription_plan = $subscription_service->get_user_plan($user_id);
+        $subscription_status = $subscription_service->get_subscription_status($user_id);
+
         // Try to get active project first (new system)
         $project_model = new Project();
         $active_project = $project_model->get_active_project($user_id);
@@ -66,6 +71,9 @@ class Profile_Endpoint extends REST_Controller {
                 'languages' => $active_project['languages'],
                 'created_at' => $active_project['created_at'],
                 'updated_at' => $active_project['updated_at'],
+                // Add subscription info
+                'subscription_plan' => $subscription_plan,
+                'subscription_status' => $subscription_status,
             ];
 
             return $this->success($profile_data);
@@ -78,6 +86,10 @@ class Profile_Endpoint extends REST_Controller {
         if (!$profile) {
             return $this->error(__('Profil non trouvé', 'ai-content-studio'), 'not_found', 404);
         }
+
+        // Add subscription info to legacy profile
+        $profile['subscription_plan'] = $subscription_plan;
+        $profile['subscription_status'] = $subscription_status;
 
         return $this->success($profile);
     }

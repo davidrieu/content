@@ -17,7 +17,9 @@ export default function StrategyGenerator({ profile }) {
     const [showPricingModal, setShowPricingModal] = useState(false);
 
     // Check if user has access to strategy features
-    const hasStrategyAccess = profile?.subscription_plan && profile.subscription_plan !== 'free_trial';
+    // Strategy access is available for all paid plans (starter, professional, business)
+    const hasStrategyAccess = profile?.subscription_plan &&
+        ['starter', 'professional', 'business', 'pro'].includes(profile.subscription_plan);
 
     // Charger la langue de l'utilisateur au montage
     useEffect(() => {
