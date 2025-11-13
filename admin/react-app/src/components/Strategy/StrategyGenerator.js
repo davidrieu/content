@@ -234,7 +234,7 @@ export default function StrategyGenerator({ profile }) {
                     <div className="acs-stat-card primary">
                         <div className="acs-stat-header">
                             <div>
-                                <div className="acs-stat-value">{strategy.total_posts || 12}</div>
+                                <div className="acs-stat-value">{strategy?.total_posts || 12}</div>
                                 <div className="acs-stat-label">{__('Posts/mois', 'ai-content-studio')}</div>
                             </div>
                             <div className="acs-stat-icon primary">
@@ -246,7 +246,7 @@ export default function StrategyGenerator({ profile }) {
                     <div className="acs-stat-card success">
                         <div className="acs-stat-header">
                             <div>
-                                <div className="acs-stat-value">{strategy.platforms?.length || 2}</div>
+                                <div className="acs-stat-value">{strategy?.platforms?.length || 2}</div>
                                 <div className="acs-stat-label">{__('Plateformes', 'ai-content-studio')}</div>
                             </div>
                             <div className="acs-stat-icon success">
@@ -258,7 +258,7 @@ export default function StrategyGenerator({ profile }) {
                     <div className="acs-stat-card secondary">
                         <div className="acs-stat-header">
                             <div>
-                                <div className="acs-stat-value">{strategy.weekly_themes?.length || 4}</div>
+                                <div className="acs-stat-value">{strategy?.weekly_themes?.length || 4}</div>
                                 <div className="acs-stat-label">{__('Thèmes hebdo', 'ai-content-studio')}</div>
                             </div>
                             <div className="acs-stat-icon secondary">
@@ -269,7 +269,7 @@ export default function StrategyGenerator({ profile }) {
                 </div>
 
                 {/* Strategy Summary */}
-                {strategy.strategy_summary && (
+                {strategy?.strategy_summary && (
                     <div
                         style={{
                             padding: 'var(--acs-spacing-4)',
@@ -279,7 +279,7 @@ export default function StrategyGenerator({ profile }) {
                         }}
                     >
                         <h4 style={{ marginBottom: 'var(--acs-spacing-2)' }}>📋 {__('Résumé de votre stratégie', 'ai-content-studio')}</h4>
-                        <p style={{ margin: 0, color: 'var(--acs-gray-700)' }}>{strategy.strategy_summary}</p>
+                        <p style={{ margin: 0, color: 'var(--acs-gray-700)' }}>{strategy?.strategy_summary}</p>
                     </div>
                 )}
 
