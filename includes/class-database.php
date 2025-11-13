@@ -29,7 +29,41 @@ class Database {
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        // 1. Business Profiles
+        // 1. Projects (remplace business_profiles pour multi-projets)
+        $sql_projects = "CREATE TABLE {$table_prefix}projects (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL COMMENT 'Propriétaire du projet',
+            project_name VARCHAR(255) NOT NULL COMMENT 'Nom du projet client',
+            is_active TINYINT(1) DEFAULT 0 COMMENT 'Projet actuellement actif pour cet utilisateur',
+            business_type VARCHAR(100) NOT NULL COMMENT 'Type d activité (legacy)',
+            business_name VARCHAR(255) NOT NULL,
+            description TEXT COMMENT 'Description courte de l activité',
+            niche VARCHAR(255) COMMENT 'Niche spécifique',
+            location VARCHAR(255) COMMENT 'Localisation',
+            target_audience TEXT COMMENT 'Public cible (texte libre)',
+            goals LONGTEXT COMMENT 'JSON: [awareness, sales, engagement]',
+            platforms LONGTEXT COMMENT 'JSON: [instagram, facebook, linkedin, tiktok, twitter, youtube]',
+            languages LONGTEXT COMMENT 'JSON: [fr, en, es, de, it]',
+            has_blog BOOLEAN DEFAULT 0 COMMENT 'Indique si l utilisateur a un blog',
+            user_type VARCHAR(50) COMMENT 'Type utilisateur: business, creator, freelance, agency',
+            sector VARCHAR(100) COMMENT 'Secteur activité: ecommerce, services, tech, food, health, music, etc',
+            website VARCHAR(255) COMMENT 'URL du site web',
+            social_platforms LONGTEXT COMMENT 'JSON: Plateformes sociales sélectionnées',
+            posting_frequency VARCHAR(50) COMMENT 'Fréquence publication: daily, frequent, weekly, occasional',
+            seo_goals LONGTEXT COMMENT 'JSON: Objectifs SEO [organic_traffic, ranking, long_tail, authority]',
+            blog_topics LONGTEXT COMMENT 'JSON: Sujets blog préférés',
+            primary_keywords LONGTEXT COMMENT 'JSON: Mots-clés principaux (max 5)',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_user_id (user_id),
+            KEY idx_user_active (user_id, is_active),
+            KEY idx_business_type (business_type),
+            KEY idx_user_type (user_type),
+            KEY idx_sector (sector)
+        ) $charset_collate ENGINE=InnoDB;";
+
+        // 2. Business Profiles (DEPRECATED - kept for backward compatibility)
         $sql_business_profiles = "CREATE TABLE {$table_prefix}business_profiles (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             user_id BIGINT(20) UNSIGNED NOT NULL,
@@ -393,6 +427,7 @@ class Database {
         ) $charset_collate ENGINE=InnoDB;";
 
         // Execute all table creations
+        dbDelta($sql_projects); // NEW: Multi-projects support
         dbDelta($sql_business_profiles);
         dbDelta($sql_strategies);
         dbDelta($sql_usage_stats);
