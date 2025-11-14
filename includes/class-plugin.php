@@ -211,6 +211,7 @@ class Plugin {
                 'class-library-endpoint.php',
                 'class-logs-endpoint.php',
                 'class-diagnostic-endpoint.php',
+                'class-settings-endpoint.php',
             ];
 
             foreach ($endpoints as $endpoint) {
@@ -269,6 +270,11 @@ class Plugin {
             if (class_exists('ACS\\API\\Diagnostic_Endpoint')) {
                 $diagnostic = new API\Diagnostic_Endpoint();
                 $diagnostic->register_routes();
+            }
+
+            if (class_exists('ACS\\API\\Settings_Endpoint')) {
+                $settings = new API\Settings_Endpoint();
+                $settings->register_routes();
             }
 
             // More endpoints will be registered as they are created

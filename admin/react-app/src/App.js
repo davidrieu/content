@@ -13,6 +13,7 @@ import ContentLibrary from './components/Library/ContentLibrary';
 import BlogArticleGenerator from './components/Blog/BlogArticleGenerator';
 import BlogLibrary from './components/Blog/BlogLibrary';
 import BlogStrategyGenerator from './components/Blog/BlogStrategyGenerator';
+import Settings from './components/Settings/Settings';
 import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
 import LoadingSpinner from './components/common/LoadingSpinner';
@@ -64,7 +65,7 @@ function AppContent({ profile, onAddProject }) {
                         <Route path="/blog-strategy" element={<BlogStrategyGenerator profile={profile} />} />
                         <Route path="/images" element={<PlaceholderPage title="Images IA" />} />
                         <Route path="/trends" element={<PlaceholderPage title="Tendances" />} />
-                        <Route path="/settings" element={<PlaceholderPage title="Paramètres" />} />
+                        <Route path="/settings" element={<Settings profile={profile} />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                 </div>
