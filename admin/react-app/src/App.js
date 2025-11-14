@@ -13,6 +13,8 @@ import ContentLibrary from './components/Library/ContentLibrary';
 import BlogArticleGenerator from './components/Blog/BlogArticleGenerator';
 import BlogLibrary from './components/Blog/BlogLibrary';
 import BlogStrategyGenerator from './components/Blog/BlogStrategyGenerator';
+import ImageGenerator from './components/ImageGenerator/ImageGenerator';
+import ImageLibrary from './components/ImageGenerator/ImageLibrary';
 import Settings from './components/Settings/Settings';
 import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
@@ -32,7 +34,8 @@ function AppContent({ profile, onAddProject }) {
             case '/blog-generator': return 'Générer un Article';
             case '/blog-library': return 'Bibliothèque d\'Articles';
             case '/blog-strategy': return 'Stratégie Blog';
-            case '/images': return 'Images IA';
+            case '/images': return 'Générateur d\'Images IA';
+            case '/image-library': return 'Bibliothèque d\'Images';
             case '/trends': return 'Tendances';
             case '/settings': return 'Paramètres';
             default: return 'Dashboard';
@@ -63,7 +66,8 @@ function AppContent({ profile, onAddProject }) {
                         <Route path="/blog-generator" element={<BlogArticleGenerator profile={profile} />} />
                         <Route path="/blog-library" element={<BlogLibrary profile={profile} />} />
                         <Route path="/blog-strategy" element={<BlogStrategyGenerator profile={profile} />} />
-                        <Route path="/images" element={<PlaceholderPage title="Images IA" />} />
+                        <Route path="/images" element={<ImageGenerator profile={profile} />} />
+                        <Route path="/image-library" element={<ImageLibrary profile={profile} />} />
                         <Route path="/trends" element={<PlaceholderPage title="Tendances" />} />
                         <Route path="/settings" element={<Settings profile={profile} />} />
                         <Route path="*" element={<Navigate to="/" replace />} />

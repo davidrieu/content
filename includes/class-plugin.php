@@ -277,6 +277,11 @@ class Plugin {
                 $settings->register_routes();
             }
 
+            if (class_exists('ACS\\API\\Images_Endpoint')) {
+                $images = new API\Images_Endpoint();
+                $images->register_routes();
+            }
+
             // More endpoints will be registered as they are created
         });
     }
