@@ -214,6 +214,24 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                         <button onClick={onClose} className="acs-pricing-dismiss-button">
                             {__('Je décide plus tard', 'ai-content-studio')}
                         </button>
+                        {currentPlan !== 'free_trial' && (
+                            <a
+                                href="/my-account"
+                                className="acs-pricing-cancel-link"
+                                style={{
+                                    fontSize: '0.8rem',
+                                    color: 'var(--acs-gray-500)',
+                                    textDecoration: 'underline',
+                                    marginTop: '8px',
+                                    display: 'inline-block',
+                                    transition: 'color 0.2s'
+                                }}
+                                onMouseEnter={(e) => e.target.style.color = 'var(--acs-danger)'}
+                                onMouseLeave={(e) => e.target.style.color = 'var(--acs-gray-500)'}
+                            >
+                                {__('Annuler mon abonnement', 'ai-content-studio')}
+                            </a>
+                        )}
                     </div>
                 )}
             </div>

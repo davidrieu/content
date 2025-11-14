@@ -643,13 +643,12 @@ export default function Settings({ profile }) {
                 </div>
             </div>
 
-            {showPricingModal && (
-                <PricingModal
-                    onClose={() => setShowPricingModal(false)}
-                    currentPlan={subscriptionData.plan}
-                    trigger="settings"
-                />
-            )}
+            <PricingModal
+                isOpen={showPricingModal}
+                onClose={() => setShowPricingModal(false)}
+                currentPlan={subscriptionData.plan}
+                triggerType="upgrade"
+            />
         </div>
     );
 }
