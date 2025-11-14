@@ -283,12 +283,24 @@ class Subscription_Service {
         $remaining = $this->get_remaining_quota($user_id);
         $limits = $this->get_user_limits($user_id);
 
+        // Get usage stats
+        $usage_service = new Usage_Service();
+        $usage_stats = $usage_service->get_usage_stats($user_id);
+
+        $usage = [
+            'posts_this_month' => (int) ($usage_stats['posts_this_month'] ?? 0),
+            'articles_this_month' => (int) ($usage_stats['articles_this_month'] ?? 0),
+            'images_this_month' => (int) ($usage_stats['images_this_month'] ?? 0),
+            'videos_this_month' => (int) ($usage_stats['videos_this_month'] ?? 0),
+        ];
+
         return [
             'plan' => $plan_slug,
             'plan_name' => $plan['name'] ?? $plan_slug,
             'plan_price' => $plan['price'] ?? 0,
             'status' => $status,
             'limits' => $limits,
+            'usage' => $usage,
             'remaining' => $remaining,
             'wc_subscription_id' => get_user_meta($user_id, 'acs_wc_subscription_id', true),
         ];

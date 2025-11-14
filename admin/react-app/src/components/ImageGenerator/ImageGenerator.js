@@ -148,10 +148,20 @@ const ImageGenerator = () => {
         custom: 'Formats Personnalisés',
     };
 
+    // Check if user can generate images
     const canGenerate = subscription && (
         subscription.plan === 'business' ||
-        (subscription.usage?.images_this_month < subscription.limits?.images_per_month)
+        (subscription.limits?.images_per_month > 0 &&
+         (subscription.usage?.images_this_month || 0) < subscription.limits?.images_per_month)
     );
+
+    // Check if it's a free trial limitation
+    const isFreeTrial = subscription && subscription.plan === 'free_trial';
+
+    // Check if limit is reached (not free trial but quota exhausted)
+    const isLimitReached = subscription && !isFreeTrial &&
+        subscription.limits?.images_per_month > 0 &&
+        (subscription.usage?.images_this_month || 0) >= subscription.limits?.images_per_month;
 
     return (
         <div className="acs-image-generator">
@@ -314,12 +324,22 @@ const ImageGenerator = () => {
                             </div>
                         )}
 
-                        {!canGenerate && subscription && (
+                        {isFreeTrial && (
+                            <div className="acs-alert acs-alert-warning">
+                                <FiCreditCard />
+                                <div>
+                                    <strong>Fonctionnalité Premium</strong>
+                                    <p>La génération d'images n'est pas disponible avec le plan Free Trial. Passez à un plan payant pour accéder à cette fonctionnalité.</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {isLimitReached && (
                             <div className="acs-alert acs-alert-warning">
                                 <FiCreditCard />
                                 <div>
                                     <strong>Limite atteinte</strong>
-                                    <p>Vous avez utilisé toutes vos images pour ce mois. Passez à un plan supérieur pour continuer.</p>
+                                    <p>Vous avez utilisé toutes vos images pour ce mois ({subscription.limits?.images_per_month} images). Passez à un plan supérieur pour continuer.</p>
                                 </div>
                             </div>
                         )}
