@@ -136,6 +136,15 @@
     margin-bottom: var(--acs-spacing-5);
     padding-bottom: var(--acs-spacing-3);
     border-bottom: 2px solid var(--acs-gray-100);
+    display: flex;
+    align-items: center;
+}
+
+.acs-settings-divider {
+    height: 2px;
+    background: linear-gradient(90deg, var(--acs-primary), transparent);
+    margin: var(--acs-spacing-6) 0;
+    opacity: 0.2;
 }
 
 .acs-form-row {

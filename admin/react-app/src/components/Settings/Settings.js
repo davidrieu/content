@@ -28,6 +28,14 @@ export default function Settings({ profile }) {
         last_name: '',
     });
 
+    // Password change
+    const [passwordData, setPasswordData] = useState({
+        current_password: '',
+        new_password: '',
+        confirm_password: '',
+    });
+    const [passwordError, setPasswordError] = useState('');
+
     // Preferences settings
     const [preferences, setPreferences] = useState({
         default_language: 'fr',
@@ -69,6 +77,15 @@ export default function Settings({ profile }) {
                 first_name: user.first_name || '',
                 last_name: user.last_name || '',
             });
+
+            // Auto-select user's registration language from profile
+            if (profile?.languages && Array.isArray(profile.languages) && profile.languages.length > 0) {
+                const userLanguage = profile.languages[0]; // First language is the primary one
+                setPreferences(prev => ({
+                    ...prev,
+                    default_language: userLanguage,
+                }));
+            }
 
             // Load preferences
             try {
@@ -146,6 +163,51 @@ export default function Settings({ profile }) {
             }
         } catch (err) {
             showMessage('error', __('Erreur lors de la sauvegarde', 'ai-content-studio'));
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const changePassword = async () => {
+        setPasswordError('');
+
+        // Validation
+        if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
+            setPasswordError(__('Tous les champs sont requis', 'ai-content-studio'));
+            return;
+        }
+
+        if (passwordData.new_password.length < 8) {
+            setPasswordError(__('Le nouveau mot de passe doit contenir au moins 8 caractères', 'ai-content-studio'));
+            return;
+        }
+
+        if (passwordData.new_password !== passwordData.confirm_password) {
+            setPasswordError(__('Les mots de passe ne correspondent pas', 'ai-content-studio'));
+            return;
+        }
+
+        setSaving(true);
+        try {
+            const response = await apiFetch({
+                path: '/acs/v1/settings/password',
+                method: 'POST',
+                data: {
+                    current_password: passwordData.current_password,
+                    new_password: passwordData.new_password,
+                },
+            });
+
+            if (response.success) {
+                showMessage('success', __('Mot de passe modifié avec succès', 'ai-content-studio'));
+                setPasswordData({
+                    current_password: '',
+                    new_password: '',
+                    confirm_password: '',
+                });
+            }
+        } catch (err) {
+            setPasswordError(err.message || __('Mot de passe actuel incorrect', 'ai-content-studio'));
         } finally {
             setSaving(false);
         }
@@ -324,6 +386,69 @@ export default function Settings({ profile }) {
                             >
                                 <FiSave />
                                 {saving ? __('Sauvegarde...', 'ai-content-studio') : __('Sauvegarder', 'ai-content-studio')}
+                            </button>
+
+                            {/* Password Change Section */}
+                            <div className="acs-settings-divider" />
+
+                            <h2 className="acs-settings-section-title">
+                                <FiShield style={{ marginRight: '8px' }} />
+                                {__('Changer le mot de passe', 'ai-content-studio')}
+                            </h2>
+
+                            {passwordError && (
+                                <div className="acs-settings-message acs-settings-message-error">
+                                    <FiAlertCircle />
+                                    <span>{passwordError}</span>
+                                </div>
+                            )}
+
+                            <div className="acs-form-group">
+                                <label className="acs-form-label">
+                                    {__('Mot de passe actuel', 'ai-content-studio')}
+                                </label>
+                                <input
+                                    type="password"
+                                    className="acs-form-control"
+                                    value={passwordData.current_password}
+                                    onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="acs-form-row">
+                                <div className="acs-form-group">
+                                    <label className="acs-form-label">
+                                        {__('Nouveau mot de passe', 'ai-content-studio')}
+                                    </label>
+                                    <input
+                                        type="password"
+                                        className="acs-form-control"
+                                        value={passwordData.new_password}
+                                        onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
+                                        placeholder={__('Minimum 8 caractères', 'ai-content-studio')}
+                                    />
+                                </div>
+
+                                <div className="acs-form-group">
+                                    <label className="acs-form-label">
+                                        {__('Confirmer le mot de passe', 'ai-content-studio')}
+                                    </label>
+                                    <input
+                                        type="password"
+                                        className="acs-form-control"
+                                        value={passwordData.confirm_password}
+                                        onChange={(e) => setPasswordData({ ...passwordData, confirm_password: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                className="acs-btn acs-btn-secondary"
+                                onClick={changePassword}
+                                disabled={saving}
+                            >
+                                <FiShield />
+                                {saving ? __('Modification...', 'ai-content-studio') : __('Changer le mot de passe', 'ai-content-studio')}
                             </button>
                         </div>
                     )}
