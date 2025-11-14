@@ -42,6 +42,13 @@ class Settings_Endpoint extends REST_Controller {
             'callback' => [$this, 'get_subscription_status'],
             'permission_callback' => [$this, 'permission_check'],
         ]);
+
+        // Change password
+        register_rest_route($this->namespace, '/settings/password', [
+            'methods' => 'POST',
+            'callback' => [$this, 'change_password'],
+            'permission_callback' => [$this, 'permission_check'],
+        ]);
     }
 
     /**
@@ -171,5 +178,34 @@ class Settings_Endpoint extends REST_Controller {
         ];
 
         return $this->success($export_data);
+    }
+
+    /**
+     * Change user password
+     */
+    public function change_password($request) {
+        $user_id = $this->get_current_user_id();
+        $data = $request->get_json_params();
+
+        // Validate required fields
+        if (empty($data['current_password']) || empty($data['new_password'])) {
+            return $this->error(__('Tous les champs sont requis', 'ai-content-studio'), 'missing_fields', 400);
+        }
+
+        // Verify current password
+        $user = get_user_by('id', $user_id);
+        if (!$user || !wp_check_password($data['current_password'], $user->user_pass, $user_id)) {
+            return $this->error(__('Mot de passe actuel incorrect', 'ai-content-studio'), 'invalid_password', 403);
+        }
+
+        // Validate new password strength (minimum 8 characters)
+        if (strlen($data['new_password']) < 8) {
+            return $this->error(__('Le nouveau mot de passe doit contenir au moins 8 caractères', 'ai-content-studio'), 'weak_password', 400);
+        }
+
+        // Update password
+        wp_set_password($data['new_password'], $user_id);
+
+        return $this->success(null, __('Mot de passe modifié avec succès', 'ai-content-studio'));
     }
 }
