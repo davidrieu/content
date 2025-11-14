@@ -103,7 +103,30 @@ const ImageGenerator = () => {
         if (!generatedImage) return;
 
         try {
-            const response = await fetch(generatedImage.url);
+            // Si on a un media_id WordPress, télécharger depuis WordPress
+            if (generatedImage.media_id) {
+                const wpUrl = `${window.location.origin}/wp-content/uploads/`;
+                // Construire l'URL WordPress en récupérant depuis l'API
+                const response = await apiFetch({
+                    path: `/wp/v2/media/${generatedImage.media_id}`,
+                    method: 'GET',
+                });
+
+                if (response && response.source_url) {
+                    // Créer un lien de téléchargement
+                    const link = document.createElement('a');
+                    link.href = response.source_url;
+                    link.download = `${generatedImage.title || 'image'}.png`;
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    return;
+                }
+            }
+
+            // Fallback : essayer de télécharger depuis l'URL directe
+            const response = await fetch(generatedImage.url, { mode: 'cors' });
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -115,6 +138,8 @@ const ImageGenerator = () => {
             window.URL.revokeObjectURL(url);
         } catch (err) {
             console.error('Download error:', err);
+            // Fallback final : ouvrir dans un nouvel onglet
+            window.open(generatedImage.url, '_blank');
         }
     };
 
@@ -345,7 +370,7 @@ const ImageGenerator = () => {
                         )}
 
                         <button
-                            className={`acs-button acs-button-primary acs-button-large ${loading ? 'acs-button-loading' : ''}`}
+                            className={`acs-btn acs-btn-primary acs-btn-lg ${loading ? 'acs-btn-loading' : ''}`}
                             onClick={handleGenerate}
                             disabled={loading || !prompt.trim() || !canGenerate}
                         >
@@ -391,7 +416,7 @@ const ImageGenerator = () => {
 
                                 <div className="acs-image-actions">
                                     <button
-                                        className="acs-button acs-button-secondary"
+                                        className="acs-btn acs-btn-secondary"
                                         onClick={handleDownload}
                                     >
                                         <FiDownload />
@@ -401,7 +426,7 @@ const ImageGenerator = () => {
                                         href={generatedImage.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="acs-button acs-button-secondary"
+                                        className="acs-btn acs-btn-outline-primary"
                                     >
                                         <FiImage />
                                         Voir en grand
@@ -479,13 +504,13 @@ const ImageGenerator = () => {
                         </div>
                         <div className="acs-modal-footer">
                             <button
-                                className="acs-button acs-button-secondary"
+                                className="acs-btn acs-btn-outline-primary"
                                 onClick={() => setShowPricingModal(false)}
                             >
                                 Plus tard
                             </button>
                             <button
-                                className="acs-button acs-button-primary"
+                                className="acs-btn acs-btn-primary"
                                 onClick={() => window.location.hash = '#/settings'}
                             >
                                 Voir les plans

@@ -68,7 +68,28 @@ const ImageLibrary = () => {
 
     const handleDownload = async (image) => {
         try {
-            const response = await fetch(image.url);
+            // Si on a un media_id WordPress, télécharger depuis WordPress
+            if (image.media_id) {
+                const response = await apiFetch({
+                    path: `/wp/v2/media/${image.media_id}`,
+                    method: 'GET',
+                });
+
+                if (response && response.source_url) {
+                    // Créer un lien de téléchargement
+                    const link = document.createElement('a');
+                    link.href = response.source_url;
+                    link.download = `${image.title || 'image'}.png`;
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    return;
+                }
+            }
+
+            // Fallback : essayer de télécharger depuis l'URL directe
+            const response = await fetch(image.url, { mode: 'cors' });
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -80,6 +101,8 @@ const ImageLibrary = () => {
             window.URL.revokeObjectURL(url);
         } catch (err) {
             console.error('Download error:', err);
+            // Fallback final : ouvrir dans un nouvel onglet
+            window.open(image.url, '_blank');
         }
     };
 
@@ -115,7 +138,7 @@ const ImageLibrary = () => {
                 </div>
                 <div className="acs-page-actions">
                     <button
-                        className="acs-button acs-button-primary"
+                        className="acs-btn acs-btn-primary"
                         onClick={() => window.location.hash = '#/images'}
                     >
                         <FiImage />
@@ -195,7 +218,7 @@ const ImageLibrary = () => {
                     </p>
                     {!searchTerm && filterQuality === 'all' && filterStyle === 'all' && (
                         <button
-                            className="acs-button acs-button-primary"
+                            className="acs-btn acs-btn-primary"
                             onClick={() => window.location.hash = '#/images'}
                         >
                             <FiImage />
@@ -303,7 +326,7 @@ const ImageLibrary = () => {
                     {pagination.total_pages > 1 && (
                         <div className="acs-pagination">
                             <button
-                                className="acs-button acs-button-secondary"
+                                className="acs-btn acs-btn-secondary"
                                 disabled={pagination.current_page === 1}
                                 onClick={() => setPagination(prev => ({ ...prev, current_page: prev.current_page - 1 }))}
                             >
@@ -313,7 +336,7 @@ const ImageLibrary = () => {
                                 Page {pagination.current_page} sur {pagination.total_pages}
                             </span>
                             <button
-                                className="acs-button acs-button-secondary"
+                                className="acs-btn acs-btn-secondary"
                                 disabled={pagination.current_page === pagination.total_pages}
                                 onClick={() => setPagination(prev => ({ ...prev, current_page: prev.current_page + 1 }))}
                             >
@@ -373,7 +396,7 @@ const ImageLibrary = () => {
                         </div>
                         <div className="acs-modal-footer">
                             <button
-                                className="acs-button acs-button-danger"
+                                className="acs-btn acs-btn-danger"
                                 onClick={() => {
                                     handleDelete(selectedImage.id);
                                     setSelectedImage(null);
@@ -383,7 +406,7 @@ const ImageLibrary = () => {
                                 Supprimer
                             </button>
                             <button
-                                className="acs-button acs-button-secondary"
+                                className="acs-btn acs-btn-secondary"
                                 onClick={() => handleDownload(selectedImage)}
                             >
                                 <FiDownload />
@@ -393,7 +416,7 @@ const ImageLibrary = () => {
                                 href={selectedImage.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="acs-button acs-button-primary"
+                                className="acs-btn acs-btn-primary"
                             >
                                 <FiEye />
                                 Ouvrir en grand

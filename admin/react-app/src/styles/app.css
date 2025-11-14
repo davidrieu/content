@@ -522,6 +522,18 @@ body {
   transform: translateY(-2px);
 }
 
+.acs-btn-danger {
+  background: linear-gradient(135deg, var(--acs-danger) 0%, #DC2626 100%);
+  color: var(--acs-white);
+  border-color: var(--acs-danger);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.acs-btn-danger:hover {
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+  transform: translateY(-2px);
+}
+
 .acs-btn-outline-primary {
   background: transparent;
   color: var(--acs-primary);
