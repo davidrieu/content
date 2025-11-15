@@ -47,7 +47,7 @@ export default function Sidebar({ currentPath, onNavigate }) {
             <div className="acs-sidebar-header">
                 <a href="#" className="acs-sidebar-brand" onClick={(e) => { e.preventDefault(); onNavigate('/'); }}>
                     <img
-                        src={`${window.acsData?.pluginUrl || ''}admin/images/RUNNWRITE-AI-LOGO-WHITE.png`}
+                        src="/wp-content/uploads/2025/11/RUNNWRITE-AI-LOGO-WHITE.png"
                         alt="RunnWrite AI"
                         className="acs-sidebar-logo"
                     />
