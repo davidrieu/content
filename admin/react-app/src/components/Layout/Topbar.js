@@ -1,11 +1,14 @@
 import { FiChevronRight, FiUser, FiBell } from 'react-icons/fi';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../common/LanguageSwitcher';
 
 export default function Topbar({ currentPage, profile }) {
+    const { t } = useTranslation();
+
     return (
         <div className="acs-topbar">
             <div className="acs-breadcrumb">
-                <span>{__('Accueil', 'ai-content-studio')}</span>
+                <span>{t('topbar.home')}</span>
                 {currentPage && currentPage !== 'Dashboard' && (
                     <>
                         <FiChevronRight size={14} />
@@ -14,6 +17,7 @@ export default function Topbar({ currentPage, profile }) {
                 )}
             </div>
             <div className="d-flex align-items-center gap-3">
+                <LanguageSwitcher compact={true} />
                 <button className="acs-btn acs-btn-sm" style={{ background: 'transparent', border: 'none', color: 'var(--acs-gray-600)' }}>
                     <FiBell size={18} />
                 </button>
@@ -33,7 +37,7 @@ export default function Topbar({ currentPage, profile }) {
                         {profile?.business_name?.charAt(0).toUpperCase() || 'U'}
                     </div>
                     <div style={{ fontSize: '0.875rem', fontWeight: 500 }}>
-                        {profile?.business_name || __('Utilisateur', 'ai-content-studio')}
+                        {profile?.business_name || t('topbar.user')}
                     </div>
                 </div>
             </div>

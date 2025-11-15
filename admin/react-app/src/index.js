@@ -2,6 +2,7 @@ import { render } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import App from './App';
 import './styles/app.css';
+import './i18n'; // Initialize i18next
 
 // Configure API Fetch
 apiFetch.use(apiFetch.createNonceMiddleware(window.acsData.nonce));
