@@ -147,6 +147,20 @@ body {
   gap: var(--acs-spacing-3);
 }
 
+.acs-sidebar-logo {
+  max-height: 40px;
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  transition: var(--acs-transition);
+}
+
+.acs-sidebar-brand:hover .acs-sidebar-logo {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
 .acs-sidebar-nav {
   padding: var(--acs-spacing-4) 0;
 }
