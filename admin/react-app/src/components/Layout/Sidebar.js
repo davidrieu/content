@@ -5,6 +5,7 @@ export default function Sidebar({ currentPath, onNavigate }) {
     const socialMediaSection = [
         { path: '/', icon: FiHome, label: __('Tableau de bord', 'ai-content-studio') },
         { path: '/generate', icon: FiZap, label: __('Générer des posts', 'ai-content-studio') },
+        { path: '/images', icon: FiImage, label: __('Images IA', 'ai-content-studio') },
         { path: '/strategy', icon: FiTarget, label: __('Stratégie Auto', 'ai-content-studio') },
         { path: '/calendar', icon: FiCalendar, label: __('Calendrier', 'ai-content-studio') },
         { path: '/library', icon: FiBookmark, label: __('Bibliothèque', 'ai-content-studio') },
