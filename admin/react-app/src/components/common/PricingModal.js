@@ -1,12 +1,46 @@
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { FiX, FiCheck, FiZap, FiStar } from 'react-icons/fi';
+import { FiX, FiCheck, FiZap, FiStar, FiUsers, FiTrendingUp, FiShield } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
 import './PricingModal.css';
 
 export default function PricingModal({ isOpen, onClose, currentPlan = 'free_trial', triggerType = 'limit_reached' }) {
     const [loading, setLoading] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
+    const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+    // Témoignages rotatifs
+    const testimonials = [
+        {
+            text: __("RunnWrite AI a transformé ma stratégie de contenu. Je génère en 10 minutes ce qui me prenait 3 heures !", 'ai-content-studio'),
+            author: __("Marie L.", 'ai-content-studio'),
+            role: __("Social Media Manager", 'ai-content-studio'),
+            rating: 5
+        },
+        {
+            text: __("La qualité des articles générés est impressionnante. Mes clients adorent le contenu que je produis maintenant.", 'ai-content-studio'),
+            author: __("Thomas D.", 'ai-content-studio'),
+            role: __("Freelance Content Creator", 'ai-content-studio'),
+            rating: 5
+        },
+        {
+            text: __("ROI incroyable. Le temps gagné me permet de gérer 3x plus de clients avec la même équipe.", 'ai-content-studio'),
+            author: __("Sophie M.", 'ai-content-studio'),
+            role: __("Agence Marketing", 'ai-content-studio'),
+            rating: 5
+        }
+    ];
+
+    // Rotation automatique des témoignages
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const interval = setInterval(() => {
+            setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, [isOpen, testimonials.length]);
 
     if (!isOpen) return null;
 
@@ -141,6 +175,48 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                     <p className="acs-pricing-modal-subtitle">{getModalSubtitle()}</p>
                 </div>
 
+                {/* Social Proof Banner */}
+                <div className="acs-social-proof-banner">
+                    <div className="acs-social-proof-stat">
+                        <FiUsers size={18} />
+                        <span><strong>2,500+</strong> {__('créateurs de contenu', 'ai-content-studio')}</span>
+                    </div>
+                    <div className="acs-social-proof-stat">
+                        <FiTrendingUp size={18} />
+                        <span><strong>127,000+</strong> {__('posts générés ce mois', 'ai-content-studio')}</span>
+                    </div>
+                    <div className="acs-social-proof-stat">
+                        <FiStar size={18} />
+                        <span><strong>4.9/5</strong> {__('satisfaction client', 'ai-content-studio')}</span>
+                    </div>
+                </div>
+
+                {/* Testimonial Carousel */}
+                <div className="acs-testimonial-carousel">
+                    <div className="acs-testimonial-content">
+                        <div className="acs-testimonial-stars">
+                            {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                                <FiStar key={i} size={16} fill="currentColor" />
+                            ))}
+                        </div>
+                        <p className="acs-testimonial-text">"{testimonials[currentTestimonial].text}"</p>
+                        <div className="acs-testimonial-author">
+                            <strong>{testimonials[currentTestimonial].author}</strong>
+                            <span>{testimonials[currentTestimonial].role}</span>
+                        </div>
+                    </div>
+                    <div className="acs-testimonial-dots">
+                        {testimonials.map((_, index) => (
+                            <button
+                                key={index}
+                                className={`acs-testimonial-dot ${index === currentTestimonial ? 'active' : ''}`}
+                                onClick={() => setCurrentTestimonial(index)}
+                                aria-label={`Témoignage ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+                </div>
+
                 {/* Plans Grid */}
                 <div className="acs-pricing-grid">
                     {plans.map((plan) => (
@@ -197,15 +273,26 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                     ))}
                 </div>
 
+                {/* Trust Banner */}
+                <div className="acs-trust-banner">
+                    <div className="acs-trust-item">
+                        <FiShield size={20} />
+                        <span>{__('Paiement 100% sécurisé', 'ai-content-studio')}</span>
+                    </div>
+                    <div className="acs-trust-item">
+                        <FiCheck size={20} />
+                        <span>{__('Sans engagement', 'ai-content-studio')}</span>
+                    </div>
+                    <div className="acs-trust-item">
+                        <FiCheck size={20} />
+                        <span>{__('Garantie 14 jours', 'ai-content-studio')}</span>
+                    </div>
+                </div>
+
                 {/* Footer */}
                 <div className="acs-pricing-modal-footer">
-                    <p>
-                        <FiCheck className="acs-pricing-check" style={{ display: 'inline' }} />
-                        {__('Sans engagement • Annulation en 1 clic', 'ai-content-studio')}
-                    </p>
-                    <p>
-                        <FiCheck className="acs-pricing-check" style={{ display: 'inline' }} />
-                        {__('Satisfait ou remboursé 14 jours', 'ai-content-studio')}
+                    <p className="acs-pricing-footer-note">
+                        {__('🎉 Offre spéciale : Rejoignez-nous maintenant et bénéficiez de votre premier mois avec une assistance personnalisée gratuite !', 'ai-content-studio')}
                     </p>
                 </div>
 
