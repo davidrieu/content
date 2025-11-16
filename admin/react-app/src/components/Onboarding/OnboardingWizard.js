@@ -1,9 +1,10 @@
 import { useState, useEffect } from '@wordpress/element';
 import { FiCheck, FiBriefcase, FiUser, FiTarget, FiTrendingUp } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 
 export default function OnboardingWizard({ onComplete, isAddingProject = false }) {
+    const { t } = useTranslation();
     const [step, setStep] = useState(1);
 
     // Scroll to top when step changes to 2
@@ -85,8 +86,8 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
         } catch (error) {
             console.error('Save error:', error);
             const errorMessage = isAddingProject
-                ? __('Erreur lors de la création du projet', 'ai-content-studio')
-                : __('Erreur lors de la sauvegarde du profil', 'ai-content-studio');
+                ? t('Erreur lors de la création du projet')
+                : t('Erreur lors de la sauvegarde du profil');
             alert(errorMessage + ': ' + (error.message || 'Unknown error'));
         } finally {
             setLoading(false);
@@ -108,8 +109,8 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--acs-spacing-2)' }}>
                     <span style={{ fontSize: 'var(--acs-font-size-sm)', fontWeight: 600, color: 'var(--acs-primary)' }}>
                         {isAddingProject
-                            ? __('Ajouter un nouveau projet', 'ai-content-studio')
-                            : __('Configuration de votre profil', 'ai-content-studio')}
+                            ? t('Ajouter un nouveau projet')
+                            : t('Configuration de votre profil')}
                     </span>
                     <span style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
                         {step}/{totalSteps}
@@ -129,22 +130,22 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                         <div style={{ textAlign: 'center', marginBottom: 'var(--acs-spacing-6)' }}>
                             <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-2)' }}>
                                 {isAddingProject
-                                    ? __('Créer un nouveau projet', 'ai-content-studio') + ' 🚀'
-                                    : __('Bienvenue sur AI Content Studio', 'ai-content-studio') + ' 👋'}
+                                    ? t('Créer un nouveau projet') + ' 🚀'
+                                    : t('Bienvenue sur AI Content Studio') + ' 👋'}
                             </h2>
                             <p style={{ color: 'var(--acs-gray-600)' }}>
                                 {isAddingProject
-                                    ? __('Remplissez les informations de votre nouveau projet client', 'ai-content-studio')
-                                    : __('Pour personnaliser votre expérience, dites-nous qui vous êtes', 'ai-content-studio')}
+                                    ? t('Remplissez les informations de votre nouveau projet client')
+                                    : t('Pour personnaliser votre expérience, dites-nous qui vous êtes')}
                             </p>
                         </div>
 
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--acs-spacing-4)', marginBottom: 'var(--acs-spacing-5)' }}>
                             {[
-                                { value: 'business', icon: FiBriefcase, label: __('Entreprise', 'ai-content-studio'), desc: __('PME, startup, e-commerce', 'ai-content-studio') },
-                                { value: 'creator', icon: FiUser, label: __('Créateur', 'ai-content-studio'), desc: __('Artiste, influenceur, coach', 'ai-content-studio') },
-                                { value: 'freelance', icon: FiTrendingUp, label: __('Freelance', 'ai-content-studio'), desc: __('Consultant, indépendant', 'ai-content-studio') },
-                                { value: 'agency', icon: FiBriefcase, label: __('Agence', 'ai-content-studio'), desc: __('Agence marketing, com', 'ai-content-studio') },
+                                { value: 'business', icon: FiBriefcase, label: t('Entreprise'), desc: t('PME, startup, e-commerce') },
+                                { value: 'creator', icon: FiUser, label: t('Créateur'), desc: t('Artiste, influenceur, coach') },
+                                { value: 'freelance', icon: FiTrendingUp, label: t('Freelance'), desc: t('Consultant, indépendant') },
+                                { value: 'agency', icon: FiBriefcase, label: t('Agence'), desc: t('Agence marketing, com') },
                             ].map((type) => {
                                 const Icon = type.icon;
                                 return (
@@ -172,8 +173,8 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                         <div className="acs-form-group">
                             <label className="acs-form-label">
                                 {isAddingProject
-                                    ? __('Nom du projet client', 'ai-content-studio')
-                                    : __('Nom de votre entreprise/marque', 'ai-content-studio')} *
+                                    ? t('Nom du projet client')
+                                    : t('Nom de votre entreprise/marque')} *
                             </label>
                             <input
                                 type="text"
@@ -181,49 +182,49 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                                 value={formData.business_name}
                                 onChange={(e) => updateField('business_name', e.target.value)}
                                 placeholder={isAddingProject
-                                    ? __('Ex: Client ABC', 'ai-content-studio')
-                                    : __('Ex: Mon Entreprise', 'ai-content-studio')}
+                                    ? t('Ex: Client ABC')
+                                    : t('Ex: Mon Entreprise')}
                             />
                         </div>
 
                         <div className="acs-form-group">
-                            <label className="acs-form-label">{__('Secteur d\'activité', 'ai-content-studio')} *</label>
+                            <label className="acs-form-label">{t('Secteur d\'activité')} *</label>
                             <select
                                 className="acs-select"
                                 value={formData.sector}
                                 onChange={(e) => updateField('sector', e.target.value)}
                             >
-                                <option value="">{__('Sélectionnez un secteur', 'ai-content-studio')}</option>
-                                <option value="ecommerce">{__('E-commerce', 'ai-content-studio')}</option>
-                                <option value="services">{__('Services', 'ai-content-studio')}</option>
-                                <option value="tech">{__('Technologie', 'ai-content-studio')}</option>
-                                <option value="food">{__('Alimentation & Restauration', 'ai-content-studio')}</option>
-                                <option value="health">{__('Santé & Bien-être', 'ai-content-studio')}</option>
-                                <option value="music">{__('Musique & Arts', 'ai-content-studio')}</option>
-                                <option value="fashion">{__('Mode & Beauté', 'ai-content-studio')}</option>
-                                <option value="education">{__('Éducation & Formation', 'ai-content-studio')}</option>
-                                <option value="finance">{__('Finance & Assurance', 'ai-content-studio')}</option>
-                                <option value="realestate">{__('Immobilier', 'ai-content-studio')}</option>
-                                <option value="travel">{__('Voyage & Tourisme', 'ai-content-studio')}</option>
-                                <option value="sports">{__('Sport & Fitness', 'ai-content-studio')}</option>
-                                <option value="entertainment">{__('Divertissement & Loisirs', 'ai-content-studio')}</option>
-                                <option value="other">{__('Autre', 'ai-content-studio')}</option>
+                                <option value="">{t('Sélectionnez un secteur')}</option>
+                                <option value="ecommerce">{t('E-commerce')}</option>
+                                <option value="services">{t('Services')}</option>
+                                <option value="tech">{t('Technologie')}</option>
+                                <option value="food">{t('Alimentation & Restauration')}</option>
+                                <option value="health">{t('Santé & Bien-être')}</option>
+                                <option value="music">{t('Musique & Arts')}</option>
+                                <option value="fashion">{t('Mode & Beauté')}</option>
+                                <option value="education">{t('Éducation & Formation')}</option>
+                                <option value="finance">{t('Finance & Assurance')}</option>
+                                <option value="realestate">{t('Immobilier')}</option>
+                                <option value="travel">{t('Voyage & Tourisme')}</option>
+                                <option value="sports">{t('Sport & Fitness')}</option>
+                                <option value="entertainment">{t('Divertissement & Loisirs')}</option>
+                                <option value="other">{t('Autre')}</option>
                             </select>
                         </div>
 
                         <div className="acs-form-group">
-                            <label className="acs-form-label">{__('Décrivez votre activité en quelques mots', 'ai-content-studio')} *</label>
+                            <label className="acs-form-label">{t('Décrivez votre activité en quelques mots')} *</label>
                             <textarea
                                 className="acs-textarea"
                                 value={formData.description}
                                 onChange={(e) => updateField('description', e.target.value)}
-                                placeholder={__('Ex: Nous aidons les entrepreneurs à développer leur présence en ligne grâce au marketing digital...', 'ai-content-studio')}
+                                placeholder={t('Ex: Nous aidons les entrepreneurs à développer leur présence en ligne grâce au marketing digital...')}
                                 rows={4}
                             />
                         </div>
 
                         <div className="acs-form-group">
-                            <label className="acs-form-label">{__('Site web (optionnel)', 'ai-content-studio')}</label>
+                            <label className="acs-form-label">{t('Site web (optionnel)')}</label>
                             <input
                                 type="url"
                                 className="acs-form-control"
@@ -239,22 +240,22 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                 {step === 2 && (
                     <div>
                         <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-2)' }}>
-                            {__('Quels sont vos objectifs?', 'ai-content-studio')}
+                            {t('Quels sont vos objectifs?')}
                         </h2>
                         <p style={{ color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-5)' }}>
-                            {__('Sélectionnez tous les objectifs qui s\'appliquent', 'ai-content-studio')}
+                            {t('Sélectionnez tous les objectifs qui s\'appliquent')}
                         </p>
 
                         <div style={{ display: 'grid', gap: 'var(--acs-spacing-3)', marginBottom: 'var(--acs-spacing-6)' }}>
                             {[
-                                { value: 'brand_awareness', label: __('Notoriété de marque', 'ai-content-studio'), icon: '🎯' },
-                                { value: 'lead_generation', label: __('Génération de leads', 'ai-content-studio'), icon: '📈' },
-                                { value: 'sales', label: __('Augmenter les ventes', 'ai-content-studio'), icon: '💰' },
-                                { value: 'engagement', label: __('Engagement communauté', 'ai-content-studio'), icon: '❤️' },
-                                { value: 'traffic', label: __('Trafic website', 'ai-content-studio'), icon: '🚀' },
-                                { value: 'seo', label: __('Référencement SEO', 'ai-content-studio'), icon: '🔍' },
-                                { value: 'education', label: __('Éduquer l\'audience', 'ai-content-studio'), icon: '📚' },
-                                { value: 'recruitment', label: __('Recrutement', 'ai-content-studio'), icon: '👥' },
+                                { value: 'brand_awareness', label: t('Notoriété de marque'), icon: '🎯' },
+                                { value: 'lead_generation', label: t('Génération de leads'), icon: '📈' },
+                                { value: 'sales', label: t('Augmenter les ventes'), icon: '💰' },
+                                { value: 'engagement', label: t('Engagement communauté'), icon: '❤️' },
+                                { value: 'traffic', label: t('Trafic website'), icon: '🚀' },
+                                { value: 'seo', label: t('Référencement SEO'), icon: '🔍' },
+                                { value: 'education', label: t('Éduquer l\'audience'), icon: '📚' },
+                                { value: 'recruitment', label: t('Recrutement'), icon: '👥' },
                             ].map((goal) => (
                                 <label
                                     key={goal.value}
@@ -282,10 +283,10 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                         </div>
 
                         <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-2)' }}>
-                            {__('Que souhaitez-vous faire?', 'ai-content-studio')}
+                            {t('Que souhaitez-vous faire?')}
                         </h2>
                         <p style={{ color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-5)' }}>
-                            {__('Sélectionnez les services que vous souhaitez utiliser', 'ai-content-studio')}
+                            {t('Sélectionnez les services que vous souhaitez utiliser')}
                         </p>
 
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--acs-spacing-3)', marginBottom: 'var(--acs-spacing-5)' }}>
@@ -320,16 +321,16 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                         </div>
 
                         <div className="acs-form-group">
-                            <label className="acs-form-label">{__('Fréquence de publication souhaitée', 'ai-content-studio')}</label>
+                            <label className="acs-form-label">{t('Fréquence de publication souhaitée')}</label>
                             <select
                                 className="acs-select"
                                 value={formData.posting_frequency}
                                 onChange={(e) => updateField('posting_frequency', e.target.value)}
                             >
-                                <option value="daily">{__('Quotidienne (7 posts/semaine)', 'ai-content-studio')}</option>
-                                <option value="frequent">{__('Fréquente (4-5 posts/semaine)', 'ai-content-studio')}</option>
-                                <option value="weekly">{__('Régulière (2-3 posts/semaine)', 'ai-content-studio')}</option>
-                                <option value="occasional">{__('Occasionnelle (1 post/semaine)', 'ai-content-studio')}</option>
+                                <option value="daily">{t('Quotidienne (7 posts/semaine)')}</option>
+                                <option value="frequent">{t('Fréquente (4-5 posts/semaine)')}</option>
+                                <option value="weekly">{t('Régulière (2-3 posts/semaine)')}</option>
+                                <option value="occasional">{t('Occasionnelle (1 post/semaine)')}</option>
                             </select>
                         </div>
                     </div>
@@ -339,7 +340,7 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'var(--acs-spacing-6)', paddingTop: 'var(--acs-spacing-4)', borderTop: '1px solid var(--acs-gray-200)' }}>
                     {step > 1 && (
                         <button className="acs-btn acs-btn-secondary" onClick={() => setStep(step - 1)} disabled={loading}>
-                            {__('Précédent', 'ai-content-studio')}
+                            {t('Précédent')}
                         </button>
                     )}
                     <div style={{ flex: 1 }}></div>
@@ -349,7 +350,7 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                             onClick={() => setStep(step + 1)}
                             disabled={!canProceed() || loading}
                         >
-                            {__('Suivant', 'ai-content-studio')}
+                            {t('Suivant')}
                         </button>
                     ) : (
                         <button
@@ -357,7 +358,7 @@ export default function OnboardingWizard({ onComplete, isAddingProject = false }
                             onClick={handleSubmit}
                             disabled={!canProceed() || loading}
                         >
-                            {loading ? __('Enregistrement...', 'ai-content-studio') : __('Terminer', 'ai-content-studio')}
+                            {loading ? t('Enregistrement...') : t('Terminer')}
                         </button>
                     )}
                 </div>

@@ -1,10 +1,11 @@
 import { useState, useEffect } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import { FiChevronDown, FiPlus, FiCheck } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
 import './ProjectSwitcher.css';
 
 export default function ProjectSwitcher({ onProjectChange, onAddProject }) {
+    const { t } = useTranslation();
     const [projects, setProjects] = useState([]);
     const [activeProject, setActiveProject] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -73,7 +74,7 @@ export default function ProjectSwitcher({ onProjectChange, onAddProject }) {
             }
         } catch (error) {
             console.error('Error switching project:', error);
-            alert(__('Erreur lors du changement de projet', 'ai-content-studio'));
+            alert(t('Erreur lors du changement de projet'));
         } finally {
             setSwitching(false);
         }
@@ -106,10 +107,10 @@ export default function ProjectSwitcher({ onProjectChange, onAddProject }) {
                 disabled={switching}
             >
                 <div className="acs-project-info">
-                    <span className="acs-project-label">{__('Projet actif', 'ai-content-studio')}</span>
+                    <span className="acs-project-label">{t('Projet actif')}</span>
                     <span className="acs-project-name">{activeProject.project_name || activeProject.business_name}</span>
                     <span className="acs-project-meta">
-                        {projects.length} {projects.length === 1 ? __('projet', 'ai-content-studio') : __('projets', 'ai-content-studio')}
+                        {projects.length} {projects.length === 1 ? t('projet') : t('projets')}
                     </span>
                 </div>
                 <FiChevronDown className={`acs-project-chevron ${isOpen ? 'open' : ''}`} />
@@ -152,8 +153,8 @@ export default function ProjectSwitcher({ onProjectChange, onAddProject }) {
                             >
                                 <FiPlus size={20} />
                                 <span className="acs-project-add-text">
-                                    <span className="acs-project-add-title">{__('Ajouter un nouveau projet', 'ai-content-studio')}</span>
-                                    <span className="acs-project-add-subtitle">{__('Créez un projet pour un nouveau client', 'ai-content-studio')}</span>
+                                    <span className="acs-project-add-title">{t('Ajouter un nouveau projet')}</span>
+                                    <span className="acs-project-add-subtitle">{t('Créez un projet pour un nouveau client')}</span>
                                 </span>
                             </button>
                         </div>

@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import apiFetch from '@wordpress/api-fetch';
 import { useLocation } from 'react-router-dom';
 import { FiFileText, FiEdit, FiImage, FiSave, FiLoader, FiCheckCircle } from 'react-icons/fi';
 import PricingModal from '../common/PricingModal';
 
 export default function BlogArticleGenerator() {
+    const { t } = useTranslation();
     const location = useLocation();
     const [subject, setSubject] = useState('');
     const [suggestedTitle, setSuggestedTitle] = useState('');
@@ -77,7 +78,7 @@ export default function BlogArticleGenerator() {
     // Générer le titre et les mots-clés
     const generateSuggestions = async () => {
         if (!subject.trim()) {
-            alert(__('Veuillez entrer un sujet', 'ai-content-studio'));
+            alert(t('Veuillez entrer un sujet'));
             return;
         }
 
@@ -97,11 +98,11 @@ export default function BlogArticleGenerator() {
                 setKeywords(response.data.keywords);
                 setMainKeyword(response.data.keywords[0]); // Premier mot-clé = principal
             } else {
-                alert(response.message || __('Erreur lors de la génération', 'ai-content-studio'));
+                alert(response.message || t('Erreur lors de la génération'));
             }
         } catch (error) {
             console.error('Error generating suggestions:', error);
-            alert(__('Erreur lors de la génération des suggestions', 'ai-content-studio'));
+            alert(t('Erreur lors de la génération des suggestions'));
         } finally {
             setGeneratingSuggestions(false);
         }
@@ -110,7 +111,7 @@ export default function BlogArticleGenerator() {
     // Générer l'article avec streaming
     const generateArticle = async () => {
         if (!suggestedTitle || keywords.length === 0) {
-            alert(__('Veuillez d\'abord générer le titre et les mots-clés', 'ai-content-studio'));
+            alert(t('Veuillez d\'abord générer le titre et les mots-clés'));
             return;
         }
 
@@ -183,7 +184,7 @@ export default function BlogArticleGenerator() {
                 setPricingTriggerType('article_limit');
                 setShowPricingModal(true);
             }
-            alert(__('Erreur lors de la génération de l\'article', 'ai-content-studio') + ': ' + error.message);
+            alert(t('Erreur lors de la génération de l\'article') + ': ' + error.message);
         } finally {
             setGeneratingArticle(false);
         }
@@ -216,11 +217,11 @@ export default function BlogArticleGenerator() {
                 // Auto-sauvegarder après génération SEO
                 await saveArticle();
             } else {
-                alert(response.message || __('Erreur lors de la génération SEO', 'ai-content-studio'));
+                alert(response.message || t('Erreur lors de la génération SEO'));
             }
         } catch (error) {
             console.error('Error generating SEO:', error);
-            alert(__('Erreur lors de la génération des meta SEO', 'ai-content-studio'));
+            alert(t('Erreur lors de la génération des meta SEO'));
         } finally {
             setGeneratingSeo(false);
         }
@@ -230,7 +231,7 @@ export default function BlogArticleGenerator() {
     const saveArticle = async () => {
         if (!articleContent) {
             console.warn('Save attempt failed: No article content');
-            alert(__('Aucun article à sauvegarder', 'ai-content-studio'));
+            alert(t('Aucun article à sauvegarder'));
             return;
         }
 
@@ -266,12 +267,12 @@ export default function BlogArticleGenerator() {
                 setTimeout(() => setSaved(false), 3000);
             } else {
                 console.error('Save failed:', response.message);
-                alert(response.message || __('Erreur lors de la sauvegarde', 'ai-content-studio'));
+                alert(response.message || t('Erreur lors de la sauvegarde'));
             }
         } catch (error) {
             console.error('Error saving article:', error);
             console.error('Error details:', error.message, error.stack);
-            alert(__('Erreur lors de la sauvegarde de l\'article', 'ai-content-studio'));
+            alert(t('Erreur lors de la sauvegarde de l\'article'));
         } finally {
             setSavingArticle(false);
         }
@@ -305,9 +306,9 @@ export default function BlogArticleGenerator() {
     return (
         <div className="acs-blog-generator">
             <div className="acs-page-header">
-                <h1><FiFileText /> {__('Générateur d\'Articles de Blog', 'ai-content-studio')}</h1>
+                <h1><FiFileText /> {t('Générateur d\'Articles de Blog')}</h1>
                 <p className="acs-text-muted">
-                    {__('Générez des articles de blog optimisés SEO avec RUNNWRITE AI', 'ai-content-studio')}
+                    {t('Générez des articles de blog optimisés SEO avec RUNNWRITE AI')}
                 </p>
             </div>
 
@@ -316,56 +317,56 @@ export default function BlogArticleGenerator() {
                 <div className="acs-blog-form-section">
                     <div className="acs-card">
                         <h2 className="acs-card-title">
-                            {__('1. Sujet de l\'article', 'ai-content-studio')}
+                            {t('1. Sujet de l\'article')}
                         </h2>
 
                         <div className="acs-form-group">
-                            <label>{__('Langue de l\'article', 'ai-content-studio')}</label>
+                            <label>{t('Langue de l\'article')}</label>
                             <select
                                 className="acs-form-control"
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value)}
                                 disabled={generatingSuggestions || generatingArticle}
                             >
-                                <option value="fr">{__('Français', 'ai-content-studio')}</option>
-                                <option value="en">{__('Anglais', 'ai-content-studio')}</option>
-                                <option value="es">{__('Espagnol', 'ai-content-studio')}</option>
-                                <option value="pt">{__('Portugais', 'ai-content-studio')}</option>
-                                <option value="de">{__('Allemand', 'ai-content-studio')}</option>
-                                <option value="it">{__('Italien', 'ai-content-studio')}</option>
-                                <option value="zh">{__('Chinois (Mandarin)', 'ai-content-studio')}</option>
-                                <option value="ja">{__('Japonais', 'ai-content-studio')}</option>
-                                <option value="ko">{__('Coréen', 'ai-content-studio')}</option>
-                                <option value="ar">{__('Arabe', 'ai-content-studio')}</option>
-                                <option value="ru">{__('Russe', 'ai-content-studio')}</option>
-                                <option value="hi">{__('Hindi', 'ai-content-studio')}</option>
-                                <option value="bn">{__('Bengali', 'ai-content-studio')}</option>
-                                <option value="id">{__('Indonésien', 'ai-content-studio')}</option>
-                                <option value="tr">{__('Turc', 'ai-content-studio')}</option>
-                                <option value="vi">{__('Vietnamien', 'ai-content-studio')}</option>
-                                <option value="pl">{__('Polonais', 'ai-content-studio')}</option>
-                                <option value="uk">{__('Ukrainien', 'ai-content-studio')}</option>
-                                <option value="nl">{__('Néerlandais', 'ai-content-studio')}</option>
-                                <option value="th">{__('Thaï', 'ai-content-studio')}</option>
-                                <option value="sv">{__('Suédois', 'ai-content-studio')}</option>
-                                <option value="el">{__('Grec', 'ai-content-studio')}</option>
-                                <option value="cs">{__('Tchèque', 'ai-content-studio')}</option>
-                                <option value="ro">{__('Roumain', 'ai-content-studio')}</option>
-                                <option value="hu">{__('Hongrois', 'ai-content-studio')}</option>
-                                <option value="da">{__('Danois', 'ai-content-studio')}</option>
-                                <option value="fi">{__('Finnois', 'ai-content-studio')}</option>
-                                <option value="no">{__('Norvégien', 'ai-content-studio')}</option>
-                                <option value="he">{__('Hébreu', 'ai-content-studio')}</option>
-                                <option value="ca">{__('Catalan', 'ai-content-studio')}</option>
+                                <option value="fr">{t('Français')}</option>
+                                <option value="en">{t('Anglais')}</option>
+                                <option value="es">{t('Espagnol')}</option>
+                                <option value="pt">{t('Portugais')}</option>
+                                <option value="de">{t('Allemand')}</option>
+                                <option value="it">{t('Italien')}</option>
+                                <option value="zh">{t('Chinois (Mandarin)')}</option>
+                                <option value="ja">{t('Japonais')}</option>
+                                <option value="ko">{t('Coréen')}</option>
+                                <option value="ar">{t('Arabe')}</option>
+                                <option value="ru">{t('Russe')}</option>
+                                <option value="hi">{t('Hindi')}</option>
+                                <option value="bn">{t('Bengali')}</option>
+                                <option value="id">{t('Indonésien')}</option>
+                                <option value="tr">{t('Turc')}</option>
+                                <option value="vi">{t('Vietnamien')}</option>
+                                <option value="pl">{t('Polonais')}</option>
+                                <option value="uk">{t('Ukrainien')}</option>
+                                <option value="nl">{t('Néerlandais')}</option>
+                                <option value="th">{t('Thaï')}</option>
+                                <option value="sv">{t('Suédois')}</option>
+                                <option value="el">{t('Grec')}</option>
+                                <option value="cs">{t('Tchèque')}</option>
+                                <option value="ro">{t('Roumain')}</option>
+                                <option value="hu">{t('Hongrois')}</option>
+                                <option value="da">{t('Danois')}</option>
+                                <option value="fi">{t('Finnois')}</option>
+                                <option value="no">{t('Norvégien')}</option>
+                                <option value="he">{t('Hébreu')}</option>
+                                <option value="ca">{t('Catalan')}</option>
                             </select>
                         </div>
 
                         <div className="acs-form-group">
-                            <label>{__('Sujet principal', 'ai-content-studio')}</label>
+                            <label>{t('Sujet principal')}</label>
                             <input
                                 type="text"
                                 className="acs-form-control"
-                                placeholder={__('Ex: Comment améliorer le SEO de son site web', 'ai-content-studio')}
+                                placeholder={t('Ex: Comment améliorer le SEO de son site web')}
                                 value={subject}
                                 onChange={(e) => setSubject(e.target.value)}
                                 disabled={generatingSuggestions || generatingArticle}
@@ -380,11 +381,11 @@ export default function BlogArticleGenerator() {
                             {generatingSuggestions ? (
                                 <>
                                     <div className="acs-spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }} />
-                                    {__('Génération...', 'ai-content-studio')}
+                                    {t('Génération...')}
                                 </>
                             ) : (
                                 <>
-                                    <FiEdit /> {__('Générer Titre & Mots-clés', 'ai-content-studio')}
+                                    <FiEdit /> {t('Générer Titre & Mots-clés')}
                                 </>
                             )}
                         </button>
@@ -392,7 +393,7 @@ export default function BlogArticleGenerator() {
                         {suggestedTitle && (
                             <div className="acs-suggestion-result">
                                 <div className="acs-form-group">
-                                    <label>{__('Titre suggéré', 'ai-content-studio')}</label>
+                                    <label>{t('Titre suggéré')}</label>
                                     <input
                                         type="text"
                                         className="acs-form-control"
@@ -402,7 +403,7 @@ export default function BlogArticleGenerator() {
                                 </div>
 
                                 <div className="acs-form-group">
-                                    <label>{__('Mots-clés (5)', 'ai-content-studio')}</label>
+                                    <label>{t('Mots-clés (5)')}</label>
                                     <div className="acs-keywords-list">
                                         {keywords.map((keyword, index) => (
                                             <span
@@ -422,7 +423,7 @@ export default function BlogArticleGenerator() {
                     {suggestedTitle && (
                         <div className="acs-card">
                             <h2 className="acs-card-title">
-                                {__('2. Options de rédaction', 'ai-content-studio')}
+                                {t('2. Options de rédaction')}
                             </h2>
 
                             <div className="acs-form-group">
@@ -433,22 +434,22 @@ export default function BlogArticleGenerator() {
                                         onChange={(e) => setFirstPerson(e.target.checked)}
                                         disabled={generatingArticle}
                                     />
-                                    {__('Écrire à la première personne', 'ai-content-studio')}
+                                    {t('Écrire à la première personne')}
                                 </label>
                             </div>
 
                             <div className="acs-form-group">
-                                <label>{__('Longueur de l\'article', 'ai-content-studio')}</label>
+                                <label>{t('Longueur de l\'article')}</label>
                                 <select
                                     className="acs-form-control"
                                     value={length}
                                     onChange={(e) => setLength(e.target.value)}
                                     disabled={generatingArticle}
                                 >
-                                    <option value="1000-2000">{__('1000-2000 mots', 'ai-content-studio')}</option>
-                                    <option value="2000-3000">{__('2000-3000 mots', 'ai-content-studio')}</option>
-                                    <option value="3000-4000">{__('3000-4000 mots', 'ai-content-studio')}</option>
-                                    <option value="4000-5000">{__('4000-5000 mots', 'ai-content-studio')}</option>
+                                    <option value="1000-2000">{t('1000-2000 mots')}</option>
+                                    <option value="2000-3000">{t('2000-3000 mots')}</option>
+                                    <option value="3000-4000">{t('3000-4000 mots')}</option>
+                                    <option value="4000-5000">{t('4000-5000 mots')}</option>
                                 </select>
                             </div>
 
@@ -460,11 +461,11 @@ export default function BlogArticleGenerator() {
                                 {generatingArticle ? (
                                     <>
                                         <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
-                                        {__('Génération en cours...', 'ai-content-studio')}
+                                        {t('Génération en cours...')}
                                     </>
                                 ) : (
                                     <>
-                                        <FiFileText /> {__('Générer l\'Article', 'ai-content-studio')}
+                                        <FiFileText /> {t('Générer l\'Article')}
                                     </>
                                 )}
                             </button>
@@ -474,7 +475,7 @@ export default function BlogArticleGenerator() {
                     {articleGenerated && (
                         <div className="acs-card">
                             <h2 className="acs-card-title">
-                                {__('3. Meta SEO', 'ai-content-studio')}
+                                {t('3. Meta SEO')}
                             </h2>
 
                             {!seoTitle ? (
@@ -486,18 +487,18 @@ export default function BlogArticleGenerator() {
                                     {generatingSeo ? (
                                         <>
                                             <div className="acs-spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }} />
-                                            {__('Génération...', 'ai-content-studio')}
+                                            {t('Génération...')}
                                         </>
                                     ) : (
                                         <>
-                                            <FiEdit /> {__('Générer Titre, Meta & URL', 'ai-content-studio')}
+                                            <FiEdit /> {t('Générer Titre, Meta & URL')}
                                         </>
                                     )}
                                 </button>
                             ) : (
                                 <>
                                     <div className="acs-form-group">
-                                        <label>{__('Titre SEO', 'ai-content-studio')}</label>
+                                        <label>{t('Titre SEO')}</label>
                                         <input
                                             type="text"
                                             className="acs-form-control"
@@ -510,7 +511,7 @@ export default function BlogArticleGenerator() {
                                     </div>
 
                                     <div className="acs-form-group">
-                                        <label>{__('Meta Description', 'ai-content-studio')}</label>
+                                        <label>{t('Meta Description')}</label>
                                         <textarea
                                             className="acs-textarea"
                                             rows="3"
@@ -523,7 +524,7 @@ export default function BlogArticleGenerator() {
                                     </div>
 
                                     <div className="acs-form-group">
-                                        <label>{__('URL (slug)', 'ai-content-studio')}</label>
+                                        <label>{t('URL (slug)')}</label>
                                         <input
                                             type="text"
                                             className="acs-form-control"
@@ -545,15 +546,15 @@ export default function BlogArticleGenerator() {
                             {savingArticle ? (
                                 <>
                                     <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
-                                    {__('Sauvegarde...', 'ai-content-studio')}
+                                    {t('Sauvegarde...')}
                                 </>
                             ) : saved ? (
                                 <>
-                                    <FiCheckCircle /> {__('Article Sauvegardé !', 'ai-content-studio')}
+                                    <FiCheckCircle /> {t('Article Sauvegardé !')}
                                 </>
                             ) : (
                                 <>
-                                    <FiSave /> {__('Sauvegarder l\'Article', 'ai-content-studio')}
+                                    <FiSave /> {t('Sauvegarder l\'Article')}
                                 </>
                             )}
                         </button>
@@ -564,13 +565,13 @@ export default function BlogArticleGenerator() {
                 <div className="acs-blog-preview-section">
                     <div className="acs-card acs-preview-card">
                         <h2 className="acs-card-title">
-                            {__('Aperçu de l\'article', 'ai-content-studio')}
+                            {t('Aperçu de l\'article')}
                         </h2>
 
                         {!articleContent && !generatingArticle && (
                             <div className="acs-empty-state">
                                 <FiFileText size={48} />
-                                <p>{__('L\'article apparaîtra ici en temps réel lors de la génération', 'ai-content-studio')}</p>
+                                <p>{t('L\'article apparaîtra ici en temps réel lors de la génération')}</p>
                             </div>
                         )}
 
@@ -588,7 +589,7 @@ export default function BlogArticleGenerator() {
                                 {generatingArticle && (
                                     <div className="acs-generating-indicator">
                                         <FiLoader className="acs-spin" />
-                                        <span>{__('Génération en cours...', 'ai-content-studio')}</span>
+                                        <span>{t('Génération en cours...')}</span>
                                     </div>
                                 )}
                             </div>
@@ -603,12 +604,12 @@ export default function BlogArticleGenerator() {
                     <div className="acs-modal acs-completion-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="acs-modal-header">
                             <FiCheckCircle size={48} style={{ color: 'var(--acs-success)' }} />
-                            <h2>{__('Article Terminé !', 'ai-content-studio')}</h2>
+                            <h2>{t('Article Terminé !')}</h2>
                         </div>
                         <div className="acs-modal-body">
-                            <p>{__('Votre article a été généré avec succès.', 'ai-content-studio')}</p>
+                            <p>{t('Votre article a été généré avec succès.')}</p>
                             <p className="acs-text-muted">
-                                {__('Vous pouvez maintenant générer les meta SEO et sauvegarder l\'article.', 'ai-content-studio')}
+                                {t('Vous pouvez maintenant générer les meta SEO et sauvegarder l\'article.')}
                             </p>
                         </div>
                         <div className="acs-modal-footer">
@@ -616,7 +617,7 @@ export default function BlogArticleGenerator() {
                                 className="acs-btn acs-btn-primary"
                                 onClick={() => setShowCompletionModal(false)}
                             >
-                                {__('Continuer', 'ai-content-studio')}
+                                {t('Continuer')}
                             </button>
                         </div>
                     </div>

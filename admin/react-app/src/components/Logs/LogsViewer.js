@@ -1,9 +1,10 @@
 import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import { FiRefreshCw, FiTrash2, FiFilter, FiAlertCircle, FiInfo, FiAlertTriangle, FiXCircle, FiZap } from 'react-icons/fi';
 
 export default function LogsViewer() {
+    const { t } = useTranslation();
     const [logs, setLogs] = useState([]);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -62,7 +63,7 @@ export default function LogsViewer() {
     };
 
     const clearOldLogs = async () => {
-        if (!confirm(__('Supprimer les logs de plus de 30 jours ?', 'ai-content-studio'))) {
+        if (!confirm(t('Supprimer les logs de plus de 30 jours ?'))) {
             return;
         }
 
@@ -80,7 +81,7 @@ export default function LogsViewer() {
             }
         } catch (error) {
             console.error('Error clearing logs:', error);
-            alert(__('Erreur lors de la suppression des logs', 'ai-content-studio'));
+            alert(t('Erreur lors de la suppression des logs'));
         }
     };
 
@@ -111,23 +112,23 @@ export default function LogsViewer() {
             {stats && (
                 <div className="acs-logs-stats">
                     <div className="acs-stat-card">
-                        <div className="acs-stat-label">{__('Total', 'ai-content-studio')}</div>
+                        <div className="acs-stat-label">{t('Total')}</div>
                         <div className="acs-stat-value">{stats.total || 0}</div>
                     </div>
                     <div className="acs-stat-card acs-stat-errors">
-                        <div className="acs-stat-label">{__('Erreurs', 'ai-content-studio')}</div>
+                        <div className="acs-stat-label">{t('Erreurs')}</div>
                         <div className="acs-stat-value">{stats.errors || 0}</div>
                     </div>
                     <div className="acs-stat-card acs-stat-critical">
-                        <div className="acs-stat-label">{__('Critiques', 'ai-content-studio')}</div>
+                        <div className="acs-stat-label">{t('Critiques')}</div>
                         <div className="acs-stat-value">{stats.critical || 0}</div>
                     </div>
                     <div className="acs-stat-card acs-stat-warnings">
-                        <div className="acs-stat-label">{__('Avertissements', 'ai-content-studio')}</div>
+                        <div className="acs-stat-label">{t('Avertissements')}</div>
                         <div className="acs-stat-value">{stats.warnings || 0}</div>
                     </div>
                     <div className="acs-stat-card">
-                        <div className="acs-stat-label">{__('Dernière heure', 'ai-content-studio')}</div>
+                        <div className="acs-stat-label">{t('Dernière heure')}</div>
                         <div className="acs-stat-value">{stats.last_hour || 0}</div>
                     </div>
                 </div>
@@ -141,7 +142,7 @@ export default function LogsViewer() {
                         value={filter.level}
                         onChange={(e) => setFilter({ ...filter, level: e.target.value })}
                     >
-                        <option value="">{__('Tous les niveaux', 'ai-content-studio')}</option>
+                        <option value="">{t('Tous les niveaux')}</option>
                         <option value="debug">Debug</option>
                         <option value="info">Info</option>
                         <option value="warning">Warning</option>
@@ -154,7 +155,7 @@ export default function LogsViewer() {
                         value={filter.category}
                         onChange={(e) => setFilter({ ...filter, category: e.target.value })}
                     >
-                        <option value="">{__('Toutes les catégories', 'ai-content-studio')}</option>
+                        <option value="">{t('Toutes les catégories')}</option>
                         <option value="api">API</option>
                         <option value="generation">Generation</option>
                         <option value="auth">Auth</option>
@@ -167,10 +168,10 @@ export default function LogsViewer() {
                         value={filter.limit}
                         onChange={(e) => setFilter({ ...filter, limit: parseInt(e.target.value) })}
                     >
-                        <option value="50">50 {__('logs', 'ai-content-studio')}</option>
-                        <option value="100">100 {__('logs', 'ai-content-studio')}</option>
-                        <option value="200">200 {__('logs', 'ai-content-studio')}</option>
-                        <option value="500">500 {__('logs', 'ai-content-studio')}</option>
+                        <option value="50">50 {t('logs')}</option>
+                        <option value="100">100 {t('logs')}</option>
+                        <option value="200">200 {t('logs')}</option>
+                        <option value="500">500 {t('logs')}</option>
                     </select>
                 </div>
 
@@ -181,13 +182,13 @@ export default function LogsViewer() {
                             checked={autoRefresh}
                             onChange={(e) => setAutoRefresh(e.target.checked)}
                         />
-                        <span>{__('Auto-refresh', 'ai-content-studio')}</span>
+                        <span>{t('Auto-refresh')}</span>
                     </label>
                     <button className="acs-btn acs-btn-sm acs-btn-secondary" onClick={fetchLogs}>
-                        <FiRefreshCw /> {__('Actualiser', 'ai-content-studio')}
+                        <FiRefreshCw /> {t('Actualiser')}
                     </button>
                     <button className="acs-btn acs-btn-sm acs-btn-danger" onClick={clearOldLogs}>
-                        <FiTrash2 /> {__('Nettoyer (30j+)', 'ai-content-studio')}
+                        <FiTrash2 /> {t('Nettoyer (30j+)')}
                     </button>
                 </div>
             </div>
@@ -197,23 +198,23 @@ export default function LogsViewer() {
                 {loading ? (
                     <div className="acs-loading-state">
                         <div className="acs-spinner"></div>
-                        <p>{__('Chargement des logs...', 'ai-content-studio')}</p>
+                        <p>{t('Chargement des logs...')}</p>
                     </div>
                 ) : logs.length === 0 ? (
                     <div className="acs-empty-state">
                         <FiInfo size={48} />
-                        <p>{__('Aucun log trouvé', 'ai-content-studio')}</p>
+                        <p>{t('Aucun log trouvé')}</p>
                     </div>
                 ) : (
                     <table className="acs-table acs-logs-table">
                         <thead>
                             <tr>
                                 <th style={{ width: '40px' }}></th>
-                                <th style={{ width: '100px' }}>{__('Niveau', 'ai-content-studio')}</th>
-                                <th style={{ width: '120px' }}>{__('Catégorie', 'ai-content-studio')}</th>
-                                <th>{__('Message', 'ai-content-studio')}</th>
-                                <th style={{ width: '150px' }}>{__('Fichier', 'ai-content-studio')}</th>
-                                <th style={{ width: '180px' }}>{__('Date', 'ai-content-studio')}</th>
+                                <th style={{ width: '100px' }}>{t('Niveau')}</th>
+                                <th style={{ width: '120px' }}>{t('Catégorie')}</th>
+                                <th>{t('Message')}</th>
+                                <th style={{ width: '150px' }}>{t('Fichier')}</th>
+                                <th style={{ width: '180px' }}>{t('Date')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -244,23 +245,23 @@ export default function LogsViewer() {
                                                 <div className="acs-log-context">
                                                     {log.context && (
                                                         <div className="acs-log-context-section">
-                                                            <strong>{__('Contexte:', 'ai-content-studio')}</strong>
+                                                            <strong>{t('Contexte:')}</strong>
                                                             <pre>{JSON.stringify(log.context, null, 2)}</pre>
                                                         </div>
                                                     )}
                                                     {log.request_uri && (
                                                         <div className="acs-log-context-section">
-                                                            <strong>{__('URI:', 'ai-content-studio')}</strong> {log.request_uri}
+                                                            <strong>{t('URI:')}</strong> {log.request_uri}
                                                         </div>
                                                     )}
                                                     {log.ip_address && (
                                                         <div className="acs-log-context-section">
-                                                            <strong>{__('IP:', 'ai-content-studio')}</strong> {log.ip_address}
+                                                            <strong>{t('IP:')}</strong> {log.ip_address}
                                                         </div>
                                                     )}
                                                     {log.user_agent && (
                                                         <div className="acs-log-context-section">
-                                                            <strong>{__('User Agent:', 'ai-content-studio')}</strong> {log.user_agent}
+                                                            <strong>{t('User Agent:')}</strong> {log.user_agent}
                                                         </div>
                                                     )}
                                                 </div>

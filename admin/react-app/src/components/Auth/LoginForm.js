@@ -1,8 +1,9 @@
 import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import { FiMail, FiLock, FiLogIn, FiUser } from 'react-icons/fi';
 
 export default function LoginForm({ onLogin, onSwitchToRegister }) {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -43,10 +44,10 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                 // Reload page to refresh user session
                 window.location.reload();
             } else {
-                setError(data.data.message || __('Erreur de connexion', 'ai-content-studio'));
+                setError(data.data.message || t('Erreur de connexion'));
             }
         } catch (err) {
-            setError(__('Erreur de connexion. Veuillez réessayer.', 'ai-content-studio'));
+            setError(t('Erreur de connexion. Veuillez réessayer.'));
         } finally {
             setLoading(false);
         }
@@ -59,9 +60,9 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                     <div className="acs-auth-icon">
                         <FiLogIn size={32} />
                     </div>
-                    <h1 className="acs-auth-title">{__('Connexion', 'ai-content-studio')}</h1>
+                    <h1 className="acs-auth-title">{t('Connexion')}</h1>
                     <p className="acs-auth-subtitle">
-                        {__('Connectez-vous pour accéder à AI Content Studio', 'ai-content-studio')}
+                        {t('Connectez-vous pour accéder à AI Content Studio')}
                     </p>
                 </div>
 
@@ -74,7 +75,7 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                 <form onSubmit={handleSubmit} className="acs-auth-form">
                     <div className="acs-form-group">
                         <label className="acs-form-label">
-                            {__('Nom d\'utilisateur ou Email', 'ai-content-studio')}
+                            {t('Nom d\'utilisateur ou Email')}
                         </label>
                         <div className="acs-input-with-icon">
                             <FiUser className="acs-input-icon" />
@@ -86,14 +87,14 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                                 onChange={handleChange}
                                 required
                                 autoFocus
-                                placeholder={__('votre@email.com', 'ai-content-studio')}
+                                placeholder={t('votre@email.com')}
                             />
                         </div>
                     </div>
 
                     <div className="acs-form-group">
                         <label className="acs-form-label">
-                            {__('Mot de passe', 'ai-content-studio')}
+                            {t('Mot de passe')}
                         </label>
                         <div className="acs-input-with-icon">
                             <FiLock className="acs-input-icon" />
@@ -104,14 +105,14 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
-                                placeholder={__('••••••••', 'ai-content-studio')}
+                                placeholder={t('••••••••')}
                             />
                         </div>
                     </div>
 
                     <div className="acs-form-footer">
                         <a href={window.acsData.homeUrl + '/wp-login.php?action=lostpassword'} className="acs-link">
-                            {__('Mot de passe oublié ?', 'ai-content-studio')}
+                            {t('Mot de passe oublié ?')}
                         </a>
                     </div>
 
@@ -121,18 +122,18 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                         disabled={loading}
                     >
                         {loading ? (
-                            __('Connexion...', 'ai-content-studio')
+                            t('Connexion...')
                         ) : (
                             <>
                                 <FiLogIn />
-                                {__('Se connecter', 'ai-content-studio')}
+                                {t('Se connecter')}
                             </>
                         )}
                     </button>
                 </form>
 
                 <div className="acs-auth-divider">
-                    <span>{__('ou', 'ai-content-studio')}</span>
+                    <span>{t('ou')}</span>
                 </div>
 
                 <button
@@ -140,7 +141,7 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                     className="acs-btn acs-btn-outline-primary acs-btn-lg w-100"
                 >
                     <FiUser />
-                    {__('Créer un compte', 'ai-content-studio')}
+                    {t('Créer un compte')}
                 </button>
             </div>
         </div>

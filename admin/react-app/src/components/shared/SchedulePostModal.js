@@ -1,7 +1,7 @@
 import { useState } from '@wordpress/element';
 import { FiX, FiCalendar, FiClock, FiSave } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 
 /**
  * Modal de planification de post
@@ -13,6 +13,7 @@ import { __ } from '@wordpress/i18n';
  * @param {Function} props.onSuccess - Callback après succès
  */
 export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) {
+    const { t } = useTranslation();
     const [scheduledDate, setScheduledDate] = useState('');
     const [scheduledTime, setScheduledTime] = useState('09:00');
     const [status, setStatus] = useState('scheduled'); // scheduled ou draft
@@ -32,7 +33,7 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
         e.preventDefault();
 
         if (!scheduledDate || !scheduledTime) {
-            setError(__('Date et heure requises', 'ai-content-studio'));
+            setError(t('Date et heure requises'));
             return;
         }
 
@@ -62,11 +63,11 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                 }
                 onClose();
             } else {
-                setError(response.message || __('Erreur lors de la planification', 'ai-content-studio'));
+                setError(response.message || t('Erreur lors de la planification'));
             }
         } catch (err) {
             console.error('Error scheduling post:', err);
-            setError(err.message || __('Erreur lors de la planification', 'ai-content-studio'));
+            setError(err.message || t('Erreur lors de la planification'));
         } finally {
             setSaving(false);
         }
@@ -129,7 +130,7 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)' }}>
                         <FiCalendar size={24} style={{ color: 'var(--acs-primary)' }} />
                         <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>
-                            {__('Planifier ce post', 'ai-content-studio')}
+                            {t('Planifier ce post')}
                         </h2>
                     </div>
                     <button
@@ -153,7 +154,7 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                 <form onSubmit={handleSubmit} style={{ padding: 'var(--acs-spacing-4)' }}>
                     {/* Prévisualisation du post */}
                     <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                        <label className="acs-form-label">{__('Aperçu du post', 'ai-content-studio')}</label>
+                        <label className="acs-form-label">{t('Aperçu du post')}</label>
                         <div
                             style={{
                                 padding: 'var(--acs-spacing-4)',
@@ -202,7 +203,7 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                         <div className="acs-form-group">
                             <label className="acs-form-label">
                                 <FiCalendar size={14} style={{ marginRight: '4px' }} />
-                                {__('Date', 'ai-content-studio')}
+                                {t('Date')}
                             </label>
                             <input
                                 type="date"
@@ -217,7 +218,7 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                         <div className="acs-form-group">
                             <label className="acs-form-label">
                                 <FiClock size={14} style={{ marginRight: '4px' }} />
-                                {__('Heure', 'ai-content-studio')}
+                                {t('Heure')}
                             </label>
                             <input
                                 type="time"
@@ -231,7 +232,7 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
 
                     {/* Statut */}
                     <div className="acs-form-group" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                        <label className="acs-form-label">{__('Statut', 'ai-content-studio')}</label>
+                        <label className="acs-form-label">{t('Statut')}</label>
                         <div style={{ display: 'flex', gap: 'var(--acs-spacing-2)' }}>
                             <label
                                 style={{
@@ -253,9 +254,9 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                                     onChange={(e) => setStatus(e.target.value)}
                                     style={{ display: 'none' }}
                                 />
-                                <div style={{ fontWeight: 600, marginBottom: '4px' }}>📅 {__('Planifié', 'ai-content-studio')}</div>
+                                <div style={{ fontWeight: 600, marginBottom: '4px' }}>📅 {t('Planifié')}</div>
                                 <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
-                                    {__('Sera publié à la date choisie', 'ai-content-studio')}
+                                    {t('Sera publié à la date choisie')}
                                 </div>
                             </label>
 
@@ -279,9 +280,9 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                                     onChange={(e) => setStatus(e.target.value)}
                                     style={{ display: 'none' }}
                                 />
-                                <div style={{ fontWeight: 600, marginBottom: '4px' }}>📝 {__('Brouillon', 'ai-content-studio')}</div>
+                                <div style={{ fontWeight: 600, marginBottom: '4px' }}>📝 {t('Brouillon')}</div>
                                 <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
-                                    {__('Enregistrer sans publier', 'ai-content-studio')}
+                                    {t('Enregistrer sans publier')}
                                 </div>
                             </label>
                         </div>
@@ -305,7 +306,7 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                             onClick={onClose}
                             disabled={saving}
                         >
-                            {__('Annuler', 'ai-content-studio')}
+                            {t('Annuler')}
                         </button>
                         <button
                             type="submit"
@@ -315,12 +316,12 @@ export default function SchedulePostModal({ isOpen, onClose, post, onSuccess }) 
                             {saving ? (
                                 <>
                                     <div className="acs-spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }} />
-                                    {__('Enregistrement...', 'ai-content-studio')}
+                                    {t('Enregistrement...')}
                                 </>
                             ) : (
                                 <>
                                     <FiSave />
-                                    {status === 'scheduled' ? __('Planifier', 'ai-content-studio') : __('Sauvegarder', 'ai-content-studio')}
+                                    {status === 'scheduled' ? t('Planifier') : t('Sauvegarder')}
                                 </>
                             )}
                         </button>

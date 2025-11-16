@@ -2,11 +2,12 @@ import { useState, useEffect } from '@wordpress/element';
 import { FiCalendar, FiTarget, FiTrendingUp, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import { CONTENT_TYPES, CONTENT_MIX_RECOMMENDATIONS, BEST_POSTING_TIMES } from '../../data/contentTemplates';
 import PricingModal from '../common/PricingModal';
 
 export default function StrategyGenerator({ profile }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [strategy, setStrategy] = useState(null);
@@ -143,10 +144,10 @@ export default function StrategyGenerator({ profile }) {
             if (response.success) {
                 setContentIdeas(response.data);
             } else {
-                alert(__('Erreur lors de la génération des idées', 'ai-content-studio'));
+                alert(t('Erreur lors de la génération des idées'));
             }
         } catch (err) {
-            alert(err.message || __('Erreur lors de la génération des idées', 'ai-content-studio'));
+            alert(err.message || t('Erreur lors de la génération des idées'));
         } finally {
             setGeneratingIdeas(false);
         }
@@ -161,14 +162,14 @@ export default function StrategyGenerator({ profile }) {
         return (
             <div>
                 <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                    <h1 className="acs-page-title">{__('Votre Stratégie de Contenu', 'ai-content-studio')}</h1>
+                    <h1 className="acs-page-title">{t('Votre Stratégie de Contenu')}</h1>
                     <p className="acs-text-muted">
-                        {__('Génération de votre stratégie personnalisée...', 'ai-content-studio')}
+                        {t('Génération de votre stratégie personnalisée...')}
                     </p>
                 </div>
                 <div className="acs-card" style={{ textAlign: 'center', padding: 'var(--acs-spacing-6)' }}>
                     <div className="acs-spinner" style={{ width: '40px', height: '40px', margin: '0 auto var(--acs-spacing-3)' }} />
-                    <p>{__('Analyse de votre profil et création de votre stratégie...', 'ai-content-studio')}</p>
+                    <p>{t('Analyse de votre profil et création de votre stratégie...')}</p>
                 </div>
             </div>
         );
@@ -181,16 +182,16 @@ export default function StrategyGenerator({ profile }) {
     return (
         <div>
             <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                <h1 className="acs-page-title">{__('🎯 Votre Stratégie de Contenu', 'ai-content-studio')}</h1>
+                <h1 className="acs-page-title">{t('🎯 Votre Stratégie de Contenu')}</h1>
                 <p className="acs-text-muted">
-                    {__('Stratégie personnalisée basée sur votre profil et vos objectifs', 'ai-content-studio')}
+                    {t('Stratégie personnalisée basée sur votre profil et vos objectifs')}
                 </p>
             </div>
 
             {/* Language Selector */}
             <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
                 <div className="acs-form-group" style={{ marginBottom: 0 }}>
-                    <label className="acs-form-label">{__('Langue de génération', 'ai-content-studio')}</label>
+                    <label className="acs-form-label">{t('Langue de génération')}</label>
                     <select className="acs-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
                         <optgroup label="🌍 Europe">
                             <option value="fr">🇫🇷 Français</option>
@@ -237,7 +238,7 @@ export default function StrategyGenerator({ profile }) {
                         <div className="acs-stat-header">
                             <div>
                                 <div className="acs-stat-value">{strategy?.total_posts || 12}</div>
-                                <div className="acs-stat-label">{__('Posts/mois', 'ai-content-studio')}</div>
+                                <div className="acs-stat-label">{t('Posts/mois')}</div>
                             </div>
                             <div className="acs-stat-icon primary">
                                 <FiCalendar />
@@ -249,7 +250,7 @@ export default function StrategyGenerator({ profile }) {
                         <div className="acs-stat-header">
                             <div>
                                 <div className="acs-stat-value">{strategy?.platforms?.length || 2}</div>
-                                <div className="acs-stat-label">{__('Plateformes', 'ai-content-studio')}</div>
+                                <div className="acs-stat-label">{t('Plateformes')}</div>
                             </div>
                             <div className="acs-stat-icon success">
                                 <FiTrendingUp />
@@ -261,7 +262,7 @@ export default function StrategyGenerator({ profile }) {
                         <div className="acs-stat-header">
                             <div>
                                 <div className="acs-stat-value">{strategy?.weekly_themes?.length || 4}</div>
-                                <div className="acs-stat-label">{__('Thèmes hebdo', 'ai-content-studio')}</div>
+                                <div className="acs-stat-label">{t('Thèmes hebdo')}</div>
                             </div>
                             <div className="acs-stat-icon secondary">
                                 <FiTarget />
@@ -280,7 +281,7 @@ export default function StrategyGenerator({ profile }) {
                             marginBottom: 'var(--acs-spacing-4)',
                         }}
                     >
-                        <h4 style={{ marginBottom: 'var(--acs-spacing-2)' }}>📋 {__('Résumé de votre stratégie', 'ai-content-studio')}</h4>
+                        <h4 style={{ marginBottom: 'var(--acs-spacing-2)' }}>📋 {t('Résumé de votre stratégie')}</h4>
                         <p style={{ margin: 0, color: 'var(--acs-gray-700)' }}>{strategy?.strategy_summary}</p>
                     </div>
                 )}
@@ -294,7 +295,7 @@ export default function StrategyGenerator({ profile }) {
                         marginBottom: 'var(--acs-spacing-4)',
                     }}
                 >
-                    <h4 style={{ marginBottom: 'var(--acs-spacing-3)' }}>📊 {__('Mix de contenu recommandé', 'ai-content-studio')}</h4>
+                    <h4 style={{ marginBottom: 'var(--acs-spacing-3)' }}>📊 {t('Mix de contenu recommandé')}</h4>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
                         {Object.entries(contentMix).map(([type, percentage]) => {
                             const contentType = CONTENT_TYPES[type.toUpperCase()] || CONTENT_TYPES.EDUCATIONAL;
@@ -325,11 +326,11 @@ export default function StrategyGenerator({ profile }) {
                             {generatingIdeas ? (
                                 <>
                                     <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
-                                    {__('Génération...', 'ai-content-studio')}
+                                    {t('Génération...')}
                                 </>
                             ) : (
                                 <>
-                                    💡 {__('Générer 50 idées de posts', 'ai-content-studio')}
+                                    💡 {t('Générer 50 idées de posts')}
                                 </>
                             )}
                         </button>
@@ -341,10 +342,10 @@ export default function StrategyGenerator({ profile }) {
             {contentIdeas.length > 0 && (
                 <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
                     <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                        <h3 className="acs-card-title">💡 {__('50 Idées de Posts', 'ai-content-studio')}</h3>
+                        <h3 className="acs-card-title">💡 {t('50 Idées de Posts')}</h3>
                     </div>
                     <p className="acs-text-muted" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                        {__('Cliquez sur "Générer" pour créer un post complet à partir d\'une idée', 'ai-content-studio')}
+                        {t('Cliquez sur "Générer" pour créer un post complet à partir d\'une idée')}
                     </p>
                     <div
                         style={{
@@ -401,7 +402,7 @@ export default function StrategyGenerator({ profile }) {
                                     onClick={() => handleGeneratePostFromIdea(idea)}
                                     style={{ flexShrink: 0 }}
                                 >
-                                    {__('Générer', 'ai-content-studio')}
+                                    {t('Générer')}
                                 </button>
                             </div>
                         ))}
@@ -411,7 +412,7 @@ export default function StrategyGenerator({ profile }) {
 
             {/* Weekly Themes */}
             <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>📅 {__('Thèmes hebdomadaires', 'ai-content-studio')}</h3>
+                <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>📅 {t('Thèmes hebdomadaires')}</h3>
                 <div style={{ display: 'grid', gap: 'var(--acs-spacing-3)' }}>
                     {(strategy?.weekly_themes || [
                         { week: 1, theme: 'Introduction & Accueil', description: 'Présentez votre activité et créez du lien' },
@@ -451,7 +452,7 @@ export default function StrategyGenerator({ profile }) {
 
             {/* Best posting times */}
             <div className="acs-card">
-                <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>⏰ {__('Meilleurs moments de publication', 'ai-content-studio')}</h3>
+                <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>⏰ {t('Meilleurs moments de publication')}</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
                     {(strategy?.platforms || ['instagram', 'facebook']).map((platform) => {
                         const times = BEST_POSTING_TIMES[platform]?.[profile?.user_type || 'business'] || BEST_POSTING_TIMES[platform]?.business;
@@ -523,10 +524,10 @@ export default function StrategyGenerator({ profile }) {
                             <FiLock size={40} color="white" />
                         </div>
                         <h2 style={{ marginBottom: 'var(--acs-spacing-2)', color: 'var(--acs-gray-900)' }}>
-                            {__('Fonctionnalité Premium', 'ai-content-studio')}
+                            {t('Fonctionnalité Premium')}
                         </h2>
                         <p style={{ color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-4)', lineHeight: '1.6' }}>
-                            {__('La génération de stratégies de contenu est réservée aux abonnés. Passez à un plan payant pour débloquer cette fonctionnalité et bien plus encore.', 'ai-content-studio')}
+                            {t('La génération de stratégies de contenu est réservée aux abonnés. Passez à un plan payant pour débloquer cette fonctionnalité et bien plus encore.')}
                         </p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--acs-spacing-2)' }}>
                             <button
@@ -534,14 +535,14 @@ export default function StrategyGenerator({ profile }) {
                                 onClick={() => setShowPricingModal(true)}
                                 style={{ width: '100%' }}
                             >
-                                {__('Voir les plans', 'ai-content-studio')}
+                                {t('Voir les plans')}
                             </button>
                             <button
                                 className="acs-btn acs-btn-outline-secondary"
                                 onClick={() => navigate('/dashboard')}
                                 style={{ width: '100%' }}
                             >
-                                {__('Retour au tableau de bord', 'ai-content-studio')}
+                                {t('Retour au tableau de bord')}
                             </button>
                         </div>
                     </div>

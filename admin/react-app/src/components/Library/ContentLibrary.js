@@ -1,7 +1,7 @@
 import { useState, useEffect } from '@wordpress/element';
 import { FiHeart, FiCopy, FiTrash2, FiSearch, FiFilter, FiEdit, FiCalendar } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import SchedulePostModal from '../shared/SchedulePostModal';
 
 const PLATFORM_EMOJIS = {
@@ -13,6 +13,7 @@ const PLATFORM_EMOJIS = {
 };
 
 export default function ContentLibrary({ profile }) {
+    const { t } = useTranslation();
     const [savedPosts, setSavedPosts] = useState([]);
     const [templates, setTemplates] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -49,7 +50,7 @@ export default function ContentLibrary({ profile }) {
     };
 
     const deleteItem = async (id, type) => {
-        if (!confirm(__('Êtes-vous sûr de vouloir supprimer cet élément ?', 'ai-content-studio'))) {
+        if (!confirm(t('Êtes-vous sûr de vouloir supprimer cet élément ?'))) {
             return;
         }
 
@@ -60,7 +61,7 @@ export default function ContentLibrary({ profile }) {
             });
             loadLibraryContent();
         } catch (err) {
-            alert(__('Erreur lors de la suppression', 'ai-content-studio'));
+            alert(t('Erreur lors de la suppression'));
         }
     };
 
@@ -72,13 +73,13 @@ export default function ContentLibrary({ profile }) {
             });
             loadLibraryContent();
         } catch (err) {
-            alert(__('Erreur', 'ai-content-studio'));
+            alert(t('Erreur'));
         }
     };
 
     const copyToClipboard = (content) => {
         navigator.clipboard.writeText(content);
-        alert(__('Copié dans le presse-papier !', 'ai-content-studio'));
+        alert(t('Copié dans le presse-papier !'));
     };
 
     const openScheduleModal = (post) => {
@@ -95,7 +96,7 @@ export default function ContentLibrary({ profile }) {
     };
 
     const handleScheduleSuccess = (data) => {
-        alert(__('✅ Post planifié avec succès !', 'ai-content-studio'));
+        alert(t('✅ Post planifié avec succès !'));
     };
 
     const filteredPosts = savedPosts.filter((post) => {
@@ -108,9 +109,9 @@ export default function ContentLibrary({ profile }) {
     return (
         <div>
             <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                <h1 className="acs-page-title">{__('Bibliothèque de Contenu', 'ai-content-studio')}</h1>
+                <h1 className="acs-page-title">{t('Bibliothèque de Contenu')}</h1>
                 <p className="acs-text-muted">
-                    {__('Retrouvez tous vos posts sauvegardés, templates personnalisés et sets de hashtags', 'ai-content-studio')}
+                    {t('Retrouvez tous vos posts sauvegardés, templates personnalisés et sets de hashtags')}
                 </p>
             </div>
 
@@ -156,7 +157,7 @@ export default function ContentLibrary({ profile }) {
                             <input
                                 type="text"
                                 className="acs-form-control acs-with-icon"
-                                placeholder={__('Rechercher...', 'ai-content-studio')}
+                                placeholder={t('Rechercher...')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -164,7 +165,7 @@ export default function ContentLibrary({ profile }) {
                     </div>
 
                     <select className="acs-select" style={{ width: 'auto' }} value={filterPlatform} onChange={(e) => setFilterPlatform(e.target.value)}>
-                        <option value="all">{__('Toutes plateformes', 'ai-content-studio')}</option>
+                        <option value="all">{t('Toutes plateformes')}</option>
                         <option value="instagram">📷 Instagram</option>
                         <option value="facebook">📘 Facebook</option>
                         <option value="linkedin">💼 LinkedIn</option>
@@ -172,7 +173,7 @@ export default function ContentLibrary({ profile }) {
                     </select>
 
                     <select className="acs-select" style={{ width: 'auto' }} value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-                        <option value="all">{__('Toutes catégories', 'ai-content-studio')}</option>
+                        <option value="all">{t('Toutes catégories')}</option>
                         <option value="educational">📚 Éducatif</option>
                         <option value="promotional">🎯 Promotionnel</option>
                         <option value="engagement">💬 Engagement</option>
@@ -190,9 +191,9 @@ export default function ContentLibrary({ profile }) {
                 filteredPosts.length === 0 ? (
                     <div className="acs-card" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
                         <div style={{ fontSize: '3rem', marginBottom: 'var(--acs-spacing-3)' }}>📚</div>
-                        <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{__('Votre bibliothèque est vide', 'ai-content-studio')}</h3>
+                        <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{t('Votre bibliothèque est vide')}</h3>
                         <p className="acs-text-muted">
-                            {__('Sauvegardez vos meilleurs posts pour les réutiliser facilement', 'ai-content-studio')}
+                            {t('Sauvegardez vos meilleurs posts pour les réutiliser facilement')}
                         </p>
                     </div>
                 ) : (
@@ -249,18 +250,18 @@ export default function ContentLibrary({ profile }) {
                                         className="acs-btn acs-btn-outline-primary acs-btn-sm"
                                         onClick={() => copyToClipboard(post.content)}
                                     >
-                                        <FiCopy /> {__('Copier', 'ai-content-studio')}
+                                        <FiCopy /> {t('Copier')}
                                     </button>
                                     <button
                                         className="acs-btn acs-btn-outline-primary acs-btn-sm"
                                         onClick={() => openScheduleModal(post)}
                                     >
-                                        <FiCalendar /> {__('Planifier', 'ai-content-studio')}
+                                        <FiCalendar /> {t('Planifier')}
                                     </button>
                                 </div>
                                 <div style={{ display: 'flex', gap: 'var(--acs-spacing-2)' }}>
                                     <button className="acs-btn acs-btn-outline-primary acs-btn-sm" style={{ flex: 1 }}>
-                                        <FiEdit /> {__('Éditer', 'ai-content-studio')}
+                                        <FiEdit /> {t('Éditer')}
                                     </button>
                                     <button
                                         className="acs-btn acs-btn-sm"
@@ -272,7 +273,7 @@ export default function ContentLibrary({ profile }) {
                                 </div>
 
                                 <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-500)', marginTop: 'var(--acs-spacing-2)' }}>
-                                    {__('Utilisé', 'ai-content-studio')} {post.usage_count || 0} {__('fois', 'ai-content-studio')}
+                                    {t('Utilisé')} {post.usage_count || 0} {t('fois')}
                                 </div>
                             </div>
                         ))}
@@ -281,14 +282,14 @@ export default function ContentLibrary({ profile }) {
             ) : activeTab === 'templates' ? (
                 <div className="acs-card" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
                     <div style={{ fontSize: '3rem', marginBottom: 'var(--acs-spacing-3)' }}>📄</div>
-                    <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{__('Templates personnalisés', 'ai-content-studio')}</h3>
-                    <p className="acs-text-muted">{__('Fonctionnalité à venir !', 'ai-content-studio')}</p>
+                    <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{t('Templates personnalisés')}</h3>
+                    <p className="acs-text-muted">{t('Fonctionnalité à venir !')}</p>
                 </div>
             ) : (
                 <div className="acs-card" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
                     <div style={{ fontSize: '3rem', marginBottom: 'var(--acs-spacing-3)' }}>#️⃣</div>
-                    <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{__('Sets de hashtags', 'ai-content-studio')}</h3>
-                    <p className="acs-text-muted">{__('Fonctionnalité à venir !', 'ai-content-studio')}</p>
+                    <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{t('Sets de hashtags')}</h3>
+                    <p className="acs-text-muted">{t('Fonctionnalité à venir !')}</p>
                 </div>
             )}
 

@@ -1,9 +1,10 @@
 import { useState } from '@wordpress/element';
 import { FiZap, FiCopy, FiCheck } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 
 export default function PostGenerator({ profile }) {
+    const { t } = useTranslation();
     const [platform, setPlatform] = useState('instagram');
     const [topic, setTopic] = useState('');
     const [tone, setTone] = useState('professional');
@@ -15,7 +16,7 @@ export default function PostGenerator({ profile }) {
 
     const handleGenerate = async () => {
         if (!topic.trim()) {
-            setError(__('Veuillez entrer un sujet', 'ai-content-studio'));
+            setError(t('Veuillez entrer un sujet'));
             return;
         }
 
@@ -33,10 +34,10 @@ export default function PostGenerator({ profile }) {
             if (response.success) {
                 setGeneratedPosts(response.data);
             } else {
-                setError(response.error?.message || __('Erreur lors de la génération', 'ai-content-studio'));
+                setError(response.error?.message || t('Erreur lors de la génération'));
             }
         } catch (err) {
-            setError(err.message || __('Erreur lors de la génération', 'ai-content-studio'));
+            setError(err.message || t('Erreur lors de la génération'));
         } finally {
             setGenerating(false);
         }
@@ -50,16 +51,16 @@ export default function PostGenerator({ profile }) {
 
     return (
         <div>
-            <h1 className="acs-page-title">{__('Générateur de Posts', 'ai-content-studio')}</h1>
+            <h1 className="acs-page-title">{t('Générateur de Posts')}</h1>
 
             {/* Generator Form */}
             <div className="acs-card">
                 <div className="acs-card-header">
-                    <h3 className="acs-card-title">{__('Créer un nouveau post', 'ai-content-studio')}</h3>
+                    <h3 className="acs-card-title">{t('Créer un nouveau post')}</h3>
                 </div>
 
                 <div className="acs-form-group">
-                    <label className="acs-form-label">{__('Plateforme', 'ai-content-studio')}</label>
+                    <label className="acs-form-label">{t('Plateforme')}</label>
                     <select className="acs-select" value={platform} onChange={(e) => setPlatform(e.target.value)}>
                         <option value="instagram">Instagram</option>
                         <option value="facebook">Facebook</option>
@@ -69,10 +70,10 @@ export default function PostGenerator({ profile }) {
                 </div>
 
                 <div className="acs-form-group">
-                    <label className="acs-form-label">{__('Sujet du post', 'ai-content-studio')}</label>
+                    <label className="acs-form-label">{t('Sujet du post')}</label>
                     <textarea
                         className="acs-textarea"
-                        placeholder={__('De quoi voulez-vous parler ?', 'ai-content-studio')}
+                        placeholder={t('De quoi voulez-vous parler ?')}
                         value={topic}
                         onChange={(e) => setTopic(e.target.value)}
                         rows={4}
@@ -80,12 +81,12 @@ export default function PostGenerator({ profile }) {
                 </div>
 
                 <div className="acs-form-group">
-                    <label className="acs-form-label">{__('Ton de voix', 'ai-content-studio')}</label>
+                    <label className="acs-form-label">{t('Ton de voix')}</label>
                     <select className="acs-select" value={tone} onChange={(e) => setTone(e.target.value)}>
-                        <option value="professional">{__('Professionnel', 'ai-content-studio')}</option>
-                        <option value="casual">{__('Décontracté', 'ai-content-studio')}</option>
-                        <option value="enthusiastic">{__('Enthousiaste', 'ai-content-studio')}</option>
-                        <option value="friendly">{__('Amical', 'ai-content-studio')}</option>
+                        <option value="professional">{t('Professionnel')}</option>
+                        <option value="casual">{t('Décontracté')}</option>
+                        <option value="enthusiastic">{t('Enthousiaste')}</option>
+                        <option value="friendly">{t('Amical')}</option>
                     </select>
                 </div>
 
@@ -103,11 +104,11 @@ export default function PostGenerator({ profile }) {
                     {generating ? (
                         <>
                             <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
-                            {__('Génération en cours...', 'ai-content-studio')}
+                            {t('Génération en cours...')}
                         </>
                     ) : (
                         <>
-                            <FiZap /> {__('Générer 3 variantes', 'ai-content-studio')}
+                            <FiZap /> {t('Générer 3 variantes')}
                         </>
                     )}
                 </button>
@@ -116,13 +117,13 @@ export default function PostGenerator({ profile }) {
             {/* Generated Posts */}
             {generatedPosts.length > 0 && (
                 <div style={{ marginTop: 'var(--acs-spacing-5)' }}>
-                    <h2 className="acs-card-title mb-4">{__('Posts générés', 'ai-content-studio')}</h2>
+                    <h2 className="acs-card-title mb-4">{t('Posts générés')}</h2>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: 'var(--acs-spacing-4)' }}>
                         {generatedPosts.map((post, index) => (
                             <div key={post.id || index} className="acs-post-card">
                                 <div className="acs-post-header">
                                     <span className="acs-badge acs-badge-primary">
-                                        {__('Variante', 'ai-content-studio')} {index + 1}
+                                        {t('Variante')} {index + 1}
                                     </span>
                                 </div>
 
@@ -148,16 +149,16 @@ export default function PostGenerator({ profile }) {
                                     >
                                         {copiedIndex === index ? (
                                             <>
-                                                <FiCheck /> {__('Copié!', 'ai-content-studio')}
+                                                <FiCheck /> {t('Copié!')}
                                             </>
                                         ) : (
                                             <>
-                                                <FiCopy /> {__('Copier', 'ai-content-studio')}
+                                                <FiCopy /> {t('Copier')}
                                             </>
                                         )}
                                     </button>
                                     <button className="acs-btn acs-btn-primary acs-btn-sm" style={{ flex: 1 }}>
-                                        {__('Utiliser', 'ai-content-studio')}
+                                        {t('Utiliser')}
                                     </button>
                                 </div>
                             </div>
@@ -171,7 +172,7 @@ export default function PostGenerator({ profile }) {
                 <div className="acs-card" style={{ marginTop: 'var(--acs-spacing-4)', textAlign: 'center', padding: '3rem 2rem' }}>
                     <FiZap size={48} style={{ color: 'var(--acs-gray-300)', marginBottom: '1rem' }} />
                     <p className="acs-text-muted">
-                        {__('Remplissez le formulaire et cliquez sur Générer pour créer vos posts', 'ai-content-studio')}
+                        {t('Remplissez le formulaire et cliquez sur Générer pour créer vos posts')}
                     </p>
                 </div>
             )}

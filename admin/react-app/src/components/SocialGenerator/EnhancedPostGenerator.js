@@ -2,12 +2,13 @@ import { useState, useEffect, useRef } from '@wordpress/element';
 import { FiZap, FiCopy, FiCheck, FiSave, FiCalendar, FiHeart, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import { CONTENT_TYPES, POST_TEMPLATES, PLATFORM_SPECS } from '../../data/contentTemplates';
 import SchedulePostModal from '../shared/SchedulePostModal';
 import PricingModal from '../common/PricingModal';
 
 export default function EnhancedPostGenerator({ profile }) {
+    const { t } = useTranslation();
     const location = useLocation();
     const [platform, setPlatform] = useState('instagram');
     const [contentType, setContentType] = useState('educational');
@@ -151,7 +152,7 @@ export default function EnhancedPostGenerator({ profile }) {
 
     const handleGenerate = async () => {
         if (!topic.trim()) {
-            setError(__('Veuillez entrer un sujet', 'ai-content-studio'));
+            setError(t('Veuillez entrer un sujet'));
             return;
         }
 
@@ -193,14 +194,14 @@ export default function EnhancedPostGenerator({ profile }) {
                     });
                 }, 100);
             } else {
-                setError(response.error?.message || __('Erreur lors de la génération', 'ai-content-studio'));
+                setError(response.error?.message || t('Erreur lors de la génération'));
             }
         } catch (err) {
             console.error('Generation error:', err);
             console.log('Error structure:', { err, data: err.data, code: err.code, message: err.message });
 
             // Extract error message and code from various possible structures
-            let errorMessage = __('Erreur lors de la génération', 'ai-content-studio');
+            let errorMessage = t('Erreur lors de la génération');
             let errorCode = '';
 
             // Try different error structures
@@ -298,7 +299,7 @@ export default function EnhancedPostGenerator({ profile }) {
     };
 
     const handleScheduleSuccess = (data) => {
-        alert(__('✅ Post planifié avec succès !', 'ai-content-studio'));
+        alert(t('✅ Post planifié avec succès !'));
     };
 
     const saveToLibrary = async (post, index) => {
@@ -314,18 +315,18 @@ export default function EnhancedPostGenerator({ profile }) {
                     category: contentType,
                 },
             });
-            alert(__('Post sauvegardé dans votre bibliothèque!', 'ai-content-studio'));
+            alert(t('Post sauvegardé dans votre bibliothèque!'));
         } catch (err) {
-            alert(__('Erreur lors de la sauvegarde', 'ai-content-studio'));
+            alert(t('Erreur lors de la sauvegarde'));
         }
     };
 
     return (
         <div>
             <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                <h1 className="acs-page-title">{__('Générateur de Posts Intelligent', 'ai-content-studio')}</h1>
+                <h1 className="acs-page-title">{t('Générateur de Posts Intelligent')}</h1>
                 <p className="acs-text-muted">
-                    {__('Créez du contenu engageant avec des templates professionnels adaptés à vos objectifs', 'ai-content-studio')}
+                    {t('Créez du contenu engageant avec des templates professionnels adaptés à vos objectifs')}
                 </p>
             </div>
 
@@ -333,12 +334,12 @@ export default function EnhancedPostGenerator({ profile }) {
             {/* Generator Form */}
             <div className="acs-card">
                 <div className="acs-card-header">
-                    <h3 className="acs-card-title">{__('Paramètres de génération', 'ai-content-studio')}</h3>
+                    <h3 className="acs-card-title">{t('Paramètres de génération')}</h3>
                 </div>
 
                 {/* Plateforme - Toutes les 8 plateformes */}
                 <div className="acs-form-group">
-                    <label className="acs-form-label">{__('Plateforme', 'ai-content-studio')}</label>
+                    <label className="acs-form-label">{t('Plateforme')}</label>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
                         {Object.keys(PLATFORM_SPECS).map((p) => {
                             const spec = PLATFORM_SPECS[p];
@@ -370,7 +371,7 @@ export default function EnhancedPostGenerator({ profile }) {
 
                 {/* Type de contenu */}
                 <div className="acs-form-group">
-                    <label className="acs-form-label">{__('Type de contenu', 'ai-content-studio')}</label>
+                    <label className="acs-form-label">{t('Type de contenu')}</label>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
                         {Object.values(CONTENT_TYPES).map((type) => (
                             <div
@@ -401,9 +402,9 @@ export default function EnhancedPostGenerator({ profile }) {
                 {/* Template */}
                 {availableTemplates.length > 0 && (
                     <div className="acs-form-group">
-                        <label className="acs-form-label">{__('Template', 'ai-content-studio')}</label>
+                        <label className="acs-form-label">{t('Template')}</label>
                         <select className="acs-select" value={template} onChange={(e) => setTemplate(e.target.value)}>
-                            <option value="">{__('-- Sélectionner un template --', 'ai-content-studio')}</option>
+                            <option value="">{t('-- Sélectionner un template --')}</option>
                             {availableTemplates.map((t) => (
                                 <option key={t.id} value={t.id}>
                                     {t.name} - {t.description}
@@ -439,7 +440,7 @@ export default function EnhancedPostGenerator({ profile }) {
 
                 {/* Sujet */}
                 <div className="acs-form-group">
-                    <label className="acs-form-label">{__('Sujet du post', 'ai-content-studio')}</label>
+                    <label className="acs-form-label">{t('Sujet du post')}</label>
 
                     {/* Post Ideas Tags - Affichage simple et rapide */}
                     {!loadingIdeas && postIdeas.length > 0 && (
@@ -515,32 +516,32 @@ export default function EnhancedPostGenerator({ profile }) {
 
                     <textarea
                         className="acs-textarea"
-                        placeholder={__('Exemple: 5 astuces pour améliorer sa productivité au travail', 'ai-content-studio')}
+                        placeholder={t('Exemple: 5 astuces pour améliorer sa productivité au travail')}
                         value={topic}
                         onChange={(e) => setTopic(e.target.value)}
                         rows={3}
                     />
                     <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', marginTop: 'var(--acs-spacing-1)' }}>
-                        💡 {__('Plus votre sujet est précis, meilleur sera le résultat', 'ai-content-studio')}
+                        💡 {t('Plus votre sujet est précis, meilleur sera le résultat')}
                     </div>
                 </div>
 
                 {/* Ton et Language */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--acs-spacing-4)' }}>
                     <div className="acs-form-group">
-                        <label className="acs-form-label">{__('Ton de voix', 'ai-content-studio')}</label>
+                        <label className="acs-form-label">{t('Ton de voix')}</label>
                         <select className="acs-select" value={tone} onChange={(e) => setTone(e.target.value)}>
-                            <option value="professional">{__('Professionnel', 'ai-content-studio')}</option>
-                            <option value="casual">{__('Décontracté', 'ai-content-studio')}</option>
-                            <option value="enthusiastic">{__('Enthousiaste', 'ai-content-studio')}</option>
-                            <option value="friendly">{__('Amical', 'ai-content-studio')}</option>
-                            <option value="inspiring">{__('Inspirant', 'ai-content-studio')}</option>
-                            <option value="educational">{__('Éducatif', 'ai-content-studio')}</option>
+                            <option value="professional">{t('Professionnel')}</option>
+                            <option value="casual">{t('Décontracté')}</option>
+                            <option value="enthusiastic">{t('Enthousiaste')}</option>
+                            <option value="friendly">{t('Amical')}</option>
+                            <option value="inspiring">{t('Inspirant')}</option>
+                            <option value="educational">{t('Éducatif')}</option>
                         </select>
                     </div>
 
                     <div className="acs-form-group">
-                        <label className="acs-form-label">{__('Langue', 'ai-content-studio')}</label>
+                        <label className="acs-form-label">{t('Langue')}</label>
                         <select className="acs-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
                             <optgroup label="🌍 Europe">
                                 <option value="en">🇬🇧 English</option>
@@ -612,11 +613,11 @@ export default function EnhancedPostGenerator({ profile }) {
                     {generating ? (
                         <>
                             <div className="acs-spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }} />
-                            {__('Génération en cours...', 'ai-content-studio')}
+                            {t('Génération en cours...')}
                         </>
                     ) : (
                         <>
-                            <FiZap /> {__('Générer 3 variantes', 'ai-content-studio')}
+                            <FiZap /> {t('Générer 3 variantes')}
                         </>
                     )}
                 </button>
@@ -628,7 +629,7 @@ export default function EnhancedPostGenerator({ profile }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--acs-spacing-4)' }}>
                         <div>
                             <h2 className="acs-card-title" style={{ marginBottom: 'var(--acs-spacing-1)' }}>
-                                {__('Posts générés', 'ai-content-studio')} ✨
+                                {t('Posts générés')} ✨
                             </h2>
                             <p style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', margin: 0 }}>
                                 Sélectionnez le post qui correspond le mieux à votre style
@@ -675,7 +676,7 @@ export default function EnhancedPostGenerator({ profile }) {
                                             fontSize: 'var(--acs-font-size-sm)',
                                             fontWeight: 600,
                                         }}>
-                                            {__('Variante', 'ai-content-studio')} {index + 1}
+                                            {t('Variante')} {index + 1}
                                         </span>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)' }}>
                                             {isOver ? (
@@ -767,11 +768,11 @@ export default function EnhancedPostGenerator({ profile }) {
                                         >
                                             {copiedIndex === index ? (
                                                 <>
-                                                    <FiCheck /> {__('Copié!', 'ai-content-studio')}
+                                                    <FiCheck /> {t('Copié!')}
                                                 </>
                                             ) : (
                                                 <>
-                                                    <FiCopy /> {__('Copier', 'ai-content-studio')}
+                                                    <FiCopy /> {t('Copier')}
                                                 </>
                                             )}
                                         </button>
@@ -779,14 +780,14 @@ export default function EnhancedPostGenerator({ profile }) {
                                             className="acs-btn acs-btn-outline-primary acs-btn-sm"
                                             onClick={() => saveToLibrary(post, index)}
                                         >
-                                            <FiHeart /> {__('Favoris', 'ai-content-studio')}
+                                            <FiHeart /> {t('Favoris')}
                                         </button>
                                     </div>
                                     <button
                                         className="acs-btn acs-btn-primary acs-btn-sm w-100"
                                         onClick={() => openScheduleModal(post)}
                                     >
-                                        <FiCalendar /> {__('Planifier ce post', 'ai-content-studio')}
+                                        <FiCalendar /> {t('Planifier ce post')}
                                     </button>
                                 </div>
                             );
@@ -799,9 +800,9 @@ export default function EnhancedPostGenerator({ profile }) {
             {!generating && generatedPosts.length === 0 && (
                 <div className="acs-card" style={{ marginTop: 'var(--acs-spacing-4)', textAlign: 'center', padding: '3rem 2rem' }}>
                     <FiZap size={48} style={{ color: 'var(--acs-gray-300)', marginBottom: '1rem' }} />
-                    <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{__('Prêt à créer du contenu ?', 'ai-content-studio')}</h3>
+                    <h3 style={{ marginBottom: 'var(--acs-spacing-2)' }}>{t('Prêt à créer du contenu ?')}</h3>
                     <p className="acs-text-muted">
-                        {__('Choisissez un type de contenu, un template et un sujet pour générer des posts professionnels', 'ai-content-studio')}
+                        {t('Choisissez un type de contenu, un template et un sujet pour générer des posts professionnels')}
                     </p>
                 </div>
             )}

@@ -10,7 +10,7 @@ import {
     FiCheck,
 } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import PostDetailModal from '../shared/PostDetailModal';
 
 const DAYS_OF_WEEK = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
@@ -45,6 +45,7 @@ const PLATFORM_EMOJIS = {
 };
 
 export default function ContentCalendar({ profile }) {
+    const { t } = useTranslation();
     const [currentDate, setCurrentDate] = useState(new Date());
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -167,7 +168,7 @@ export default function ContentCalendar({ profile }) {
             }
         } catch (err) {
             console.error('Error moving post:', err);
-            alert(__('Erreur lors du déplacement du post', 'ai-content-studio'));
+            alert(t('Erreur lors du déplacement du post'));
         } finally {
             setDraggedPost(null);
         }
@@ -341,7 +342,7 @@ export default function ContentCalendar({ profile }) {
             return (
                 <div style={{ textAlign: 'center', padding: 'var(--acs-spacing-6)', color: 'var(--acs-gray-500)' }}>
                     <FiCalendar size={48} style={{ marginBottom: 'var(--acs-spacing-3)' }} />
-                    <p>{__('Aucun post planifié pour ce mois', 'ai-content-studio')}</p>
+                    <p>{t('Aucun post planifié pour ce mois')}</p>
                 </div>
             );
         }
@@ -421,9 +422,9 @@ export default function ContentCalendar({ profile }) {
     return (
         <div>
             <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                <h1 className="acs-page-title">{__('Calendrier Éditorial', 'ai-content-studio')}</h1>
+                <h1 className="acs-page-title">{t('Calendrier Éditorial')}</h1>
                 <p className="acs-text-muted">
-                    {__('Planifiez et organisez votre contenu sur tous vos réseaux sociaux', 'ai-content-studio')}
+                    {t('Planifiez et organisez votre contenu sur tous vos réseaux sociaux')}
                 </p>
             </div>
 
@@ -442,14 +443,14 @@ export default function ContentCalendar({ profile }) {
                             <FiChevronRight />
                         </button>
                         <button className="acs-btn acs-btn-outline-primary acs-btn-sm" onClick={goToToday}>
-                            {__("Aujourd'hui", 'ai-content-studio')}
+                            {t("Aujourd'hui")}
                         </button>
                     </div>
 
                     {/* View switcher and filters */}
                     <div style={{ display: 'flex', gap: 'var(--acs-spacing-2)', flexWrap: 'wrap' }}>
                         <select className="acs-select" style={{ width: 'auto' }} value={filterPlatform} onChange={(e) => setFilterPlatform(e.target.value)}>
-                            <option value="all">{__('Toutes plateformes', 'ai-content-studio')}</option>
+                            <option value="all">{t('Toutes plateformes')}</option>
                             <option value="instagram">📷 Instagram</option>
                             <option value="facebook">📘 Facebook</option>
                             <option value="linkedin">💼 LinkedIn</option>
@@ -457,7 +458,7 @@ export default function ContentCalendar({ profile }) {
                         </select>
 
                         <select className="acs-select" style={{ width: 'auto' }} value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-                            <option value="all">{__('Tous statuts', 'ai-content-studio')}</option>
+                            <option value="all">{t('Tous statuts')}</option>
                             <option value="draft">Brouillon</option>
                             <option value="scheduled">Planifié</option>
                             <option value="published">Publié</option>
@@ -476,14 +477,14 @@ export default function ContentCalendar({ profile }) {
                                 onClick={() => setView('month')}
                                 style={{ margin: 0 }}
                             >
-                                {__('Mois', 'ai-content-studio')}
+                                {t('Mois')}
                             </button>
                             <button
                                 className={`acs-btn acs-btn-sm ${view === 'list' ? 'acs-btn-primary' : ''}`}
                                 onClick={() => setView('list')}
                                 style={{ margin: 0 }}
                             >
-                                {__('Liste', 'ai-content-studio')}
+                                {t('Liste')}
                             </button>
                         </div>
                     </div>

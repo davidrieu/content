@@ -1,8 +1,9 @@
 import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import { FiMail, FiLock, FiUser, FiUserPlus, FiCheck, FiGlobe } from 'react-icons/fi';
 
 export default function RegisterForm({ onSwitchToLogin }) {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -24,17 +25,17 @@ export default function RegisterForm({ onSwitchToLogin }) {
 
     const validateForm = () => {
         if (formData.password.length < 8) {
-            setError(__('Le mot de passe doit contenir au moins 8 caractères', 'ai-content-studio'));
+            setError(t('Le mot de passe doit contenir au moins 8 caractères'));
             return false;
         }
 
         if (formData.password !== formData.confirmPassword) {
-            setError(__('Les mots de passe ne correspondent pas', 'ai-content-studio'));
+            setError(t('Les mots de passe ne correspondent pas'));
             return false;
         }
 
         if (!formData.email.includes('@')) {
-            setError(__('Veuillez entrer une adresse email valide', 'ai-content-studio'));
+            setError(t('Veuillez entrer une adresse email valide'));
             return false;
         }
 
@@ -76,10 +77,10 @@ export default function RegisterForm({ onSwitchToLogin }) {
                     window.location.reload();
                 }, 2000);
             } else {
-                setError(data.data.message || __('Erreur lors de la création du compte', 'ai-content-studio'));
+                setError(data.data.message || t('Erreur lors de la création du compte'));
             }
         } catch (err) {
-            setError(__('Erreur lors de la création du compte. Veuillez réessayer.', 'ai-content-studio'));
+            setError(t('Erreur lors de la création du compte. Veuillez réessayer.'));
         } finally {
             setLoading(false);
         }
@@ -93,9 +94,9 @@ export default function RegisterForm({ onSwitchToLogin }) {
                         <div className="acs-auth-icon success">
                             <FiCheck size={32} />
                         </div>
-                        <h1 className="acs-auth-title">{__('Compte créé avec succès !', 'ai-content-studio')}</h1>
+                        <h1 className="acs-auth-title">{t('Compte créé avec succès !')}</h1>
                         <p className="acs-auth-subtitle">
-                            {__('Redirection en cours...', 'ai-content-studio')}
+                            {t('Redirection en cours...')}
                         </p>
                     </div>
                 </div>
@@ -106,9 +107,9 @@ export default function RegisterForm({ onSwitchToLogin }) {
     const passwordStrength = () => {
         const password = formData.password;
         if (password.length === 0) return null;
-        if (password.length < 8) return { level: 'weak', label: __('Faible', 'ai-content-studio') };
-        if (password.length < 12) return { level: 'medium', label: __('Moyen', 'ai-content-studio') };
-        return { level: 'strong', label: __('Fort', 'ai-content-studio') };
+        if (password.length < 8) return { level: 'weak', label: t('Faible') };
+        if (password.length < 12) return { level: 'medium', label: t('Moyen') };
+        return { level: 'strong', label: t('Fort') };
     };
 
     const strength = passwordStrength();
@@ -120,9 +121,9 @@ export default function RegisterForm({ onSwitchToLogin }) {
                     <div className="acs-auth-icon">
                         <FiUserPlus size={32} />
                     </div>
-                    <h1 className="acs-auth-title">{__('Créer un compte', 'ai-content-studio')}</h1>
+                    <h1 className="acs-auth-title">{t('Créer un compte')}</h1>
                     <p className="acs-auth-subtitle">
-                        {__('Commencez à créer du contenu avec l\'IA', 'ai-content-studio')}
+                        {t('Commencez à créer du contenu avec l\'IA')}
                     </p>
                 </div>
 
@@ -135,7 +136,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
                 <form onSubmit={handleSubmit} className="acs-auth-form">
                     <div className="acs-form-group">
                         <label className="acs-form-label">
-                            {__('Nom d\'utilisateur', 'ai-content-studio')}
+                            {t('Nom d\'utilisateur')}
                         </label>
                         <div className="acs-input-with-icon">
                             <FiUser className="acs-input-icon" />
@@ -147,14 +148,14 @@ export default function RegisterForm({ onSwitchToLogin }) {
                                 onChange={handleChange}
                                 required
                                 autoFocus
-                                placeholder={__('johndoe', 'ai-content-studio')}
+                                placeholder={t('johndoe')}
                             />
                         </div>
                     </div>
 
                     <div className="acs-form-group">
                         <label className="acs-form-label">
-                            {__('Adresse email', 'ai-content-studio')}
+                            {t('Adresse email')}
                         </label>
                         <div className="acs-input-with-icon">
                             <FiMail className="acs-input-icon" />
@@ -165,14 +166,14 @@ export default function RegisterForm({ onSwitchToLogin }) {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                placeholder={__('votre@email.com', 'ai-content-studio')}
+                                placeholder={t('votre@email.com')}
                             />
                         </div>
                     </div>
 
                     <div className="acs-form-group">
                         <label className="acs-form-label">
-                            {__('Langue de l\'interface', 'ai-content-studio')}
+                            {t('Langue de l\'interface')}
                         </label>
                         <div className="acs-input-with-icon">
                             <FiGlobe className="acs-input-icon" />
@@ -219,7 +220,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
 
                     <div className="acs-form-group">
                         <label className="acs-form-label">
-                            {__('Mot de passe', 'ai-content-studio')}
+                            {t('Mot de passe')}
                         </label>
                         <div className="acs-input-with-icon">
                             <FiLock className="acs-input-icon" />
@@ -230,7 +231,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
-                                placeholder={__('••••••••', 'ai-content-studio')}
+                                placeholder={t('••••••••')}
                             />
                         </div>
                         {strength && (
@@ -247,7 +248,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
 
                     <div className="acs-form-group">
                         <label className="acs-form-label">
-                            {__('Confirmer le mot de passe', 'ai-content-studio')}
+                            {t('Confirmer le mot de passe')}
                         </label>
                         <div className="acs-input-with-icon">
                             <FiLock className="acs-input-icon" />
@@ -258,7 +259,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                                 required
-                                placeholder={__('••••••••', 'ai-content-studio')}
+                                placeholder={t('••••••••')}
                             />
                         </div>
                     </div>
@@ -269,33 +270,33 @@ export default function RegisterForm({ onSwitchToLogin }) {
                         disabled={loading}
                     >
                         {loading ? (
-                            __('Création...', 'ai-content-studio')
+                            t('Création...')
                         ) : (
                             <>
                                 <FiUserPlus />
-                                {__('Créer mon compte', 'ai-content-studio')}
+                                {t('Créer mon compte')}
                             </>
                         )}
                     </button>
                 </form>
 
                 <div className="acs-auth-divider">
-                    <span>{__('ou', 'ai-content-studio')}</span>
+                    <span>{t('ou')}</span>
                 </div>
 
                 <button
                     onClick={onSwitchToLogin}
                     className="acs-btn acs-btn-outline-primary acs-btn-lg w-100"
                 >
-                    {__('J\'ai déjà un compte', 'ai-content-studio')}
+                    {t('J\'ai déjà un compte')}
                 </button>
 
                 <div className="acs-auth-terms">
                     <p className="acs-text-sm">
-                        {__('En créant un compte, vous acceptez nos', 'ai-content-studio')}{' '}
-                        <a href="#" className="acs-link">{__('Conditions d\'utilisation', 'ai-content-studio')}</a>
-                        {' '}{__('et notre', 'ai-content-studio')}{' '}
-                        <a href="#" className="acs-link">{__('Politique de confidentialité', 'ai-content-studio')}</a>
+                        {t('En créant un compte, vous acceptez nos')}{' '}
+                        <a href="#" className="acs-link">{t('Conditions d\'utilisation')}</a>
+                        {' '}{t('et notre')}{' '}
+                        <a href="#" className="acs-link">{t('Politique de confidentialité')}</a>
                     </p>
                 </div>
             </div>

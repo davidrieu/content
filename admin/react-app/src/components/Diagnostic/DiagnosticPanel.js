@@ -1,9 +1,10 @@
 import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import { FiCheck, FiX, FiAlertTriangle, FiRefreshCw, FiTool } from 'react-icons/fi';
 
 export default function DiagnosticPanel() {
+    const { t } = useTranslation();
     const [diagnostic, setDiagnostic] = useState(null);
     const [loading, setLoading] = useState(true);
     const [migrating, setMigrating] = useState(false);
@@ -34,7 +35,7 @@ export default function DiagnosticPanel() {
     };
 
     const runMigration = async () => {
-        if (!confirm(__('Exécuter la migration de la base de données ?', 'ai-content-studio'))) {
+        if (!confirm(t('Exécuter la migration de la base de données ?'))) {
             return;
         }
 
@@ -46,14 +47,14 @@ export default function DiagnosticPanel() {
             });
 
             if (response.success) {
-                alert(__('Migration réussie !', 'ai-content-studio'));
+                alert(t('Migration réussie !'));
                 fetchDiagnostic(); // Refresh diagnostic
             } else {
-                alert(__('Erreur lors de la migration: ', 'ai-content-studio') + response.message);
+                alert(t('Erreur lors de la migration: ') + response.message);
             }
         } catch (error) {
             console.error('Migration error:', error);
-            alert(__('Erreur lors de la migration', 'ai-content-studio'));
+            alert(t('Erreur lors de la migration'));
         } finally {
             setMigrating(false);
         }
@@ -72,7 +73,7 @@ export default function DiagnosticPanel() {
             <div className="acs-card" style={{ padding: 'var(--acs-spacing-6)' }}>
                 <div className="acs-loading-state">
                     <div className="acs-spinner"></div>
-                    <p>{__('Chargement du diagnostic...', 'ai-content-studio')}</p>
+                    <p>{t('Chargement du diagnostic...')}</p>
                 </div>
             </div>
         );
@@ -81,7 +82,7 @@ export default function DiagnosticPanel() {
     if (!diagnostic) {
         return (
             <div className="acs-card" style={{ padding: 'var(--acs-spacing-6)' }}>
-                <p>{__('Impossible de charger le diagnostic', 'ai-content-studio')}</p>
+                <p>{t('Impossible de charger le diagnostic')}</p>
             </div>
         );
     }
@@ -90,10 +91,10 @@ export default function DiagnosticPanel() {
         <div style={{ padding: 'var(--acs-spacing-6)' }}>
             <div style={{ marginBottom: 'var(--acs-spacing-6)' }}>
                 <h1 style={{ fontSize: '1.875rem', fontWeight: 700, marginBottom: 'var(--acs-spacing-2)' }}>
-                    {__('Diagnostic Système', 'ai-content-studio')}
+                    {t('Diagnostic Système')}
                 </h1>
                 <p style={{ color: 'var(--acs-gray-600)' }}>
-                    {__('Vérifiez l\'état de votre installation et résolvez les problèmes', 'ai-content-studio')}
+                    {t('Vérifiez l\'état de votre installation et résolvez les problèmes')}
                 </p>
             </div>
 
@@ -103,7 +104,7 @@ export default function DiagnosticPanel() {
                     <div style={{ padding: 'var(--acs-spacing-5)' }}>
                         <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 'var(--acs-spacing-4)' }}>
                             <FiAlertTriangle style={{ color: '#f59e0b' }} />
-                            {__('Recommandations', 'ai-content-studio')}
+                            {t('Recommandations')}
                         </h3>
                         {diagnostic.recommendations.map((rec, index) => (
                             <div key={index} style={{ marginBottom: 'var(--acs-spacing-3)', display: 'flex', gap: 'var(--acs-spacing-4)', alignItems: 'flex-start' }}>
@@ -123,7 +124,7 @@ export default function DiagnosticPanel() {
                                         onClick={runMigration}
                                         disabled={migrating}
                                     >
-                                        <FiTool /> {migrating ? __('Migration...', 'ai-content-studio') : __('Migrer', 'ai-content-studio')}
+                                        <FiTool /> {migrating ? t('Migration...') : t('Migrer')}
                                     </button>
                                 )}
                             </div>
@@ -135,26 +136,26 @@ export default function DiagnosticPanel() {
             {/* System Status */}
             <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-6)' }}>
                 <div className="acs-card-header">
-                    <h3>{__('État du Système', 'ai-content-studio')}</h3>
+                    <h3>{t('État du Système')}</h3>
                 </div>
                 <div style={{ padding: 'var(--acs-spacing-5)' }}>
                     <table style={{ width: '100%' }}>
                         <tbody>
                             <tr style={{ borderBottom: '1px solid var(--acs-gray-200)' }}>
                                 <td style={{ padding: 'var(--acs-spacing-3)' }}>
-                                    <strong>{__('Table system_logs', 'ai-content-studio')}</strong>
+                                    <strong>{t('Table system_logs')}</strong>
                                 </td>
                                 <td style={{ padding: 'var(--acs-spacing-3)', textAlign: 'right' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
                                         {getStatusIcon(diagnostic.system_logs_table?.exists)}
-                                        <span>{diagnostic.system_logs_table?.exists ? __('Existe', 'ai-content-studio') : __('Manquante', 'ai-content-studio')}</span>
+                                        <span>{diagnostic.system_logs_table?.exists ? t('Existe') : t('Manquante')}</span>
                                     </div>
                                 </td>
                             </tr>
                             {diagnostic.system_logs_table?.exists && (
                                 <tr style={{ borderBottom: '1px solid var(--acs-gray-200)' }}>
                                     <td style={{ padding: 'var(--acs-spacing-3)' }}>
-                                        {__('Nombre de logs', 'ai-content-studio')}
+                                        {t('Nombre de logs')}
                                     </td>
                                     <td style={{ padding: 'var(--acs-spacing-3)', textAlign: 'right' }}>
                                         <strong>{diagnostic.system_logs_table.count}</strong>
@@ -163,7 +164,7 @@ export default function DiagnosticPanel() {
                             )}
                             <tr style={{ borderBottom: '1px solid var(--acs-gray-200)' }}>
                                 <td style={{ padding: 'var(--acs-spacing-3)' }}>
-                                    <strong>{__('Clé API Claude', 'ai-content-studio')}</strong>
+                                    <strong>{t('Clé API Claude')}</strong>
                                 </td>
                                 <td style={{ padding: 'var(--acs-spacing-3)', textAlign: 'right' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
@@ -174,12 +175,12 @@ export default function DiagnosticPanel() {
                             </tr>
                             <tr style={{ borderBottom: '1px solid var(--acs-gray-200)' }}>
                                 <td style={{ padding: 'var(--acs-spacing-3)' }}>
-                                    <strong>{__('Profil utilisateur', 'ai-content-studio')}</strong>
+                                    <strong>{t('Profil utilisateur')}</strong>
                                 </td>
                                 <td style={{ padding: 'var(--acs-spacing-3)', textAlign: 'right' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
                                         {getStatusIcon(diagnostic.user_profile?.has_profile)}
-                                        <span>{diagnostic.user_profile?.has_profile ? __('Configuré', 'ai-content-studio') : __('Manquant', 'ai-content-studio')}</span>
+                                        <span>{diagnostic.user_profile?.has_profile ? t('Configuré') : t('Manquant')}</span>
                                     </div>
                                 </td>
                             </tr>
@@ -192,16 +193,16 @@ export default function DiagnosticPanel() {
             {diagnostic.system_logs_table?.exists && diagnostic.system_logs_table.recent?.length > 0 && (
                 <div className="acs-card">
                     <div className="acs-card-header">
-                        <h3>{__('Logs Récents', 'ai-content-studio')}</h3>
+                        <h3>{t('Logs Récents')}</h3>
                     </div>
                     <div style={{ padding: 'var(--acs-spacing-5)' }}>
                         <table className="acs-table">
                             <thead>
                                 <tr>
-                                    <th>{__('Niveau', 'ai-content-studio')}</th>
-                                    <th>{__('Catégorie', 'ai-content-studio')}</th>
-                                    <th>{__('Message', 'ai-content-studio')}</th>
-                                    <th>{__('Date', 'ai-content-studio')}</th>
+                                    <th>{t('Niveau')}</th>
+                                    <th>{t('Catégorie')}</th>
+                                    <th>{t('Message')}</th>
+                                    <th>{t('Date')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -226,7 +227,7 @@ export default function DiagnosticPanel() {
             {/* Refresh Button */}
             <div style={{ marginTop: 'var(--acs-spacing-6)', textAlign: 'center' }}>
                 <button className="acs-btn acs-btn-secondary" onClick={fetchDiagnostic}>
-                    <FiRefreshCw /> {__('Actualiser le diagnostic', 'ai-content-studio')}
+                    <FiRefreshCw /> {t('Actualiser le diagnostic')}
                 </button>
             </div>
         </div>

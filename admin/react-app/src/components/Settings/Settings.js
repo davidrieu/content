@@ -1,5 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import {
     FiUser,
     FiGlobe,
@@ -15,6 +15,7 @@ import PricingModal from '../common/PricingModal';
 import './Settings.css';
 
 export default function Settings({ profile }) {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('account');
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -121,7 +122,7 @@ export default function Settings({ profile }) {
             }
         } catch (err) {
             console.error('Error loading settings:', err);
-            showMessage('error', __('Erreur lors du chargement des paramètres', 'ai-content-studio'));
+            showMessage('error', t('Erreur lors du chargement des paramètres'));
         } finally {
             setLoading(false);
         }
@@ -141,9 +142,9 @@ export default function Settings({ profile }) {
                 data: accountData,
             });
 
-            showMessage('success', __('Informations du compte mises à jour', 'ai-content-studio'));
+            showMessage('success', t('Informations du compte mises à jour'));
         } catch (err) {
-            showMessage('error', __('Erreur lors de la sauvegarde', 'ai-content-studio'));
+            showMessage('error', t('Erreur lors de la sauvegarde'));
         } finally {
             setSaving(false);
         }
@@ -159,10 +160,10 @@ export default function Settings({ profile }) {
             });
 
             if (response.success) {
-                showMessage('success', __('Préférences sauvegardées', 'ai-content-studio'));
+                showMessage('success', t('Préférences sauvegardées'));
             }
         } catch (err) {
-            showMessage('error', __('Erreur lors de la sauvegarde', 'ai-content-studio'));
+            showMessage('error', t('Erreur lors de la sauvegarde'));
         } finally {
             setSaving(false);
         }
@@ -173,17 +174,17 @@ export default function Settings({ profile }) {
 
         // Validation
         if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
-            setPasswordError(__('Tous les champs sont requis', 'ai-content-studio'));
+            setPasswordError(t('Tous les champs sont requis'));
             return;
         }
 
         if (passwordData.new_password.length < 8) {
-            setPasswordError(__('Le nouveau mot de passe doit contenir au moins 8 caractères', 'ai-content-studio'));
+            setPasswordError(t('Le nouveau mot de passe doit contenir au moins 8 caractères'));
             return;
         }
 
         if (passwordData.new_password !== passwordData.confirm_password) {
-            setPasswordError(__('Les mots de passe ne correspondent pas', 'ai-content-studio'));
+            setPasswordError(t('Les mots de passe ne correspondent pas'));
             return;
         }
 
@@ -199,7 +200,7 @@ export default function Settings({ profile }) {
             });
 
             if (response.success) {
-                showMessage('success', __('Mot de passe modifié avec succès', 'ai-content-studio'));
+                showMessage('success', t('Mot de passe modifié avec succès'));
                 setPasswordData({
                     current_password: '',
                     new_password: '',
@@ -207,7 +208,7 @@ export default function Settings({ profile }) {
                 });
             }
         } catch (err) {
-            setPasswordError(err.message || __('Mot de passe actuel incorrect', 'ai-content-studio'));
+            setPasswordError(err.message || t('Mot de passe actuel incorrect'));
         } finally {
             setSaving(false);
         }
@@ -231,32 +232,32 @@ export default function Settings({ profile }) {
                 link.click();
                 URL.revokeObjectURL(url);
 
-                showMessage('success', __('Données exportées avec succès', 'ai-content-studio'));
+                showMessage('success', t('Données exportées avec succès'));
             }
         } catch (err) {
-            showMessage('error', __('Erreur lors de l\'export', 'ai-content-studio'));
+            showMessage('error', t('Erreur lors de l\'export'));
         }
     };
 
     const tabs = [
-        { id: 'account', icon: FiUser, label: __('Compte', 'ai-content-studio') },
-        { id: 'preferences', icon: FiGlobe, label: __('Préférences', 'ai-content-studio') },
-        { id: 'subscription', icon: FiCreditCard, label: __('Abonnement', 'ai-content-studio') },
-        { id: 'data', icon: FiDownload, label: __('Données', 'ai-content-studio') },
+        { id: 'account', icon: FiUser, label: t('Compte') },
+        { id: 'preferences', icon: FiGlobe, label: t('Préférences') },
+        { id: 'subscription', icon: FiCreditCard, label: t('Abonnement') },
+        { id: 'data', icon: FiDownload, label: t('Données') },
     ];
 
     const toneOptions = [
-        { value: 'professional', label: __('Professionnel', 'ai-content-studio') },
-        { value: 'casual', label: __('Décontracté', 'ai-content-studio') },
-        { value: 'friendly', label: __('Amical', 'ai-content-studio') },
-        { value: 'enthusiastic', label: __('Enthousiaste', 'ai-content-studio') },
-        { value: 'authoritative', label: __('Autoritaire', 'ai-content-studio') },
+        { value: 'professional', label: t('Professionnel') },
+        { value: 'casual', label: t('Décontracté') },
+        { value: 'friendly', label: t('Amical') },
+        { value: 'enthusiastic', label: t('Enthousiaste') },
+        { value: 'authoritative', label: t('Autoritaire') },
     ];
 
     const lengthOptions = [
-        { value: 'short', label: __('Court', 'ai-content-studio') },
-        { value: 'medium', label: __('Moyen', 'ai-content-studio') },
-        { value: 'long', label: __('Long', 'ai-content-studio') },
+        { value: 'short', label: t('Court') },
+        { value: 'medium', label: t('Moyen') },
+        { value: 'long', label: t('Long') },
     ];
 
     const languageOptions = [
@@ -296,7 +297,7 @@ export default function Settings({ profile }) {
         return (
             <div className="acs-settings-loading">
                 <div className="acs-spinner" />
-                <p>{__('Chargement des paramètres...', 'ai-content-studio')}</p>
+                <p>{t('Chargement des paramètres...')}</p>
             </div>
         );
     }
@@ -304,9 +305,9 @@ export default function Settings({ profile }) {
     return (
         <div className="acs-settings">
             <div className="acs-settings-header">
-                <h1 className="acs-settings-title">{__('Paramètres', 'ai-content-studio')}</h1>
+                <h1 className="acs-settings-title">{t('Paramètres')}</h1>
                 <p className="acs-settings-subtitle">
-                    {__('Gérez vos préférences et paramètres de compte', 'ai-content-studio')}
+                    {t('Gérez vos préférences et paramètres de compte')}
                 </p>
             </div>
 
@@ -338,12 +339,12 @@ export default function Settings({ profile }) {
                     {activeTab === 'account' && (
                         <div className="acs-settings-section">
                             <h2 className="acs-settings-section-title">
-                                {__('Informations du compte', 'ai-content-studio')}
+                                {t('Informations du compte')}
                             </h2>
 
                             <div className="acs-form-group">
                                 <label className="acs-form-label">
-                                    {__('Adresse email', 'ai-content-studio')}
+                                    {t('Adresse email')}
                                 </label>
                                 <input
                                     type="email"
@@ -356,7 +357,7 @@ export default function Settings({ profile }) {
                             <div className="acs-form-row">
                                 <div className="acs-form-group">
                                     <label className="acs-form-label">
-                                        {__('Prénom', 'ai-content-studio')}
+                                        {t('Prénom')}
                                     </label>
                                     <input
                                         type="text"
@@ -368,7 +369,7 @@ export default function Settings({ profile }) {
 
                                 <div className="acs-form-group">
                                     <label className="acs-form-label">
-                                        {__('Nom', 'ai-content-studio')}
+                                        {t('Nom')}
                                     </label>
                                     <input
                                         type="text"
@@ -385,7 +386,7 @@ export default function Settings({ profile }) {
                                 disabled={saving}
                             >
                                 <FiSave />
-                                {saving ? __('Sauvegarde...', 'ai-content-studio') : __('Sauvegarder', 'ai-content-studio')}
+                                {saving ? t('Sauvegarde...') : t('Sauvegarder')}
                             </button>
 
                             {/* Password Change Section */}
@@ -393,7 +394,7 @@ export default function Settings({ profile }) {
 
                             <h2 className="acs-settings-section-title">
                                 <FiShield style={{ marginRight: '8px' }} />
-                                {__('Changer le mot de passe', 'ai-content-studio')}
+                                {t('Changer le mot de passe')}
                             </h2>
 
                             {passwordError && (
@@ -405,7 +406,7 @@ export default function Settings({ profile }) {
 
                             <div className="acs-form-group">
                                 <label className="acs-form-label">
-                                    {__('Mot de passe actuel', 'ai-content-studio')}
+                                    {t('Mot de passe actuel')}
                                 </label>
                                 <input
                                     type="password"
@@ -418,20 +419,20 @@ export default function Settings({ profile }) {
                             <div className="acs-form-row">
                                 <div className="acs-form-group">
                                     <label className="acs-form-label">
-                                        {__('Nouveau mot de passe', 'ai-content-studio')}
+                                        {t('Nouveau mot de passe')}
                                     </label>
                                     <input
                                         type="password"
                                         className="acs-form-control"
                                         value={passwordData.new_password}
                                         onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
-                                        placeholder={__('Minimum 8 caractères', 'ai-content-studio')}
+                                        placeholder={t('Minimum 8 caractères')}
                                     />
                                 </div>
 
                                 <div className="acs-form-group">
                                     <label className="acs-form-label">
-                                        {__('Confirmer le mot de passe', 'ai-content-studio')}
+                                        {t('Confirmer le mot de passe')}
                                     </label>
                                     <input
                                         type="password"
@@ -448,7 +449,7 @@ export default function Settings({ profile }) {
                                 disabled={saving}
                             >
                                 <FiShield />
-                                {saving ? __('Modification...', 'ai-content-studio') : __('Changer le mot de passe', 'ai-content-studio')}
+                                {saving ? t('Modification...') : t('Changer le mot de passe')}
                             </button>
                         </div>
                     )}
@@ -457,12 +458,12 @@ export default function Settings({ profile }) {
                     {activeTab === 'preferences' && (
                         <div className="acs-settings-section">
                             <h2 className="acs-settings-section-title">
-                                {__('Préférences de génération', 'ai-content-studio')}
+                                {t('Préférences de génération')}
                             </h2>
 
                             <div className="acs-form-group">
                                 <label className="acs-form-label">
-                                    {__('Langue par défaut', 'ai-content-studio')}
+                                    {t('Langue par défaut')}
                                 </label>
                                 <select
                                     className="acs-form-control"
@@ -477,7 +478,7 @@ export default function Settings({ profile }) {
 
                             <div className="acs-form-group">
                                 <label className="acs-form-label">
-                                    {__('Ton par défaut', 'ai-content-studio')}
+                                    {t('Ton par défaut')}
                                 </label>
                                 <select
                                     className="acs-form-control"
@@ -492,7 +493,7 @@ export default function Settings({ profile }) {
 
                             <div className="acs-form-group">
                                 <label className="acs-form-label">
-                                    {__('Longueur de contenu par défaut', 'ai-content-studio')}
+                                    {t('Longueur de contenu par défaut')}
                                 </label>
                                 <select
                                     className="acs-form-control"
@@ -512,7 +513,7 @@ export default function Settings({ profile }) {
                                         checked={preferences.use_emojis}
                                         onChange={(e) => setPreferences({ ...preferences, use_emojis: e.target.checked })}
                                     />
-                                    <span>{__('Utiliser des emojis dans le contenu généré', 'ai-content-studio')}</span>
+                                    <span>{t('Utiliser des emojis dans le contenu généré')}</span>
                                 </label>
                             </div>
 
@@ -523,7 +524,7 @@ export default function Settings({ profile }) {
                                         checked={preferences.use_hashtags}
                                         onChange={(e) => setPreferences({ ...preferences, use_hashtags: e.target.checked })}
                                     />
-                                    <span>{__('Suggérer des hashtags automatiquement', 'ai-content-studio')}</span>
+                                    <span>{t('Suggérer des hashtags automatiquement')}</span>
                                 </label>
                             </div>
 
@@ -533,7 +534,7 @@ export default function Settings({ profile }) {
                                 disabled={saving}
                             >
                                 <FiSave />
-                                {saving ? __('Sauvegarde...', 'ai-content-studio') : __('Sauvegarder les préférences', 'ai-content-studio')}
+                                {saving ? t('Sauvegarde...') : t('Sauvegarder les préférences')}
                             </button>
                         </div>
                     )}
@@ -542,33 +543,33 @@ export default function Settings({ profile }) {
                     {activeTab === 'subscription' && (
                         <div className="acs-settings-section">
                             <h2 className="acs-settings-section-title">
-                                {__('Votre abonnement', 'ai-content-studio')}
+                                {t('Votre abonnement')}
                             </h2>
 
                             <div className="acs-subscription-card">
                                 <div className="acs-subscription-header">
                                     <div>
                                         <h3 className="acs-subscription-plan">
-                                            {subscriptionData.plan === 'free_trial' && __('Essai Gratuit', 'ai-content-studio')}
-                                            {subscriptionData.plan === 'starter' && __('Starter', 'ai-content-studio')}
-                                            {subscriptionData.plan === 'professional' && __('Professional', 'ai-content-studio')}
-                                            {subscriptionData.plan === 'business' && __('Business', 'ai-content-studio')}
+                                            {subscriptionData.plan === 'free_trial' && t('Essai Gratuit')}
+                                            {subscriptionData.plan === 'starter' && t('Starter')}
+                                            {subscriptionData.plan === 'professional' && t('Professional')}
+                                            {subscriptionData.plan === 'business' && t('Business')}
                                         </h3>
                                         <p className="acs-subscription-status">
-                                            {subscriptionData.status === 'active' && __('Actif', 'ai-content-studio')}
+                                            {subscriptionData.status === 'active' && t('Actif')}
                                         </p>
                                     </div>
                                     <button
                                         className="acs-btn acs-btn-primary"
                                         onClick={() => setShowPricingModal(true)}
                                     >
-                                        {__('Changer de plan', 'ai-content-studio')}
+                                        {t('Changer de plan')}
                                     </button>
                                 </div>
 
                                 <div className="acs-usage-stats">
                                     <div className="acs-usage-item">
-                                        <span className="acs-usage-label">{__('Posts générés ce mois', 'ai-content-studio')}</span>
+                                        <span className="acs-usage-label">{t('Posts générés ce mois')}</span>
                                         <span className="acs-usage-value">
                                             {subscriptionData.usage.posts} / {subscriptionData.limits.posts_per_month === -1 ? '∞' : subscriptionData.limits.posts_per_month}
                                         </span>
@@ -585,7 +586,7 @@ export default function Settings({ profile }) {
                                     </div>
 
                                     <div className="acs-usage-item">
-                                        <span className="acs-usage-label">{__('Articles générés ce mois', 'ai-content-studio')}</span>
+                                        <span className="acs-usage-label">{t('Articles générés ce mois')}</span>
                                         <span className="acs-usage-value">
                                             {subscriptionData.usage.articles} / {subscriptionData.limits.articles_per_month === -1 ? '∞' : subscriptionData.limits.articles_per_month}
                                         </span>
@@ -609,7 +610,7 @@ export default function Settings({ profile }) {
                     {activeTab === 'data' && (
                         <div className="acs-settings-section">
                             <h2 className="acs-settings-section-title">
-                                {__('Gestion des données', 'ai-content-studio')}
+                                {t('Gestion des données')}
                             </h2>
 
                             <div className="acs-data-card">
@@ -617,15 +618,15 @@ export default function Settings({ profile }) {
                                     <FiDownload size={24} />
                                 </div>
                                 <div className="acs-data-card-content">
-                                    <h3>{__('Exporter mes données', 'ai-content-studio')}</h3>
-                                    <p>{__('Téléchargez toutes vos données en format JSON (profil, posts, articles, stratégies)', 'ai-content-studio')}</p>
+                                    <h3>{t('Exporter mes données')}</h3>
+                                    <p>{t('Téléchargez toutes vos données en format JSON (profil, posts, articles, stratégies)')}</p>
                                 </div>
                                 <button
                                     className="acs-btn acs-btn-outline-primary"
                                     onClick={exportData}
                                 >
                                     <FiDownload />
-                                    {__('Exporter', 'ai-content-studio')}
+                                    {t('Exporter')}
                                 </button>
                             </div>
 
@@ -634,8 +635,8 @@ export default function Settings({ profile }) {
                                     <FiAlertCircle size={24} />
                                 </div>
                                 <div className="acs-data-card-content">
-                                    <h3>{__('Zone de danger', 'ai-content-studio')}</h3>
-                                    <p>{__('Actions irréversibles concernant votre compte', 'ai-content-studio')}</p>
+                                    <h3>{t('Zone de danger')}</h3>
+                                    <p>{t('Actions irréversibles concernant votre compte')}</p>
                                 </div>
                             </div>
                         </div>

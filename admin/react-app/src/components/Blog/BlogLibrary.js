@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import apiFetch from '@wordpress/api-fetch';
 import { FiFileText, FiEdit, FiTrash2, FiEye, FiCalendar, FiTag, FiGlobe } from 'react-icons/fi';
 
 export default function BlogLibrary() {
+    const { t } = useTranslation();
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedArticle, setSelectedArticle] = useState(null);
@@ -34,7 +35,7 @@ export default function BlogLibrary() {
 
     // Supprimer un article
     const deleteArticle = async (articleId) => {
-        if (!confirm(__('Êtes-vous sûr de vouloir supprimer cet article ?', 'ai-content-studio'))) {
+        if (!confirm(t('Êtes-vous sûr de vouloir supprimer cet article ?'))) {
             return;
         }
 
@@ -47,11 +48,11 @@ export default function BlogLibrary() {
             if (response.success) {
                 loadArticles(); // Recharger la liste
             } else {
-                alert(response.message || __('Erreur lors de la suppression', 'ai-content-studio'));
+                alert(response.message || t('Erreur lors de la suppression'));
             }
         } catch (error) {
             console.error('Error deleting article:', error);
-            alert(__('Erreur lors de la suppression', 'ai-content-studio'));
+            alert(t('Erreur lors de la suppression'));
         }
     };
 
@@ -104,16 +105,16 @@ export default function BlogLibrary() {
     return (
         <div className="acs-blog-library">
             <div className="acs-page-header">
-                <h1><FiFileText /> {__('Bibliothèque d\'Articles', 'ai-content-studio')}</h1>
+                <h1><FiFileText /> {t('Bibliothèque d\'Articles')}</h1>
                 <p className="acs-text-muted">
-                    {__('Retrouvez tous vos articles de blog générés', 'ai-content-studio')}
+                    {t('Retrouvez tous vos articles de blog générés')}
                 </p>
             </div>
 
             {articles.length === 0 ? (
                 <div className="acs-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
                     <FiFileText size={48} style={{ color: 'var(--acs-gray-400)', marginBottom: 'var(--acs-spacing-4)' }} />
-                    <h2>{__('Aucun article', 'ai-content-studio')}</h2>
+                    <h2>{t('Aucun article')}</h2>
                     <p className="acs-text-muted">
                         {__('Vous n\'avez pas encore généré d\'articles de blog.', 'ai-content-studio')}
                     </p>
@@ -131,7 +132,7 @@ export default function BlogLibrary() {
                                     </span>
                                     <span className="acs-article-meta-item">
                                         <FiFileText size={14} />
-                                        {article.word_count} {__('mots', 'ai-content-studio')}
+                                        {article.word_count} {t('mots')}
                                     </span>
                                     <span className="acs-article-meta-item">
                                         <FiCalendar size={14} />
@@ -143,7 +144,7 @@ export default function BlogLibrary() {
                             <div className="acs-article-card-body">
                                 {article.subject && (
                                     <p className="acs-article-subject">
-                                        <strong>{__('Sujet:', 'ai-content-studio')}</strong> {article.subject}
+                                        <strong>{t('Sujet:')}</strong> {article.subject}
                                     </p>
                                 )}
 
@@ -177,14 +178,14 @@ export default function BlogLibrary() {
                                     className="acs-btn acs-btn-sm acs-btn-outline-primary"
                                     onClick={() => viewArticle(article)}
                                 >
-                                    <FiEye /> {__('Voir', 'ai-content-studio')}
+                                    <FiEye /> {t('Voir')}
                                 </button>
                                 <button
                                     className="acs-btn acs-btn-sm"
                                     onClick={() => deleteArticle(article.id)}
                                     style={{ color: 'var(--acs-danger)' }}
                                 >
-                                    <FiTrash2 /> {__('Supprimer', 'ai-content-studio')}
+                                    <FiTrash2 /> {t('Supprimer')}
                                 </button>
                             </div>
                         </div>
@@ -209,14 +210,14 @@ export default function BlogLibrary() {
                         <div className="acs-modal-body acs-article-modal-body">
                             <div className="acs-article-meta-section">
                                 <div className="acs-article-meta-row">
-                                    <span><FiGlobe /> <strong>{__('Langue:', 'ai-content-studio')}</strong> {languageNames[selectedArticle.language]}</span>
-                                    <span><FiFileText /> <strong>{__('Mots:', 'ai-content-studio')}</strong> {selectedArticle.word_count}</span>
-                                    <span><FiCalendar /> <strong>{__('Créé le:', 'ai-content-studio')}</strong> {new Date(selectedArticle.created_at).toLocaleString()}</span>
+                                    <span><FiGlobe /> <strong>{t('Langue:')}</strong> {languageNames[selectedArticle.language]}</span>
+                                    <span><FiFileText /> <strong>{t('Mots:')}</strong> {selectedArticle.word_count}</span>
+                                    <span><FiCalendar /> <strong>{t('Créé le:')}</strong> {new Date(selectedArticle.created_at).toLocaleString()}</span>
                                 </div>
 
                                 {selectedArticle.keywords && selectedArticle.keywords.length > 0 && (
                                     <div className="acs-article-keywords-full">
-                                        <strong><FiTag /> {__('Mots-clés:', 'ai-content-studio')}</strong>
+                                        <strong><FiTag /> {t('Mots-clés:')}</strong>
                                         {selectedArticle.keywords.map((keyword, index) => (
                                             <span key={index} className="acs-keyword-badge">
                                                 {keyword}
@@ -227,20 +228,20 @@ export default function BlogLibrary() {
 
                                 {selectedArticle.seo_title && (
                                     <div className="acs-article-seo-section">
-                                        <h4>{__('Meta SEO', 'ai-content-studio')}</h4>
-                                        <p><strong>{__('Titre SEO:', 'ai-content-studio')}</strong> {selectedArticle.seo_title}</p>
+                                        <h4>{t('Meta SEO')}</h4>
+                                        <p><strong>{t('Titre SEO:')}</strong> {selectedArticle.seo_title}</p>
                                         {selectedArticle.meta_description && (
-                                            <p><strong>{__('Description:', 'ai-content-studio')}</strong> {selectedArticle.meta_description}</p>
+                                            <p><strong>{t('Description:')}</strong> {selectedArticle.meta_description}</p>
                                         )}
                                         {selectedArticle.url_slug && (
-                                            <p><strong>{__('URL:', 'ai-content-studio')}</strong> {selectedArticle.url_slug}</p>
+                                            <p><strong>{t('URL:')}</strong> {selectedArticle.url_slug}</p>
                                         )}
                                     </div>
                                 )}
                             </div>
 
                             <div className="acs-article-content-section">
-                                <h3>{__('Contenu de l\'article', 'ai-content-studio')}</h3>
+                                <h3>{t('Contenu de l\'article')}</h3>
                                 <div
                                     className="acs-article-content-preview"
                                     dangerouslySetInnerHTML={{ __html: formatContent(selectedArticle.content) }}
@@ -253,7 +254,7 @@ export default function BlogLibrary() {
                                 className="acs-btn acs-btn-primary"
                                 onClick={() => setShowModal(false)}
                             >
-                                {__('Fermer', 'ai-content-studio')}
+                                {t('Fermer')}
                             </button>
                         </div>
                     </div>

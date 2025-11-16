@@ -2,10 +2,11 @@ import { useState, useEffect } from '@wordpress/element';
 import { FiBookOpen, FiLoader, FiZap, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import PricingModal from '../common/PricingModal';
 
 export default function BlogStrategyGenerator({ profile }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [blogIdeas, setBlogIdeas] = useState([]);
@@ -158,7 +159,7 @@ export default function BlogStrategyGenerator({ profile }) {
             <div style={{ textAlign: 'center', padding: 'var(--acs-spacing-8)' }}>
                 <FiLoader style={{ fontSize: '3rem', animation: 'spin 1s linear infinite' }} />
                 <p style={{ marginTop: 'var(--acs-spacing-4)', color: 'var(--acs-gray-600)' }}>
-                    {__('Génération de votre stratégie blog...', 'ai-content-studio')}
+                    {t('Génération de votre stratégie blog...')}
                 </p>
             </div>
         );
@@ -167,16 +168,16 @@ export default function BlogStrategyGenerator({ profile }) {
     return (
         <div>
             <div style={{ marginBottom: 'var(--acs-spacing-4)' }}>
-                <h1 className="acs-page-title">{__('📚 Stratégie Articles de Blog', 'ai-content-studio')}</h1>
+                <h1 className="acs-page-title">{t('📚 Stratégie Articles de Blog')}</h1>
                 <p className="acs-text-muted">
-                    {__('50 idées de sujets d\'articles personnalisées pour votre blog', 'ai-content-studio')}
+                    {t('50 idées de sujets d\'articles personnalisées pour votre blog')}
                 </p>
             </div>
 
             {/* Language Selector */}
             <div className="acs-card" style={{ marginBottom: 'var(--acs-spacing-4)' }}>
                 <div className="acs-form-group" style={{ marginBottom: 0 }}>
-                    <label className="acs-form-label">{__('Langue de génération', 'ai-content-studio')}</label>
+                    <label className="acs-form-label">{t('Langue de génération')}</label>
                     <select className="acs-select" value={language} onChange={(e) => setLanguage(e.target.value)}>
                         <optgroup label="🌍 Europe">
                             <option value="fr">🇫🇷 Français</option>
@@ -221,7 +222,7 @@ export default function BlogStrategyGenerator({ profile }) {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--acs-spacing-4)' }}>
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)', margin: 0 }}>
                         <FiBookOpen />
-                        {__('Idées d\'articles pour votre blog', 'ai-content-studio')}
+                        {t('Idées d\'articles pour votre blog')}
                     </h3>
                     <button
                         className="acs-btn acs-btn-primary"
@@ -232,14 +233,14 @@ export default function BlogStrategyGenerator({ profile }) {
                         {loading ? (
                             <>
                                 <FiLoader style={{ animation: 'spin 1s linear infinite' }} />
-                                {__('Génération...', 'ai-content-studio')}
+                                {t('Génération...')}
                             </>
                         ) : (
                             <>
                                 <FiZap />
                                 {blogIdeas.length === 0
-                                    ? __('Générer les idées', 'ai-content-studio')
-                                    : __('Régénérer', 'ai-content-studio')
+                                    ? t('Générer les idées')
+                                    : t('Régénérer')
                                 }
                             </>
                         )}
@@ -248,7 +249,7 @@ export default function BlogStrategyGenerator({ profile }) {
 
                 {blogIdeas.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: 'var(--acs-spacing-6)', color: 'var(--acs-gray-500)' }}>
-                        {__('Cliquez sur "Générer les idées" pour obtenir 50 sujets d\'articles personnalisés', 'ai-content-studio')}
+                        {t('Cliquez sur "Générer les idées" pour obtenir 50 sujets d\'articles personnalisés')}
                     </div>
                 ) : (
                     <div style={{ display: 'grid', gap: 'var(--acs-spacing-3)' }}>
@@ -343,10 +344,10 @@ export default function BlogStrategyGenerator({ profile }) {
                             <FiLock size={40} color="white" />
                         </div>
                         <h2 style={{ marginBottom: 'var(--acs-spacing-2)', color: 'var(--acs-gray-900)' }}>
-                            {__('Fonctionnalité Premium', 'ai-content-studio')}
+                            {t('Fonctionnalité Premium')}
                         </h2>
                         <p style={{ color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-4)', lineHeight: '1.6' }}>
-                            {__('La génération de stratégies de blog est réservée aux abonnés. Passez à un plan payant pour débloquer cette fonctionnalité et bien plus encore.', 'ai-content-studio')}
+                            {t('La génération de stratégies de blog est réservée aux abonnés. Passez à un plan payant pour débloquer cette fonctionnalité et bien plus encore.')}
                         </p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--acs-spacing-2)' }}>
                             <button
@@ -354,14 +355,14 @@ export default function BlogStrategyGenerator({ profile }) {
                                 onClick={() => setShowPricingModal(true)}
                                 style={{ width: '100%' }}
                             >
-                                {__('Voir les plans', 'ai-content-studio')}
+                                {t('Voir les plans')}
                             </button>
                             <button
                                 className="acs-btn acs-btn-outline-secondary"
                                 onClick={() => navigate('/dashboard')}
                                 style={{ width: '100%' }}
                             >
-                                {__('Retour au tableau de bord', 'ai-content-studio')}
+                                {t('Retour au tableau de bord')}
                             </button>
                         </div>
                     </div>

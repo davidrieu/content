@@ -1,7 +1,7 @@
 import { useState } from '@wordpress/element';
 import { FiX, FiEdit, FiTrash2, FiCopy, FiCalendar, FiClock } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 
 /**
  * Modal de détails/édition d'un post
@@ -14,6 +14,7 @@ import { __ } from '@wordpress/i18n';
  * @param {Function} props.onDelete - Callback après suppression
  */
 export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDelete }) {
+    const { t } = useTranslation();
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(post?.content || '');
     const [editedScheduledFor, setEditedScheduledFor] = useState('');
@@ -56,20 +57,20 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
                     onUpdate({ ...post, ...updates });
                 }
                 setIsEditing(false);
-                alert(__('✅ Post mis à jour avec succès !', 'ai-content-studio'));
+                alert(t('✅ Post mis à jour avec succès !'));
             } else {
-                setError(response.message || __('Erreur lors de la mise à jour', 'ai-content-studio'));
+                setError(response.message || t('Erreur lors de la mise à jour'));
             }
         } catch (err) {
             console.error('Error updating post:', err);
-            setError(err.message || __('Erreur lors de la mise à jour', 'ai-content-studio'));
+            setError(err.message || t('Erreur lors de la mise à jour'));
         } finally {
             setSaving(false);
         }
     };
 
     const handleDelete = async () => {
-        if (!confirm(__('Êtes-vous sûr de vouloir supprimer ce post ?', 'ai-content-studio'))) {
+        if (!confirm(t('Êtes-vous sûr de vouloir supprimer ce post ?'))) {
             return;
         }
 
@@ -85,11 +86,11 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
                     onDelete(post.id);
                 }
                 onClose();
-                alert(__('✅ Post supprimé avec succès !', 'ai-content-studio'));
+                alert(t('✅ Post supprimé avec succès !'));
             }
         } catch (err) {
             console.error('Error deleting post:', err);
-            alert(__('Erreur lors de la suppression', 'ai-content-studio'));
+            alert(t('Erreur lors de la suppression'));
         } finally {
             setSaving(false);
         }
@@ -99,7 +100,7 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
         const hashtags = post.hashtags ? (typeof post.hashtags === 'string' ? JSON.parse(post.hashtags) : post.hashtags) : [];
         const fullContent = post.content + '\n\n' + hashtags.join(' ');
         navigator.clipboard.writeText(fullContent);
-        alert(__('✅ Copié dans le presse-papier !', 'ai-content-studio'));
+        alert(t('✅ Copié dans le presse-papier !'));
     };
 
     const PLATFORM_EMOJIS = {
@@ -218,7 +219,7 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
                             <FiCalendar size={20} style={{ color: 'var(--acs-primary)' }} />
                             <div>
                                 <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
-                                    {__('Planifié pour', 'ai-content-studio')}
+                                    {t('Planifié pour')}
                                 </div>
                                 <div style={{ fontWeight: 600 }}>
                                     {new Date(post.scheduled_for).toLocaleString('fr-FR', {
@@ -232,7 +233,7 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
 
                     {/* Content */}
                     <div style={{ marginBottom: 'var(--acs-spacing-3)' }}>
-                        <label className="acs-form-label">{__('Contenu', 'ai-content-studio')}</label>
+                        <label className="acs-form-label">{t('Contenu')}</label>
                         {isEditing ? (
                             <textarea
                                 className="acs-textarea"
@@ -260,7 +261,7 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
                     {/* Hashtags */}
                     {hashtags.length > 0 && (
                         <div style={{ marginBottom: 'var(--acs-spacing-3)' }}>
-                            <label className="acs-form-label">{__('Hashtags', 'ai-content-studio')}</label>
+                            <label className="acs-form-label">{t('Hashtags')}</label>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--acs-spacing-1)' }}>
                                 {hashtags.map((tag, i) => (
                                     <span
@@ -287,7 +288,7 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
                             <div className="acs-form-group">
                                 <label className="acs-form-label">
                                     <FiCalendar size={14} style={{ marginRight: '4px' }} />
-                                    {__('Date', 'ai-content-studio')}
+                                    {t('Date')}
                                 </label>
                                 <input
                                     type="date"
@@ -300,7 +301,7 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
                             <div className="acs-form-group">
                                 <label className="acs-form-label">
                                     <FiClock size={14} style={{ marginRight: '4px' }} />
-                                    {__('Heure', 'ai-content-studio')}
+                                    {t('Heure')}
                                 </label>
                                 <input
                                     type="time"
@@ -331,19 +332,19 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
                                     }}
                                     disabled={saving}
                                 >
-                                    {__('Annuler', 'ai-content-studio')}
+                                    {t('Annuler')}
                                 </button>
                                 <button className="acs-btn acs-btn-primary" onClick={handleSave} disabled={saving} style={{ flex: 1 }}>
-                                    {saving ? __('Enregistrement...', 'ai-content-studio') : __('Enregistrer', 'ai-content-studio')}
+                                    {saving ? t('Enregistrement...') : t('Enregistrer')}
                                 </button>
                             </>
                         ) : (
                             <>
                                 <button className="acs-btn acs-btn-outline-primary" onClick={handleCopy}>
-                                    <FiCopy /> {__('Copier', 'ai-content-studio')}
+                                    <FiCopy /> {t('Copier')}
                                 </button>
                                 <button className="acs-btn acs-btn-outline-primary" onClick={() => setIsEditing(true)} style={{ flex: 1 }}>
-                                    <FiEdit /> {__('Éditer', 'ai-content-studio')}
+                                    <FiEdit /> {t('Éditer')}
                                 </button>
                                 <button
                                     className="acs-btn"
@@ -351,7 +352,7 @@ export default function PostDetailModal({ isOpen, onClose, post, onUpdate, onDel
                                     disabled={saving}
                                     style={{ color: 'var(--acs-danger)', borderColor: 'var(--acs-danger)' }}
                                 >
-                                    <FiTrash2 /> {__('Supprimer', 'ai-content-studio')}
+                                    <FiTrash2 /> {t('Supprimer')}
                                 </button>
                             </>
                         )}
