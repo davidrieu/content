@@ -2,11 +2,12 @@ import { useState, useEffect } from '@wordpress/element';
 import { useNavigate } from 'react-router-dom';
 import { FiFileText, FiTrendingUp, FiImage, FiZap, FiArrowUp, FiArrowDown } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 import PricingModal from '../common/PricingModal';
 
 export default function Dashboard({ profile }) {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [subscription, setSubscription] = useState(null);
     const [usage, setUsage] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -42,7 +43,7 @@ export default function Dashboard({ profile }) {
             <div style={{ textAlign: 'center', padding: '3rem' }}>
                 <div className="acs-spinner" style={{ margin: '0 auto' }}></div>
                 <p className="acs-text-muted" style={{ marginTop: '1rem' }}>
-                    {__('Chargement...', 'ai-content-studio')}
+                    {t('Chargement...')}
                 </p>
             </div>
         );
@@ -53,10 +54,10 @@ export default function Dashboard({ profile }) {
             {/* Page Title */}
             <div className="mb-4">
                 <h1 className="acs-page-title">
-                    {__('Bienvenue,', 'ai-content-studio')} {profile?.business_name}!
+                    {t('Bienvenue,')} {profile?.business_name}!
                 </h1>
                 <p className="acs-text-muted">
-                    {__('Voici un aperçu de votre activité ce mois-ci', 'ai-content-studio')}
+                    {t('Voici un aperçu de votre activité ce mois-ci')}
                 </p>
             </div>
 
@@ -73,7 +74,7 @@ export default function Dashboard({ profile }) {
                         </div>
                     </div>
                     <div className="acs-stat-value">{usage?.posts.used || 0}</div>
-                    <div className="acs-stat-label">{__('Posts générés', 'ai-content-studio')}</div>
+                    <div className="acs-stat-label">{t('Posts générés')}</div>
                     <div className="acs-progress">
                         <div
                             className="acs-progress-bar"
@@ -81,7 +82,7 @@ export default function Dashboard({ profile }) {
                         />
                     </div>
                     <div className="acs-text-sm acs-text-muted" style={{ marginTop: '0.5rem' }}>
-                        {usage?.posts.used || 0} / {usage?.posts.limit === -1 ? '∞' : usage?.posts.limit} {__('disponibles', 'ai-content-studio')}
+                        {usage?.posts.used || 0} / {usage?.posts.limit === -1 ? '∞' : usage?.posts.limit} {t('disponibles')}
                     </div>
                 </div>
 
@@ -96,7 +97,7 @@ export default function Dashboard({ profile }) {
                         </div>
                     </div>
                     <div className="acs-stat-value">{usage?.articles.used || 0}</div>
-                    <div className="acs-stat-label">{__('Articles de blog', 'ai-content-studio')}</div>
+                    <div className="acs-stat-label">{t('Articles de blog')}</div>
                     <div className="acs-progress">
                         <div
                             className="acs-progress-bar success"
@@ -104,7 +105,7 @@ export default function Dashboard({ profile }) {
                         />
                     </div>
                     <div className="acs-text-sm acs-text-muted" style={{ marginTop: '0.5rem' }}>
-                        {usage?.articles.used || 0} / {usage?.articles.limit === -1 ? '∞' : usage?.articles.limit} {__('disponibles', 'ai-content-studio')}
+                        {usage?.articles.used || 0} / {usage?.articles.limit === -1 ? '∞' : usage?.articles.limit} {t('disponibles')}
                     </div>
                 </div>
 
@@ -119,7 +120,7 @@ export default function Dashboard({ profile }) {
                         </div>
                     </div>
                     <div className="acs-stat-value">{usage?.images.used || 0}</div>
-                    <div className="acs-stat-label">{__('Images IA', 'ai-content-studio')}</div>
+                    <div className="acs-stat-label">{t('Images IA')}</div>
                     <div className="acs-progress">
                         <div
                             className="acs-progress-bar warning"
@@ -127,7 +128,7 @@ export default function Dashboard({ profile }) {
                         />
                     </div>
                     <div className="acs-text-sm acs-text-muted" style={{ marginTop: '0.5rem' }}>
-                        {usage?.images.used || 0} / {usage?.images.limit === -1 ? '∞' : usage?.images.limit} {__('disponibles', 'ai-content-studio')}
+                        {usage?.images.used || 0} / {usage?.images.limit === -1 ? '∞' : usage?.images.limit} {t('disponibles')}
                     </div>
                 </div>
             </div>
@@ -137,20 +138,20 @@ export default function Dashboard({ profile }) {
                 {/* Quick Actions Card */}
                 <div className="acs-card">
                     <div className="acs-card-header">
-                        <h3 className="acs-card-title">{__('Actions rapides', 'ai-content-studio')}</h3>
+                        <h3 className="acs-card-title">{t('Actions rapides')}</h3>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--acs-spacing-3)' }}>
                         <button className="acs-btn acs-btn-primary" onClick={() => navigate('/generate')}>
-                            <FiZap /> {__('Nouveau post', 'ai-content-studio')}
+                            <FiZap /> {t('Nouveau post')}
                         </button>
                         <button className="acs-btn acs-btn-outline-primary" onClick={() => navigate('/blog-generator')}>
-                            <FiFileText /> {__('Nouvel article', 'ai-content-studio')}
+                            <FiFileText /> {t('Nouvel article')}
                         </button>
                         <button className="acs-btn acs-btn-outline-primary" onClick={() => navigate('/images')}>
-                            <FiImage /> {__('Générer image', 'ai-content-studio')}
+                            <FiImage /> {t('Générer image')}
                         </button>
                         <button className="acs-btn acs-btn-outline-primary" onClick={() => navigate('/trends')}>
-                            <FiTrendingUp /> {__('Voir tendances', 'ai-content-studio')}
+                            <FiTrendingUp /> {t('Voir tendances')}
                         </button>
                     </div>
                 </div>
@@ -158,22 +159,22 @@ export default function Dashboard({ profile }) {
                 {/* Subscription Card */}
                 <div className="acs-card">
                     <div className="acs-card-header">
-                        <h3 className="acs-card-title">{__('Votre plan', 'ai-content-studio')}</h3>
+                        <h3 className="acs-card-title">{t('Votre plan')}</h3>
                         <span className={`acs-badge acs-badge-${subscription?.plan === 'free_trial' ? 'primary' : 'success'}`}>
                             {subscription?.plan_name || 'Free Trial'}
                         </span>
                     </div>
                     <p className="acs-text-muted mb-3">
                         {subscription?.plan === 'free_trial'
-                            ? __('Passez à un plan supérieur pour plus de fonctionnalités', 'ai-content-studio')
-                            : __('Vous profitez de toutes les fonctionnalités', 'ai-content-studio')
+                            ? t('Passez à un plan supérieur pour plus de fonctionnalités')
+                            : t('Vous profitez de toutes les fonctionnalités')
                         }
                     </p>
                     <button
                         className="acs-btn acs-btn-secondary w-100"
                         onClick={() => setShowPricingModal(true)}
                     >
-                        {subscription?.plan === 'free_trial' ? __('Upgrader', 'ai-content-studio') : __('Gérer', 'ai-content-studio')}
+                        {subscription?.plan === 'free_trial' ? t('Upgrader') : t('Gérer')}
                     </button>
                 </div>
             </div>

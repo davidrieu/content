@@ -1,26 +1,28 @@
 import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark, FiShare2, FiEdit, FiBookOpen } from 'react-icons/fi';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 
 export default function Sidebar({ currentPath, onNavigate }) {
+    const { t } = useTranslation();
+
     const socialMediaSection = [
-        { path: '/', icon: FiHome, label: __('Tableau de bord', 'ai-content-studio') },
-        { path: '/generate', icon: FiZap, label: __('Générer des posts', 'ai-content-studio') },
-        { path: '/images', icon: FiImage, label: __('Images IA', 'ai-content-studio') },
-        { path: '/strategy', icon: FiTarget, label: __('Stratégie Auto', 'ai-content-studio') },
-        { path: '/calendar', icon: FiCalendar, label: __('Calendrier', 'ai-content-studio') },
-        { path: '/library', icon: FiBookmark, label: __('Bibliothèque', 'ai-content-studio') },
+        { path: '/', icon: FiHome, label: t('Tableau de bord') },
+        { path: '/generate', icon: FiZap, label: t('Générer des posts') },
+        { path: '/images', icon: FiImage, label: t('Images IA') },
+        { path: '/strategy', icon: FiTarget, label: t('Stratégie Auto') },
+        { path: '/calendar', icon: FiCalendar, label: t('Calendrier') },
+        { path: '/library', icon: FiBookmark, label: t('Bibliothèque') },
     ];
 
     const blogSeoSection = [
-        { path: '/blog-generator', icon: FiEdit, label: __('Créer un article', 'ai-content-studio') },
-        { path: '/blog-strategy', icon: FiBookOpen, label: __('Stratégie Blog', 'ai-content-studio') },
-        { path: '/blog-library', icon: FiFileText, label: __('Mes articles', 'ai-content-studio') },
-        { path: '/images', icon: FiImage, label: __('Images IA', 'ai-content-studio') },
-        { path: '/trends', icon: FiTrendingUp, label: __('Tendances SEO', 'ai-content-studio') },
+        { path: '/blog-generator', icon: FiEdit, label: t('Créer un article') },
+        { path: '/blog-strategy', icon: FiBookOpen, label: t('Stratégie Blog') },
+        { path: '/blog-library', icon: FiFileText, label: t('Mes articles') },
+        { path: '/images', icon: FiImage, label: t('Images IA') },
+        { path: '/trends', icon: FiTrendingUp, label: t('Tendances SEO') },
     ];
 
     const settingsSection = [
-        { path: '/settings', icon: FiSettings, label: __('Paramètres', 'ai-content-studio') },
+        { path: '/settings', icon: FiSettings, label: t('Paramètres') },
     ];
 
     const renderNavItem = (item) => {
@@ -59,7 +61,7 @@ export default function Sidebar({ currentPath, onNavigate }) {
                 <div className="acs-nav-section">
                     <div className="acs-nav-section-header">
                         <FiShare2 size={14} />
-                        <span>{__('Réseaux Sociaux', 'ai-content-studio')}</span>
+                        <span>{t('Réseaux Sociaux')}</span>
                     </div>
                     {socialMediaSection.map(renderNavItem)}
                 </div>
@@ -68,7 +70,7 @@ export default function Sidebar({ currentPath, onNavigate }) {
                 <div className="acs-nav-section">
                     <div className="acs-nav-section-header">
                         <FiEdit size={14} />
-                        <span>{__('SEO & Blog', 'ai-content-studio')}</span>
+                        <span>{t('SEO & Blog')}</span>
                     </div>
                     {blogSeoSection.map(renderNavItem)}
                 </div>

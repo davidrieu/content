@@ -1,10 +1,11 @@
 import { useState, useEffect } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 import { FiX, FiCheck, FiZap, FiStar, FiUsers, FiTrendingUp, FiShield } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
+import { useTranslation } from '../../contexts/TranslationContext';
 import './PricingModal.css';
 
 export default function PricingModal({ isOpen, onClose, currentPlan = 'free_trial', triggerType = 'limit_reached' }) {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
     const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -12,21 +13,21 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
     // Témoignages rotatifs
     const testimonials = [
         {
-            text: __("RunnWrite AI a transformé ma stratégie de contenu. Je génère en 10 minutes ce qui me prenait 3 heures !", 'ai-content-studio'),
-            author: __("Marie L.", 'ai-content-studio'),
-            role: __("Social Media Manager", 'ai-content-studio'),
+            text: t("RunnWrite AI a transformé ma stratégie de contenu. Je génère en 10 minutes ce qui me prenait 3 heures !"),
+            author: t("Marie L."),
+            role: t("Social Media Manager"),
             rating: 5
         },
         {
-            text: __("La qualité des articles générés est impressionnante. Mes clients adorent le contenu que je produis maintenant.", 'ai-content-studio'),
-            author: __("Thomas D.", 'ai-content-studio'),
-            role: __("Freelance Content Creator", 'ai-content-studio'),
+            text: t("La qualité des articles générés est impressionnante. Mes clients adorent le contenu que je produis maintenant."),
+            author: t("Thomas D."),
+            role: t("Freelance Content Creator"),
             rating: 5
         },
         {
-            text: __("ROI incroyable. Le temps gagné me permet de gérer 3x plus de clients avec la même équipe.", 'ai-content-studio'),
-            author: __("Sophie M.", 'ai-content-studio'),
-            role: __("Agence Marketing", 'ai-content-studio'),
+            text: t("ROI incroyable. Le temps gagné me permet de gérer 3x plus de clients avec la même équipe."),
+            author: t("Sophie M."),
+            role: t("Agence Marketing"),
             rating: 5
         }
     ];
@@ -47,49 +48,49 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
     const plans = [
         {
             slug: 'starter',
-            name: __('Starter', 'ai-content-studio'),
+            name: t('Starter'),
             price: 29,
-            description: __('Pour les entrepreneurs et créateurs', 'ai-content-studio'),
+            description: t('Pour les entrepreneurs et créateurs'),
             features: [
-                __('50 posts sociaux/mois', 'ai-content-studio'),
-                __('5 articles de blog/mois', 'ai-content-studio'),
-                __('25 images AI/mois', 'ai-content-studio'),
-                __('Toutes les langues', 'ai-content-studio'),
-                __('Toutes les plateformes', 'ai-content-studio'),
-                __('Planification & calendrier', 'ai-content-studio'),
-                __('Support email', 'ai-content-studio'),
+                t('50 posts sociaux/mois'),
+                t('5 articles de blog/mois'),
+                t('25 images AI/mois'),
+                t('Toutes les langues'),
+                t('Toutes les plateformes'),
+                t('Planification & calendrier'),
+                t('Support email'),
             ],
             popular: false,
         },
         {
             slug: 'professional',
-            name: __('Professional', 'ai-content-studio'),
+            name: t('Professional'),
             price: 59,
-            description: __('Pour les professionnels du marketing', 'ai-content-studio'),
+            description: t('Pour les professionnels du marketing'),
             features: [
-                __('300 posts sociaux/mois', 'ai-content-studio'),
-                __('30 articles de blog/mois', 'ai-content-studio'),
-                __('150 images AI/mois', 'ai-content-studio'),
-                __('Toutes les fonctionnalités Starter', 'ai-content-studio'),
-                __('Analytics avancées', 'ai-content-studio'),
-                __('Analyse de la concurrence', 'ai-content-studio'),
-                __('Support prioritaire', 'ai-content-studio'),
+                t('300 posts sociaux/mois'),
+                t('30 articles de blog/mois'),
+                t('150 images AI/mois'),
+                t('Toutes les fonctionnalités Starter'),
+                t('Analytics avancées'),
+                t('Analyse de la concurrence'),
+                t('Support prioritaire'),
             ],
             popular: true,
         },
         {
             slug: 'business',
-            name: __('Business', 'ai-content-studio'),
+            name: t('Business'),
             price: 149,
-            description: __('Pour les agences et entreprises', 'ai-content-studio'),
+            description: t('Pour les agences et entreprises'),
             features: [
-                __('Posts ILLIMITÉS', 'ai-content-studio'),
-                __('Articles ILLIMITÉS', 'ai-content-studio'),
-                __('Images ILLIMITÉES', 'ai-content-studio'),
-                __('Toutes les fonctionnalités Pro', 'ai-content-studio'),
-                __('5 membres d\'équipe', 'ai-content-studio'),
-                __('API access', 'ai-content-studio'),
-                __('Support dédié', 'ai-content-studio'),
+                t('Posts ILLIMITÉS'),
+                t('Articles ILLIMITÉS'),
+                t('Images ILLIMITÉES'),
+                t('Toutes les fonctionnalités Pro'),
+                t('5 membres d\'équipe'),
+                t('API access'),
+                t('Support dédié'),
             ],
             popular: false,
         },
@@ -114,7 +115,7 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                 window.location.href = response.data.checkout_url;
             } else {
                 // Display specific error message from server
-                const errorMessage = response.message || __('Erreur lors de la création du lien de paiement', 'ai-content-studio');
+                const errorMessage = response.message || t('Erreur lors de la création du lien de paiement');
                 alert(errorMessage);
                 setLoading(false);
                 setSelectedPlan(null);
@@ -123,7 +124,7 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
             console.error('Error getting checkout URL:', error);
 
             // Try to extract error message from API response
-            let errorMessage = __('Une erreur s\'est produite', 'ai-content-studio');
+            let errorMessage = t('Une erreur s\'est produite');
 
             if (error.message) {
                 errorMessage = error.message;
@@ -140,24 +141,24 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
     const getModalTitle = () => {
         switch (triggerType) {
             case 'article_limit':
-                return __('Vous avez atteint votre limite d\'articles', 'ai-content-studio');
+                return t('Vous avez atteint votre limite d\'articles');
             case 'post_limit':
-                return __('Vous avez atteint votre limite de posts', 'ai-content-studio');
+                return t('Vous avez atteint votre limite de posts');
             case 'upgrade':
-                return __('Choisissez votre plan', 'ai-content-studio');
+                return t('Choisissez votre plan');
             default:
-                return __('Améliorez votre plan pour continuer', 'ai-content-studio');
+                return t('Améliorez votre plan pour continuer');
         }
     };
 
     const getModalSubtitle = () => {
         switch (triggerType) {
             case 'article_limit':
-                return __('Passez à un plan supérieur pour générer plus d\'articles de blog', 'ai-content-studio');
+                return t('Passez à un plan supérieur pour générer plus d\'articles de blog');
             case 'post_limit':
-                return __('Passez à un plan supérieur pour générer plus de posts sociaux', 'ai-content-studio');
+                return t('Passez à un plan supérieur pour générer plus de posts sociaux');
             default:
-                return __('Choisissez le plan qui correspond à vos besoins', 'ai-content-studio');
+                return t('Choisissez le plan qui correspond à vos besoins');
         }
     };
 
@@ -179,15 +180,15 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                 <div className="acs-social-proof-banner">
                     <div className="acs-social-proof-stat">
                         <FiUsers size={18} />
-                        <span><strong>2,500+</strong> {__('créateurs de contenu', 'ai-content-studio')}</span>
+                        <span><strong>2,500+</strong> {t('créateurs de contenu')}</span>
                     </div>
                     <div className="acs-social-proof-stat">
                         <FiTrendingUp size={18} />
-                        <span><strong>127,000+</strong> {__('posts générés ce mois', 'ai-content-studio')}</span>
+                        <span><strong>127,000+</strong> {t('posts générés ce mois')}</span>
                     </div>
                     <div className="acs-social-proof-stat">
                         <FiStar size={18} />
-                        <span><strong>4.9/5</strong> {__('satisfaction client', 'ai-content-studio')}</span>
+                        <span><strong>4.9/5</strong> {t('satisfaction client')}</span>
                     </div>
                 </div>
 
@@ -229,7 +230,7 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                             {plan.popular && (
                                 <div className="acs-pricing-badge">
                                     <FiStar size={14} />
-                                    {__('POPULAIRE', 'ai-content-studio')}
+                                    {t('POPULAIRE')}
                                 </div>
                             )}
 
@@ -260,12 +261,12 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                                 {selectedPlan === plan.slug ? (
                                     <>
                                         <div className="acs-spinner-small"></div>
-                                        {__('Redirection...', 'ai-content-studio')}
+                                        {t('Redirection...')}
                                     </>
                                 ) : (
                                     <>
                                         <FiZap size={18} />
-                                        {__('Choisir ce plan', 'ai-content-studio')}
+                                        {t('Choisir ce plan')}
                                     </>
                                 )}
                             </button>
@@ -277,29 +278,29 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                 <div className="acs-trust-banner">
                     <div className="acs-trust-item">
                         <FiShield size={20} />
-                        <span>{__('Paiement 100% sécurisé', 'ai-content-studio')}</span>
+                        <span>{t('Paiement 100% sécurisé')}</span>
                     </div>
                     <div className="acs-trust-item">
                         <FiCheck size={20} />
-                        <span>{__('Sans engagement', 'ai-content-studio')}</span>
+                        <span>{t('Sans engagement')}</span>
                     </div>
                     <div className="acs-trust-item">
                         <FiCheck size={20} />
-                        <span>{__('Garantie 14 jours', 'ai-content-studio')}</span>
+                        <span>{t('Garantie 14 jours')}</span>
                     </div>
                 </div>
 
                 {/* Footer */}
                 <div className="acs-pricing-modal-footer">
                     <p className="acs-pricing-footer-note">
-                        {__('🎉 Offre spéciale : Rejoignez-nous maintenant et bénéficiez de votre premier mois avec une assistance personnalisée gratuite !', 'ai-content-studio')}
+                        {t('🎉 Offre spéciale : Rejoignez-nous maintenant et bénéficiez de votre premier mois avec une assistance personnalisée gratuite !')}
                     </p>
                 </div>
 
                 {!loading && (
                     <div className="acs-pricing-modal-dismiss">
                         <button onClick={onClose} className="acs-pricing-dismiss-button">
-                            {__('Je décide plus tard', 'ai-content-studio')}
+                            {t('Je décide plus tard')}
                         </button>
                         {currentPlan !== 'free_trial' && (
                             <a
@@ -316,7 +317,7 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
                                 onMouseEnter={(e) => e.target.style.color = 'var(--acs-danger)'}
                                 onMouseLeave={(e) => e.target.style.color = 'var(--acs-gray-500)'}
                             >
-                                {__('Annuler mon abonnement', 'ai-content-studio')}
+                                {t('Annuler mon abonnement')}
                             </a>
                         )}
                     </div>
