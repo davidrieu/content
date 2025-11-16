@@ -1,5 +1,7 @@
 import { FiChevronRight, FiUser, FiBell } from 'react-icons/fi';
 import { __ } from '@wordpress/i18n';
+import LanguageSwitcher from '../common/LanguageSwitcher';
+import '../common/LanguageSwitcher.css';
 
 export default function Topbar({ currentPage, profile }) {
     return (
@@ -14,6 +16,7 @@ export default function Topbar({ currentPage, profile }) {
                 )}
             </div>
             <div className="d-flex align-items-center gap-3">
+                <LanguageSwitcher />
                 <button className="acs-btn acs-btn-sm" style={{ background: 'transparent', border: 'none', color: 'var(--acs-gray-600)' }}>
                     <FiBell size={18} />
                 </button>

@@ -32,7 +32,7 @@ class Translations_Admin {
      */
     public function add_menu_page() {
         add_submenu_page(
-            'ai-content-studio-settings',
+            'ai-content-studio',
             __('Traductions', 'ai-content-studio'),
             __('Traductions', 'ai-content-studio'),
             'manage_options',

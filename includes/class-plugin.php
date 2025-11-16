@@ -120,6 +120,18 @@ class Plugin {
         if (file_exists($utils_dir . 'class-helpers.php')) {
             require_once $utils_dir . 'class-helpers.php';
         }
+
+        // Data classes
+        $data_dir = ACS_PLUGIN_DIR . 'includes/data/';
+        if (file_exists($data_dir . 'class-language-config.php')) {
+            require_once $data_dir . 'class-language-config.php';
+        }
+
+        // Services
+        $services_dir = ACS_PLUGIN_DIR . 'includes/services/';
+        if (file_exists($services_dir . 'class-translation-service.php')) {
+            require_once $services_dir . 'class-translation-service.php';
+        }
     }
 
     /**
@@ -219,6 +231,7 @@ class Plugin {
                 'class-logs-endpoint.php',
                 'class-diagnostic-endpoint.php',
                 'class-settings-endpoint.php',
+                'class-language-endpoint.php',
             ];
 
             foreach ($endpoints as $endpoint) {
@@ -287,6 +300,11 @@ class Plugin {
             if (class_exists('ACS\\API\\Images_Endpoint')) {
                 $images = new API\Images_Endpoint();
                 $images->register_routes();
+            }
+
+            if (class_exists('ACS\\API\\Language_Endpoint')) {
+                $language = new API\Language_Endpoint();
+                $language->register_routes();
             }
 
             // More endpoints will be registered as they are created
@@ -513,6 +531,13 @@ class Plugin {
                 filemtime($css_file) . '.' . time() . '.' . wp_rand(1000, 9999)
             );
 
+            // Get user language
+            $user_id = get_current_user_id();
+            $user_language = get_user_meta($user_id, 'acs_user_language', true);
+            if (!$user_language) {
+                $user_language = 'fr'; // Default language
+            }
+
             // Localize script
             wp_localize_script('acs-admin-script', 'acsData', [
                 'apiUrl' => rest_url('acs/v1'),
@@ -520,6 +545,7 @@ class Plugin {
                 'currentUser' => get_current_user_id(),
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'pluginUrl' => ACS_PLUGIN_URL,
+                'userLanguage' => $user_language,
                 'cacheDebug' => [
                     'jsFile' => filemtime($js_file),
                     'currentTime' => time(),
