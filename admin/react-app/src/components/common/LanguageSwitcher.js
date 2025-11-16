@@ -37,16 +37,27 @@ export default function LanguageSwitcher() {
 
     const loadLanguages = async () => {
         try {
+            console.log('LanguageSwitcher: Loading languages...');
             const response = await apiFetch({
                 path: '/acs/v1/languages',
             });
 
+            console.log('LanguageSwitcher: API Response:', response);
+
             if (response.success) {
-                setLanguages(Object.values(response.data.languages));
-                setPopularLanguages(Object.values(response.data.popular));
+                const allLangs = Object.values(response.data.languages);
+                const popularLangs = Object.values(response.data.popular);
+
+                console.log('LanguageSwitcher: All languages:', allLangs);
+                console.log('LanguageSwitcher: Popular languages:', popularLangs);
+
+                setLanguages(allLangs);
+                setPopularLanguages(popularLangs);
+            } else {
+                console.error('LanguageSwitcher: API returned success=false');
             }
         } catch (error) {
-            console.error('Error loading languages:', error);
+            console.error('LanguageSwitcher: Error loading languages:', error);
         }
     };
 
@@ -118,6 +129,12 @@ export default function LanguageSwitcher() {
                         <FiGlobe size={16} />
                         <span>{__('Choisir une langue', 'ai-content-studio')}</span>
                     </div>
+
+                    {languages.length === 0 && (
+                        <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                            Chargement des langues...
+                        </div>
+                    )}
 
                     {/* Popular Languages */}
                     {popularLanguages.length > 0 && (
