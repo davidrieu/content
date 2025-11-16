@@ -103,6 +103,102 @@ class Translation_Service {
     }
 
     /**
+     * Translate all strings in batch using Claude AI (OPTIMIZED)
+     *
+     * @param array $strings Array of French strings to translate
+     * @param string $target_lang Target language code
+     * @return array Array of translated strings
+     */
+    public static function translate_batch_with_ai($strings, $target_lang) {
+        $lang_config = Language_Config::get($target_lang);
+
+        if (!$lang_config) {
+            return $strings;
+        }
+
+        $api_key = get_option('acs_claude_api_key', '');
+
+        if (empty($api_key)) {
+            Logger::warning('Claude API key not configured');
+            return $strings;
+        }
+
+        // Prepare JSON input for batch translation
+        $json_input = json_encode($strings, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+
+        $prompt = sprintf(
+            "You are a professional translator. Translate the following JSON object from French to %s.\n\n" .
+            "IMPORTANT INSTRUCTIONS:\n" .
+            "1. Keep the SAME JSON structure (same keys)\n" .
+            "2. Only translate the VALUES (right side), NOT the keys (left side)\n" .
+            "3. Preserve tone, context, and any special characters or emojis\n" .
+            "4. Return ONLY the translated JSON, no explanations\n" .
+            "5. Keep placeholders like %%s, %%d unchanged\n\n" .
+            "JSON to translate:\n%s",
+            $lang_config['native_name'],
+            $json_input
+        );
+
+        Logger::info("Translating {$target_lang} with batch API call");
+
+        $response = wp_remote_post('https://api.anthropic.com/v1/messages', [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'x-api-key' => $api_key,
+                'anthropic-version' => '2023-06-01',
+            ],
+            'body' => json_encode([
+                'model' => 'claude-3-haiku-20240307',
+                'max_tokens' => 16000, // Increased for batch translations
+                'messages' => [
+                    [
+                        'role' => 'user',
+                        'content' => $prompt,
+                    ],
+                ],
+            ]),
+            'timeout' => 120, // 2 minutes for batch
+        ]);
+
+        if (is_wp_error($response)) {
+            Logger::error('Batch translation API error', [
+                'error' => $response->get_error_message(),
+                'lang' => $target_lang
+            ]);
+            return $strings;
+        }
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+
+        if (isset($body['content'][0]['text'])) {
+            $translated_text = trim($body['content'][0]['text']);
+
+            // Extract JSON from potential markdown code blocks
+            if (preg_match('/```json\s*(.*?)\s*```/s', $translated_text, $matches)) {
+                $translated_text = $matches[1];
+            } elseif (preg_match('/```\s*(.*?)\s*```/s', $translated_text, $matches)) {
+                $translated_text = $matches[1];
+            }
+
+            $translated_array = json_decode($translated_text, true);
+
+            if (is_array($translated_array) && count($translated_array) > 0) {
+                Logger::info("Successfully translated {$target_lang} with " . count($translated_array) . " keys");
+                return $translated_array;
+            } else {
+                Logger::error('Failed to decode batch translation JSON', [
+                    'lang' => $target_lang,
+                    'response_preview' => substr($translated_text, 0, 500)
+                ]);
+            }
+        }
+
+        // Fallback to original strings if batch failed
+        Logger::warning("Batch translation failed for {$target_lang}, keeping original strings");
+        return $strings;
+    }
+
+    /**
      * Get or generate translation file for a language
      *
      * @param string $lang_code Language code
@@ -122,7 +218,7 @@ class Translation_Service {
     }
 
     /**
-     * Generate all translations for a language
+     * Generate all translations for a language (OPTIMIZED with batch translation)
      *
      * @param string $lang_code Language code
      * @return array Translations
@@ -131,24 +227,24 @@ class Translation_Service {
         $strings = self::get_translatable_strings();
         $translations = [];
 
-        Logger::info("Generating translations for language: {$lang_code}");
+        Logger::info("Generating translations for language: {$lang_code} (using batch mode)");
 
-        foreach ($strings as $french => $english) {
-            // If target is English, use the English translation directly
-            if ($lang_code === 'en') {
-                $translations[$french] = $english;
-            } else {
-                // Use AI translation for other languages
-                $translated = self::translate_with_ai($french, $lang_code);
-                $translations[$french] = $translated;
-
-                // Small delay to avoid rate limiting
-                usleep(100000); // 0.1 second
-            }
+        // If target is English, use the English translation directly
+        if ($lang_code === 'en') {
+            $translations = $strings;
+        } else {
+            // Use BATCH AI translation (1 API call instead of 461)
+            $translations = self::translate_batch_with_ai($strings, $lang_code);
         }
 
         // Save translations to file
-        self::save_translations($lang_code, $translations);
+        $result = self::save_translations($lang_code, $translations);
+
+        if ($result) {
+            Logger::info("Successfully saved {$lang_code} translations: " . count($translations) . " keys");
+        } else {
+            Logger::error("Failed to save {$lang_code} translations to file");
+        }
 
         return $translations;
     }
@@ -163,14 +259,33 @@ class Translation_Service {
     public static function save_translations($lang_code, $translations) {
         $languages_dir = ACS_TRANSLATIONS_DIR;
 
+        // Create directory if it doesn't exist
         if (!file_exists($languages_dir)) {
-            mkdir($languages_dir, 0755, true);
+            $created = wp_mkdir_p($languages_dir);
+            if (!$created) {
+                Logger::error("Failed to create translations directory: {$languages_dir}");
+                return false;
+            }
+            Logger::info("Created translations directory: {$languages_dir}");
+        }
+
+        // Verify directory is writable
+        if (!is_writable($languages_dir)) {
+            Logger::error("Translations directory is not writable: {$languages_dir}");
+            return false;
         }
 
         $file = $languages_dir . "/translations-{$lang_code}.json";
         $content = json_encode($translations, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
-        return file_put_contents($file, $content) !== false;
+        $result = file_put_contents($file, $content);
+
+        if ($result === false) {
+            Logger::error("Failed to write translation file: {$file}");
+            return false;
+        }
+
+        return true;
     }
 
     /**

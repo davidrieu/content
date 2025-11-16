@@ -116,7 +116,7 @@ export default function BlogLibrary() {
                     <FiFileText size={48} style={{ color: 'var(--acs-gray-400)', marginBottom: 'var(--acs-spacing-4)' }} />
                     <h2>{t('Aucun article')}</h2>
                     <p className="acs-text-muted">
-                        {__('Vous n\'avez pas encore généré d\'articles de blog.', 'ai-content-studio')}
+                        {t('Vous n\'avez pas encore généré d\'articles de blog.')}
                     </p>
                 </div>
             ) : (

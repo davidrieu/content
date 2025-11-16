@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { FiGlobe, FiCheck } from 'react-icons/fi';
 import apiFetch from '@wordpress/api-fetch';
-import { __ } from '@wordpress/i18n';
+import { useTranslation } from '../../contexts/TranslationContext';
 
 export default function LanguageSwitcher() {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [languages, setLanguages] = useState([]);
     const [currentLanguage, setCurrentLanguage] = useState({
@@ -124,7 +125,7 @@ export default function LanguageSwitcher() {
                 className="acs-language-trigger"
                 onClick={() => setIsOpen(!isOpen)}
                 disabled={loading}
-                aria-label={__('Changer de langue', 'ai-content-studio')}
+                aria-label={t('Changer de langue')}
                 style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -145,7 +146,7 @@ export default function LanguageSwitcher() {
                 <div className="acs-language-dropdown">
                     <div className="acs-language-dropdown-header">
                         <FiGlobe size={16} />
-                        <span>{__('Choisir une langue', 'ai-content-studio')}</span>
+                        <span>{t('Choisir une langue')}</span>
                     </div>
 
                     {/* Search Bar */}
@@ -153,7 +154,7 @@ export default function LanguageSwitcher() {
                         <input
                             ref={searchInputRef}
                             type="text"
-                            placeholder={__('Rechercher une langue...', 'ai-content-studio')}
+                            placeholder={t('Rechercher une langue...')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="acs-language-search-input"
@@ -188,7 +189,7 @@ export default function LanguageSwitcher() {
                         </div>
                     ) : (
                         <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
-                            {__('Aucune langue trouvée', 'ai-content-studio')}
+                            {t('Aucune langue trouvée')}
                         </div>
                     )}
                 </div>

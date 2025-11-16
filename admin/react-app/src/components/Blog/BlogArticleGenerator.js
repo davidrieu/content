@@ -193,7 +193,7 @@ export default function BlogArticleGenerator() {
     // Générer les meta SEO
     const generateSeoMeta = async () => {
         if (!articleContent) {
-            alert(__('Veuillez d\'abord générer l\'article', 'ai-content-studio'));
+            alert(t('Veuillez d\'abord générer l\'article'));
             return;
         }
 
