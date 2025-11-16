@@ -314,7 +314,84 @@ class Translation_Service {
     }
 
     /**
+     * Generate translations chunk (portion) for a language
+     *
+     * @param string $lang_code Language code
+     * @param int $offset Starting position
+     * @param int $limit Number of translations to generate
+     * @return array Result with translated chunk and progress info
+     */
+    public static function generate_translations_chunk($lang_code, $offset = 0, $limit = 50) {
+        $strings = self::get_translatable_strings();
+        $total_strings = count($strings);
+
+        // If target is English, use the English translation directly
+        if ($lang_code === 'en') {
+            return [
+                'success' => true,
+                'translations' => $strings,
+                'total' => $total_strings,
+                'processed' => $total_strings,
+                'completed' => true
+            ];
+        }
+
+        // Get existing translations or start fresh
+        $translations_file = ACS_TRANSLATIONS_DIR . "/translations-{$lang_code}.json";
+        $all_translations = [];
+        if (file_exists($translations_file)) {
+            $content = file_get_contents($translations_file);
+            $all_translations = json_decode($content, true) ?: [];
+        }
+
+        // Get chunk of strings to translate
+        $strings_array = array_slice($strings, $offset, $limit, true);
+        $chunk_size = count($strings_array);
+        $errors = 0;
+
+        Logger::info("📦 [CHUNK] Traduction {$lang_code}: de {$offset} à " . ($offset + $chunk_size) . " sur {$total_strings}");
+
+        // Translate this chunk
+        foreach ($strings_array as $french_key => $english_value) {
+            // Translate from French to target language
+            $translated = self::translate_with_ai($french_key, $lang_code);
+
+            // Check if translation failed
+            if ($translated === $french_key) {
+                $errors++;
+                Logger::warning("⚠️ Traduction échouée: '{$french_key}'");
+            }
+
+            $all_translations[$french_key] = $translated;
+
+            // Small delay to avoid rate limiting (50ms)
+            usleep(50000);
+        }
+
+        // Save updated translations
+        $result = self::save_translations($lang_code, $all_translations);
+
+        $processed = $offset + $chunk_size;
+        $completed = ($processed >= $total_strings);
+
+        if ($completed) {
+            Logger::info("✅ [TERMINÉ] {$lang_code}: {$total_strings} traductions ({$errors} erreurs)");
+        }
+
+        return [
+            'success' => $result,
+            'translations' => $all_translations,
+            'total' => $total_strings,
+            'processed' => $processed,
+            'completed' => $completed,
+            'errors' => $errors,
+            'chunk_size' => $chunk_size
+        ];
+    }
+
+    /**
      * Generate all translations for a language (ONE BY ONE with Haiku)
+     * DEPRECATED: Use generate_translations_chunk for better timeout handling
      *
      * @param string $lang_code Language code
      * @return array Translations

@@ -26,6 +26,7 @@ class Translations_Admin {
         add_action('admin_menu', [$this, 'add_menu_page'], 100);
         add_action('admin_post_acs_generate_translations', [$this, 'handle_generate_translations']);
         add_action('wp_ajax_acs_generate_single_translation', [$this, 'ajax_generate_single_translation']);
+        add_action('wp_ajax_acs_generate_translation_chunk', [$this, 'ajax_generate_translation_chunk']);
     }
 
     /**
@@ -342,7 +343,7 @@ class Translations_Admin {
                 generateNext(0);
             });
 
-            // Handle individual generate buttons
+            // Handle individual generate buttons - CHUNK-BASED (NO TIMEOUT!)
             $('form[data-single-lang]').on('submit', function(e) {
                 e.preventDefault();
 
@@ -356,12 +357,19 @@ class Translations_Admin {
                 $log.html('');
                 $btn.prop('disabled', true).text('<?php _e('Génération...', 'ai-content-studio'); ?>');
 
+                let totalProcessed = 0;
+                let totalErrors = 0;
+                let total = 0;
+                const chunkSize = 50;
+                const startTime = Date.now();
+
                 function addLog(message, type = 'info') {
                     const timestamp = new Date().toLocaleTimeString();
                     const colors = {
                         'info': '#0073aa',
                         'success': '#46b450',
-                        'error': '#dc3232'
+                        'error': '#dc3232',
+                        'warning': '#f0b849'
                     };
                     const color = colors[type] || colors['info'];
 
@@ -371,35 +379,64 @@ class Translations_Admin {
                         message +
                         '</div>'
                     );
+
+                    // Auto-scroll
+                    $log.parent()[0].scrollTop = $log.parent()[0].scrollHeight;
                 }
 
-                addLog('Génération de la traduction pour: ' + langCode + '...', 'info');
+                function processChunk(offset) {
+                    addLog(`📦 Chunk ${Math.floor(offset/chunkSize) + 1}: traduction de ${offset} à ${offset + chunkSize}...`, 'info');
 
-                $.ajax({
-                    url: ajaxurl,
-                    method: 'POST',
-                    data: {
-                        action: 'acs_generate_single_translation',
-                        lang_code: langCode,
-                        nonce: '<?php echo wp_create_nonce('acs_generate_translation'); ?>'
-                    },
-                    timeout: 120000,
-                    success: function(response) {
-                        if (response.success) {
-                            addLog('✓ Traduction générée avec succès (' + response.data.count + ' chaînes)', 'success');
+                    $.ajax({
+                        url: ajaxurl,
+                        method: 'POST',
+                        data: {
+                            action: 'acs_generate_translation_chunk',
+                            lang_code: langCode,
+                            offset: offset,
+                            limit: chunkSize,
+                            nonce: '<?php echo wp_create_nonce('acs_generate_translation'); ?>'
+                        },
+                        timeout: 90000, // 90 seconds per chunk (50 translations)
+                        success: function(response) {
+                            if (response.success) {
+                                total = response.data.total;
+                                totalProcessed = response.data.processed;
+                                totalErrors += response.data.errors;
+
+                                const percent = Math.round((totalProcessed / total) * 100);
+                                addLog(`✓ Chunk terminé: ${totalProcessed}/${total} (${percent}%) - ${response.data.errors} erreurs`, 'success');
+
+                                // Check if completed
+                                if (response.data.completed) {
+                                    const duration = Math.round((Date.now() - startTime) / 1000);
+                                    addLog(`✅ TERMINÉ! ${total} traductions générées en ${duration}s (${totalErrors} erreurs)`, 'success');
+
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 2000);
+                                } else {
+                                    // Process next chunk
+                                    processChunk(totalProcessed);
+                                }
+                            } else {
+                                addLog('✗ Erreur: ' + response.data.message, 'error');
+                                $btn.prop('disabled', false).text('<?php _e('Réessayer', 'ai-content-studio'); ?>');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            addLog('✗ Erreur réseau: ' + error, 'error');
+                            addLog('⚠️ Tentative de récupération...', 'warning');
+                            // Retry after 2 seconds
                             setTimeout(function() {
-                                window.location.reload();
-                            }, 1500);
-                        } else {
-                            addLog('✗ Erreur: ' + response.data.message, 'error');
-                            $btn.prop('disabled', false).text('<?php _e('Générer', 'ai-content-studio'); ?>');
+                                processChunk(offset);
+                            }, 2000);
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        addLog('✗ Erreur réseau: ' + error, 'error');
-                        $btn.prop('disabled', false).text('<?php _e('Générer', 'ai-content-studio'); ?>');
-                    }
-                });
+                    });
+                }
+
+                addLog(`🚀 Début génération pour: ${langCode} (par lots de ${chunkSize})`, 'info');
+                processChunk(0);
             });
         });
         </script>
@@ -489,6 +526,61 @@ class Translations_Admin {
                 'message' => sprintf(__('Traduction générée pour: %s', 'ai-content-studio'), $lang['native_name']),
                 'lang_code' => $lang_code,
                 'count' => count($translations)
+            ]);
+        } catch (\Exception $e) {
+            wp_send_json_error([
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * AJAX handler for chunk-based translation generation (NO TIMEOUT)
+     */
+    public function ajax_generate_translation_chunk() {
+        // Check permissions
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error([
+                'message' => __('Vous n\'avez pas les permissions nécessaires.', 'ai-content-studio')
+            ]);
+        }
+
+        // Verify nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'acs_generate_translation')) {
+            wp_send_json_error([
+                'message' => __('Nonce invalide.', 'ai-content-studio')
+            ]);
+        }
+
+        $lang_code = $_POST['lang_code'] ?? '';
+        $offset = intval($_POST['offset'] ?? 0);
+        $limit = intval($_POST['limit'] ?? 50);
+
+        if (empty($lang_code)) {
+            wp_send_json_error([
+                'message' => __('Code de langue manquant.', 'ai-content-studio')
+            ]);
+        }
+
+        try {
+            // Generate chunk of translations
+            $result = Translation_Service::generate_translations_chunk($lang_code, $offset, $limit);
+
+            $lang = Language_Config::get($lang_code);
+
+            wp_send_json_success([
+                'message' => sprintf(
+                    __('Chunk %d-%d traité pour: %s', 'ai-content-studio'),
+                    $offset,
+                    $result['processed'],
+                    $lang['native_name']
+                ),
+                'lang_code' => $lang_code,
+                'total' => $result['total'],
+                'processed' => $result['processed'],
+                'completed' => $result['completed'],
+                'errors' => $result['errors'],
+                'chunk_size' => $result['chunk_size']
             ]);
         } catch (\Exception $e) {
             wp_send_json_error([
