@@ -1,6 +1,7 @@
 import { useState, useEffect } from '@wordpress/element';
 import { HashRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
+import { TranslationProvider } from './contexts/TranslationContext';
 import Sidebar from './components/Layout/Sidebar';
 import Topbar from './components/Layout/Topbar';
 import ProjectSwitcher from './components/common/ProjectSwitcher';
@@ -180,12 +181,14 @@ function App() {
 
     // Show main app
     return (
-        <HashRouter>
-            <AppContent
-                profile={profile}
-                onAddProject={() => setShowAddProjectWizard(true)}
-            />
-        </HashRouter>
+        <TranslationProvider>
+            <HashRouter>
+                <AppContent
+                    profile={profile}
+                    onAddProject={() => setShowAddProjectWizard(true)}
+                />
+            </HashRouter>
+        </TranslationProvider>
     );
 }
 
