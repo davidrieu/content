@@ -132,7 +132,7 @@ class Language_Endpoint extends REST_Controller {
             return $this->error_response(__('Langue non supportée', 'ai-content-studio'));
         }
 
-        $translations_file = ACS_PLUGIN_DIR . "languages/translations-{$lang}.json";
+        $translations_file = ACS_TRANSLATIONS_DIR . "/translations-{$lang}.json";
 
         if (!file_exists($translations_file)) {
             return $this->error_response(__('Traductions non disponibles pour cette langue', 'ai-content-studio'));

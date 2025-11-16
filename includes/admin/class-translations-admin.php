@@ -51,7 +51,7 @@ class Translations_Admin {
         }
 
         $languages = Language_Config::get_all();
-        $languages_dir = ACS_PLUGIN_DIR . 'languages';
+        $languages_dir = ACS_TRANSLATIONS_DIR;
 
         ?>
         <div class="wrap">

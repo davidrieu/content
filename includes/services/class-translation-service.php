@@ -188,7 +188,7 @@ class Translation_Service {
      */
     public static function get_translations($lang_code) {
         // Check if translation file exists
-        $translations_file = ACS_PLUGIN_DIR . "languages/translations-{$lang_code}.json";
+        $translations_file = ACS_TRANSLATIONS_DIR . "/translations-{$lang_code}.json";
 
         if (file_exists($translations_file)) {
             $content = file_get_contents($translations_file);
@@ -239,7 +239,7 @@ class Translation_Service {
      * @return bool Success
      */
     public static function save_translations($lang_code, $translations) {
-        $languages_dir = ACS_PLUGIN_DIR . 'languages';
+        $languages_dir = ACS_TRANSLATIONS_DIR;
 
         if (!file_exists($languages_dir)) {
             mkdir($languages_dir, 0755, true);

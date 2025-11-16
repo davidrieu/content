@@ -33,6 +33,10 @@ define('ACS_MIN_PHP_VERSION', '8.1');
 define('ACS_MIN_WP_VERSION', '6.4');
 define('ACS_TABLE_PREFIX', 'acs_');
 
+// Translations directory in wp-content/uploads (persists through updates)
+$upload_dir = wp_upload_dir();
+define('ACS_TRANSLATIONS_DIR', $upload_dir['basedir'] . '/ai-content-studio/languages');
+
 // =====================================================
 // PSR-4 AUTOLOADER
 // =====================================================
