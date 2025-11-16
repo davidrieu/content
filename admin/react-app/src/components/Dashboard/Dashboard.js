@@ -143,13 +143,13 @@ export default function Dashboard({ profile }) {
                         <button className="acs-btn acs-btn-primary" onClick={() => navigate('/generate')}>
                             <FiZap /> {__('Nouveau post', 'ai-content-studio')}
                         </button>
-                        <button className="acs-btn acs-btn-outline-primary">
+                        <button className="acs-btn acs-btn-outline-primary" onClick={() => navigate('/blog-generator')}>
                             <FiFileText /> {__('Nouvel article', 'ai-content-studio')}
                         </button>
-                        <button className="acs-btn acs-btn-outline-primary">
+                        <button className="acs-btn acs-btn-outline-primary" onClick={() => navigate('/images')}>
                             <FiImage /> {__('Générer image', 'ai-content-studio')}
                         </button>
-                        <button className="acs-btn acs-btn-outline-primary">
+                        <button className="acs-btn acs-btn-outline-primary" onClick={() => navigate('/trends')}>
                             <FiTrendingUp /> {__('Voir tendances', 'ai-content-studio')}
                         </button>
                     </div>
@@ -174,19 +174,6 @@ export default function Dashboard({ profile }) {
                         onClick={() => setShowPricingModal(true)}
                     >
                         {subscription?.plan === 'free_trial' ? __('Upgrader', 'ai-content-studio') : __('Gérer', 'ai-content-studio')}
-                    </button>
-                </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="acs-card" style={{ marginTop: 'var(--acs-spacing-4)' }}>
-                <div className="acs-card-header">
-                    <h3 className="acs-card-title">{__('Activité récente', 'ai-content-studio')}</h3>
-                </div>
-                <div className="text-center" style={{ padding: '2rem' }}>
-                    <p className="acs-text-muted">{__('Vos posts récents apparaîtront ici', 'ai-content-studio')}</p>
-                    <button className="acs-btn acs-btn-primary" onClick={() => navigate('/generate')} style={{ marginTop: '1rem' }}>
-                        <FiZap /> {__('Créer votre premier post', 'ai-content-studio')}
                     </button>
                 </div>
             </div>
