@@ -110,21 +110,37 @@ class Translation_Service {
      * @return array Array of translated strings
      */
     public static function translate_batch_with_ai($strings, $target_lang) {
+        Logger::info("🚀 [DÉBUT] Traduction batch pour langue: {$target_lang}");
+
         $lang_config = Language_Config::get($target_lang);
 
         if (!$lang_config) {
+            Logger::error("❌ [ERREUR] Configuration langue introuvable pour: {$target_lang}");
             return $strings;
         }
+        Logger::info("✓ Configuration langue trouvée: " . $lang_config['native_name']);
 
         $api_key = get_option('acs_claude_api_key', '');
 
         if (empty($api_key)) {
-            Logger::warning('Claude API key not configured');
+            Logger::error('❌ [ERREUR] Clé API Claude non configurée');
             return $strings;
         }
+        Logger::info("✓ Clé API Claude configurée (longueur: " . strlen($api_key) . " caractères)");
 
         // Prepare JSON input for batch translation
+        $num_strings = count($strings);
+        Logger::info("✓ Préparation de {$num_strings} chaînes à traduire");
+
         $json_input = json_encode($strings, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        $json_size = strlen($json_input);
+        Logger::info("✓ JSON préparé ({$json_size} octets, ~" . round($json_size/1024) . " KB)");
+
+        // Log quelques exemples
+        $sample_keys = array_slice(array_keys($strings), 0, 3);
+        foreach ($sample_keys as $key) {
+            Logger::info("📝 Exemple à traduire: '{$key}' → '{$strings[$key]}'");
+        }
 
         $prompt = sprintf(
             "You are a professional translator. Translate the following JSON object from French to %s.\n\n" .
@@ -139,7 +155,11 @@ class Translation_Service {
             $json_input
         );
 
-        Logger::info("Translating {$target_lang} with batch API call");
+        Logger::info("🌐 [API] Envoi requête à Claude API (model: claude-3-haiku-20240307)");
+        Logger::info("🌐 [API] Timeout configuré: 120 secondes");
+        Logger::info("🌐 [API] Max tokens: 16000");
+
+        $request_start = microtime(true);
 
         $response = wp_remote_post('https://api.anthropic.com/v1/messages', [
             'headers' => [
@@ -149,7 +169,7 @@ class Translation_Service {
             ],
             'body' => json_encode([
                 'model' => 'claude-3-haiku-20240307',
-                'max_tokens' => 16000, // Increased for batch translations
+                'max_tokens' => 16000,
                 'messages' => [
                     [
                         'role' => 'user',
@@ -157,44 +177,90 @@ class Translation_Service {
                     ],
                 ],
             ]),
-            'timeout' => 120, // 2 minutes for batch
+            'timeout' => 120,
         ]);
 
+        $request_duration = round(microtime(true) - $request_start, 2);
+        Logger::info("🌐 [API] Réponse reçue en {$request_duration} secondes");
+
         if (is_wp_error($response)) {
-            Logger::error('Batch translation API error', [
-                'error' => $response->get_error_message(),
+            Logger::error('❌ [ERREUR API] ' . $response->get_error_message(), [
+                'lang' => $target_lang,
+                'duration' => $request_duration
+            ]);
+            return $strings;
+        }
+
+        $http_code = wp_remote_retrieve_response_code($response);
+        Logger::info("🌐 [API] Code HTTP: {$http_code}");
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+
+        if (isset($body['error'])) {
+            Logger::error("❌ [ERREUR API] " . ($body['error']['message'] ?? 'Erreur inconnue'), [
+                'type' => $body['error']['type'] ?? 'unknown',
                 'lang' => $target_lang
             ]);
             return $strings;
         }
 
-        $body = json_decode(wp_remote_retrieve_body($response), true);
-
         if (isset($body['content'][0]['text'])) {
             $translated_text = trim($body['content'][0]['text']);
+            $response_size = strlen($translated_text);
+            Logger::info("✓ Texte traduit reçu ({$response_size} octets, ~" . round($response_size/1024) . " KB)");
 
             // Extract JSON from potential markdown code blocks
             if (preg_match('/```json\s*(.*?)\s*```/s', $translated_text, $matches)) {
+                Logger::info("✓ JSON extrait des balises markdown ```json");
                 $translated_text = $matches[1];
             } elseif (preg_match('/```\s*(.*?)\s*```/s', $translated_text, $matches)) {
+                Logger::info("✓ JSON extrait des balises markdown ```");
                 $translated_text = $matches[1];
+            } else {
+                Logger::info("✓ JSON sans balises markdown");
             }
 
+            Logger::info("🔍 Décodage JSON...");
             $translated_array = json_decode($translated_text, true);
 
             if (is_array($translated_array) && count($translated_array) > 0) {
-                Logger::info("Successfully translated {$target_lang} with " . count($translated_array) . " keys");
+                $translated_count = count($translated_array);
+                Logger::info("✅ [SUCCÈS] {$translated_count} traductions décodées avec succès");
+
+                // Log quelques exemples de traductions
+                $sample_translated = array_slice($translated_array, 0, 3, true);
+                foreach ($sample_translated as $key => $value) {
+                    Logger::info("✓ Traduction OK: '{$key}' → '{$value}'");
+                }
+
+                // Vérifier si c'est vraiment traduit
+                if (isset($translated_array['Bienvenue'])) {
+                    $bienvenue_value = $translated_array['Bienvenue'];
+                    if ($bienvenue_value === 'Bienvenue') {
+                        Logger::warning("⚠️ [ATTENTION] 'Bienvenue' n'a PAS été traduit (toujours en français!)");
+                    } else {
+                        Logger::info("✓ Vérification: 'Bienvenue' → '{$bienvenue_value}' (BIEN TRADUIT)");
+                    }
+                }
+
                 return $translated_array;
             } else {
-                Logger::error('Failed to decode batch translation JSON', [
+                Logger::error('❌ [ERREUR] Impossible de décoder le JSON de traduction', [
                     'lang' => $target_lang,
+                    'json_error' => json_last_error_msg(),
                     'response_preview' => substr($translated_text, 0, 500)
                 ]);
+                Logger::error("Réponse complète Claude: " . $translated_text);
             }
+        } else {
+            Logger::error("❌ [ERREUR] Pas de contenu texte dans la réponse API", [
+                'lang' => $target_lang,
+                'body_keys' => array_keys($body)
+            ]);
         }
 
         // Fallback to original strings if batch failed
-        Logger::warning("Batch translation failed for {$target_lang}, keeping original strings");
+        Logger::warning("⚠️ [ÉCHEC] Traduction batch échouée pour {$target_lang}, conservation des chaînes originales");
         return $strings;
     }
 

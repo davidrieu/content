@@ -53,9 +53,66 @@ class Translations_Admin {
         $languages = Language_Config::get_all();
         $languages_dir = ACS_TRANSLATIONS_DIR;
 
+        // Diagnostic info
+        $api_key = get_option('acs_claude_api_key', '');
+        $dir_exists = file_exists($languages_dir);
+        $dir_writable = is_writable($languages_dir);
+
         ?>
         <div class="wrap">
             <h1><?php _e('Gestion des Traductions', 'ai-content-studio'); ?></h1>
+
+            <!-- DIAGNOSTIC SECTION -->
+            <div class="card" style="max-width: 1200px; margin-bottom: 20px; <?php echo (!$api_key || !$dir_exists) ? 'border-left: 4px solid #dc3232;' : ''; ?>">
+                <h2>🔍 Diagnostic Système</h2>
+                <table class="form-table">
+                    <tr>
+                        <th>Clé API Claude :</th>
+                        <td>
+                            <?php if ($api_key): ?>
+                                <span style="color: #46b450;">✅ Configurée</span>
+                                <code><?php echo substr($api_key, 0, 15); ?>...</code>
+                            <?php else: ?>
+                                <span style="color: #dc3232;">❌ NON CONFIGURÉE</span>
+                                <p>Allez dans <a href="<?php echo admin_url('admin.php?page=ai-content-studio-settings'); ?>">Paramètres</a> pour configurer votre clé API Claude</p>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Répertoire traductions :</th>
+                        <td>
+                            <code><?php echo $languages_dir; ?></code><br>
+                            <?php if ($dir_exists): ?>
+                                <span style="color: #46b450;">✅ Existe</span>
+                            <?php else: ?>
+                                <span style="color: #dc3232;">❌ N'existe pas</span>
+                            <?php endif; ?>
+
+                            <?php if ($dir_exists && $dir_writable): ?>
+                                <span style="color: #46b450;">✅ Inscriptible</span>
+                            <?php elseif ($dir_exists): ?>
+                                <span style="color: #dc3232;">❌ Pas inscriptible</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Fichier source :</th>
+                        <td>
+                            <?php
+                            $source_file = ACS_PLUGIN_DIR . '/languages/translations-en.json';
+                            if (file_exists($source_file)) {
+                                $source_data = json_decode(file_get_contents($source_file), true);
+                                $source_keys = count($source_data);
+                                echo '<span style="color: #46b450;">✅ ' . $source_keys . ' clés</span>';
+                                echo '<br><code>' . $source_file . '</code>';
+                            } else {
+                                echo '<span style="color: #dc3232;">❌ Fichier manquant</span>';
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
             <div class="card" style="max-width: 1200px;">
                 <h2><?php _e('Traductions Disponibles', 'ai-content-studio'); ?></h2>
@@ -67,7 +124,8 @@ class Translations_Admin {
                             <th style="width: 50px;"><?php _e('Drapeau', 'ai-content-studio'); ?></th>
                             <th><?php _e('Langue', 'ai-content-studio'); ?></th>
                             <th><?php _e('Code', 'ai-content-studio'); ?></th>
-                            <th><?php _e('Statut', 'ai-content-studio'); ?></th>
+                            <th style="width: 150px;"><?php _e('Statut', 'ai-content-studio'); ?></th>
+                            <th style="width: 250px;">Vérification</th>
                             <th><?php _e('Action', 'ai-content-studio'); ?></th>
                         </tr>
                     </thead>
@@ -77,19 +135,60 @@ class Translations_Admin {
                             $file_exists = file_exists("{$languages_dir}/translations-{$code}.json");
                             $status_class = $file_exists ? 'success' : 'warning';
                             $status_text = $file_exists ? __('Traduit', 'ai-content-studio') : __('Non traduit', 'ai-content-studio');
+
+                            // Vérifier si c'est VRAIMENT traduit
+                            $is_really_translated = false;
+                            $test_sample = '';
+                            if ($file_exists) {
+                                $content = file_get_contents("{$languages_dir}/translations-{$code}.json");
+                                $data = json_decode($content, true);
+                                if (is_array($data)) {
+                                    $num_keys = count($data);
+                                    // Test avec "Bienvenue"
+                                    $test_value = $data['Bienvenue'] ?? '';
+                                    if ($code === 'en') {
+                                        $is_really_translated = ($test_value === 'Welcome');
+                                        $test_sample = $test_value;
+                                    } elseif ($code === 'fr') {
+                                        $is_really_translated = true;
+                                        $test_sample = 'Langue par défaut';
+                                    } else {
+                                        // Pour autres langues, vérifier que ce n'est PAS "Bienvenue" ou "Welcome"
+                                        $is_really_translated = ($test_value !== 'Bienvenue' && $test_value !== 'Welcome' && !empty($test_value));
+                                        $test_sample = $test_value ?: 'Vide!';
+                                    }
+                                }
+                            }
                             ?>
                             <tr>
                                 <td style="font-size: 24px; text-align: center;"><?php echo $lang['flag']; ?></td>
                                 <td><strong><?php echo esc_html($lang['native_name']); ?></strong></td>
                                 <td><code><?php echo esc_html($code); ?></code></td>
                                 <td>
-                                    <span class="dashicons dashicons-<?php echo $file_exists ? 'yes-alt' : 'warning'; ?>"
-                                          style="color: <?php echo $file_exists ? '#46b450' : '#f0b849'; ?>;"></span>
-                                    <?php echo $status_text; ?>
+                                    <?php if ($file_exists): ?>
+                                        <span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
+                                        Fichier existe (<?php echo $num_keys ?? 0; ?> clés)
+                                    <?php else: ?>
+                                        <span class="dashicons dashicons-warning" style="color: #f0b849;"></span>
+                                        Non généré
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?php if ($file_exists): ?>
+                                        <?php if ($is_really_translated): ?>
+                                            <span style="color: #46b450;">✅ Vraiment traduit</span><br>
+                                            <small style="color: #666;">Ex: "<?php echo esc_html(substr($test_sample, 0, 30)); ?>"</small>
+                                        <?php else: ?>
+                                            <span style="color: #dc3232;">❌ PAS TRADUIT!</span><br>
+                                            <small style="color: #dc3232;">Montre: "<?php echo esc_html($test_sample); ?>"</small>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <span style="color: #999;">-</span>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <form data-single-lang="<?php echo esc_attr($code); ?>" style="display: inline;">
-                                        <button type="submit" class="button button-small">
+                                        <button type="submit" class="button button-small <?php echo (!$is_really_translated && $file_exists) ? 'button-primary' : ''; ?>">
                                             <?php echo $file_exists ? __('Régénérer', 'ai-content-studio') : __('Générer', 'ai-content-studio'); ?>
                                         </button>
                                     </form>
