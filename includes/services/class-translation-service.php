@@ -233,8 +233,15 @@ class Translation_Service {
         if ($lang_code === 'en') {
             $translations = $strings;
         } else {
+            // For other languages, translate from FRENCH (keys) to target language
+            // Create a French source array where keys = values (all in French)
+            $french_source = [];
+            foreach ($strings as $french_key => $english_value) {
+                $french_source[$french_key] = $french_key;  // Use French key as value
+            }
+
             // Use BATCH AI translation (1 API call instead of 461)
-            $translations = self::translate_batch_with_ai($strings, $lang_code);
+            $translations = self::translate_batch_with_ai($french_source, $lang_code);
         }
 
         // Save translations to file
