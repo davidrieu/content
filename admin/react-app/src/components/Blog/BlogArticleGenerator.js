@@ -307,7 +307,7 @@ export default function BlogArticleGenerator() {
             <div className="acs-page-header">
                 <h1><FiFileText /> {__('Générateur d\'Articles de Blog', 'ai-content-studio')}</h1>
                 <p className="acs-text-muted">
-                    {__('Générez des articles de blog optimisés SEO avec Claude AI', 'ai-content-studio')}
+                    {__('Générez des articles de blog optimisés SEO avec RUNNWRITE AI', 'ai-content-studio')}
                 </p>
             </div>
 

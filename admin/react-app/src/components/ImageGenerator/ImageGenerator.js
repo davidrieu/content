@@ -196,7 +196,7 @@ const ImageGenerator = () => {
                         <FiImage /> Générateur d'Images IA
                     </h1>
                     <p className="acs-page-subtitle">
-                        Créez des visuels époustouflants avec DALL-E 3 pour vos réseaux sociaux et articles de blog
+                        Créez des visuels époustouflants avec RUNNWRITE AI pour vos réseaux sociaux et articles de blog
                     </p>
                 </div>
                 {subscription && (
