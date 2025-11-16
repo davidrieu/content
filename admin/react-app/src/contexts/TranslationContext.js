@@ -30,7 +30,10 @@ export function TranslationProvider({ children }) {
                 }
             }
         } catch (error) {
-            console.error('Error loading language:', error);
+            // User not logged in or API error - use default French
+            console.log('Using default language (French):', error.message);
+            setCurrentLanguage('fr');
+            setTranslations({});
         } finally {
             setLoading(false);
         }
@@ -38,12 +41,19 @@ export function TranslationProvider({ children }) {
 
     const loadTranslations = async (langCode) => {
         try {
+            console.log(`Loading translations for language: ${langCode}`);
             const response = await apiFetch({
                 path: `/acs/v1/translations/${langCode}`,
             });
 
+            console.log('Translation API response:', response);
+
             if (response.success && response.data.translations) {
-                setTranslations(response.data.translations);
+                const translationsData = response.data.translations;
+                console.log(`Loaded ${Object.keys(translationsData).length} translation keys for ${langCode}`);
+                setTranslations(translationsData);
+            } else {
+                console.warn('No translations in response:', response);
             }
         } catch (error) {
             console.error('Error loading translations:', error);
@@ -78,7 +88,16 @@ export function TranslationProvider({ children }) {
 
     const t = (key) => {
         // If French or no translation exists, return original key
-        if (currentLanguage === 'fr' || !translations[key]) {
+        if (currentLanguage === 'fr') {
+            return key;
+        }
+
+        // Check if translation exists
+        if (!translations[key]) {
+            // Log missing translations in dev mode
+            if (process.env.NODE_ENV === 'development') {
+                console.warn(`Missing translation for key: "${key}" in language: ${currentLanguage}`);
+            }
             return key;
         }
 
