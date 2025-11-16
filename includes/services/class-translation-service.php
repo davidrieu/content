@@ -155,9 +155,9 @@ class Translation_Service {
             $json_input
         );
 
-        Logger::info("🌐 [API] Envoi requête à Claude API (model: claude-3-haiku-20240307)");
+        Logger::info("🌐 [API] Envoi requête à Claude API (model: claude-3-5-sonnet-20241022)");
         Logger::info("🌐 [API] Timeout configuré: 120 secondes");
-        Logger::info("🌐 [API] Max tokens: 4096 (limite Haiku)");
+        Logger::info("🌐 [API] Max tokens: 8192");
 
         $request_start = microtime(true);
 
@@ -168,8 +168,8 @@ class Translation_Service {
                 'anthropic-version' => '2023-06-01',
             ],
             'body' => json_encode([
-                'model' => 'claude-3-haiku-20240307',
-                'max_tokens' => 4096,
+                'model' => 'claude-3-5-sonnet-20241022',
+                'max_tokens' => 8192,
                 'messages' => [
                     [
                         'role' => 'user',
