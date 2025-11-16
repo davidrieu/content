@@ -209,7 +209,8 @@ class Translation_Service {
             $response_size = strlen($translated_text);
             Logger::info("✓ Texte traduit reçu ({$response_size} octets, ~" . round($response_size/1024) . " KB)");
 
-            // Extract JSON from potential markdown code blocks
+            // Extract JSON from response
+            // Try to find JSON in markdown code blocks first
             if (preg_match('/```json\s*(.*?)\s*```/s', $translated_text, $matches)) {
                 Logger::info("✓ JSON extrait des balises markdown ```json");
                 $translated_text = $matches[1];
@@ -217,7 +218,18 @@ class Translation_Service {
                 Logger::info("✓ JSON extrait des balises markdown ```");
                 $translated_text = $matches[1];
             } else {
-                Logger::info("✓ JSON sans balises markdown");
+                // No markdown, try to extract raw JSON object
+                // Find the first { and last } to extract the complete JSON object
+                $first_brace = strpos($translated_text, '{');
+                $last_brace = strrpos($translated_text, '}');
+
+                if ($first_brace !== false && $last_brace !== false && $last_brace > $first_brace) {
+                    $json_only = substr($translated_text, $first_brace, $last_brace - $first_brace + 1);
+                    Logger::info("✓ JSON extrait directement (du caractère {$first_brace} au {$last_brace})");
+                    $translated_text = $json_only;
+                } else {
+                    Logger::info("✓ JSON sans balises markdown (utilisation brute)");
+                }
             }
 
             Logger::info("🔍 Décodage JSON...");
