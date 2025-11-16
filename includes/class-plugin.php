@@ -166,6 +166,13 @@ class Plugin {
                 require_once $diagnostic_file;
                 new Admin\Diagnostic_Page();
             }
+
+            // Load translations admin page
+            $translations_file = ACS_PLUGIN_DIR . 'includes/admin/class-translations-admin.php';
+            if (file_exists($translations_file)) {
+                require_once $translations_file;
+                new Admin\Translations_Admin();
+            }
         }
 
         // Load auth AJAX handler (works for both admin and frontend)
