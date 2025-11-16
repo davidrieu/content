@@ -7,7 +7,11 @@ export default function LanguageSwitcher() {
     const [isOpen, setIsOpen] = useState(false);
     const [languages, setLanguages] = useState([]);
     const [popularLanguages, setPopularLanguages] = useState([]);
-    const [currentLanguage, setCurrentLanguage] = useState(null);
+    const [currentLanguage, setCurrentLanguage] = useState({
+        code: 'fr',
+        flag: '🇫🇷',
+        native_name: 'Français'
+    });
     const [loading, setLoading] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -52,11 +56,12 @@ export default function LanguageSwitcher() {
                 path: '/acs/v1/language',
             });
 
-            if (response.success) {
+            if (response.success && response.data.config) {
                 setCurrentLanguage(response.data.config);
             }
         } catch (error) {
             console.error('Error loading current language:', error);
+            // Keep default French language if error
         }
     };
 
@@ -84,10 +89,6 @@ export default function LanguageSwitcher() {
         }
     };
 
-    if (!currentLanguage) {
-        return null;
-    }
-
     return (
         <div className="acs-language-switcher" ref={dropdownRef}>
             <button
@@ -95,9 +96,20 @@ export default function LanguageSwitcher() {
                 onClick={() => setIsOpen(!isOpen)}
                 disabled={loading}
                 aria-label={__('Changer de langue', 'ai-content-studio')}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 12px',
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    borderRadius: '4px',
+                    transition: 'all 0.2s'
+                }}
             >
                 <FiGlobe size={18} />
-                <span className="acs-current-lang">{currentLanguage.flag}</span>
+                <span style={{ fontSize: '1.25rem' }}>{currentLanguage.flag}</span>
             </button>
 
             {isOpen && (
