@@ -16,10 +16,10 @@ export default function Topbar({ currentPage, profile }) {
                 )}
             </div>
             <div className="d-flex align-items-center gap-3">
-                <LanguageSwitcher />
                 <button className="acs-btn acs-btn-sm" style={{ background: 'transparent', border: 'none', color: 'var(--acs-gray-600)' }}>
                     <FiBell size={18} />
                 </button>
+                <LanguageSwitcher />
                 <div className="d-flex align-items-center gap-2">
                     <div style={{
                         width: '32px',
