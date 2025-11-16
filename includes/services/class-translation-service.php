@@ -54,12 +54,14 @@ class Translation_Service {
         $lang_config = Language_Config::get($target_lang);
 
         if (!$lang_config) {
+            Logger::error("Configuration langue introuvable: {$target_lang}");
             return $text;
         }
 
         $api_key = get_option('acs_claude_api_key', '');
 
         if (empty($api_key)) {
+            Logger::error('Clé API Claude non configurée');
             return $text;
         }
 
@@ -89,16 +91,30 @@ class Translation_Service {
         ]);
 
         if (is_wp_error($response)) {
-            Logger::error('Translation API error', ['error' => $response->get_error_message()]);
+            Logger::error('❌ API Error (single translation)', [
+                'error' => $response->get_error_message(),
+                'text_preview' => substr($text, 0, 50)
+            ]);
             return $text;
         }
 
         $body = json_decode(wp_remote_retrieve_body($response), true);
 
+        // Check for API errors
+        if (isset($body['error'])) {
+            Logger::error('❌ Claude API Error (single)', [
+                'message' => $body['error']['message'] ?? 'Unknown',
+                'type' => $body['error']['type'] ?? 'unknown',
+                'text_preview' => substr($text, 0, 50)
+            ]);
+            return $text;
+        }
+
         if (isset($body['content'][0]['text'])) {
             return trim($body['content'][0]['text']);
         }
 
+        Logger::warning("⚠️ Pas de contenu dans réponse API", ['text_preview' => substr($text, 0, 50)]);
         return $text;
     }
 
@@ -298,7 +314,7 @@ class Translation_Service {
     }
 
     /**
-     * Generate all translations for a language (OPTIMIZED with batch translation)
+     * Generate all translations for a language (ONE BY ONE with Haiku)
      *
      * @param string $lang_code Language code
      * @return array Translations
@@ -307,30 +323,53 @@ class Translation_Service {
         $strings = self::get_translatable_strings();
         $translations = [];
 
-        Logger::info("Generating translations for language: {$lang_code} (using batch mode)");
+        $total_strings = count($strings);
+        Logger::info("🚀 [DÉBUT] Génération traductions pour {$lang_code}: {$total_strings} chaînes (mode: UNE PAR UNE)");
 
         // If target is English, use the English translation directly
         if ($lang_code === 'en') {
             $translations = $strings;
+            Logger::info("✓ Langue anglaise: utilisation directe du fichier source");
         } else {
-            // For other languages, translate from FRENCH (keys) to target language
-            // Create a French source array where keys = values (all in French)
-            $french_source = [];
+            // Translate ONE BY ONE from French to target language
+            $current = 0;
+            $errors = 0;
+
             foreach ($strings as $french_key => $english_value) {
-                $french_source[$french_key] = $french_key;  // Use French key as value
+                $current++;
+
+                // Log progress every 50 strings
+                if ($current % 50 === 0 || $current === 1) {
+                    Logger::info("📊 Progression: {$current}/{$total_strings} (" . round(($current/$total_strings)*100) . "%)");
+                }
+
+                // Translate from French to target language
+                $translated = self::translate_with_ai($french_key, $lang_code);
+
+                // Check if translation failed (returned same text)
+                if ($translated === $french_key) {
+                    $errors++;
+                    if ($errors <= 5) {
+                        Logger::warning("⚠️ Traduction échouée pour: '{$french_key}'");
+                    }
+                }
+
+                $translations[$french_key] = $translated;
+
+                // Small delay to avoid rate limiting (50ms)
+                usleep(50000);
             }
 
-            // Use BATCH AI translation (1 API call instead of 461)
-            $translations = self::translate_batch_with_ai($french_source, $lang_code);
+            Logger::info("✅ [TERMINÉ] {$current} traductions générées ({$errors} erreurs)");
         }
 
         // Save translations to file
         $result = self::save_translations($lang_code, $translations);
 
         if ($result) {
-            Logger::info("Successfully saved {$lang_code} translations: " . count($translations) . " keys");
+            Logger::info("✓ Fichier sauvegardé: {$lang_code} ({$total_strings} clés)");
         } else {
-            Logger::error("Failed to save {$lang_code} translations to file");
+            Logger::error("❌ Échec sauvegarde fichier {$lang_code}");
         }
 
         return $translations;
