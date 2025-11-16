@@ -88,7 +88,7 @@ function PlaceholderPage({ title }) {
     );
 }
 
-function App() {
+function AuthenticatedApp() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
     const [needsOnboarding, setNeedsOnboarding] = useState(true);
@@ -181,13 +181,19 @@ function App() {
 
     // Show main app
     return (
+        <HashRouter>
+            <AppContent
+                profile={profile}
+                onAddProject={() => setShowAddProjectWizard(true)}
+            />
+        </HashRouter>
+    );
+}
+
+function App() {
+    return (
         <TranslationProvider>
-            <HashRouter>
-                <AppContent
-                    profile={profile}
-                    onAddProject={() => setShowAddProjectWizard(true)}
-                />
-            </HashRouter>
+            <AuthenticatedApp />
         </TranslationProvider>
     );
 }
