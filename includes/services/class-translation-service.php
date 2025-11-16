@@ -155,7 +155,7 @@ class Translation_Service {
             $json_input
         );
 
-        Logger::info("🌐 [API] Envoi requête à Claude API (model: claude-3-5-sonnet-20241022)");
+        Logger::info("🌐 [API] Envoi requête à Claude API (model: claude-3-5-sonnet-20240620)");
         Logger::info("🌐 [API] Timeout configuré: 120 secondes");
         Logger::info("🌐 [API] Max tokens: 8192");
 
@@ -168,7 +168,7 @@ class Translation_Service {
                 'anthropic-version' => '2023-06-01',
             ],
             'body' => json_encode([
-                'model' => 'claude-3-5-sonnet-20241022',
+                'model' => 'claude-3-5-sonnet-20240620',
                 'max_tokens' => 8192,
                 'messages' => [
                     [
@@ -199,8 +199,10 @@ class Translation_Service {
         if (isset($body['error'])) {
             Logger::error("❌ [ERREUR API] " . ($body['error']['message'] ?? 'Erreur inconnue'), [
                 'type' => $body['error']['type'] ?? 'unknown',
-                'lang' => $target_lang
+                'lang' => $target_lang,
+                'error_full' => json_encode($body['error'])
             ]);
+            Logger::error("Réponse API complète: " . json_encode($body));
             return $strings;
         }
 
