@@ -21,104 +21,26 @@ class Translation_Service {
 
     /**
      * Get all translatable strings from the app
+     * Loads from the source JSON file in the plugin directory
      *
      * @return array
      */
     public static function get_translatable_strings() {
-        return [
-            // Auth & Onboarding
-            'Bienvenue' => 'Welcome',
-            'Connexion' => 'Login',
-            'Inscription' => 'Register',
-            'Email' => 'Email',
-            'Mot de passe' => 'Password',
-            'Se connecter' => 'Sign in',
-            "S'inscrire" => 'Sign up',
-            'Déconnexion' => 'Logout',
+        // Load from the source JSON file
+        $source_file = ACS_PLUGIN_DIR . '/languages/translations-en.json';
 
-            // Dashboard
-            'Tableau de bord' => 'Dashboard',
-            'Actions rapides' => 'Quick actions',
-            'Votre plan' => 'Your plan',
-            'Posts générés' => 'Generated posts',
-            'Articles de blog' => 'Blog articles',
-            'Images IA' => 'AI Images',
-            'disponibles' => 'available',
+        if (file_exists($source_file)) {
+            $content = file_get_contents($source_file);
+            $translations = json_decode($content, true);
 
-            // Navigation
-            'Générer des posts' => 'Generate posts',
-            'Créer un article' => 'Create article',
-            'Stratégie Auto' => 'Auto Strategy',
-            'Calendrier' => 'Calendar',
-            'Bibliothèque' => 'Library',
-            'Mes articles' => 'My articles',
-            'Tendances SEO' => 'SEO Trends',
-            'Paramètres' => 'Settings',
-            'Réseaux Sociaux' => 'Social Media',
-            'SEO & Blog' => 'SEO & Blog',
+            if (is_array($translations)) {
+                return $translations;
+            }
+        }
 
-            // Actions
-            'Nouveau post' => 'New post',
-            'Nouvel article' => 'New article',
-            'Générer image' => 'Generate image',
-            'Voir tendances' => 'View trends',
-            'Upgrader' => 'Upgrade',
-            'Gérer' => 'Manage',
-
-            // Pricing
-            'Choisissez votre plan' => 'Choose your plan',
-            'Choisir ce plan' => 'Choose this plan',
-            'POPULAIRE' => 'POPULAR',
-            'Pour les entrepreneurs et créateurs' => 'For entrepreneurs and creators',
-            'Pour les professionnels du marketing' => 'For marketing professionals',
-            'Pour les agences et entreprises' => 'For agencies and businesses',
-            'Posts ILLIMITÉS' => 'UNLIMITED Posts',
-            'Articles ILLIMITÉS' => 'UNLIMITED Articles',
-            'Images ILLIMITÉES' => 'UNLIMITED Images',
-            'Toutes les langues' => 'All languages',
-            'Toutes les plateformes' => 'All platforms',
-            'Planification & calendrier' => 'Scheduling & calendar',
-            'Support email' => 'Email support',
-            'Analytics avancées' => 'Advanced analytics',
-            'Analyse de la concurrence' => 'Competitor analysis',
-            'Support prioritaire' => 'Priority support',
-            'Support dédié' => 'Dedicated support',
-            'Sans engagement' => 'No commitment',
-            'Garantie 14 jours' => '14-day guarantee',
-            'Paiement 100% sécurisé' => '100% secure payment',
-            'créateurs de contenu' => 'content creators',
-            'posts générés ce mois' => 'posts generated this month',
-            'satisfaction client' => 'customer satisfaction',
-
-            // Messages
-            'Chargement...' => 'Loading...',
-            'Redirection...' => 'Redirecting...',
-            'Erreur' => 'Error',
-            'Succès' => 'Success',
-            'Je décide plus tard' => "I'll decide later",
-            'Annuler mon abonnement' => 'Cancel my subscription',
-
-            // Testimonials
-            "RunnWrite AI a transformé ma stratégie de contenu. Je génère en 10 minutes ce qui me prenait 3 heures !" => "RunnWrite AI transformed my content strategy. I generate in 10 minutes what used to take me 3 hours!",
-            "La qualité des articles générés est impressionnante. Mes clients adorent le contenu que je produis maintenant." => "The quality of the generated articles is impressive. My clients love the content I produce now.",
-            "ROI incroyable. Le temps gagné me permet de gérer 3x plus de clients avec la même équipe." => "Incredible ROI. The time saved allows me to manage 3x more clients with the same team.",
-            "Marie L." => "Marie L.",
-            "Thomas D." => "Thomas D.",
-            "Sophie M." => "Sophie M.",
-            "Social Media Manager" => "Social Media Manager",
-            "Freelance Content Creator" => "Freelance Content Creator",
-            "Agence Marketing" => "Marketing Agency",
-
-            // Special offer
-            "🎉 Offre spéciale : Rejoignez-nous maintenant et bénéficiez de votre premier mois avec une assistance personnalisée gratuite !" => "🎉 Special offer: Join us now and get your first month with free personalized assistance!",
-
-            // Limits
-            "Vous avez atteint votre limite d'articles" => "You've reached your article limit",
-            "Vous avez atteint votre limite de posts" => "You've reached your post limit",
-            "Passez à un plan supérieur pour générer plus d'articles de blog" => "Upgrade to generate more blog articles",
-            "Passez à un plan supérieur pour générer plus de posts sociaux" => "Upgrade to generate more social posts",
-            "Améliorez votre plan pour continuer" => "Upgrade your plan to continue",
-        ];
+        // Fallback to empty array if file doesn't exist
+        Logger::warning('Source translation file not found: ' . $source_file);
+        return [];
     }
 
     /**
