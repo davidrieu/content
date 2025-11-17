@@ -83,10 +83,15 @@ class Language_Endpoint extends REST_Controller {
      */
     public function get_user_language($request) {
         $user_id = get_current_user_id();
+
+        // Try new key first, then fallback to preferred language (set during registration)
         $language = get_user_meta($user_id, 'acs_user_language', true);
+        if (!$language) {
+            $language = get_user_meta($user_id, 'acs_preferred_language', true);
+        }
 
         if (!$language) {
-            $language = 'fr'; // Default language
+            $language = 'en'; // Default language for new users
         }
 
         $lang_config = Language_Config::get($language);

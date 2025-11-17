@@ -4,7 +4,7 @@ import apiFetch from '@wordpress/api-fetch';
 const TranslationContext = createContext();
 
 export function TranslationProvider({ children }) {
-    const [currentLanguage, setCurrentLanguage] = useState('fr');
+    const [currentLanguage, setCurrentLanguage] = useState('en');
     const [translations, setTranslations] = useState({});
     const [loading, setLoading] = useState(true);
 
@@ -24,16 +24,17 @@ export function TranslationProvider({ children }) {
                 const langCode = response.data.language;
                 setCurrentLanguage(langCode);
 
-                // Load translations if not French (default)
+                // Load translations if not French (default source language)
                 if (langCode !== 'fr') {
                     await loadTranslations(langCode);
                 }
             }
         } catch (error) {
-            // User not logged in or API error - use default French
-            console.log('Using default language (French):', error.message);
-            setCurrentLanguage('fr');
-            setTranslations({});
+            // User not logged in or API error - use default English for non-authenticated users
+            console.log('User not authenticated, using default language (English):', error.message);
+            setCurrentLanguage('en');
+            // Load English translations for login/register forms
+            await loadTranslations('en');
         } finally {
             setLoading(false);
         }
