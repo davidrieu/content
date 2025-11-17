@@ -459,7 +459,10 @@ export default function StrategyGenerator({ profile }) {
                 <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>⏰ {t('Meilleurs moments de publication')}</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
                     {(strategy?.platforms || ['instagram', 'facebook']).map((platform) => {
-                        const times = BEST_POSTING_TIMES[platform]?.[profile?.user_type || 'business'] || BEST_POSTING_TIMES[platform]?.business;
+                        // Get posting times with fallback for platforms using 'all' key (like Twitter)
+                        const times = BEST_POSTING_TIMES[platform]?.[profile?.user_type || 'business']
+                                   || BEST_POSTING_TIMES[platform]?.business
+                                   || BEST_POSTING_TIMES[platform]?.all;
                         return (
                             <div
                                 key={platform}
@@ -477,7 +480,7 @@ export default function StrategyGenerator({ profile }) {
                                 {times && (
                                     <>
                                         <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
-                                            <strong>{t('Jours :')} </strong> {times.best_days.join(', ')}
+                                            <strong>{t('Jours :')} </strong> {times.best_days.map(day => t(day)).join(', ')}
                                         </div>
                                         <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
                                             <strong>{t('Heures :')} </strong> {times.best_times.join(', ')}
