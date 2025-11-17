@@ -52,11 +52,11 @@ class Language_Endpoint extends REST_Controller {
             ],
         ]);
 
-        // GET /acs/v1/translations/{lang} - Get translations for a language
+        // GET /acs/v1/translations/{lang} - Get translations for a language (public access for login/register)
         register_rest_route('acs/v1', '/translations/(?P<lang>[a-z]{2})', [
             'methods' => 'GET',
             'callback' => [$this, 'get_translations'],
-            'permission_callback' => [$this, 'permission_check'],
+            'permission_callback' => '__return_true', // Public access for non-authenticated users
         ]);
     }
 
