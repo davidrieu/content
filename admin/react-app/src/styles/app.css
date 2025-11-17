@@ -3189,21 +3189,35 @@ body.admin-bar #acs-frontend-root .acs-app {
   .acs-calendar-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    margin: 0 calc(var(--acs-spacing-3) * -1);
+    padding: 0 var(--acs-spacing-3);
   }
 
   .acs-calendar-grid {
-    min-width: 600px;
+    min-width: 800px;
   }
 
   .acs-calendar-day {
-    min-height: 80px;
+    min-height: 100px;
+    min-width: 100px;
     padding: var(--acs-spacing-2);
     font-size: 0.75rem;
   }
 
+  .acs-calendar-day-header {
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  .acs-calendar-day-number {
+    font-size: 0.85rem;
+    margin-bottom: var(--acs-spacing-1);
+  }
+
   .acs-post-preview {
-    font-size: 0.65rem;
-    padding: 4px;
+    font-size: 0.6rem;
+    padding: 3px 4px;
+    margin-bottom: 2px;
   }
 
   /* ========== IMAGE GENERATOR ========== */

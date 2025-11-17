@@ -548,6 +548,16 @@
         font-size: 2.25rem;
     }
 
+    /* Reduce testimonial dots size on mobile */
+    .acs-testimonial-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .acs-testimonial-dot.active {
+        width: 16px;
+    }
+
     .acs-social-proof-banner,
     .acs-trust-banner {
         flex-direction: column;
