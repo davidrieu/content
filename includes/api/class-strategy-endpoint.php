@@ -111,7 +111,16 @@ class Strategy_Endpoint extends REST_Controller {
             $strategy_data['id'] = $strategy_id;
             $strategy_data['month'] = $month;
             $strategy_data['year'] = $year;
-            $strategy_data['platforms'] = $profile['platforms'] ?? ['instagram', 'facebook'];
+
+            // Ensure platforms is always an array
+            $platforms = $profile['platforms'] ?? ['instagram', 'facebook'];
+            if (is_string($platforms)) {
+                $platforms = json_decode($platforms, true) ?? ['instagram', 'facebook'];
+            }
+            if (!is_array($platforms)) {
+                $platforms = ['instagram', 'facebook'];
+            }
+            $strategy_data['platforms'] = $platforms;
 
             return rest_ensure_response([
                 'success' => true,
@@ -381,7 +390,13 @@ PROMPT;
         $strategy_data = json_decode($strategy['strategy'], true);
         $strategy_data['weekly_themes'] = json_decode($strategy['weekly_themes'], true);
         $strategy_data['content_mix'] = json_decode($strategy['content_mix'], true);
-        $strategy_data['platforms'] = json_decode($strategy['platforms'], true);
+
+        // Ensure platforms is always an array
+        $platforms = json_decode($strategy['platforms'], true);
+        if (!is_array($platforms)) {
+            $platforms = ['instagram', 'facebook'];
+        }
+        $strategy_data['platforms'] = $platforms;
 
         // Récupérer les content_ideas si elles existent (stockées dans key_topics ou un autre champ)
         if (isset($strategy_data['content_ideas'])) {
