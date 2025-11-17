@@ -166,12 +166,26 @@ ai-content-generator-runnwrite
                 </ul>
                 <div class="rw-feature-example">
                     <div class="rw-example-header">Example Output:</div>
-                    <div class="rw-example-post">
-                        <div class="rw-post-platform"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram</div>
+                    <div class="rw-post-preview">
+                        <div class="rw-post-header">
+                            <div class="rw-post-avatar">RA</div>
+                            <div class="rw-post-info">
+                                <h4>Runnwrite AI</h4>
+                                <p>2 minutes ago • Instagram</p>
+                            </div>
+                        </div>
                         <div class="rw-post-content">
-                            "<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> 5 Marketing Mistakes That Are Costing You Sales<br><br>
-                            ❌ Mistake #1: Not knowing your audience...<br><br>
-                            #DigitalMarketing #MarketingTips #BusinessGrowth"
+                            <strong>🚀 5 Marketing Mistakes That Are Costing You Sales</strong><br><br>
+                            Mistake #1: Not knowing your audience deeply enough.<br>
+                            The solution? Create detailed buyer personas...<br><br>
+                        </div>
+                        <div class="rw-post-hashtags">
+                            #DigitalMarketing #MarketingTips #BusinessGrowth #ContentStrategy #SocialMedia
+                        </div>
+                        <div class="rw-post-stats">
+                            <span>❤️ 1,247</span>
+                            <span>💬 89</span>
+                            <span>🔄 156</span>
                         </div>
                     </div>
                 </div>
@@ -1485,10 +1499,6 @@ ai-content-generator-runnwrite
 }
 
 .rw-feature-example {
-    background: var(--rw-white);
-    border: 1px solid var(--rw-gray-200);
-    border-radius: var(--rw-radius-lg);
-    padding: var(--rw-spacing-4);
     margin-top: var(--rw-spacing-4);
 }
 
@@ -1499,10 +1509,74 @@ ai-content-generator-runnwrite
     margin-bottom: var(--rw-spacing-3);
 }
 
-.rw-example-post {
-    background: var(--rw-gray-50);
-    border-radius: var(--rw-radius);
-    padding: var(--rw-spacing-3);
+/* Post Preview Styles */
+.rw-post-preview {
+    background: var(--rw-white);
+    border-radius: var(--rw-radius-xl);
+    box-shadow: var(--rw-shadow-xl);
+    padding: var(--rw-spacing-5);
+    border: 2px solid var(--rw-gray-200);
+    position: relative;
+    overflow: hidden;
+}
+
+.rw-post-header {
+    display: flex;
+    align-items: center;
+    gap: var(--rw-spacing-3);
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.rw-post-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rw-white);
+    font-weight: 700;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.rw-post-info h4 {
+    font-size: 1rem;
+    margin: 0;
+    color: var(--rw-gray-900);
+}
+
+.rw-post-info p {
+    font-size: 0.75rem;
+    margin: 0;
+    color: var(--rw-gray-600);
+}
+
+.rw-post-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.rw-post-hashtags {
+    color: var(--rw-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.rw-post-stats {
+    display: flex;
+    gap: var(--rw-spacing-5);
+    padding-top: var(--rw-spacing-4);
+    border-top: 1px solid var(--rw-gray-200);
+    font-size: 0.875rem;
+    color: var(--rw-gray-600);
+}
+
+.rw-post-stats span {
+    transition: var(--rw-transition);
 }
 
 .rw-post-platform {
@@ -3026,5 +3100,17 @@ document.addEventListener('DOMContentLoaded', function() {
             chartObserver.observe(bar);
         });
     }
+
+    // Animate post stats
+    const postStats = document.querySelectorAll('.rw-post-stats span');
+    postStats.forEach((stat, i) => {
+        stat.style.opacity = '0';
+        stat.style.transform = 'translateY(10px)';
+        setTimeout(() => {
+            stat.style.transition = 'all 0.5s ease';
+            stat.style.opacity = '1';
+            stat.style.transform = 'translateY(0)';
+        }, 300 + (i * 150));
+    });
 });
 </script>
