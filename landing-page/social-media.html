@@ -1,0 +1,687 @@
+<!--
+========================================================================================
+RUNNWRITE AI - SOCIAL MEDIA CONTENT GENERATOR PAGE
+WordPress SEO Settings
+========================================================================================
+
+META TITLE (58 characters):
+Social Media Content Creator - AI Posts Generator | Runnwrite
+
+META DESCRIPTION (157 characters):
+Create engaging social media posts for Instagram, Facebook, LinkedIn, Twitter, TikTok & YouTube. AI-powered content calendar, 200+ templates, smart hashtags.
+
+FOCUS KEYWORD:
+social media content creator
+
+ADDITIONAL KEYWORDS:
+- social media post generator
+- AI social media tool
+- content calendar
+- social media strategy
+
+========================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Content Creator - Runnwrite AI</title>
+    
+    <style>
+/* CSS Variables */
+:root {
+    --rw-primary: #6366f1;
+    --rw-primary-dark: #4f46e5;
+    --rw-primary-light: #818cf8;
+    --rw-secondary: #10b981;
+    --rw-success: #10b981;
+    --rw-warning: #f59e0b;
+    --rw-white: #ffffff;
+    --rw-black: #000000;
+    --rw-gray-50: #f9fafb;
+    --rw-gray-100: #f3f4f6;
+    --rw-gray-200: #e5e7eb;
+    --rw-gray-300: #d1d5db;
+    --rw-gray-600: #4b5563;
+    --rw-gray-700: #374151;
+    --rw-gray-900: #111827;
+    
+    --rw-spacing-2: 0.5rem;
+    --rw-spacing-3: 0.75rem;
+    --rw-spacing-4: 1rem;
+    --rw-spacing-5: 1.5rem;
+    --rw-spacing-6: 2rem;
+    --rw-spacing-8: 3rem;
+    
+    --rw-radius-lg: 0.75rem;
+    --rw-radius-xl: 1rem;
+    --rw-radius-2xl: 1.5rem;
+    --rw-radius-full: 9999px;
+    
+    --rw-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --rw-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --rw-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    
+    --rw-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--rw-gray-900);
+    background: var(--rw-white);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--rw-spacing-6);
+}
+
+section {
+    padding: var(--rw-spacing-8) 0;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--rw-gray-900);
+}
+
+h1 { font-size: 3.5rem; margin-bottom: var(--rw-spacing-5); }
+h2 { font-size: 2.5rem; margin-bottom: var(--rw-spacing-4); }
+h3 { font-size: 1.75rem; margin-bottom: var(--rw-spacing-3); }
+
+p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
+
+/* Hero Section */
+.sm-hero {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+    padding: var(--rw-spacing-8) 0;
+    border-radius: 24px;
+    margin: var(--rw-spacing-4) var(--rw-spacing-6);
+    overflow: hidden;
+}
+
+.sm-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--rw-spacing-8);
+    align-items: center;
+}
+
+.sm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    padding: var(--rw-spacing-2) var(--rw-spacing-4);
+    border-radius: var(--rw-radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.sm-hero h1 span {
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sm-hero-buttons {
+    display: flex;
+    gap: var(--rw-spacing-4);
+    margin-top: var(--rw-spacing-6);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    padding: 0.75rem 1.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--rw-radius-lg);
+    border: none;
+    cursor: pointer;
+    transition: var(--rw-transition);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-primary-dark));
+    color: var(--rw-white);
+    box-shadow: var(--rw-shadow-lg);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--rw-shadow-xl);
+}
+
+.btn-outline {
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    border: 2px solid var(--rw-primary);
+}
+
+.btn-outline:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+}
+
+/* Post Preview Animation */
+.post-preview {
+    background: var(--rw-white);
+    border-radius: var(--rw-radius-xl);
+    box-shadow: var(--rw-shadow-xl);
+    padding: var(--rw-spacing-5);
+    border: 2px solid var(--rw-gray-200);
+    position: relative;
+    overflow: hidden;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: var(--rw-spacing-3);
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.post-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rw-white);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.post-info h4 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.post-info p {
+    font-size: 0.75rem;
+    margin: 0;
+    color: var(--rw-gray-600);
+}
+
+.post-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.post-hashtags {
+    color: var(--rw-primary);
+    font-size: 0.875rem;
+}
+
+.post-stats {
+    display: flex;
+    gap: var(--rw-spacing-5);
+    padding-top: var(--rw-spacing-4);
+    border-top: 1px solid var(--rw-gray-200);
+    font-size: 0.875rem;
+    color: var(--rw-gray-600);
+}
+
+/* Platforms Grid */
+.platforms-showcase {
+    background: var(--rw-white);
+}
+
+.platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--rw-spacing-4);
+    margin-top: var(--rw-spacing-6);
+}
+
+.platform-card {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-xl);
+    padding: var(--rw-spacing-5);
+    text-align: center;
+    transition: var(--rw-transition);
+    cursor: pointer;
+}
+
+.platform-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--rw-shadow-lg);
+    border-color: var(--rw-primary);
+}
+
+.platform-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--rw-spacing-3);
+    border-radius: var(--rw-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.platform-instagram { background: linear-gradient(135deg, #f09433, #dc2743, #bc1888); }
+.platform-facebook { background: #1877f2; }
+.platform-linkedin { background: #0a66c2; }
+.platform-twitter { background: #1da1f2; }
+.platform-tiktok { background: #000000; }
+.platform-youtube { background: #ff0000; }
+
+.platform-name {
+    font-weight: 600;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-2);
+}
+
+.platform-features {
+    font-size: 0.875rem;
+    color: var(--rw-gray-600);
+    list-style: none;
+    text-align: left;
+}
+
+.platform-features li {
+    margin-bottom: var(--rw-spacing-2);
+}
+
+/* Calendar Section */
+.calendar-section {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
+}
+
+.calendar-demo {
+    background: var(--rw-white);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-6);
+    box-shadow: var(--rw-shadow-xl);
+    border: 2px solid var(--rw-gray-200);
+    margin-top: var(--rw-spacing-6);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--rw-spacing-5);
+    padding-bottom: var(--rw-spacing-4);
+    border-bottom: 2px solid var(--rw-gray-200);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--rw-spacing-2);
+}
+
+.calendar-day {
+    background: var(--rw-gray-50);
+    border: 1px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-lg);
+    padding: var(--rw-spacing-3);
+    min-height: 100px;
+    position: relative;
+    transition: var(--rw-transition);
+}
+
+.calendar-day:hover {
+    background: var(--rw-white);
+    box-shadow: var(--rw-shadow-md);
+}
+
+.day-number {
+    font-weight: 600;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-2);
+}
+
+.calendar-post {
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    color: var(--rw-white);
+    padding: var(--rw-spacing-2);
+    border-radius: var(--rw-radius-lg);
+    font-size: 0.75rem;
+    margin-bottom: var(--rw-spacing-2);
+    cursor: pointer;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Strategy Section */
+.strategy-section {
+    background: var(--rw-white);
+}
+
+.strategy-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--rw-spacing-6);
+    margin-top: var(--rw-spacing-6);
+}
+
+.strategy-card {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-6);
+    transition: var(--rw-transition);
+}
+
+.strategy-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--rw-shadow-xl);
+    border-color: var(--rw-primary);
+}
+
+.strategy-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    border-radius: var(--rw-radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rw-white);
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.strategy-number {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    color: var(--rw-primary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--rw-radius-full);
+    font-weight: 700;
+    margin-bottom: var(--rw-spacing-3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sm-hero-grid { grid-template-columns: 1fr; }
+    .platforms-grid { grid-template-columns: repeat(2, 1fr); }
+    .calendar-grid { grid-template-columns: repeat(7, 1fr); font-size: 0.75rem; }
+    .strategy-cards { grid-template-columns: 1fr; }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 1.875rem; }
+}
+
+.text-center { text-align: center; }
+.section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--rw-spacing-8);
+}
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="sm-hero">
+    <div class="container">
+        <div class="sm-hero-grid">
+            <div>
+                <div class="sm-badge">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    <span>AI Social Media Content Creator</span>
+                </div>
+                
+                <h1>Generate <span>Viral Social Media Posts</span> in Seconds</h1>
+                
+                <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+                    Create engaging content for Instagram, Facebook, LinkedIn, Twitter, TikTok, and YouTube. 
+                    Get 3 variations per post, smart hashtags, and a complete content calendar.
+                </p>
+                
+                <div class="sm-hero-buttons">
+                    <a href="#pricing" class="btn btn-primary">Start Creating Posts →</a>
+                    <a href="#templates" class="btn btn-outline">View Templates</a>
+                </div>
+            </div>
+            
+            <div class="post-preview">
+                <div class="post-header">
+                    <div class="post-avatar">RA</div>
+                    <div class="post-info">
+                        <h4>Runnwrite AI</h4>
+                        <p>2 minutes ago • Instagram</p>
+                    </div>
+                </div>
+                <div class="post-content" id="animated-post">
+                    <strong>🚀 5 Marketing Mistakes That Are Costing You Sales</strong><br><br>
+                    Mistake #1: Not knowing your audience deeply enough.<br>
+                    The solution? Create detailed buyer personas...<br><br>
+                </div>
+                <div class="post-hashtags">
+                    #DigitalMarketing #MarketingTips #BusinessGrowth #ContentStrategy #SocialMedia
+                </div>
+                <div class="post-stats">
+                    <span>❤️ 1,247</span>
+                    <span>💬 89</span>
+                    <span>🔄 156</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Platforms Section -->
+<section class="platforms-showcase">
+    <div class="container">
+        <div class="section-header">
+            <h2>Create Content for Every Platform</h2>
+            <p>Optimized posts for all major social media platforms. Each with platform-specific best practices and formatting.</p>
+        </div>
+        
+        <div class="platforms-grid">
+            <div class="platform-card">
+                <div class="platform-icon platform-instagram">📷</div>
+                <div class="platform-name">Instagram</div>
+                <ul class="platform-features">
+                    <li>✓ Feed Posts</li>
+                    <li>✓ Stories</li>
+                    <li>✓ Reels Ideas</li>
+                </ul>
+            </div>
+            
+            <div class="platform-card">
+                <div class="platform-icon platform-facebook">f</div>
+                <div class="platform-name">Facebook</div>
+                <ul class="platform-features">
+                    <li>✓ Page Posts</li>
+                    <li>✓ Group Content</li>
+                    <li>✓ Ads Copy</li>
+                </ul>
+            </div>
+            
+            <div class="platform-card">
+                <div class="platform-icon platform-linkedin">in</div>
+                <div class="platform-name">LinkedIn</div>
+                <ul class="platform-features">
+                    <li>✓ Professional</li>
+                    <li>✓ B2B Focus</li>
+                    <li>✓ Thought Leader</li>
+                </ul>
+            </div>
+            
+            <div class="platform-card">
+                <div class="platform-icon platform-twitter">🐦</div>
+                <div class="platform-name">Twitter</div>
+                <ul class="platform-features">
+                    <li>✓ Threads</li>
+                    <li>✓ Viral Tweets</li>
+                    <li>✓ Hashtags</li>
+                </ul>
+            </div>
+            
+            <div class="platform-card">
+                <div class="platform-icon platform-tiktok">🎵</div>
+                <div class="platform-name">TikTok</div>
+                <ul class="platform-features">
+                    <li>✓ Video Scripts</li>
+                    <li>✓ Hooks</li>
+                    <li>✓ Trends</li>
+                </ul>
+            </div>
+            
+            <div class="platform-card">
+                <div class="platform-icon platform-youtube">▶️</div>
+                <div class="platform-name">YouTube</div>
+                <ul class="platform-features">
+                    <li>✓ Video Ideas</li>
+                    <li>✓ Descriptions</li>
+                    <li>✓ Tags</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Calendar Section -->
+<section class="calendar-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Editorial Calendar - Plan Your Content</h2>
+            <p>Visual content calendar with drag & drop. Schedule posts, see your content at a glance, and never miss a publishing date.</p>
+        </div>
+        
+        <div class="calendar-demo">
+            <div class="calendar-header">
+                <h3>December 2025</h3>
+                <div>
+                    <button class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">+ Add Post</button>
+                </div>
+            </div>
+            
+            <div class="calendar-grid">
+                <div class="calendar-day"><div class="day-number">Mon</div></div>
+                <div class="calendar-day"><div class="day-number">Tue</div></div>
+                <div class="calendar-day"><div class="day-number">Wed</div></div>
+                <div class="calendar-day"><div class="day-number">Thu</div></div>
+                <div class="calendar-day"><div class="day-number">Fri</div></div>
+                <div class="calendar-day"><div class="day-number">Sat</div></div>
+                <div class="calendar-day"><div class="day-number">Sun</div></div>
+                
+                <div class="calendar-day">
+                    <div class="day-number">1</div>
+                    <div class="calendar-post">📷 Instagram Post</div>
+                </div>
+                <div class="calendar-day"><div class="day-number">2</div></div>
+                <div class="calendar-day">
+                    <div class="day-number">3</div>
+                    <div class="calendar-post">💼 LinkedIn Article</div>
+                </div>
+                <div class="calendar-day"><div class="day-number">4</div></div>
+                <div class="calendar-day">
+                    <div class="day-number">5</div>
+                    <div class="calendar-post">🐦 Twitter Thread</div>
+                </div>
+                <div class="calendar-day"><div class="day-number">6</div></div>
+                <div class="calendar-day"><div class="day-number">7</div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Strategy Section -->
+<section class="strategy-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>AI-Powered Content Strategy</h2>
+            <p>Get 50+ content ideas tailored to your niche. Never run out of ideas again.</p>
+        </div>
+        
+        <div class="strategy-cards">
+            <div class="strategy-card">
+                <div class="strategy-number">Step 1</div>
+                <div class="strategy-icon">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="12" r="6"/>
+                        <circle cx="12" cy="12" r="2"/>
+                    </svg>
+                </div>
+                <h3>Define Your Niche</h3>
+                <p>Tell us about your business, audience, and goals. Our AI analyzes your market and competitors.</p>
+            </div>
+            
+            <div class="strategy-card">
+                <div class="strategy-number">Step 2</div>
+                <div class="strategy-icon">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <h3>Get 50 Post Ideas</h3>
+                <p>Receive a complete content strategy with 50 post ideas, topics, and angles optimized for engagement.</p>
+            </div>
+            
+            <div class="strategy-card">
+                <div class="strategy-number">Step 3</div>
+                <div class="strategy-icon">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <h3>Execute & Grow</h3>
+                <p>Generate posts from ideas, schedule in calendar, and watch your engagement soar by 3x.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate post stats
+    const stats = document.querySelectorAll('.post-stats span');
+    stats.forEach((stat, i) => {
+        setTimeout(() => {
+            stat.style.opacity = '0';
+            stat.style.transform = 'translateY(10px)';
+            stat.style.transition = 'all 0.5s ease';
+            setTimeout(() => {
+                stat.style.opacity = '1';
+                stat.style.transform = 'translateY(0)';
+            }, 100);
+        }, i * 200);
+    });
+    
+    // Calendar posts animation
+    const calendarPosts = document.querySelectorAll('.calendar-post');
+    calendarPosts.forEach((post, i) => {
+        post.style.animationDelay = `${i * 0.2}s`;
+    });
+});
+</script>
+
+</body>
+</html>

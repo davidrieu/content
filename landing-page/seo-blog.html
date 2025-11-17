@@ -1,0 +1,791 @@
+<!--
+========================================================================================
+RUNNWRITE AI - SEO BLOG WRITER PAGE
+WordPress SEO Settings
+========================================================================================
+
+META TITLE (56 characters):
+SEO Blog Writer - AI Article Generator | Runnwrite AI
+
+META DESCRIPTION (158 characters):
+Write SEO-optimized blog articles that rank on Google. AI-powered keyword research, perfect structure, meta tags, 1000-5000 words. Real-time streaming.
+
+FOCUS KEYWORD:
+SEO blog writer
+
+ADDITIONAL KEYWORDS:
+- AI blog writer
+- SEO article generator
+- blog content creator
+- SEO optimization tool
+
+========================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Blog Writer - Runnwrite AI</title>
+    
+    <style>
+/* CSS Variables */
+:root {
+    --rw-primary: #6366f1;
+    --rw-primary-dark: #4f46e5;
+    --rw-success: #10b981;
+    --rw-warning: #f59e0b;
+    --rw-white: #ffffff;
+    --rw-gray-50: #f9fafb;
+    --rw-gray-100: #f3f4f6;
+    --rw-gray-200: #e5e7eb;
+    --rw-gray-300: #d1d5db;
+    --rw-gray-600: #4b5563;
+    --rw-gray-700: #374151;
+    --rw-gray-900: #111827;
+    
+    --rw-spacing-2: 0.5rem;
+    --rw-spacing-3: 0.75rem;
+    --rw-spacing-4: 1rem;
+    --rw-spacing-5: 1.5rem;
+    --rw-spacing-6: 2rem;
+    --rw-spacing-8: 3rem;
+    
+    --rw-radius-lg: 0.75rem;
+    --rw-radius-xl: 1rem;
+    --rw-radius-2xl: 1.5rem;
+    --rw-radius-full: 9999px;
+    
+    --rw-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --rw-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --rw-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    
+    --rw-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--rw-gray-900);
+    background: var(--rw-white);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--rw-spacing-6);
+}
+
+section {
+    padding: var(--rw-spacing-8) 0;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--rw-gray-900);
+}
+
+h1 { font-size: 3.5rem; margin-bottom: var(--rw-spacing-5); }
+h2 { font-size: 2.5rem; margin-bottom: var(--rw-spacing-4); }
+h3 { font-size: 1.75rem; margin-bottom: var(--rw-spacing-3); }
+
+p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    padding: 0.75rem 1.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--rw-radius-lg);
+    border: none;
+    cursor: pointer;
+    transition: var(--rw-transition);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--rw-success), #059669);
+    color: var(--rw-white);
+    box-shadow: var(--rw-shadow-lg);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--rw-shadow-xl);
+}
+
+/* Hero Section */
+.seo-hero {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.03), rgba(5, 150, 105, 0.03));
+    padding: var(--rw-spacing-8) 0;
+    border-radius: 24px;
+    margin: var(--rw-spacing-4) var(--rw-spacing-6);
+}
+
+.seo-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--rw-spacing-8);
+    align-items: center;
+}
+
+.seo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    background: var(--rw-white);
+    color: var(--rw-success);
+    padding: var(--rw-spacing-2) var(--rw-spacing-4);
+    border-radius: var(--rw-radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.seo-hero h1 span {
+    background: linear-gradient(135deg, var(--rw-success), #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* SEO Score Card */
+.seo-score-card {
+    background: var(--rw-white);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-6);
+    box-shadow: var(--rw-shadow-xl);
+    border: 2px solid var(--rw-gray-200);
+}
+
+.score-circle {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto var(--rw-spacing-4);
+    position: relative;
+}
+
+.score-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--rw-success), #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.score-label {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--rw-gray-600);
+}
+
+.seo-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--rw-spacing-4);
+    margin-top: var(--rw-spacing-5);
+}
+
+.metric-item {
+    display: flex;
+    align-items: center;
+    gap: var(--rw-spacing-3);
+}
+
+.metric-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+    border-radius: var(--rw-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rw-success);
+}
+
+/* Ranking Chart */
+.ranking-section {
+    background: var(--rw-white);
+}
+
+.ranking-chart {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-6);
+    margin-top: var(--rw-spacing-6);
+    box-shadow: var(--rw-shadow-lg);
+}
+
+.chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--rw-spacing-3);
+    height: 300px;
+    margin-top: var(--rw-spacing-5);
+}
+
+.chart-bar {
+    flex: 1;
+    background: linear-gradient(180deg, var(--rw-success), #059669);
+    border-radius: var(--rw-radius-lg) var(--rw-radius-lg) 0 0;
+    position: relative;
+    transition: var(--rw-transition);
+    animation: growBar 1s ease-out;
+}
+
+.chart-bar:hover {
+    opacity: 0.8;
+}
+
+.bar-label {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    color: var(--rw-gray-600);
+}
+
+.bar-value {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 700;
+    color: var(--rw-gray-900);
+}
+
+@keyframes growBar {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+    to {
+        height: var(--bar-height);
+        opacity: 1;
+    }
+}
+
+/* Keywords Section */
+.keywords-section {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.02), rgba(5, 150, 105, 0.02));
+}
+
+.keywords-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--rw-spacing-4);
+    margin-top: var(--rw-spacing-6);
+}
+
+.keyword-card {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-xl);
+    padding: var(--rw-spacing-5);
+    transition: var(--rw-transition);
+}
+
+.keyword-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--rw-shadow-lg);
+    border-color: var(--rw-success);
+}
+
+.keyword-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--rw-spacing-3);
+}
+
+.keyword-badge {
+    background: linear-gradient(135deg, var(--rw-success), #059669);
+    color: var(--rw-white);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--rw-radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.keyword-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--rw-spacing-3);
+    margin-top: var(--rw-spacing-3);
+}
+
+.keyword-stat {
+    font-size: 0.875rem;
+}
+
+.stat-label {
+    color: var(--rw-gray-600);
+    font-size: 0.75rem;
+}
+
+.stat-value {
+    font-weight: 700;
+    color: var(--rw-gray-900);
+}
+
+.difficulty-bar {
+    height: 6px;
+    background: var(--rw-gray-200);
+    border-radius: var(--rw-radius-full);
+    overflow: hidden;
+    margin-top: var(--rw-spacing-2);
+}
+
+.difficulty-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rw-success), var(--rw-warning));
+    border-radius: var(--rw-radius-full);
+    transition: width 1s ease;
+}
+
+/* Article Structure */
+.structure-section {
+    background: var(--rw-white);
+}
+
+.structure-demo {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-6);
+    margin-top: var(--rw-spacing-6);
+    box-shadow: var(--rw-shadow-lg);
+}
+
+.structure-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--rw-spacing-4);
+    padding: var(--rw-spacing-4);
+    border-left: 4px solid var(--rw-gray-200);
+    margin-bottom: var(--rw-spacing-3);
+    transition: var(--rw-transition);
+}
+
+.structure-item:hover {
+    background: var(--rw-gray-50);
+    border-left-color: var(--rw-success);
+}
+
+.structure-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--rw-success), #059669);
+    border-radius: var(--rw-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rw-white);
+    flex-shrink: 0;
+}
+
+.structure-content h4 {
+    margin-bottom: var(--rw-spacing-2);
+    color: var(--rw-gray-900);
+}
+
+.structure-content p {
+    font-size: 0.95rem;
+    color: var(--rw-gray-600);
+}
+
+/* Strategy Section */
+.strategy-section {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.02), rgba(5, 150, 105, 0.02));
+}
+
+.strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--rw-spacing-6);
+    margin-top: var(--rw-spacing-6);
+}
+
+.strategy-card {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-6);
+    transition: var(--rw-transition);
+}
+
+.strategy-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--rw-shadow-xl);
+    border-color: var(--rw-success);
+}
+
+.strategy-number {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--rw-success), #059669);
+    color: var(--rw-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-bottom: var(--rw-spacing-3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .seo-hero-grid { grid-template-columns: 1fr; }
+    .keywords-grid { grid-template-columns: 1fr; }
+    .strategy-grid { grid-template-columns: 1fr; }
+    .seo-metrics { grid-template-columns: 1fr; }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 1.875rem; }
+}
+
+.text-center { text-align: center; }
+.section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--rw-spacing-8);
+}
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="seo-hero">
+    <div class="container">
+        <div class="seo-hero-grid">
+            <div>
+                <div class="seo-badge">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                    <span>100% SEO-Optimized Content</span>
+                </div>
+                
+                <h1>Write Blog Articles That <span>Rank #1 on Google</span></h1>
+                
+                <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+                    AI-powered SEO blog writer with automatic keyword research, perfect article structure, 
+                    meta tags, and real-time streaming. 1000-5000 words in minutes.
+                </p>
+                
+                <div style="display: flex; gap: 1.5rem;">
+                    <a href="#pricing" class="btn btn-primary">Start Writing SEO Articles →</a>
+                </div>
+            </div>
+            
+            <div class="seo-score-card">
+                <div class="score-circle">
+                    <svg width="200" height="200" viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="url(#gradient)" stroke-width="12" 
+                                stroke-dasharray="565" stroke-dashoffset="113" 
+                                stroke-linecap="round" transform="rotate(-90 100 100)"
+                                style="transition: stroke-dashoffset 2s ease"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#10b981"/>
+                                <stop offset="100%" stop-color="#059669"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="score-number" id="score-number">0</div>
+                </div>
+                <div class="score-label">SEO Optimization Score</div>
+                
+                <div class="seo-metrics">
+                    <div class="metric-item">
+                        <div class="metric-icon">✓</div>
+                        <div>
+                            <div style="font-weight: 600; color: var(--rw-gray-900);">Keywords</div>
+                            <div style="font-size: 0.875rem; color: var(--rw-gray-600);">Perfect density</div>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-icon">✓</div>
+                        <div>
+                            <div style="font-weight: 600; color: var(--rw-gray-900);">Meta Tags</div>
+                            <div style="font-size: 0.875rem; color: var(--rw-gray-600);">Optimized</div>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-icon">✓</div>
+                        <div>
+                            <div style="font-weight: 600; color: var(--rw-gray-900);">Structure</div>
+                            <div style="font-size: 0.875rem; color: var(--rw-gray-600);">H1-H6 perfect</div>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-icon">✓</div>
+                        <div>
+                            <div style="font-weight: 600; color: var(--rw-gray-900);">Readability</div>
+                            <div style="font-size: 0.875rem; color: var(--rw-gray-600);">Grade A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ranking Progress Section -->
+<section class="ranking-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Watch Your Rankings Grow</h2>
+            <p>Our AI-optimized articles consistently rank in the top 3 positions on Google. Real results from real users.</p>
+        </div>
+        
+        <div class="ranking-chart">
+            <h3>Average Ranking Position Over 3 Months</h3>
+            <div class="chart-bars">
+                <div class="chart-bar" style="--bar-height: 30%; height: 30%;">
+                    <div class="bar-value">#8.5</div>
+                    <div class="bar-label">Month 1</div>
+                </div>
+                <div class="chart-bar" style="--bar-height: 60%; height: 60%;">
+                    <div class="bar-value">#4.2</div>
+                    <div class="bar-label">Month 2</div>
+                </div>
+                <div class="chart-bar" style="--bar-height: 95%; height: 95%;">
+                    <div class="bar-value">#1.8</div>
+                    <div class="bar-label">Month 3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Keywords Research Section -->
+<section class="keywords-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>AI-Powered Keyword Research</h2>
+            <p>Discover high-value keywords with low competition. Get search volume, difficulty, and ranking potential for each keyword.</p>
+        </div>
+        
+        <div class="keywords-grid">
+            <div class="keyword-card">
+                <div class="keyword-header">
+                    <h3 style="font-size: 1.25rem; margin: 0;">content marketing strategy</h3>
+                    <div class="keyword-badge">Primary</div>
+                </div>
+                <div class="keyword-stats">
+                    <div class="keyword-stat">
+                        <div class="stat-label">Search Volume</div>
+                        <div class="stat-value">12,000/mo</div>
+                    </div>
+                    <div class="keyword-stat">
+                        <div class="stat-label">Competition</div>
+                        <div class="stat-value">Medium</div>
+                    </div>
+                </div>
+                <div class="difficulty-bar">
+                    <div class="difficulty-fill" style="width: 45%;"></div>
+                </div>
+            </div>
+            
+            <div class="keyword-card">
+                <div class="keyword-header">
+                    <h3 style="font-size: 1.25rem; margin: 0;">SEO best practices 2025</h3>
+                    <div class="keyword-badge" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">Secondary</div>
+                </div>
+                <div class="keyword-stats">
+                    <div class="keyword-stat">
+                        <div class="stat-label">Search Volume</div>
+                        <div class="stat-value">8,500/mo</div>
+                    </div>
+                    <div class="keyword-stat">
+                        <div class="stat-label">Competition</div>
+                        <div class="stat-value">Low</div>
+                    </div>
+                </div>
+                <div class="difficulty-bar">
+                    <div class="difficulty-fill" style="width: 25%;"></div>
+                </div>
+            </div>
+            
+            <div class="keyword-card">
+                <div class="keyword-header">
+                    <h3 style="font-size: 1.25rem; margin: 0;">AI content optimization</h3>
+                    <div class="keyword-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">Long-tail</div>
+                </div>
+                <div class="keyword-stats">
+                    <div class="keyword-stat">
+                        <div class="stat-label">Search Volume</div>
+                        <div class="stat-value">3,200/mo</div>
+                    </div>
+                    <div class="keyword-stat">
+                        <div class="stat-label">Competition</div>
+                        <div class="stat-value">Very Low</div>
+                    </div>
+                </div>
+                <div class="difficulty-bar">
+                    <div class="difficulty-fill" style="width: 15%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Article Structure Section -->
+<section class="structure-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Perfect SEO Article Structure</h2>
+            <p>Every article follows Google's best practices for structure, readability, and user experience.</p>
+        </div>
+        
+        <div class="structure-demo">
+            <div class="structure-item">
+                <div class="structure-icon">1</div>
+                <div class="structure-content">
+                    <h4>Optimized Title (H1)</h4>
+                    <p>Includes primary keyword, under 60 characters, compelling and click-worthy.</p>
+                </div>
+            </div>
+            
+            <div class="structure-item">
+                <div class="structure-icon">2</div>
+                <div class="structure-content">
+                    <h4>Engaging Introduction</h4>
+                    <p>Hook the reader in the first 100 words. Include primary keyword naturally.</p>
+                </div>
+            </div>
+            
+            <div class="structure-item">
+                <div class="structure-icon">3</div>
+                <div class="structure-content">
+                    <h4>Multiple H2 Sections</h4>
+                    <p>4-8 H2 headers with secondary keywords. Each covers a key aspect of the topic.</p>
+                </div>
+            </div>
+            
+            <div class="structure-item">
+                <div class="structure-icon">4</div>
+                <div class="structure-content">
+                    <h4>H3 Subsections</h4>
+                    <p>Break down complex topics with H3 tags. Improves scannability and SEO.</p>
+                </div>
+            </div>
+            
+            <div class="structure-item">
+                <div class="structure-icon">5</div>
+                <div class="structure-content">
+                    <h4>FAQ Section</h4>
+                    <p>Structured data markup for Google's featured snippets. Answers common questions.</p>
+                </div>
+            </div>
+            
+            <div class="structure-item">
+                <div class="structure-icon">6</div>
+                <div class="structure-content">
+                    <h4>Strong Conclusion</h4>
+                    <p>Summarize key points, include call-to-action, reinforce main message.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Strategy Section -->
+<section class="strategy-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Get 50 SEO-Optimized Article Ideas</h2>
+            <p>Never run out of content ideas. Our AI generates 50 article topics proven to rank.</p>
+        </div>
+        
+        <div class="strategy-grid">
+            <div class="strategy-card">
+                <div class="strategy-number">50</div>
+                <h3>Article Topics</h3>
+                <p>Receive 50 blog article ideas tailored to your niche, each with keyword analysis and ranking potential.</p>
+                <ul style="list-style: none; margin-top: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;">✓ Search volume for each topic</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Keyword difficulty score</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Suggested article structure</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Target word count</li>
+                </ul>
+            </div>
+            
+            <div class="strategy-card">
+                <div class="strategy-number">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3>Content Clusters</h3>
+                <p>Organize topics into content clusters for better SEO. Build topical authority in your niche.</p>
+                <ul style="list-style: none; margin-top: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;">✓ Pillar content identification</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Supporting articles mapped</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Internal linking strategy</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Topic cluster visualization</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate SEO score
+    const scoreNumber = document.getElementById('score-number');
+    let score = 0;
+    const targetScore = 94;
+    const duration = 2000;
+    const increment = targetScore / (duration / 16);
+    
+    function animateScore() {
+        if (score < targetScore) {
+            score += increment;
+            scoreNumber.textContent = Math.floor(score);
+            requestAnimationFrame(animateScore);
+        } else {
+            scoreNumber.textContent = targetScore;
+        }
+    }
+    
+    setTimeout(animateScore, 500);
+    
+    // Animate difficulty bars
+    const difficultyBars = document.querySelectorAll('.difficulty-fill');
+    difficultyBars.forEach((bar, i) => {
+        setTimeout(() => {
+            bar.style.width = bar.style.width;
+        }, i * 200);
+    });
+    
+    // Animate chart bars
+    const chartBars = document.querySelectorAll('.chart-bar');
+    chartBars.forEach((bar, i) => {
+        setTimeout(() => {
+            bar.style.animationPlayState = 'running';
+        }, i * 300);
+    });
+});
+</script>
+
+</body>
+</html>
