@@ -111,6 +111,7 @@ class Strategy_Endpoint extends REST_Controller {
             $strategy_data['id'] = $strategy_id;
             $strategy_data['month'] = $month;
             $strategy_data['year'] = $year;
+            $strategy_data['platforms'] = $profile['platforms'] ?? ['instagram', 'facebook'];
 
             return rest_ensure_response([
                 'success' => true,
