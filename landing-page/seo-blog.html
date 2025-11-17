@@ -33,6 +33,7 @@ ADDITIONAL KEYWORDS:
 :root {
     --rw-primary: #6366f1;
     --rw-primary-dark: #4f46e5;
+    --rw-primary-light: #818cf8;
     --rw-success: #10b981;
     --rw-warning: #f59e0b;
     --rw-white: #ffffff;
@@ -113,7 +114,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--rw-success), #059669);
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-primary-dark));
     color: var(--rw-white);
     box-shadow: var(--rw-shadow-lg);
 }
@@ -125,7 +126,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 
 /* Hero Section */
 .seo-hero {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.03), rgba(5, 150, 105, 0.03));
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
     padding: var(--rw-spacing-8) 0;
     border-radius: 24px;
     margin: var(--rw-spacing-4) var(--rw-spacing-6);
@@ -143,7 +144,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
     align-items: center;
     gap: var(--rw-spacing-2);
     background: var(--rw-white);
-    color: var(--rw-success);
+    color: var(--rw-primary);
     padding: var(--rw-spacing-2) var(--rw-spacing-4);
     border-radius: var(--rw-radius-full);
     font-size: 0.875rem;
@@ -152,7 +153,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 }
 
 .seo-hero h1 span {
-    background: linear-gradient(135deg, var(--rw-success), #059669);
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -180,7 +181,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
     transform: translate(-50%, -50%);
     font-size: 4rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--rw-success), #059669);
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -207,12 +208,12 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 .metric-icon {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
     border-radius: var(--rw-radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--rw-success);
+    color: var(--rw-primary);
 }
 
 /* Ranking Chart */
@@ -239,7 +240,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 
 .chart-bar {
     flex: 1;
-    background: linear-gradient(180deg, var(--rw-success), #059669);
+    background: linear-gradient(180deg, var(--rw-primary), #8b5cf6);
     border-radius: var(--rw-radius-lg) var(--rw-radius-lg) 0 0;
     position: relative;
     transition: var(--rw-transition);
@@ -282,7 +283,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 
 /* Keywords Section */
 .keywords-section {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.02), rgba(5, 150, 105, 0.02));
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
 }
 
 .keywords-grid {
@@ -303,7 +304,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 .keyword-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--rw-shadow-lg);
-    border-color: var(--rw-success);
+    border-color: var(--rw-primary);
 }
 
 .keyword-header {
@@ -314,7 +315,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 }
 
 .keyword-badge {
-    background: linear-gradient(135deg, var(--rw-success), #059669);
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
     color: var(--rw-white);
     padding: 0.25rem 0.75rem;
     border-radius: var(--rw-radius-full);
@@ -353,7 +354,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 
 .difficulty-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--rw-success), var(--rw-warning));
+    background: linear-gradient(90deg, var(--rw-primary), #8b5cf6);
     border-radius: var(--rw-radius-full);
     transition: width 1s ease;
 }
@@ -384,13 +385,13 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 
 .structure-item:hover {
     background: var(--rw-gray-50);
-    border-left-color: var(--rw-success);
+    border-left-color: var(--rw-primary);
 }
 
 .structure-icon {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, var(--rw-success), #059669);
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
     border-radius: var(--rw-radius-lg);
     display: flex;
     align-items: center;
@@ -411,7 +412,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 
 /* Strategy Section */
 .strategy-section {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.02), rgba(5, 150, 105, 0.02));
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
 }
 
 .strategy-grid {
@@ -432,14 +433,14 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 .strategy-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--rw-shadow-xl);
-    border-color: var(--rw-success);
+    border-color: var(--rw-primary);
 }
 
 .strategy-number {
     display: inline-block;
     width: 48px;
     height: 48px;
-    background: linear-gradient(135deg, var(--rw-success), #059669);
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
     color: var(--rw-white);
     border-radius: 50%;
     display: flex;
@@ -504,8 +505,8 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                                 style="transition: stroke-dashoffset 2s ease"/>
                         <defs>
                             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#10b981"/>
-                                <stop offset="100%" stop-color="#059669"/>
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#8b5cf6"/>
                             </linearGradient>
                         </defs>
                     </svg>
