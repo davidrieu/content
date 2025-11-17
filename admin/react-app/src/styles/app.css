@@ -3172,7 +3172,8 @@ body.admin-bar #acs-frontend-root .acs-app {
   }
 
   .acs-calendar-controls {
-    justify-content: space-between;
+    flex-direction: column;
+    gap: var(--acs-spacing-2);
   }
 
   .acs-calendar-filters {
@@ -3185,39 +3186,85 @@ body.admin-bar #acs-frontend-root .acs-app {
     gap: var(--acs-spacing-2);
   }
 
-  /* Calendar grid - make scrollable horizontally */
+  /* Hide calendar grid on mobile - too cramped */
   .acs-calendar-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin: 0 calc(var(--acs-spacing-3) * -1);
-    padding: 0 var(--acs-spacing-3);
+    display: none;
   }
 
-  .acs-calendar-grid {
-    min-width: 800px;
+  /* Show mobile list view instead */
+  .acs-calendar-mobile-list {
+    display: block;
   }
 
-  .acs-calendar-day {
-    min-height: 100px;
-    min-width: 100px;
-    padding: var(--acs-spacing-2);
-    font-size: 0.75rem;
+  .acs-calendar-mobile-day {
+    background: var(--acs-white);
+    border: 1px solid var(--acs-gray-200);
+    border-radius: var(--acs-radius);
+    padding: var(--acs-spacing-4);
+    margin-bottom: var(--acs-spacing-3);
   }
 
-  .acs-calendar-day-header {
-    font-size: 0.7rem;
+  .acs-calendar-mobile-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--acs-spacing-3);
+    padding-bottom: var(--acs-spacing-2);
+    border-bottom: 1px solid var(--acs-gray-200);
+  }
+
+  .acs-calendar-mobile-day-date {
+    font-size: 1rem;
     font-weight: 600;
+    color: var(--acs-gray-900);
   }
 
-  .acs-calendar-day-number {
-    font-size: 0.85rem;
+  .acs-calendar-mobile-day-weekday {
+    font-size: 0.875rem;
+    color: var(--acs-gray-600);
+  }
+
+  .acs-calendar-mobile-posts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--acs-spacing-2);
+  }
+
+  .acs-calendar-mobile-post {
+    background: var(--acs-gray-50);
+    border-left: 3px solid var(--acs-primary);
+    padding: var(--acs-spacing-3);
+    border-radius: var(--acs-radius-sm);
+  }
+
+  .acs-calendar-mobile-post-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--acs-gray-900);
     margin-bottom: var(--acs-spacing-1);
   }
 
-  .acs-post-preview {
-    font-size: 0.6rem;
-    padding: 3px 4px;
-    margin-bottom: 2px;
+  .acs-calendar-mobile-post-platform {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    background: var(--acs-primary);
+    color: white;
+    border-radius: 12px;
+    margin-bottom: var(--acs-spacing-2);
+  }
+
+  .acs-calendar-mobile-post-excerpt {
+    font-size: 0.8rem;
+    color: var(--acs-gray-600);
+    line-height: 1.4;
+  }
+
+  .acs-calendar-mobile-empty {
+    text-align: center;
+    padding: var(--acs-spacing-6) var(--acs-spacing-4);
+    color: var(--acs-gray-500);
+    font-size: 0.875rem;
   }
 
   /* ========== IMAGE GENERATOR ========== */
@@ -3409,6 +3456,15 @@ body.admin-bar #acs-frontend-root .acs-app {
     display: none;
   }
 
+  /* Show calendar grid on tablet */
+  .acs-calendar-container {
+    display: block;
+  }
+
+  .acs-calendar-mobile-list {
+    display: none;
+  }
+
   /* Collapsible sidebar */
   .acs-sidebar {
     width: 70px;
@@ -3477,6 +3533,15 @@ body.admin-bar #acs-frontend-root .acs-app {
   }
 
   .acs-hamburger {
+    display: none;
+  }
+
+  /* Show calendar grid on desktop */
+  .acs-calendar-container {
+    display: block;
+  }
+
+  .acs-calendar-mobile-list {
     display: none;
   }
 }

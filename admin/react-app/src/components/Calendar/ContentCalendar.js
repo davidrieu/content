@@ -342,6 +342,68 @@ export default function ContentCalendar({ profile }) {
         return days;
     };
 
+    const renderMobileListView = () => {
+        // Get all days with posts for the current month
+        const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+        const daysWithPosts = [];
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayPosts = getPostsForDate(day);
+            if (dayPosts.length > 0) {
+                daysWithPosts.push({ day, posts: dayPosts });
+            }
+        }
+
+        if (daysWithPosts.length === 0) {
+            return (
+                <div className="acs-calendar-mobile-empty">
+                    {t('Aucun post planifié ce mois-ci')}
+                </div>
+            );
+        }
+
+        return (
+            <div>
+                {daysWithPosts.map(({ day, posts: dayPosts }) => {
+                    const date = new Date(currentYear, currentMonth, day);
+                    const dayName = DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1];
+
+                    return (
+                        <div key={day} className="acs-calendar-mobile-day">
+                            <div className="acs-calendar-mobile-day-header">
+                                <div>
+                                    <div className="acs-calendar-mobile-day-date">
+                                        {day} {MONTHS[currentMonth]} {currentYear}
+                                    </div>
+                                    <div className="acs-calendar-mobile-day-weekday">{dayName}</div>
+                                </div>
+                                <div style={{ fontSize: '0.875rem', color: 'var(--acs-gray-500)' }}>
+                                    {dayPosts.length} {dayPosts.length === 1 ? t('post') : t('posts')}
+                                </div>
+                            </div>
+                            <div className="acs-calendar-mobile-posts">
+                                {dayPosts.map((post) => (
+                                    <div
+                                        key={post.id}
+                                        className="acs-calendar-mobile-post"
+                                        onClick={() => handlePostClick(post, { stopPropagation: () => {} })}
+                                    >
+                                        <div className="acs-calendar-mobile-post-platform">
+                                            {PLATFORM_EMOJIS[post.platform] || '📝'} {post.platform}
+                                        </div>
+                                        <div className="acs-calendar-mobile-post-excerpt">
+                                            {post.content?.substring(0, 120)}{post.content?.length > 120 ? '...' : ''}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
     const renderListView = () => {
         const filteredPosts = posts.filter((post) => {
             if (filterPlatform !== 'all' && post.platform !== filterPlatform) return false;
@@ -504,49 +566,63 @@ export default function ContentCalendar({ profile }) {
 
             {/* Calendar view */}
             {view === 'month' ? (
-                <div className="acs-card">
-                    {/* Days of week header */}
-                    <div
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(7, 1fr)',
-                            gap: 'var(--acs-spacing-2)',
-                            marginBottom: 'var(--acs-spacing-2)',
-                        }}
-                    >
-                        {DAYS_OF_WEEK.map((day) => (
-                            <div
-                                key={day}
-                                style={{
-                                    fontWeight: 600,
-                                    textAlign: 'center',
-                                    padding: 'var(--acs-spacing-2)',
-                                    color: 'var(--acs-gray-700)',
-                                    fontSize: 'var(--acs-font-size-sm)',
-                                }}
-                            >
-                                {day}
-                            </div>
-                        ))}
+                <>
+                    {/* Desktop/Tablet Grid View */}
+                    <div className="acs-card acs-calendar-container">
+                        {/* Days of week header */}
+                        <div
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(7, 1fr)',
+                                gap: 'var(--acs-spacing-2)',
+                                marginBottom: 'var(--acs-spacing-2)',
+                            }}
+                        >
+                            {DAYS_OF_WEEK.map((day) => (
+                                <div
+                                    key={day}
+                                    style={{
+                                        fontWeight: 600,
+                                        textAlign: 'center',
+                                        padding: 'var(--acs-spacing-2)',
+                                        color: 'var(--acs-gray-700)',
+                                        fontSize: 'var(--acs-font-size-sm)',
+                                    }}
+                                >
+                                    {day}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Calendar grid */}
+                        <div
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(7, 1fr)',
+                                gap: 'var(--acs-spacing-2)',
+                            }}
+                        >
+                            {loading ? (
+                                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 'var(--acs-spacing-6)' }}>
+                                    <div className="acs-spinner" />
+                                </div>
+                            ) : (
+                                renderCalendarDays()
+                            )}
+                        </div>
                     </div>
 
-                    {/* Calendar grid */}
-                    <div
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(7, 1fr)',
-                            gap: 'var(--acs-spacing-2)',
-                        }}
-                    >
+                    {/* Mobile List View */}
+                    <div className="acs-calendar-mobile-list">
                         {loading ? (
-                            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 'var(--acs-spacing-6)' }}>
+                            <div style={{ textAlign: 'center', padding: 'var(--acs-spacing-6)' }}>
                                 <div className="acs-spinner" />
                             </div>
                         ) : (
-                            renderCalendarDays()
+                            renderMobileListView()
                         )}
                     </div>
-                </div>
+                </>
             ) : (
                 renderListView()
             )}
