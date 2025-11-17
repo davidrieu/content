@@ -3,7 +3,7 @@ import { FiCalendar, FiTarget, FiTrendingUp, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import apiFetch from '@wordpress/api-fetch';
 import { useTranslation } from '../../contexts/TranslationContext';
-import { CONTENT_TYPES, CONTENT_MIX_RECOMMENDATIONS, BEST_POSTING_TIMES } from '../../data/contentTemplates';
+import { CONTENT_TYPES, CONTENT_MIX_RECOMMENDATIONS } from '../../data/contentTemplates';
 import PricingModal from '../common/PricingModal';
 
 export default function StrategyGenerator({ profile }) {
@@ -451,45 +451,6 @@ export default function StrategyGenerator({ profile }) {
                             <p style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)', margin: 0 }}>{week.description}</p>
                         </div>
                     ))}
-                </div>
-            </div>
-
-            {/* Best posting times */}
-            <div className="acs-card">
-                <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>⏰ {t('Meilleurs moments de publication')}</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--acs-spacing-3)' }}>
-                    {(strategy?.platforms || ['instagram', 'facebook']).map((platform) => {
-                        // Get posting times with fallback for platforms using 'all' key (like Twitter)
-                        const times = BEST_POSTING_TIMES[platform]?.[profile?.user_type || 'business']
-                                   || BEST_POSTING_TIMES[platform]?.business
-                                   || BEST_POSTING_TIMES[platform]?.all;
-                        return (
-                            <div
-                                key={platform}
-                                style={{
-                                    padding: 'var(--acs-spacing-3)',
-                                    background: 'var(--acs-white)',
-                                    border: '1px solid var(--acs-gray-200)',
-                                    borderRadius: 'var(--acs-radius)',
-                                }}
-                            >
-                                <div style={{ fontWeight: 600, marginBottom: 'var(--acs-spacing-2)', textTransform: 'capitalize' }}>
-                                    {platform === 'instagram' && '📷'} {platform === 'facebook' && '📘'} {platform === 'linkedin' && '💼'}{' '}
-                                    {platform === 'twitter' && '🐦'} {platform}
-                                </div>
-                                {times && (
-                                    <>
-                                        <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
-                                            <strong>{t('Jours :')} </strong> {times.best_days.map(day => t(day)).join(', ')}
-                                        </div>
-                                        <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
-                                            <strong>{t('Heures :')} </strong> {times.best_times.join(', ')}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        );
-                    })}
                 </div>
             </div>
 
