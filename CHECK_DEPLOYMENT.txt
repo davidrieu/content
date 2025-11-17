@@ -1,0 +1,152 @@
+═══════════════════════════════════════════════════════════════════
+🔍 DIAGNOSTIC COMPLET - Traductions manquantes
+═══════════════════════════════════════════════════════════════════
+
+PROBLÈME IDENTIFIÉ:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Le serveur WordPress charge: 459 traductions
+✅ Le fichier local contient:  838 traductions
+🔴 DIFFÉRENCE: 379 traductions MANQUANTES sur le serveur!
+
+Erreur console:
+> Loaded 459 translation keys for en
+
+═══════════════════════════════════════════════════════════════════
+📋 CHECKLIST DE DÉPLOIEMENT (suivez dans l'ordre)
+═══════════════════════════════════════════════════════════════════
+
+□ ÉTAPE 1: Vérifier l'endpoint actuel
+  
+  Ouvrez cette URL dans votre navigateur:
+  https://votre-site.com/wp-json/acs/v1/translations/en
+  
+  Questions à vérifier:
+  - Combien d'entrées voyez-vous dans le JSON ?
+  - Cherchez "Nom d'utilisateur" - est-ce que vous trouvez "Username" ?
+  - Cherchez "Langue de l'interface" - trouvez-vous "Interface Language" ?
+  
+  Si NON → Le fichier n'est PAS déployé correctement
+
+
+□ ÉTAPE 2: Localiser le fichier sur le serveur
+  
+  Via FTP/SFTP ou gestionnaire de fichiers, allez dans:
+  wp-content/plugins/ai-content-studio/languages/
+  
+  Vérifiez:
+  - Le fichier translations-en.json existe-t-il ?
+  - Quelle est sa taille ? (devrait être ~41 KB)
+  - Date de modification ? (devrait être récente)
+  
+  Si taille < 41 KB → Fichier OBSOLÈTE
+
+
+□ ÉTAPE 3: Télécharger le bon fichier
+  
+  Depuis votre repository Git:
+  /home/user/content/languages/translations-en.json
+  
+  Téléchargez ce fichier sur votre ordinateur local
+
+
+□ ÉTAPE 4: Supprimer l'ancien fichier sur le serveur
+  
+  Via FTP/SFTP:
+  SUPPRIMEZ: wp-content/plugins/ai-content-studio/languages/translations-en.json
+
+
+□ ÉTAPE 5: Uploader le nouveau fichier
+  
+  Uploadez le fichier téléchargé à l'étape 3 vers:
+  wp-content/plugins/ai-content-studio/languages/
+  
+  Vérifiez après upload:
+  - Taille du fichier: ~41 KB ✓
+  - Permissions: 644 (lecture pour tous) ✓
+
+
+□ ÉTAPE 6: Vider TOUS les caches
+  
+  a) Cache WordPress:
+     - WP Rocket: Dashboard → WP Rocket → Clear cache
+     - W3 Total Cache: Performance → Purge All Caches
+     - WP Super Cache: Settings → WP Super Cache → Delete Cache
+  
+  b) Cache CDN (si Cloudflare):
+     - Dashboard Cloudflare → Caching → Purge Everything
+  
+  c) Cache navigateur:
+     - Windows/Linux: Ctrl + Shift + R
+     - Mac: Cmd + Shift + R
+     - Ou mode navigation privée
+
+
+□ ÉTAPE 7: Re-tester l'endpoint
+  
+  Ouvrez à nouveau (en navigation privée):
+  https://votre-site.com/wp-json/acs/v1/translations/en
+  
+  ATTENDU:
+  - Doit contenir 838 entrées (pas 459!)
+  - Doit inclure "Nom d'utilisateur": "Username"
+  - Doit inclure "Langue de l'interface": "Interface Language"
+  - Taille JSON: ~41 KB
+
+
+□ ÉTAPE 8: Tester la page de login
+  
+  - Déconnectez-vous de WordPress
+  - Allez sur la page AI Content Studio
+  - Ouvrez la console (F12)
+  
+  Console doit afficher:
+  ✅ "Loading translations for language: en"
+  ✅ "Loaded 838 translation keys for en" (PAS 459!)
+  
+  Page doit afficher en anglais:
+  ✅ "Login"
+  ✅ "Log in to access Runnwrite AI"
+  ✅ "Username or Email"
+  ✅ "Create an account"
+
+═══════════════════════════════════════════════════════════════════
+🔧 DÉPANNAGE
+═══════════════════════════════════════════════════════════════════
+
+Si après déploiement vous voyez toujours 459 traductions:
+
+1. Vérifiez que le fichier uploadé fait bien 41 KB
+2. Vérifiez les permissions du fichier (644)
+3. Vérifiez qu'il n'y a pas de fichier .json.bak ou .json.old
+4. Vérifiez le cache de votre hébergeur (OVH, O2switch, etc.)
+5. Attendez 2-3 minutes (certains hébergeurs ont un cache serveur)
+
+Si la page reste en français après "Loaded 838 translation keys":
+
+1. Vérifiez la console: y a-t-il des erreurs ?
+2. Testez avec une autre langue (ex: Español)
+3. Vérifiez que les fichiers JS sont bien déployés:
+   - admin/js/admin-script.js (225 KB)
+   - admin/css/admin-style.css (68 KB)
+
+═══════════════════════════════════════════════════════════════════
+📞 AIDE RAPIDE
+═══════════════════════════════════════════════════════════════════
+
+Traductions qui DOIVENT apparaître dans le JSON de l'endpoint:
+
+{
+  "Nom d'utilisateur": "Username",
+  "Nom d'utilisateur ou Email": "Username or Email",
+  "Langue de l'interface": "Interface Language",
+  "J'ai déjà un compte": "I already have an account",
+  "Commencez à créer du contenu avec l'IA": "Start creating content with AI",
+  "Connectez-vous pour accéder à Runnwrite AI": "Log in to access Runnwrite AI",
+  "Compte créé avec succès !": "Account created successfully!",
+  "Redirection en cours...": "Redirecting..."
+}
+
+Si ces traductions ne sont PAS dans l'endpoint → Fichier non déployé!
+
+═══════════════════════════════════════════════════════════════════
