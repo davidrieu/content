@@ -1250,6 +1250,8 @@ ai-content-generator-runnwrite
     --rw-spacing-5: 1.5rem;
     --rw-spacing-6: 2rem;
     --rw-spacing-8: 3rem;
+    --rw-section-spacing: 5rem;
+    --rw-section-spacing-lg: 6rem;
     --rw-radius: 0.5rem;
     --rw-radius-lg: 0.75rem;
     --rw-radius-xl: 1rem;
@@ -1264,6 +1266,52 @@ ai-content-generator-runnwrite
     width: 100%;
     margin: 0;
     padding: 0 var(--rw-spacing-6);
+}
+
+/* Section Separator - Subtle visual divider between sections */
+section:not(:last-child) {
+    position: relative;
+}
+
+section:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 1200px;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(99, 102, 241, 0.1) 20%,
+        rgba(99, 102, 241, 0.2) 50%,
+        rgba(99, 102, 241, 0.1) 80%,
+        transparent
+    );
+}
+
+/* Remove separator for sections with colored backgrounds next to each other */
+section[class*="linear-gradient"]:not(:last-child)::after {
+    opacity: 0.5;
+}
+
+/* Add subtle shadow to white sections for depth */
+section[style*="background: var(--rw-white)"],
+section[class*="rw-white"] {
+    position: relative;
+    z-index: 1;
+}
+
+/* Smooth scroll behavior for better UX */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Section headers with consistent spacing */
+.rw-section-header {
+    margin-bottom: var(--rw-spacing-8);
 }
 
 /* Container with slight padding for very large screens */
@@ -1356,7 +1404,7 @@ ai-content-generator-runnwrite
    ============================================ */
 .rw-hero {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     position: relative;
     overflow: hidden;
     border-radius: 24px;
@@ -1524,7 +1572,7 @@ ai-content-generator-runnwrite
    DUAL FEATURES SECTION
    ============================================ */
 .rw-dual-features {
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     background: var(--rw-white);
 }
 
@@ -1707,7 +1755,7 @@ ai-content-generator-runnwrite
    PLATFORMS SECTION
    ============================================ */
 .rw-platforms {
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
 }
 
@@ -1762,7 +1810,7 @@ ai-content-generator-runnwrite
    HOW IT WORKS SECTION
    ============================================ */
 .rw-how-it-works {
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     background: var(--rw-white);
 }
 
@@ -1916,7 +1964,7 @@ ai-content-generator-runnwrite
    FEATURES DETAILED SECTION
    ============================================ */
 .rw-features-detailed {
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
 }
 
@@ -1962,7 +2010,7 @@ ai-content-generator-runnwrite
    TESTIMONIALS SECTION
    ============================================ */
 .rw-testimonials {
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     background: var(--rw-white);
 }
 
@@ -2033,7 +2081,7 @@ ai-content-generator-runnwrite
    PRICING SECTION
    ============================================ */
 .rw-pricing {
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
 }
 
@@ -2203,7 +2251,7 @@ ai-content-generator-runnwrite
    FAQ SECTION
    ============================================ */
 .rw-faq {
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     background: var(--rw-white);
 }
 
@@ -2238,7 +2286,7 @@ ai-content-generator-runnwrite
    FINAL CTA SECTION
    ============================================ */
 .rw-final-cta {
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
     background: linear-gradient(135deg, var(--rw-primary), var(--rw-primary-dark));
 }
 
@@ -2313,15 +2361,24 @@ ai-content-generator-runnwrite
 }
 
 @media (max-width: 768px) {
+    :root {
+        --rw-section-spacing: 3.5rem;
+        --rw-section-spacing-lg: 4rem;
+    }
+
+    section:not(:last-child)::after {
+        width: 90%;
+    }
+
     .rw-section-title {
         font-size: 2rem;
     }
-    
+
     .rw-hero-title {
         font-size: 2.5rem;
     }
-    
-        
+
+
     .rw-hero-cta {
         flex-direction: column;
     }
@@ -2574,7 +2631,7 @@ document.addEventListener('DOMContentLoaded', function() {
    =============================================== */
 .rw-seo-blog-detail {
     background: var(--rw-white);
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
 }
 
 .rw-seo-split {
@@ -2774,7 +2831,7 @@ document.addEventListener('DOMContentLoaded', function() {
    =============================================== */
 .rw-strategy {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
-    padding: var(--rw-spacing-8) 0;
+    padding: var(--rw-section-spacing) 0;
 }
 
 .rw-strategy-grid {
@@ -2934,7 +2991,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /* Ranking Chart Section */
 .rw-ranking-section {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
-    padding: 4rem 0;
+    padding: var(--rw-section-spacing) 0;
 }
 
 .rw-ranking-dashboard {
@@ -3210,7 +3267,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /* Keywords Section */
 .rw-keywords-section {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
-    padding: 4rem 0;
+    padding: var(--rw-section-spacing) 0;
 }
 
 .rw-keywords-grid {
