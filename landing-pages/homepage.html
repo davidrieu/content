@@ -1,0 +1,1330 @@
+<!--
+SEO STRATEGY FOR THIS PAGE:
+=========================
+Primary Keyword: "AI content generator"
+Secondary Keywords:
+  - "social media content creation"
+  - "SEO blog writing"
+  - "automated content marketing"
+  - "AI copywriting tool"
+
+Meta Title: AI Content Generator | Social Media & SEO Blog Writing Tool
+Meta Description: Create engaging social media posts and SEO-optimized blog articles with Runnwrite AI. Automated content marketing platform supporting 6 platforms and 30 languages.
+-->
+
+<style>
+:root {
+  --rw-primary: #6366f1;
+  --rw-primary-dark: #4f46e5;
+  --rw-secondary: #8b5cf6;
+  --rw-accent: #ec4899;
+  --rw-success: #10b981;
+  --rw-warning: #f59e0b;
+  --rw-danger: #ef4444;
+  --rw-dark: #0f172a;
+  --rw-gray-50: #f8fafc;
+  --rw-gray-100: #f1f5f9;
+  --rw-gray-200: #e2e8f0;
+  --rw-gray-300: #cbd5e1;
+  --rw-gray-400: #94a3b8;
+  --rw-gray-500: #64748b;
+  --rw-gray-600: #475569;
+  --rw-gray-700: #334155;
+  --rw-gray-800: #1e293b;
+  --rw-gray-900: #0f172a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.rw-landing {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  color: var(--rw-gray-900);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.rw-section {
+  padding: 80px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.rw-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rw-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  opacity: 0.3;
+  animation: bgMove 20s linear infinite;
+}
+
+@keyframes bgMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(40px); }
+}
+
+.rw-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.rw-hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.8s ease-out;
+  line-height: 1.2;
+}
+
+.rw-hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 40px;
+  opacity: 0.95;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+  font-weight: 300;
+}
+
+.rw-cta-button {
+  display: inline-block;
+  background: white;
+  color: var(--rw-primary);
+  padding: 18px 40px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.rw-cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.rw-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  margin-top: 60px;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.rw-stat {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  padding: 30px 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.rw-stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.rw-stat-label {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rw-section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 15px;
+  color: var(--rw-gray-900);
+}
+
+.rw-section-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--rw-gray-600);
+  margin-bottom: 60px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rw-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.rw-feature-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.rw-feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  border-color: var(--rw-primary);
+}
+
+.rw-feature-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+  border-radius: 15px;
+  padding: 12px;
+}
+
+.rw-feature-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: white;
+}
+
+.rw-feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: var(--rw-gray-900);
+}
+
+.rw-feature-card p {
+  color: var(--rw-gray-600);
+  line-height: 1.7;
+}
+
+.rw-dual-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 50px;
+  margin-top: 60px;
+}
+
+.rw-dual-feature {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 25px;
+  padding: 50px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rw-dual-feature::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.rw-dual-feature-content {
+  position: relative;
+  z-index: 2;
+}
+
+.rw-dual-feature-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+  color: white;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rw-dual-feature h3 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--rw-gray-900);
+}
+
+.rw-dual-feature p {
+  color: var(--rw-gray-600);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.rw-feature-list {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.rw-feature-list li {
+  padding: 12px 0;
+  color: var(--rw-gray-700);
+  display: flex;
+  align-items: center;
+  font-size: 1.05rem;
+}
+
+.rw-feature-list li::before {
+  content: '✓';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: var(--rw-success);
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.rw-typing-demo {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  margin-top: 30px;
+}
+
+.rw-typing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--rw-gray-100);
+}
+
+.rw-typing-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--rw-success);
+  font-weight: 600;
+}
+
+.rw-typing-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--rw-success);
+  border-radius: 50%;
+  animation: blink 1.4s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.rw-typing-progress {
+  color: var(--rw-primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.rw-typing-content h4 {
+  color: var(--rw-gray-900);
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+.rw-typing-text {
+  color: var(--rw-gray-700);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  display: inline;
+}
+
+.rw-typing-text::after {
+  content: '|';
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+.rw-platforms {
+  background: var(--rw-gray-50);
+}
+
+.rw-platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.rw-platform {
+  background: white;
+  padding: 35px 25px;
+  border-radius: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+}
+
+.rw-platform:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.rw-platform-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 15px;
+}
+
+.rw-platform-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.rw-platform-name {
+  font-weight: 600;
+  color: var(--rw-gray-900);
+  font-size: 1.1rem;
+}
+
+.rw-how-it-works {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.rw-how-it-works .rw-section-title,
+.rw-how-it-works .rw-section-subtitle {
+  color: white;
+}
+
+.rw-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.rw-step {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 40px 30px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  text-align: center;
+  position: relative;
+}
+
+.rw-step-number {
+  width: 60px;
+  height: 60px;
+  background: white;
+  color: var(--rw-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 auto 25px;
+}
+
+.rw-step h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.rw-step p {
+  opacity: 0.95;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.rw-testimonials {
+  background: var(--rw-gray-50);
+}
+
+.rw-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 35px;
+  margin-top: 60px;
+}
+
+.rw-testimonial {
+  background: white;
+  padding: 40px 35px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+.rw-testimonial::before {
+  content: '"';
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  font-size: 5rem;
+  color: var(--rw-primary);
+  opacity: 0.1;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.rw-testimonial-text {
+  color: var(--rw-gray-700);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 2;
+}
+
+.rw-testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.rw-testimonial-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.rw-testimonial-info h4 {
+  font-size: 1.1rem;
+  color: var(--rw-gray-900);
+  margin-bottom: 3px;
+}
+
+.rw-testimonial-role {
+  color: var(--rw-gray-600);
+  font-size: 0.9rem;
+}
+
+.rw-pricing {
+  background: white;
+}
+
+.rw-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 35px;
+  margin-top: 60px;
+}
+
+.rw-pricing-card {
+  background: white;
+  border: 2px solid var(--rw-gray-200);
+  border-radius: 25px;
+  padding: 45px 35px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.rw-pricing-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  border-color: var(--rw-primary);
+}
+
+.rw-pricing-card.featured {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+  transform: scale(1.05);
+}
+
+.rw-pricing-badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--rw-accent);
+  color: white;
+  padding: 6px 20px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rw-pricing-card h3 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.rw-pricing-price {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.rw-pricing-price span {
+  font-size: 1.2rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.rw-pricing-period {
+  opacity: 0.8;
+  margin-bottom: 30px;
+}
+
+.rw-pricing-features {
+  list-style: none;
+  margin-bottom: 35px;
+  text-align: left;
+}
+
+.rw-pricing-features li {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rw-pricing-card.featured .rw-pricing-features li {
+  border-bottom-color: rgba(255,255,255,0.2);
+}
+
+.rw-pricing-features li::before {
+  content: '✓';
+  color: var(--rw-success);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.rw-pricing-card.featured .rw-pricing-features li::before {
+  color: white;
+}
+
+.rw-pricing-button {
+  display: block;
+  width: 100%;
+  padding: 15px 30px;
+  background: var(--rw-primary);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.rw-pricing-button:hover {
+  background: var(--rw-primary-dark);
+  transform: scale(1.05);
+}
+
+.rw-pricing-card.featured .rw-pricing-button {
+  background: white;
+  color: var(--rw-primary);
+}
+
+.rw-pricing-card.featured .rw-pricing-button:hover {
+  background: var(--rw-gray-100);
+}
+
+.rw-faq {
+  background: var(--rw-gray-50);
+}
+
+.rw-faq-grid {
+  max-width: 900px;
+  margin: 60px auto 0;
+}
+
+.rw-faq-item {
+  background: white;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+}
+
+.rw-faq-question {
+  padding: 25px 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--rw-gray-900);
+  transition: all 0.3s ease;
+}
+
+.rw-faq-question:hover {
+  background: var(--rw-gray-50);
+  color: var(--rw-primary);
+}
+
+.rw-faq-toggle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--rw-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.rw-faq-item.active .rw-faq-toggle {
+  transform: rotate(45deg);
+}
+
+.rw-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.rw-faq-item.active .rw-faq-answer {
+  max-height: 500px;
+}
+
+.rw-faq-answer-content {
+  padding: 0 30px 25px;
+  color: var(--rw-gray-700);
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.rw-final-cta {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.rw-final-cta h2 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.rw-final-cta p {
+  font-size: 1.3rem;
+  margin-bottom: 40px;
+  opacity: 0.95;
+}
+
+.rw-final-cta .rw-cta-button {
+  background: white;
+  color: var(--rw-primary);
+}
+
+@media (max-width: 768px) {
+  .rw-hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .rw-hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .rw-section {
+    padding: 50px 20px;
+  }
+
+  .rw-section-title {
+    font-size: 2rem;
+  }
+
+  .rw-dual-features {
+    grid-template-columns: 1fr;
+  }
+
+  .rw-pricing-card.featured {
+    transform: scale(1);
+  }
+
+  .rw-final-cta h2 {
+    font-size: 2rem;
+  }
+}
+</style>
+
+<div class="rw-landing">
+  <!-- Hero Section -->
+  <section class="rw-hero">
+    <div class="rw-hero-content">
+      <h1>Transform Your Content Strategy with the Best AI Content Generator</h1>
+      <p class="rw-hero-subtitle">Create professional social media content creation and SEO blog writing in seconds. The ultimate AI copywriting tool for modern marketers.</p>
+      <a href="#pricing" class="rw-cta-button">Start Free Trial - No Credit Card Required</a>
+
+      <div class="rw-hero-stats">
+        <div class="rw-stat">
+          <span class="rw-stat-number" data-count="50000">0</span>
+          <span class="rw-stat-label">Content Pieces Generated</span>
+        </div>
+        <div class="rw-stat">
+          <span class="rw-stat-number" data-count="30">0</span>
+          <span class="rw-stat-label">Languages Supported</span>
+        </div>
+        <div class="rw-stat">
+          <span class="rw-stat-number" data-count="6">0</span>
+          <span class="rw-stat-label">Social Platforms</span>
+        </div>
+        <div class="rw-stat">
+          <span class="rw-stat-number" data-count="98">0</span>
+          <span class="rw-stat-label">Client Satisfaction</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dual Features Section -->
+  <section class="rw-section">
+    <h2 class="rw-section-title">Everything You Need for Automated Content Marketing</h2>
+    <p class="rw-section-subtitle">Runnwrite AI is your complete AI content generator platform, combining powerful social media content creation with professional SEO blog writing capabilities.</p>
+
+    <div class="rw-dual-features">
+      <!-- Social Media Feature -->
+      <div class="rw-dual-feature">
+        <div class="rw-dual-feature-content">
+          <span class="rw-dual-feature-badge">Social Media</span>
+          <h3>Create Viral Social Media Posts in Seconds</h3>
+          <p>Our AI content generator specializes in social media content creation that drives engagement and grows your audience across all major platforms. Generate platform-optimized posts with captions, hashtags, and stunning AI-generated images.</p>
+
+          <ul class="rw-feature-list">
+            <li>Generate engaging posts for Instagram, Facebook, LinkedIn, Twitter, TikTok & YouTube</li>
+            <li>AI-powered captions with trending hashtags and emojis</li>
+            <li>DALL-E 3 integration for stunning visual content</li>
+            <li>Platform-specific formatting and optimization</li>
+            <li>Schedule and plan content calendars</li>
+            <li>Multi-language support for global audiences</li>
+          </ul>
+
+          <div class="rw-typing-demo">
+            <div class="rw-typing-header">
+              <span class="rw-typing-status">
+                <span class="rw-typing-dot"></span>
+                Generating post...
+              </span>
+              <span class="rw-typing-progress">100%</span>
+            </div>
+            <div class="rw-typing-content">
+              <p><strong>Instagram Post:</strong> "Transform your marketing with AI! 🚀 Discover how automated content marketing helps businesses save 20+ hours weekly while boosting engagement by 300%. #AIMarketing #ContentCreation #DigitalMarketing"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO Blog Feature -->
+      <div class="rw-dual-feature">
+        <div class="rw-dual-feature-content">
+          <span class="rw-dual-feature-badge">SEO Blog</span>
+          <h3>Write SEO-Optimized Articles That Rank</h3>
+          <p>Transform your SEO blog writing process with our advanced AI copywriting tool. Generate comprehensive, search-engine-optimized articles that rank on Google and drive organic traffic to your website.</p>
+
+          <ul class="rw-feature-list">
+            <li>Full-length SEO articles (1000-3000+ words)</li>
+            <li>Keyword optimization and density analysis</li>
+            <li>Automatic title, meta description & URL generation</li>
+            <li>Structured with H1-H6 headings for readability</li>
+            <li>Internal linking suggestions</li>
+            <li>Real-time content generation with live preview</li>
+          </ul>
+
+          <div class="rw-typing-demo">
+            <div class="rw-typing-header">
+              <span class="rw-typing-status">
+                <span class="rw-typing-dot"></span>
+                Writing article...
+              </span>
+              <span class="rw-typing-progress">67%</span>
+            </div>
+            <div class="rw-typing-content">
+              <h4 id="typing-title">Complete Guide to Content Marketing in 2025</h4>
+              <p><span id="typing-text"></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Platforms -->
+  <section class="rw-section rw-platforms">
+    <h2 class="rw-section-title">6 Social Media Platforms, One AI Content Generator</h2>
+    <p class="rw-section-subtitle">Create optimized content for every major social platform with our AI copywriting tool</p>
+
+    <div class="rw-platforms-grid">
+      <div class="rw-platform">
+        <div class="rw-platform-icon">
+          <svg viewBox="0 0 24 24" fill="url(#instagram-gradient)">
+            <defs>
+              <linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#f09433"/>
+                <stop offset="25%" style="stop-color:#e6683c"/>
+                <stop offset="50%" style="stop-color:#dc2743"/>
+                <stop offset="75%" style="stop-color:#cc2366"/>
+                <stop offset="100%" style="stop-color:#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="url(#instagram-gradient)" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" fill="none" stroke="url(#instagram-gradient)" stroke-width="2"/>
+            <circle cx="18" cy="6" r="1.5" fill="url(#instagram-gradient)"/>
+          </svg>
+        </div>
+        <div class="rw-platform-name">Instagram</div>
+      </div>
+
+      <div class="rw-platform">
+        <div class="rw-platform-icon">
+          <svg viewBox="0 0 24 24" fill="#1877f2">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+        </div>
+        <div class="rw-platform-name">Facebook</div>
+      </div>
+
+      <div class="rw-platform">
+        <div class="rw-platform-icon">
+          <svg viewBox="0 0 24 24" fill="#0077b5">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+        </div>
+        <div class="rw-platform-name">LinkedIn</div>
+      </div>
+
+      <div class="rw-platform">
+        <div class="rw-platform-icon">
+          <svg viewBox="0 0 24 24" fill="#1da1f2">
+            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+          </svg>
+        </div>
+        <div class="rw-platform-name">Twitter / X</div>
+      </div>
+
+      <div class="rw-platform">
+        <div class="rw-platform-icon">
+          <svg viewBox="0 0 24 24" fill="#000000">
+            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+          </svg>
+        </div>
+        <div class="rw-platform-name">TikTok</div>
+      </div>
+
+      <div class="rw-platform">
+        <div class="rw-platform-icon">
+          <svg viewBox="0 0 24 24" fill="#ff0000">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </div>
+        <div class="rw-platform-name">YouTube</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="rw-section rw-how-it-works">
+    <h2 class="rw-section-title">How Our AI Content Generator Works</h2>
+    <p class="rw-section-subtitle">Start creating professional content in three simple steps</p>
+
+    <div class="rw-steps">
+      <div class="rw-step">
+        <div class="rw-step-number">1</div>
+        <h3>Choose Your Content Type</h3>
+        <p>Select between social media content creation or SEO blog writing. Pick your platform, language, and content preferences. Our AI copywriting tool adapts to your specific needs.</p>
+      </div>
+
+      <div class="rw-step">
+        <div class="rw-step-number">2</div>
+        <h3>Customize Your Requirements</h3>
+        <p>Enter your topic, keywords, tone, and target audience. For SEO blog writing, add your focus keywords. For social posts, choose your preferred style and hashtag strategy.</p>
+      </div>
+
+      <div class="rw-step">
+        <div class="rw-step-number">3</div>
+        <h3>Generate & Publish</h3>
+        <p>Watch as our AI content generator creates your content in real-time. Edit if needed, then copy or export. Your automated content marketing solution is ready to publish!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features -->
+  <section class="rw-section">
+    <h2 class="rw-section-title">Powerful Features for Content Marketers</h2>
+    <p class="rw-section-subtitle">Everything you need in one AI copywriting tool</p>
+
+    <div class="rw-features-grid">
+      <div class="rw-feature-card">
+        <div class="rw-feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-3.87-.96-7-5.54-7-10V8.3l7-3.11v14.81z"/>
+          </svg>
+        </div>
+        <h3>AI-Powered Generation</h3>
+        <p>Advanced AI technology creates high-quality, engaging content that sounds natural and converts readers into customers for your automated content marketing campaigns.</p>
+      </div>
+
+      <div class="rw-feature-card">
+        <div class="rw-feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/>
+          </svg>
+        </div>
+        <h3>30 Languages</h3>
+        <p>Create content in 30 different languages with native-level quality. Perfect for global brands and international social media content creation strategies.</p>
+      </div>
+
+      <div class="rw-feature-card">
+        <div class="rw-feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+          </svg>
+        </div>
+        <h3>SEO Optimization</h3>
+        <p>Built-in SEO tools analyze keyword density, generate meta tags, and structure content for maximum search engine visibility in your SEO blog writing.</p>
+      </div>
+
+      <div class="rw-feature-card">
+        <div class="rw-feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM11 12l2.03 2.71L16 11l4 5H4l3-4 3 3.5z"/>
+          </svg>
+        </div>
+        <h3>AI Image Generation</h3>
+        <p>Create stunning visuals with DALL-E 3 integration. Generate custom images that perfectly match your social media content creation and blog articles.</p>
+      </div>
+
+      <div class="rw-feature-card">
+        <div class="rw-feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/>
+          </svg>
+        </div>
+        <h3>Brand Voice</h3>
+        <p>Maintain consistent brand messaging across all platforms. Our AI content generator learns your unique voice and style for authentic content.</p>
+      </div>
+
+      <div class="rw-feature-card">
+        <div class="rw-feature-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+        </div>
+        <h3>Real-Time Generation</h3>
+        <p>Watch your content being written in real-time with streaming generation. No waiting - see your automated content marketing materialize instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="rw-section rw-testimonials">
+    <h2 class="rw-section-title">Loved by Content Creators Worldwide</h2>
+    <p class="rw-section-subtitle">See why thousands of marketers trust our AI content generator</p>
+
+    <div class="rw-testimonials-grid">
+      <div class="rw-testimonial">
+        <p class="rw-testimonial-text">"This AI content generator has transformed our social media content creation process. We've cut our content production time by 80% while increasing engagement by 200%. The quality is incredible!"</p>
+        <div class="rw-testimonial-author">
+          <div class="rw-testimonial-avatar">SJ</div>
+          <div class="rw-testimonial-info">
+            <h4>Sarah Johnson</h4>
+            <p class="rw-testimonial-role">Marketing Director, TechCorp</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rw-testimonial">
+        <p class="rw-testimonial-text">"As a content agency, we needed an AI copywriting tool that could handle both social media and SEO blog writing at scale. Runnwrite AI delivers on both fronts. Our clients are thrilled with the results!"</p>
+        <div class="rw-testimonial-author">
+          <div class="rw-testimonial-avatar">MC</div>
+          <div class="rw-testimonial-info">
+            <h4>Michael Chen</h4>
+            <p class="rw-testimonial-role">CEO, Content Solutions Agency</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rw-testimonial">
+        <p class="rw-testimonial-text">"The SEO blog writing feature is outstanding. Our organic traffic increased 300% in just 3 months. This automated content marketing platform paid for itself in the first month!"</p>
+        <div class="rw-testimonial-author">
+          <div class="rw-testimonial-avatar">EM</div>
+          <div class="rw-testimonial-info">
+            <h4>Emily Martinez</h4>
+            <p class="rw-testimonial-role">SEO Specialist, GrowthLabs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="rw-section rw-pricing" id="pricing">
+    <h2 class="rw-section-title">Simple, Transparent Pricing</h2>
+    <p class="rw-section-subtitle">Choose the perfect plan for your automated content marketing needs</p>
+
+    <div class="rw-pricing-grid">
+      <div class="rw-pricing-card">
+        <h3>Starter</h3>
+        <div class="rw-pricing-price">$29<span>/mo</span></div>
+        <p class="rw-pricing-period">Perfect for solo creators</p>
+        <ul class="rw-pricing-features">
+          <li>50 social media posts/month</li>
+          <li>10 SEO articles/month</li>
+          <li>All 6 social platforms</li>
+          <li>30 languages</li>
+          <li>AI image generation</li>
+          <li>Basic analytics</li>
+        </ul>
+        <a href="#" class="rw-pricing-button">Start Free Trial</a>
+      </div>
+
+      <div class="rw-pricing-card featured">
+        <span class="rw-pricing-badge">Most Popular</span>
+        <h3>Professional</h3>
+        <div class="rw-pricing-price">$59<span>/mo</span></div>
+        <p class="rw-pricing-period">Best for growing businesses</p>
+        <ul class="rw-pricing-features">
+          <li>200 social media posts/month</li>
+          <li>30 SEO articles/month</li>
+          <li>All 6 social platforms</li>
+          <li>30 languages</li>
+          <li>Unlimited AI images</li>
+          <li>Advanced SEO tools</li>
+          <li>Priority support</li>
+          <li>Custom brand voice</li>
+        </ul>
+        <a href="#" class="rw-pricing-button">Start Free Trial</a>
+      </div>
+
+      <div class="rw-pricing-card">
+        <h3>Business</h3>
+        <div class="rw-pricing-price">$149<span>/mo</span></div>
+        <p class="rw-pricing-period">For agencies & teams</p>
+        <ul class="rw-pricing-features">
+          <li>Unlimited social posts</li>
+          <li>Unlimited SEO articles</li>
+          <li>All 6 social platforms</li>
+          <li>30 languages</li>
+          <li>Unlimited AI images</li>
+          <li>White-label options</li>
+          <li>Team collaboration</li>
+          <li>API access</li>
+          <li>Dedicated support</li>
+        </ul>
+        <a href="#" class="rw-pricing-button">Start Free Trial</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="rw-section rw-faq">
+    <h2 class="rw-section-title">Frequently Asked Questions</h2>
+    <p class="rw-section-subtitle">Everything you need to know about our AI content generator</p>
+
+    <div class="rw-faq-grid">
+      <div class="rw-faq-item">
+        <div class="rw-faq-question">
+          <span>What makes Runnwrite AI different from other AI content generators?</span>
+          <span class="rw-faq-toggle">+</span>
+        </div>
+        <div class="rw-faq-answer">
+          <div class="rw-faq-answer-content">
+            Runnwrite AI combines both social media content creation and SEO blog writing in one platform. Unlike other AI copywriting tools that focus on just one area, we provide a complete automated content marketing solution with support for 30 languages, 6 social platforms, and advanced SEO optimization.
+          </div>
+        </div>
+      </div>
+
+      <div class="rw-faq-item">
+        <div class="rw-faq-question">
+          <span>How does the SEO blog writing feature work?</span>
+          <span class="rw-faq-toggle">+</span>
+        </div>
+        <div class="rw-faq-answer">
+          <div class="rw-faq-answer-content">
+            Our AI content generator analyzes your target keywords and creates comprehensive, SEO-optimized articles with proper structure, headings, meta tags, and keyword density. The content is generated in real-time with live preview, allowing you to watch as your article is written.
+          </div>
+        </div>
+      </div>
+
+      <div class="rw-faq-item">
+        <div class="rw-faq-question">
+          <span>Can I use this for multiple social media platforms?</span>
+          <span class="rw-faq-toggle">+</span>
+        </div>
+        <div class="rw-faq-answer">
+          <div class="rw-faq-answer-content">
+            Absolutely! Our AI copywriting tool supports Instagram, Facebook, LinkedIn, Twitter/X, TikTok, and YouTube. Each platform has optimized formatting, character limits, and style guidelines built into the social media content creation process.
+          </div>
+        </div>
+      </div>
+
+      <div class="rw-faq-item">
+        <div class="rw-faq-question">
+          <span>Is there a free trial available?</span>
+          <span class="rw-faq-toggle">+</span>
+        </div>
+        <div class="rw-faq-answer">
+          <div class="rw-faq-answer-content">
+            Yes! We offer a 7-day free trial with no credit card required. You'll get full access to all features of our AI content generator including social media posts, SEO blog writing, and AI image generation.
+          </div>
+        </div>
+      </div>
+
+      <div class="rw-faq-item">
+        <div class="rw-faq-question">
+          <span>What languages are supported?</span>
+          <span class="rw-faq-toggle">+</span>
+        </div>
+        <div class="rw-faq-answer">
+          <div class="rw-faq-answer-content">
+            Runnwrite AI supports 30 languages including English, Spanish, French, German, Italian, Portuguese, Chinese, Japanese, Arabic, and many more. This makes our automated content marketing platform perfect for global brands.
+          </div>
+        </div>
+      </div>
+
+      <div class="rw-faq-item">
+        <div class="rw-faq-question">
+          <span>How quickly can I generate content?</span>
+          <span class="rw-faq-toggle">+</span>
+        </div>
+        <div class="rw-faq-answer">
+          <div class="rw-faq-answer-content">
+            Social media posts are generated in 10-30 seconds, while full SEO blog articles (1000-3000 words) take 2-5 minutes with real-time streaming generation. Our AI content generator is one of the fastest in the industry.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="rw-final-cta">
+    <h2>Ready to Transform Your Content Strategy?</h2>
+    <p>Join thousands of marketers using the world's most powerful AI content generator</p>
+    <a href="#pricing" class="rw-cta-button">Start Your Free Trial Today - No Credit Card Required</a>
+  </section>
+</div>
+
+<script>
+// Counter Animation
+function animateCounter(element, target, duration = 2000) {
+  const start = 0;
+  const increment = target / (duration / 16);
+  let current = start;
+
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      element.textContent = target.toLocaleString();
+      clearInterval(timer);
+    } else {
+      element.textContent = Math.floor(current).toLocaleString();
+    }
+  }, 16);
+}
+
+// Typing Animation
+function typeText(element, text, speed = 50) {
+  let index = 0;
+  element.textContent = '';
+
+  function type() {
+    if (index < text.length) {
+      element.textContent += text.charAt(index);
+      index++;
+      setTimeout(type, speed);
+    }
+  }
+
+  type();
+}
+
+// FAQ Toggle
+document.querySelectorAll('.rw-faq-question').forEach(question => {
+  question.addEventListener('click', () => {
+    const item = question.parentElement;
+    const wasActive = item.classList.contains('active');
+
+    // Close all items
+    document.querySelectorAll('.rw-faq-item').forEach(i => i.classList.remove('active'));
+
+    // Open clicked item if it wasn't active
+    if (!wasActive) {
+      item.classList.add('active');
+    }
+  });
+});
+
+// Initialize animations when page loads
+window.addEventListener('load', () => {
+  // Animate counters
+  document.querySelectorAll('.rw-stat-number').forEach(stat => {
+    const target = parseInt(stat.dataset.count);
+    animateCounter(stat, target);
+  });
+
+  // Start typing animation
+  const typingText = document.getElementById('typing-text');
+  if (typingText) {
+    const fullText = "Content marketing has evolved dramatically in recent years. With the rise of AI content generators, businesses can now create high-quality, SEO-optimized content at scale. This comprehensive guide explores how automated content marketing is transforming the digital landscape, helping companies achieve better search rankings while saving countless hours on social media content creation and SEO blog writing...";
+    setTimeout(() => typeText(typingText, fullText, 30), 1000);
+  }
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
