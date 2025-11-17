@@ -52,6 +52,7 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
             price: 29,
             description: t('Pour les entrepreneurs et créateurs'),
             features: [
+                t('Projets illimités'),
                 t('50 posts sociaux/mois'),
                 t('5 articles de blog/mois'),
                 t('25 images AI/mois'),
@@ -68,6 +69,7 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
             price: 59,
             description: t('Pour les professionnels du marketing'),
             features: [
+                t('Projets illimités'),
                 t('300 posts sociaux/mois'),
                 t('30 articles de blog/mois'),
                 t('150 images AI/mois'),
@@ -84,6 +86,7 @@ export default function PricingModal({ isOpen, onClose, currentPlan = 'free_tria
             price: 149,
             description: t('Pour les agences et entreprises'),
             features: [
+                t('Projets illimités'),
                 t('Posts ILLIMITÉS'),
                 t('Articles ILLIMITÉS'),
                 t('Images ILLIMITÉES'),
