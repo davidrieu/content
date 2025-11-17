@@ -408,18 +408,37 @@ Format JSON:
             $posts_summary .= sprintf("\n%d. %s...", $index + 1, $content);
         }
 
-        return sprintf(
-            "Basé sur le profil (%s - %s) et posts récents:%s
+        // Build profile context with description
+        $profile_context = sprintf(
+            "Entreprise: %s\nSecteur: %s\nDescription: %s",
+            $profile['business_name'] ?? 'Business',
+            $profile['sector'] ?? 'général',
+            $profile['description'] ?? 'Non renseigné'
+        );
 
-Génère 4 titres de sujets pour %s (8-12 mots max par titre).
-IMPORTANT: Les titres doivent être en %s.
+        // Add target audience if available
+        if (!empty($profile['target_audience'])) {
+            $profile_context .= sprintf("\nAudience cible: %s", $profile['target_audience']);
+        }
+
+        return sprintf(
+            "Tu es un expert en création de contenu pour %s.
+
+PROFIL DU CLIENT:
+%s
+
+POSTS RÉCENTS:%s
+
+MISSION: Génère 4 idées de sujets de posts PERTINENTES pour ce profil spécifique.
+- Chaque titre doit être adapté au secteur et à l'activité décrite
+- Maximum 8-12 mots par titre
+- IMPORTANT: Les titres doivent être en %s
 
 Format JSON simple:
 {\"ideas\": [\"Titre 1\", \"Titre 2\", \"Titre 3\", \"Titre 4\"]}",
-            $profile['business_name'] ?? 'Business',
-            $profile['sector'] ?? 'général',
-            $posts_summary ?: "\n(Aucun)",
             $platform,
+            $profile_context,
+            $posts_summary ?: "\n(Aucun)",
             $language_name
         );
     }

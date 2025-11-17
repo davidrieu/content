@@ -133,7 +133,9 @@ export default function StrategyGenerator({ profile }) {
                     language: language,
                     profile: {
                         user_type: profile?.user_type || 'business',
+                        business_name: profile?.business_name || '',
                         sector: profile?.sector || '',
+                        description: profile?.description || '',
                         target_audience: profile?.target_audience || '',
                         platforms: profile?.social_platforms || profile?.platforms || ['instagram', 'facebook'],
                         keywords: profile?.primary_keywords || [],

@@ -397,7 +397,9 @@ PROMPT;
         $params = $request->get_json_params();
         $profile = $params['profile'] ?? [];
 
+        $business_name = $profile['business_name'] ?? 'Business';
         $sector = $profile['sector'] ?? 'général';
+        $description = $profile['description'] ?? '';
         $target_audience = $profile['target_audience'] ?? 'large public';
         $goal = sanitize_text_field($params['goal'] ?? 'engagement');
         $language = sanitize_text_field($params['language'] ?? 'fr');
@@ -426,22 +428,30 @@ PROMPT;
 
         $goal_description = $goal_descriptions[$goal] ?? 'engagement';
 
+        // Build profile context
+        $profile_context = "Entreprise: {$business_name}\nSecteur: {$sector}";
+        if (!empty($description)) {
+            $profile_context .= "\nDescription: {$description}";
+        }
+        $profile_context .= "\nAudience cible: {$target_audience}\nPlateformes: {$platforms}";
+
         $prompt = <<<PROMPT
 Tu es un expert en création de contenu pour les réseaux sociaux.
 
-MISSION: Générer 50 titres/sujets de posts percutants et variés
+MISSION: Générer 50 titres/sujets de posts percutants et variés SPÉCIFIQUEMENT ADAPTÉS au profil ci-dessous.
 
 PROFIL CLIENT:
-- Secteur: {$sector}
-- Audience cible: {$target_audience}
-- Plateformes: {$platforms}
-- Objectif: {$goal_description}
+{$profile_context}
+
+OBJECTIF: {$goal_description}
 
 CONTRAINTES:
 - 50 titres courts et accrocheurs (5-10 mots max)
-- Variété de types: éducatif, inspirant, questions, conseils, storytelling
-- Adaptés aux plateformes et à l'audience
+- IMPORTANT: Les titres doivent être PERTINENTS pour ce profil spécifique (secteur, activité, description)
+- Variété de types: éducatif, inspirant, questions, conseils, storytelling, cas pratiques
+- Adaptés aux plateformes et à l'audience décrite
 - Actionnables et engageants
+- Éviter les généralités, privilégier les sujets concrets liés à l'activité
 
 IMPORTANT: Génère tous les titres en {$language_name}.
 
