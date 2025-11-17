@@ -142,7 +142,9 @@ class Strategy_Endpoint extends REST_Controller {
 
         $platforms = is_array($profile['platforms']) ? implode(', ', $profile['platforms']) : 'Instagram, Facebook';
         $user_type = $profile['user_type'] ?? 'business';
+        $business_name = $profile['business_name'] ?? 'Business';
         $sector = $profile['sector'] ?? '';
+        $description = $profile['description'] ?? '';
         $target_audience = $profile['target_audience'] ?? '';
 
         // Language names mapping
@@ -168,18 +170,22 @@ class Strategy_Endpoint extends REST_Controller {
 
         $goal_description = $goal_descriptions[$goal] ?? 'engagement';
 
+        // Build profile context
+        $profile_context = "Type: {$user_type}\nEntreprise: {$business_name}\nSecteur: {$sector}";
+        if (!empty($description)) {
+            $profile_context .= "\nDescription: {$description}";
+        }
+        $profile_context .= "\nAudience cible: {$target_audience}\nPlateformes: {$platforms}\nObjectif principal: {$goal_description}\nFréquence: {$posts_per_week} posts par semaine";
+
         return <<<PROMPT
 Tu es un expert en stratégie de contenu pour les réseaux sociaux.
 
-MISSION: Créer une stratégie de contenu complète pour {$month_name} {$year}
+MISSION: Créer une stratégie de contenu complète et SPÉCIFIQUEMENT ADAPTÉE au profil client pour {$month_name} {$year}.
 
 PROFIL CLIENT:
-- Type: {$user_type}
-- Secteur: {$sector}
-- Audience cible: {$target_audience}
-- Plateformes: {$platforms}
-- Objectif principal: {$goal_description}
-- Fréquence: {$posts_per_week} posts par semaine
+{$profile_context}
+
+IMPORTANT: La stratégie doit être PERTINENTE pour cette activité spécifique, PAS générique.
 
 CONTRAINTES:
 - {$total_posts} posts au total sur le mois
@@ -192,7 +198,7 @@ IMPORTANT: Génère tout le contenu en {$language_name}.
 GÉNÈRE une stratégie complète au format JSON avec cette structure EXACTE:
 
 {
-    "strategy_summary": "Résumé de la stratégie en 2-3 phrases",
+    "strategy_summary": "Résumé de la stratégie en 2-3 phrases, SPÉCIFIQUEMENT basé sur l'activité et la description du client",
     "weekly_themes": [
         {
             "week": 1,
