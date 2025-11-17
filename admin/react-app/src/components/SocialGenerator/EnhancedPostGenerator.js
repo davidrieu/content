@@ -391,9 +391,9 @@ export default function EnhancedPostGenerator({ profile }) {
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--acs-spacing-2)', marginBottom: 'var(--acs-spacing-1)' }}>
                                     <span style={{ fontSize: '1.25rem' }}>{type.icon}</span>
-                                    <span style={{ fontWeight: 600, fontSize: 'var(--acs-font-size-base)' }}>{type.label}</span>
+                                    <span style={{ fontWeight: 600, fontSize: 'var(--acs-font-size-base)' }}>{t(type.label)}</span>
                                 </div>
-                                <p style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', margin: 0 }}>{type.description}</p>
+                                <p style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', margin: 0 }}>{t(type.description)}</p>
                             </div>
                         ))}
                     </div>
@@ -405,9 +405,9 @@ export default function EnhancedPostGenerator({ profile }) {
                         <label className="acs-form-label">{t('Template')}</label>
                         <select className="acs-select" value={template} onChange={(e) => setTemplate(e.target.value)}>
                             <option value="">{t('-- Sélectionner un template --')}</option>
-                            {availableTemplates.map((t) => (
-                                <option key={t.id} value={t.id}>
-                                    {t.name} - {t.description}
+                            {availableTemplates.map((tpl) => (
+                                <option key={tpl.id} value={tpl.id}>
+                                    {t(tpl.name)} - {t(tpl.description)}
                                 </option>
                             ))}
                         </select>
@@ -424,12 +424,12 @@ export default function EnhancedPostGenerator({ profile }) {
                                 }}
                             >
                                 <div style={{ fontWeight: 600, marginBottom: 'var(--acs-spacing-2)', color: 'var(--acs-gray-900)' }}>
-                                    Structure du template :
+                                    {t('Structure du template :')}
                                 </div>
                                 <ul style={{ margin: 0, paddingLeft: 'var(--acs-spacing-4)', color: 'var(--acs-gray-700)' }}>
                                     {selectedTemplate.structure.map((item, i) => (
                                         <li key={i} style={{ fontSize: 'var(--acs-font-size-sm)', marginBottom: 'var(--acs-spacing-1)' }}>
-                                            {item}
+                                            {t(item)}
                                         </li>
                                     ))}
                                 </ul>
@@ -589,14 +589,14 @@ export default function EnhancedPostGenerator({ profile }) {
                             <div style={{ fontSize: '2rem' }}>{platformSpec.emoji}</div>
                             <div style={{ flex: 1 }}>
                                 <div style={{ fontWeight: 600, marginBottom: 'var(--acs-spacing-1)', color: 'var(--acs-gray-900)' }}>
-                                    Spécifications {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                                    {t(`Spécifications ${platform.charAt(0).toUpperCase() + platform.slice(1)}`)}
                                 </div>
                                 <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
-                                    📏 Longueur optimale: <strong>{platformSpec.optimal_length}</strong>
-                                    {' '}• Maximum: <strong>{platformSpec.max_length} caractères</strong>
+                                    📏 {t('Longueur optimale:')} <strong>{platformSpec.optimal_length}</strong>
+                                    {' '}• {t('Maximum:')} <strong>{platformSpec.max_length} {t('caractères')}</strong>
                                 </div>
                                 <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', marginTop: 'var(--acs-spacing-1)' }}>
-                                    ✨ {platformSpec.features.join(' • ')}
+                                    ✨ {platformSpec.features.map(f => t(f)).join(' • ')}
                                 </div>
                             </div>
                         </div>
