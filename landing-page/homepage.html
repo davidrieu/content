@@ -53,16 +53,7 @@ ai-content-generator-runnwrite
                 
             </div>
             
-            <div class="rw-hero-trust">
-                <p>Trusted by marketing agencies, entrepreneurs, and content creators</p>
-                <div class="rw-trust-logos">
-                    <span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg> Agencies</span>
-                    <span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Startups</span>
-                    <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> Businesses</span>
-                    <span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg> Creators</span>
-                </div>
             </div>
-        </div>
         
         <div class="rw-hero-visual">
             <div class="rw-dashboard-preview">
@@ -100,7 +91,9 @@ ai-content-generator-runnwrite
                             </div>
                         </div>
                     </div>
-                </div>
+                
+            <p class="rw-dashboard-trust">Trusted by marketing agencies, entrepreneurs, and content creators</p>
+        </div>
             </div>
         </div>
     </div>
@@ -1159,12 +1152,14 @@ ai-content-generator-runnwrite
     margin-bottom: var(--rw-spacing-2);
 }
 
-.rw-trust-logos {
-    display: flex;
-    gap: var(--rw-spacing-4);
-    justify-content: center;
+
+/* Dashboard Trust Text */
+.rw-dashboard-trust {
+    text-align: center;
     font-size: 0.875rem;
     color: var(--rw-gray-600);
+    margin-top: var(--rw-spacing-4);
+    padding: 0 var(--rw-spacing-4);
 }
 
 /* Dashboard Preview */
