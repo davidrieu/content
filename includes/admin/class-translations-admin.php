@@ -61,7 +61,13 @@ class Translations_Admin {
 
         ?>
         <div class="wrap">
-            <h1><?php _e('Gestion des Traductions', 'ai-content-studio'); ?></h1>
+            <h1>
+                <?php _e('Gestion des Traductions', 'ai-content-studio'); ?>
+                <a href="<?php echo admin_url('admin.php?page=acs-translation-migration'); ?>" class="page-title-action">
+                    <span class="dashicons dashicons-update" style="margin-top: 3px;"></span>
+                    <?php _e('Assistant de Migration', 'ai-content-studio'); ?>
+                </a>
+            </h1>
 
             <!-- DIAGNOSTIC SECTION -->
             <div class="card" style="max-width: 1200px; margin-bottom: 20px; <?php echo (!$api_key || !$dir_exists) ? 'border-left: 4px solid #dc3232;' : ''; ?>">

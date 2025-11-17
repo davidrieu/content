@@ -185,6 +185,13 @@ class Plugin {
                 require_once $translations_file;
                 new Admin\Translations_Admin();
             }
+
+            // Load translation migration tool
+            $translation_migration_file = ACS_PLUGIN_DIR . 'includes/admin/class-translation-migration.php';
+            if (file_exists($translation_migration_file)) {
+                require_once $translation_migration_file;
+                new Admin\Translation_Migration();
+            }
         }
 
         // Load auth AJAX handler (works for both admin and frontend)
