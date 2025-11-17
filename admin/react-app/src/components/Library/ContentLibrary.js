@@ -125,9 +125,9 @@ export default function ContentLibrary({ profile }) {
                 }}
             >
                 {[
-                    { id: 'posts', label: 'Posts sauvegardés', icon: '💾' },
-                    { id: 'templates', label: 'Mes templates', icon: '📄' },
-                    { id: 'hashtags', label: 'Sets de hashtags', icon: '#️⃣' },
+                    { id: 'posts', label: t('Posts sauvegardés'), icon: '💾' },
+                    { id: 'templates', label: t('Mes templates'), icon: '📄' },
+                    { id: 'hashtags', label: t('Sets de hashtags'), icon: '#️⃣' },
                 ].map((tab) => (
                     <button
                         key={tab.id}
@@ -174,10 +174,10 @@ export default function ContentLibrary({ profile }) {
 
                     <select className="acs-select" style={{ width: 'auto' }} value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
                         <option value="all">{t('Toutes catégories')}</option>
-                        <option value="educational">📚 Éducatif</option>
-                        <option value="promotional">🎯 Promotionnel</option>
-                        <option value="engagement">💬 Engagement</option>
-                        <option value="storytelling">📖 Storytelling</option>
+                        <option value="educational">📚 {t('Éducatif')}</option>
+                        <option value="promotional">🎯 {t('Promotionnel')}</option>
+                        <option value="engagement">💬 {t('Engagement')}</option>
+                        <option value="storytelling">📖 {t('Storytelling')}</option>
                     </select>
                 </div>
             </div>
@@ -206,7 +206,7 @@ export default function ContentLibrary({ profile }) {
                                         <div>
                                             <div style={{ fontWeight: 600, textTransform: 'capitalize' }}>{post.platform}</div>
                                             <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
-                                                {post.category || 'Général'}
+                                                {post.category || t('Général')}
                                             </div>
                                         </div>
                                     </div>

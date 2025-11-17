@@ -415,10 +415,10 @@ export default function StrategyGenerator({ profile }) {
                 <h3 style={{ marginBottom: 'var(--acs-spacing-3)' }}>📅 {t('Thèmes hebdomadaires')}</h3>
                 <div style={{ display: 'grid', gap: 'var(--acs-spacing-3)' }}>
                     {(strategy?.weekly_themes || [
-                        { week: 1, theme: 'Introduction & Accueil', description: 'Présentez votre activité et créez du lien' },
-                        { week: 2, theme: 'Éducation & Valeur', description: 'Partagez votre expertise et des conseils' },
-                        { week: 3, theme: 'Engagement & Communauté', description: 'Interagissez et créez de l\'engagement' },
-                        { week: 4, theme: 'Promotion & Conversion', description: 'Présentez vos offres et call-to-actions' },
+                        { week: 1, theme: t('Introduction & Accueil'), description: t('Présentez votre activité et créez du lien') },
+                        { week: 2, theme: t('Éducation & Valeur'), description: t('Partagez votre expertise et des conseils') },
+                        { week: 3, theme: t('Engagement & Communauté'), description: t('Interagissez et créez de l\'engagement') },
+                        { week: 4, theme: t('Promotion & Conversion'), description: t('Présentez vos offres et call-to-actions') },
                     ]).map((week, i) => (
                         <div
                             key={i}
@@ -439,7 +439,7 @@ export default function StrategyGenerator({ profile }) {
                                             textTransform: 'uppercase',
                                         }}
                                     >
-                                        Semaine {week.week}
+                                        {t('Semaine')} {week.week}
                                     </span>
                                     <h4 style={{ fontSize: 'var(--acs-font-size-lg)', marginBottom: 'var(--acs-spacing-1)' }}>{week.theme}</h4>
                                 </div>
@@ -473,10 +473,10 @@ export default function StrategyGenerator({ profile }) {
                                 {times && (
                                     <>
                                         <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
-                                            <strong>Jours :</strong> {times.best_days.join(', ')}
+                                            <strong>{t('Jours :')} </strong> {times.best_days.join(', ')}
                                         </div>
                                         <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-700)' }}>
-                                            <strong>Heures :</strong> {times.best_times.join(', ')}
+                                            <strong>{t('Heures :')} </strong> {times.best_times.join(', ')}
                                         </div>
                                     </>
                                 )}

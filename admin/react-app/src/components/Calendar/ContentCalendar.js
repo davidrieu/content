@@ -13,8 +13,8 @@ import apiFetch from '@wordpress/api-fetch';
 import { useTranslation } from '../../contexts/TranslationContext';
 import PostDetailModal from '../shared/PostDetailModal';
 
-const DAYS_OF_WEEK = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-const MONTHS = [
+const DAYS_OF_WEEK_KEYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+const MONTHS_KEYS = [
     'Janvier',
     'Février',
     'Mars',
@@ -29,11 +29,11 @@ const MONTHS = [
     'Décembre',
 ];
 
-const STATUS_COLORS = {
-    draft: { bg: '#F3F4F6', color: '#6B7280', label: 'Brouillon' },
-    scheduled: { bg: '#DBEAFE', color: '#1D4ED8', label: 'Planifié' },
-    published: { bg: '#D1FAE5', color: '#059669', label: 'Publié' },
-    failed: { bg: '#FEE2E2', color: '#DC2626', label: 'Échec' },
+const STATUS_COLORS_BASE = {
+    draft: { bg: '#F3F4F6', color: '#6B7280', labelKey: 'Brouillon' },
+    scheduled: { bg: '#DBEAFE', color: '#1D4ED8', labelKey: 'Planifié' },
+    published: { bg: '#D1FAE5', color: '#059669', labelKey: 'Publié' },
+    failed: { bg: '#FEE2E2', color: '#DC2626', labelKey: 'Échec' },
 };
 
 const PLATFORM_EMOJIS = {
@@ -46,6 +46,17 @@ const PLATFORM_EMOJIS = {
 
 export default function ContentCalendar({ profile }) {
     const { t } = useTranslation();
+
+    // Translate arrays
+    const DAYS_OF_WEEK = DAYS_OF_WEEK_KEYS.map(day => t(day));
+    const MONTHS = MONTHS_KEYS.map(month => t(month));
+    const STATUS_COLORS = Object.fromEntries(
+        Object.entries(STATUS_COLORS_BASE).map(([key, value]) => [
+            key,
+            { ...value, label: t(value.labelKey) }
+        ])
+    );
+
     const [currentDate, setCurrentDate] = useState(new Date());
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -319,7 +330,7 @@ export default function ContentCalendar({ profile }) {
                         }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            alert(`Ajouter un post pour le ${day} ${MONTHS[currentMonth]}`);
+                            alert(t('Ajouter un post pour le') + ` ${day} ${MONTHS[currentMonth]}`);
                         }}
                     >
                         <FiPlus size={14} />
@@ -367,7 +378,7 @@ export default function ContentCalendar({ profile }) {
                                     </div>
                                     <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)' }}>
                                         <FiClock size={12} style={{ marginRight: '4px' }} />
-                                        {post.scheduled_for ? new Date(post.scheduled_for).toLocaleString('fr-FR') : 'Non planifié'}
+                                        {post.scheduled_for ? new Date(post.scheduled_for).toLocaleString('fr-FR') : t('Non planifié')}
                                     </div>
                                 </div>
                             </div>
@@ -459,9 +470,9 @@ export default function ContentCalendar({ profile }) {
 
                         <select className="acs-select" style={{ width: 'auto' }} value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
                             <option value="all">{t('Tous statuts')}</option>
-                            <option value="draft">Brouillon</option>
-                            <option value="scheduled">Planifié</option>
-                            <option value="published">Publié</option>
+                            <option value="draft">{t('Brouillon')}</option>
+                            <option value="scheduled">{t('Planifié')}</option>
+                            <option value="published">{t('Publié')}</option>
                         </select>
 
                         <div
@@ -545,7 +556,7 @@ export default function ContentCalendar({ profile }) {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 'var(--acs-spacing-4)' }}>
                     <div>
                         <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-1)' }}>
-                            Posts planifiés
+                            {t('Posts planifiés')}
                         </div>
                         <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--acs-primary)' }}>
                             {posts.filter((p) => p.status === 'scheduled').length}
@@ -553,7 +564,7 @@ export default function ContentCalendar({ profile }) {
                     </div>
                     <div>
                         <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-1)' }}>
-                            Brouillons
+                            {t('Brouillons')}
                         </div>
                         <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--acs-gray-600)' }}>
                             {posts.filter((p) => p.status === 'draft').length}
@@ -561,7 +572,7 @@ export default function ContentCalendar({ profile }) {
                     </div>
                     <div>
                         <div style={{ fontSize: 'var(--acs-font-size-sm)', color: 'var(--acs-gray-600)', marginBottom: 'var(--acs-spacing-1)' }}>
-                            Publiés ce mois
+                            {t('Publiés ce mois')}
                         </div>
                         <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--acs-success)' }}>
                             {posts.filter((p) => p.status === 'published').length}

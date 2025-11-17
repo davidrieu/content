@@ -5,8 +5,10 @@ import {
     FiTwitter, FiFileText, FiSquare, FiMaximize, FiSmartphone,
     FiZap, FiCreditCard
 } from 'react-icons/fi';
+import { useTranslation } from '../../contexts/TranslationContext';
 
 const ImageGenerator = () => {
+    const { t } = useTranslation();
     const [prompt, setPrompt] = useState('');
     const [title, setTitle] = useState('');
     const [selectedFormat, setSelectedFormat] = useState('instagram_post');
@@ -54,7 +56,7 @@ const ImageGenerator = () => {
 
     const handleGenerate = async () => {
         if (!prompt.trim()) {
-            setError('Veuillez entrer une description pour votre image.');
+            setError(t('Veuillez entrer une description pour votre image.'));
             return;
         }
 
@@ -86,14 +88,14 @@ const ImageGenerator = () => {
                 if (response.error && response.error.code === 'limit_reached') {
                     setShowPricingModal(true);
                 }
-                setError(response.error?.message || 'Une erreur est survenue.');
+                setError(response.error?.message || t('Une erreur est survenue.'));
             }
         } catch (err) {
             console.error('Generation error:', err);
             if (err.code === 'limit_reached') {
                 setShowPricingModal(true);
             }
-            setError(err.message || 'Erreur lors de la génération de l\'image.');
+            setError(err.message || t('Erreur lors de la génération de l\'image.'));
         } finally {
             setLoading(false);
         }
@@ -168,9 +170,9 @@ const ImageGenerator = () => {
     }, {});
 
     const categoryNames = {
-        social: 'Réseaux Sociaux',
-        blog: 'Blog & Articles',
-        custom: 'Formats Personnalisés',
+        social: t('Réseaux Sociaux'),
+        blog: t('Blog & Articles'),
+        custom: t('Formats Personnalisés'),
     };
 
     // Check if user can generate images
@@ -193,10 +195,10 @@ const ImageGenerator = () => {
             <div className="acs-page-header">
                 <div className="acs-page-header-content">
                     <h1 className="acs-page-title">
-                        <FiImage /> Générateur d'Images IA
+                        <FiImage /> {t('Générateur d\'Images IA')}
                     </h1>
                     <p className="acs-page-subtitle">
-                        Créez des visuels époustouflants avec RUNNWRITE AI pour vos réseaux sociaux et articles de blog
+                        {t('Créez des visuels époustouflants avec RUNNWRITE AI pour vos réseaux sociaux et articles de blog')}
                     </p>
                 </div>
                 {subscription && (
@@ -204,11 +206,11 @@ const ImageGenerator = () => {
                         <FiZap />
                         <span>
                             {subscription.plan === 'business'
-                                ? 'Illimité'
+                                ? t('Illimité')
                                 : `${subscription.usage?.images_this_month || 0}/${subscription.limits?.images_per_month || 0}`
                             }
                         </span>
-                        <small>Images ce mois</small>
+                        <small>{t('Images ce mois')}</small>
                     </div>
                 )}
             </div>
@@ -217,36 +219,36 @@ const ImageGenerator = () => {
                 {/* Left Column - Form */}
                 <div className="acs-generator-form">
                     <div className="acs-card">
-                        <h3 className="acs-card-title">Configuration</h3>
+                        <h3 className="acs-card-title">{t('Configuration')}</h3>
 
                         {/* Prompt */}
                         <div className="acs-form-group">
                             <label className="acs-label">
-                                Description de l'image
+                                {t('Description de l\'image')}
                                 <span className="acs-required">*</span>
                             </label>
                             <textarea
                                 className="acs-textarea"
                                 rows="6"
-                                placeholder="Décrivez l'image que vous souhaitez générer. Soyez précis et détaillé pour de meilleurs résultats.&#10;&#10;Exemple : Un paysage de montagne au coucher du soleil, avec des nuages orangés, style photographie professionnelle, lumière cinématographique, haute qualité, ultra détaillé."
+                                placeholder={t('Décrivez l\'image que vous souhaitez générer. Soyez précis et détaillé pour de meilleurs résultats.\n\nExemple : Un paysage de montagne au coucher du soleil, avec des nuages orangés, style photographie professionnelle, lumière cinématographique, haute qualité, ultra détaillé.')}
                                 value={prompt}
                                 onChange={(e) => setPrompt(e.target.value)}
                                 maxLength={4000}
                             />
                             <small className="acs-form-help">
-                                {prompt.length}/4000 caractères
+                                {prompt.length}/4000 {t('caractères')}
                             </small>
                         </div>
 
                         {/* Title */}
                         <div className="acs-form-group">
                             <label className="acs-label">
-                                Titre de l'image (optionnel)
+                                {t('Titre de l\'image (optionnel)')}
                             </label>
                             <input
                                 type="text"
                                 className="acs-input"
-                                placeholder="Mon image générée"
+                                placeholder={t('Mon image générée')}
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                             />
@@ -255,7 +257,7 @@ const ImageGenerator = () => {
                         {/* Format Selection */}
                         <div className="acs-form-group">
                             <label className="acs-label">
-                                Format
+                                {t('Format')}
                                 <span className="acs-required">*</span>
                             </label>
 
@@ -287,7 +289,7 @@ const ImageGenerator = () => {
 
                         {/* Quality */}
                         <div className="acs-form-group">
-                            <label className="acs-label">Qualité</label>
+                            <label className="acs-label">{t('Qualité')}</label>
                             <div className="acs-radio-group">
                                 <label className="acs-radio-label">
                                     <input
@@ -297,8 +299,8 @@ const ImageGenerator = () => {
                                         checked={quality === 'standard'}
                                         onChange={(e) => setQuality(e.target.value)}
                                     />
-                                    <span>Standard</span>
-                                    <small>Rapide et économique</small>
+                                    <span>{t('Standard')}</span>
+                                    <small>{t('Rapide et économique')}</small>
                                 </label>
                                 <label className="acs-radio-label">
                                     <input
@@ -308,15 +310,15 @@ const ImageGenerator = () => {
                                         checked={quality === 'hd'}
                                         onChange={(e) => setQuality(e.target.value)}
                                     />
-                                    <span>HD</span>
-                                    <small>Meilleure qualité, plus de détails</small>
+                                    <span>{t('HD')}</span>
+                                    <small>{t('Meilleure qualité, plus de détails')}</small>
                                 </label>
                             </div>
                         </div>
 
                         {/* Style */}
                         <div className="acs-form-group">
-                            <label className="acs-label">Style</label>
+                            <label className="acs-label">{t('Style')}</label>
                             <div className="acs-radio-group">
                                 <label className="acs-radio-label">
                                     <input
@@ -326,8 +328,8 @@ const ImageGenerator = () => {
                                         checked={style === 'vivid'}
                                         onChange={(e) => setStyle(e.target.value)}
                                     />
-                                    <span>Vivid</span>
-                                    <small>Couleurs vives et contrastées</small>
+                                    <span>{t('Vivid')}</span>
+                                    <small>{t('Couleurs vives et contrastées')}</small>
                                 </label>
                                 <label className="acs-radio-label">
                                     <input
@@ -337,8 +339,8 @@ const ImageGenerator = () => {
                                         checked={style === 'natural'}
                                         onChange={(e) => setStyle(e.target.value)}
                                     />
-                                    <span>Natural</span>
-                                    <small>Style naturel et réaliste</small>
+                                    <span>{t('Natural')}</span>
+                                    <small>{t('Style naturel et réaliste')}</small>
                                 </label>
                             </div>
                         </div>
@@ -353,8 +355,8 @@ const ImageGenerator = () => {
                             <div className="acs-alert acs-alert-warning">
                                 <FiCreditCard />
                                 <div>
-                                    <strong>Fonctionnalité Premium</strong>
-                                    <p>La génération d'images n'est pas disponible avec le plan Free Trial. Passez à un plan payant pour accéder à cette fonctionnalité.</p>
+                                    <strong>{t('Fonctionnalité Premium')}</strong>
+                                    <p>{t('La génération d\'images n\'est pas disponible avec le plan Free Trial. Passez à un plan payant pour accéder à cette fonctionnalité.')}</p>
                                 </div>
                             </div>
                         )}
@@ -363,8 +365,8 @@ const ImageGenerator = () => {
                             <div className="acs-alert acs-alert-warning">
                                 <FiCreditCard />
                                 <div>
-                                    <strong>Limite atteinte</strong>
-                                    <p>Vous avez utilisé toutes vos images pour ce mois ({subscription.limits?.images_per_month} images). Passez à un plan supérieur pour continuer.</p>
+                                    <strong>{t('Limite atteinte')}</strong>
+                                    <p>{t('Vous avez utilisé toutes vos images pour ce mois')} ({subscription.limits?.images_per_month} {t('images')}). {t('Passez à un plan supérieur pour continuer.')}</p>
                                 </div>
                             </div>
                         )}
@@ -377,12 +379,12 @@ const ImageGenerator = () => {
                             {loading ? (
                                 <>
                                     <div className="acs-spinner"></div>
-                                    Génération en cours...
+                                    {t('Génération en cours...')}
                                 </>
                             ) : (
                                 <>
                                     <FiZap />
-                                    Générer l'image
+                                    {t('Générer l\'image')}
                                 </>
                             )}
                         </button>
@@ -392,7 +394,7 @@ const ImageGenerator = () => {
                 {/* Right Column - Preview */}
                 <div className="acs-generator-preview">
                     <div className="acs-card">
-                        <h3 className="acs-card-title">Aperçu</h3>
+                        <h3 className="acs-card-title">{t('Aperçu')}</h3>
 
                         {generatedImage ? (
                             <div className="acs-image-preview">
@@ -420,7 +422,7 @@ const ImageGenerator = () => {
                                         onClick={handleDownload}
                                     >
                                         <FiDownload />
-                                        Télécharger
+                                        {t('Télécharger')}
                                     </button>
                                     <a
                                         href={generatedImage.url}
@@ -429,16 +431,16 @@ const ImageGenerator = () => {
                                         className="acs-btn acs-btn-outline-primary"
                                     >
                                         <FiImage />
-                                        Voir en grand
+                                        {t('Voir en grand')}
                                     </a>
                                 </div>
                             </div>
                         ) : (
                             <div className="acs-empty-state">
                                 <FiImage size={64} />
-                                <h3>Aucune image générée</h3>
+                                <h3>{t('Aucune image générée')}</h3>
                                 <p>
-                                    Remplissez le formulaire et cliquez sur "Générer l'image" pour créer votre visuel.
+                                    {t('Remplissez le formulaire et cliquez sur "Générer l\'image" pour créer votre visuel.')}
                                 </p>
                             </div>
                         )}
@@ -446,22 +448,22 @@ const ImageGenerator = () => {
 
                     {/* Tips */}
                     <div className="acs-card acs-tips-card">
-                        <h4>💡 Conseils pour de meilleurs résultats</h4>
+                        <h4>💡 {t('Conseils pour de meilleurs résultats')}</h4>
                         <ul className="acs-tips-list">
                             <li>
-                                <strong>Soyez précis :</strong> Décrivez les détails importants (couleurs, style, ambiance)
+                                <strong>{t('Soyez précis :')}</strong> {t('Décrivez les détails importants (couleurs, style, ambiance)')}
                             </li>
                             <li>
-                                <strong>Mentionnez le style :</strong> "photographie professionnelle", "illustration minimaliste", "art numérique"
+                                <strong>{t('Mentionnez le style :')}</strong> {t('"photographie professionnelle", "illustration minimaliste", "art numérique"')}
                             </li>
                             <li>
-                                <strong>Ajoutez le contexte :</strong> "pour Instagram", "pour article de blog", "fond blanc"
+                                <strong>{t('Ajoutez le contexte :')}</strong> {t('"pour Instagram", "pour article de blog", "fond blanc"')}
                             </li>
                             <li>
-                                <strong>Utilisez des adjectifs :</strong> "lumineux", "dynamique", "épuré", "moderne"
+                                <strong>{t('Utilisez des adjectifs :')}</strong> {t('"lumineux", "dynamique", "épuré", "moderne"')}
                             </li>
                             <li>
-                                <strong>Qualité HD :</strong> Utilisez HD pour des images destinées à l'impression ou grandes tailles
+                                <strong>{t('Qualité HD :')}</strong> {t('Utilisez HD pour des images destinées à l\'impression ou grandes tailles')}
                             </li>
                         </ul>
                     </div>
@@ -473,7 +475,7 @@ const ImageGenerator = () => {
                 <div className="acs-modal-overlay" onClick={() => setShowPricingModal(false)}>
                     <div className="acs-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="acs-modal-header">
-                            <h2>Limite d'images atteinte</h2>
+                            <h2>{t('Limite d\'images atteinte')}</h2>
                             <button
                                 className="acs-modal-close"
                                 onClick={() => setShowPricingModal(false)}
@@ -482,23 +484,23 @@ const ImageGenerator = () => {
                             </button>
                         </div>
                         <div className="acs-modal-body">
-                            <p>Vous avez atteint la limite d'images pour votre plan actuel.</p>
-                            <p>Passez à un plan supérieur pour générer plus d'images !</p>
+                            <p>{t('Vous avez atteint la limite d\'images pour votre plan actuel.')}</p>
+                            <p>{t('Passez à un plan supérieur pour générer plus d\'images !')}</p>
                             <div className="acs-pricing-quick">
                                 <div className="acs-pricing-option">
                                     <h4>Starter</h4>
                                     <div className="acs-price">29€<small>/mois</small></div>
-                                    <p>25 images/mois</p>
+                                    <p>{t('25 images/mois')}</p>
                                 </div>
                                 <div className="acs-pricing-option">
                                     <h4>Professional</h4>
                                     <div className="acs-price">59€<small>/mois</small></div>
-                                    <p>150 images/mois</p>
+                                    <p>{t('150 images/mois')}</p>
                                 </div>
                                 <div className="acs-pricing-option">
                                     <h4>Business</h4>
                                     <div className="acs-price">149€<small>/mois</small></div>
-                                    <p>Images illimitées</p>
+                                    <p>{t('Images illimitées')}</p>
                                 </div>
                             </div>
                         </div>
@@ -507,13 +509,13 @@ const ImageGenerator = () => {
                                 className="acs-btn acs-btn-outline-primary"
                                 onClick={() => setShowPricingModal(false)}
                             >
-                                Plus tard
+                                {t('Plus tard')}
                             </button>
                             <button
                                 className="acs-btn acs-btn-primary"
                                 onClick={() => window.location.hash = '#/settings'}
                             >
-                                Voir les plans
+                                {t('Voir les plans')}
                             </button>
                         </div>
                     </div>
