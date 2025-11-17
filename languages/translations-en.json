@@ -838,5 +838,16 @@
   "📅 Thèmes hebdomadaires": "📅 Weekly themes",
   "📊 Mix de contenu recommandé": "📊 Recommended content mix",
   "📋 Résumé de votre stratégie": "📋 Summary of your strategy",
-  "📚 Stratégie Articles de Blog": "📚 Blog Article Strategy"
+  "📚 Stratégie Articles de Blog": "📚 Blog Article Strategy",
+  "Décrivez l'image que vous souhaitez générer. Soyez précis et détaillé pour de meilleurs résultats.\n\nExemple : Un paysage de montagne au coucher du soleil, avec des nuages orangés, style photographie professionnelle, lumière cinématographique, haute qualité, ultra détaillé.": "Describe the image you want to generate. Be precise and detailed for better results.\n\nExample: A mountain landscape at sunset, with orange clouds, professional photography style, cinematic lighting, high quality, ultra detailed.",
+  "Soyez précis :": "Be precise:",
+  "Décrivez les détails importants (couleurs, style, ambiance)": "Describe important details (colors, style, mood)",
+  "Mentionnez le style :": "Mention the style:",
+  "\"photographie professionnelle\", \"illustration minimaliste\", \"art numérique\"": "\"professional photography\", \"minimalist illustration\", \"digital art\"",
+  "Ajoutez le contexte :": "Add the context:",
+  "\"pour Instagram\", \"pour article de blog\", \"fond blanc\"": "\"for Instagram\", \"for blog article\", \"white background\"",
+  "Utilisez des adjectifs :": "Use adjectives:",
+  "\"lumineux\", \"dynamique\", \"épuré\", \"moderne\"": "\"bright\", \"dynamic\", \"clean\", \"modern\"",
+  "Qualité HD :": "HD Quality:",
+  "Utilisez HD pour des images destinées à l'impression ou grandes tailles": "Use HD for images intended for printing or large sizes"
 }
