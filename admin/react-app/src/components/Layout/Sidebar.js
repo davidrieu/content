@@ -1,8 +1,16 @@
 import { FiHome, FiZap, FiFileText, FiImage, FiCalendar, FiSettings, FiTrendingUp, FiTarget, FiBookmark, FiShare2, FiEdit, FiBookOpen } from 'react-icons/fi';
 import { useTranslation } from '../../contexts/TranslationContext';
 
-export default function Sidebar({ currentPath, onNavigate }) {
+export default function Sidebar({ currentPath, onNavigate, show, onClose }) {
     const { t } = useTranslation();
+
+    const handleNavigate = (path) => {
+        onNavigate(path);
+        // Close sidebar on mobile after navigation
+        if (onClose) {
+            onClose();
+        }
+    };
 
     const socialMediaSection = [
         { path: '/', icon: FiHome, label: t('Tableau de bord') },
@@ -35,7 +43,7 @@ export default function Sidebar({ currentPath, onNavigate }) {
                     className={`acs-nav-link ${isActive ? 'active' : ''}`}
                     onClick={(e) => {
                         e.preventDefault();
-                        onNavigate(item.path);
+                        handleNavigate(item.path);
                     }}
                 >
                     <Icon className="acs-nav-icon" />
@@ -46,7 +54,11 @@ export default function Sidebar({ currentPath, onNavigate }) {
     };
 
     return (
-        <div className="acs-sidebar">
+        <>
+            {/* Overlay for mobile */}
+            {show && <div className={`acs-sidebar-overlay ${show ? 'show' : ''}`} onClick={onClose} />}
+
+            <div className={`acs-sidebar ${show ? 'show' : ''}`}>
             <div className="acs-sidebar-header">
                 <a href="#" className="acs-sidebar-brand" onClick={(e) => { e.preventDefault(); onNavigate('/'); }}>
                     <img
@@ -81,5 +93,6 @@ export default function Sidebar({ currentPath, onNavigate }) {
                 </div>
             </nav>
         </div>
+        </>
     );
 }

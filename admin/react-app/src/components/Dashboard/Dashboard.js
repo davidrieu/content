@@ -134,13 +134,13 @@ export default function Dashboard({ profile }) {
             </div>
 
             {/* Content Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 'var(--acs-spacing-4)', marginTop: 'var(--acs-spacing-5)' }}>
+            <div className="acs-grid-two-col acs-dashboard-grid" style={{ marginTop: 'var(--acs-spacing-5)' }}>
                 {/* Quick Actions Card */}
                 <div className="acs-card">
                     <div className="acs-card-header">
                         <h3 className="acs-card-title">{t('Actions rapides')}</h3>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--acs-spacing-3)' }}>
+                    <div className="acs-actions-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--acs-spacing-3)' }}>
                         <button className="acs-btn acs-btn-primary" onClick={() => navigate('/generate')}>
                             <FiZap /> {t('Nouveau post')}
                         </button>

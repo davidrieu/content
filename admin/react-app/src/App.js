@@ -24,6 +24,15 @@ import LoadingSpinner from './components/common/LoadingSpinner';
 function AppContent({ profile, onAddProject }) {
     const navigate = useNavigate();
     const location = useLocation();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
+    const closeSidebar = () => {
+        setSidebarOpen(false);
+    };
 
     const getPageTitle = () => {
         switch (location.pathname) {
@@ -45,9 +54,18 @@ function AppContent({ profile, onAddProject }) {
 
     return (
         <div className="acs-app">
-            <Sidebar currentPath={location.pathname} onNavigate={navigate} />
+            <Sidebar
+                currentPath={location.pathname}
+                onNavigate={navigate}
+                show={sidebarOpen}
+                onClose={closeSidebar}
+            />
             <div className="acs-main-wrapper">
-                <Topbar currentPage={getPageTitle()} profile={profile} />
+                <Topbar
+                    currentPage={getPageTitle()}
+                    profile={profile}
+                    onToggleSidebar={toggleSidebar}
+                />
                 <div className="acs-content">
                     {/* Project Switcher - dropdown pour sélectionner/ajouter des projets */}
                     <ProjectSwitcher
