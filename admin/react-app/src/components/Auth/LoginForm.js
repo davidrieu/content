@@ -62,7 +62,7 @@ export default function LoginForm({ onLogin, onSwitchToRegister }) {
                     </div>
                     <h1 className="acs-auth-title">{t('Connexion')}</h1>
                     <p className="acs-auth-subtitle">
-                        {t('Connectez-vous pour accéder à AI Content Studio')}
+                        {t('Connectez-vous pour accéder à Runnwrite AI')}
                     </p>
                 </div>
 
