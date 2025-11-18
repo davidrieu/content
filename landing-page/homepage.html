@@ -1475,7 +1475,7 @@ html {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
     padding: var(--rw-section-spacing) 0;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     border-radius: 24px;
     margin: var(--rw-spacing-4) var(--rw-spacing-6);
 }
@@ -1485,6 +1485,7 @@ html {
         border-radius: 16px;
         margin: var(--rw-spacing-3) var(--rw-spacing-4);
         padding: var(--rw-spacing-6) 0;
+        overflow: visible;
     }
 }
 
@@ -1557,7 +1558,7 @@ html {
     border-radius: var(--rw-radius-xl);
     box-shadow: var(--rw-shadow-xl);
     border: 1px solid var(--rw-gray-200);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .rw-preview-header {
@@ -2579,15 +2580,21 @@ html {
     .rw-score-circle {
         width: 140px;
         height: 140px;
+        position: relative;
     }
 
     .rw-score-circle svg {
         width: 140px;
         height: 140px;
+        display: block;
     }
 
     .rw-score-number {
         font-size: 2rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
     .rw-seo-metrics {

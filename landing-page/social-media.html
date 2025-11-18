@@ -614,6 +614,11 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
     .section-header p {
         font-size: 0.95rem;
     }
+
+    /* Hide Twitter Thread on mobile to save space */
+    .hide-on-mobile {
+        display: none;
+    }
 }
 
 .text-center { text-align: center; }
@@ -808,7 +813,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                     <div class="calendar-post">💼 LinkedIn Article</div>
                 </div>
                 <div class="calendar-day"><div class="day-number">4</div></div>
-                <div class="calendar-day">
+                <div class="calendar-day hide-on-mobile">
                     <div class="day-number">5</div>
                     <div class="calendar-post">🐦 Twitter Thread</div>
                 </div>
