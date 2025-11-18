@@ -1,0 +1,789 @@
+<!--
+========================================================================================
+RUNNWRITE AI - HOW IT WORKS PAGE
+WordPress SEO Settings
+========================================================================================
+
+META TITLE (54 characters):
+How It Works - AI Content Generator | Runnwrite AI
+
+META DESCRIPTION (159 characters):
+See how Runnwrite AI generates professional content in 3 simple steps. From topic selection to published content in minutes. Try our AI content generator free!
+
+FOCUS KEYWORD:
+how AI content generator works
+
+ADDITIONAL KEYWORDS:
+- AI content creation process
+- automated content generation
+- content marketing workflow
+- AI writing tool tutorial
+
+URL SLUG:
+how-it-works-ai-content-generator
+
+========================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works - AI Content Generator | Runnwrite AI</title>
+
+    <meta name="description" content="See how Runnwrite AI generates professional content in 3 simple steps. From topic selection to published content in minutes.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="How It Works - AI Content Generator | Runnwrite AI">
+    <meta property="og:description" content="See how Runnwrite AI generates professional content in 3 simple steps.">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="How It Works - AI Content Generator | Runnwrite AI">
+    <meta property="twitter:description" content="See how Runnwrite AI generates professional content in 3 simple steps.">
+
+    <style>
+/* CSS Variables */
+:root {
+    --rw-primary: #6366f1;
+    --rw-primary-dark: #4f46e5;
+    --rw-primary-light: #818cf8;
+    --rw-secondary: #10b981;
+    --rw-success: #10b981;
+    --rw-warning: #f59e0b;
+    --rw-white: #ffffff;
+    --rw-black: #000000;
+    --rw-gray-50: #f9fafb;
+    --rw-gray-100: #f3f4f6;
+    --rw-gray-200: #e5e7eb;
+    --rw-gray-300: #d1d5db;
+    --rw-gray-600: #4b5563;
+    --rw-gray-700: #374151;
+    --rw-gray-900: #111827;
+
+    --rw-spacing-2: 0.5rem;
+    --rw-spacing-3: 0.75rem;
+    --rw-spacing-4: 1rem;
+    --rw-spacing-5: 1.5rem;
+    --rw-spacing-6: 2rem;
+    --rw-spacing-8: 3rem;
+
+    --rw-radius-lg: 0.75rem;
+    --rw-radius-xl: 1rem;
+    --rw-radius-2xl: 1.5rem;
+    --rw-radius-full: 9999px;
+
+    --rw-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --rw-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --rw-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    --rw-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--rw-gray-900);
+    background: var(--rw-white);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--rw-spacing-6);
+}
+
+section {
+    padding: var(--rw-spacing-8) 0;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--rw-gray-900);
+}
+
+h1 { font-size: 3.5rem; margin-bottom: var(--rw-spacing-5); }
+h2 { font-size: 2.5rem; margin-bottom: var(--rw-spacing-4); }
+h3 { font-size: 1.75rem; margin-bottom: var(--rw-spacing-3); }
+
+p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
+
+/* Hero Section */
+.hiw-hero {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+    padding: var(--rw-spacing-8) 0;
+    border-radius: 24px;
+    margin: var(--rw-spacing-4) var(--rw-spacing-6);
+    text-align: center;
+}
+
+.hiw-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    padding: var(--rw-spacing-2) var(--rw-spacing-4);
+    border-radius: var(--rw-radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--rw-spacing-4);
+    border: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+.hiw-hero h1 span {
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hiw-hero p {
+    font-size: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto var(--rw-spacing-6);
+}
+
+.hiw-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--rw-spacing-8);
+    margin-top: var(--rw-spacing-6);
+}
+
+.hiw-stat {
+    text-align: center;
+}
+
+.hiw-stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: var(--rw-spacing-2);
+}
+
+.hiw-stat-label {
+    font-size: 0.95rem;
+    color: var(--rw-gray-600);
+    font-weight: 600;
+}
+
+/* Steps Section */
+.hiw-steps {
+    background: var(--rw-white);
+}
+
+.section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--rw-spacing-8);
+}
+
+.steps-container {
+    display: grid;
+    gap: var(--rw-spacing-8);
+    margin-top: var(--rw-spacing-8);
+}
+
+.step-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--rw-spacing-8);
+    align-items: center;
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-8);
+    transition: var(--rw-transition);
+}
+
+.step-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--rw-shadow-xl);
+    border-color: var(--rw-primary);
+}
+
+.step-card:nth-child(even) {
+    direction: rtl;
+}
+
+.step-card:nth-child(even) > * {
+    direction: ltr;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    color: var(--rw-white);
+    border-radius: 50%;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.step-content h3 {
+    font-size: 2rem;
+    margin-bottom: var(--rw-spacing-3);
+}
+
+.step-features {
+    list-style: none;
+    margin-top: var(--rw-spacing-4);
+}
+
+.step-features li {
+    display: flex;
+    align-items: center;
+    gap: var(--rw-spacing-3);
+    padding: var(--rw-spacing-3) 0;
+    font-size: 1.05rem;
+    color: var(--rw-gray-700);
+}
+
+.step-features li svg {
+    flex-shrink: 0;
+    color: var(--rw-success);
+}
+
+.step-visual {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+    border-radius: var(--rw-radius-xl);
+    padding: var(--rw-spacing-6);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+/* Step 1 Visual - Topic Selection */
+.topic-selector {
+    background: var(--rw-white);
+    border-radius: var(--rw-radius-lg);
+    padding: var(--rw-spacing-5);
+    box-shadow: var(--rw-shadow-md);
+}
+
+.topic-input {
+    background: var(--rw-gray-50);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-lg);
+    padding: var(--rw-spacing-4);
+    margin-bottom: var(--rw-spacing-4);
+    font-size: 1rem;
+    color: var(--rw-gray-700);
+}
+
+.topic-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--rw-spacing-2);
+    margin-top: var(--rw-spacing-3);
+}
+
+.topic-tag {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-primary);
+    color: var(--rw-primary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--rw-radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--rw-transition);
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.topic-tag:nth-child(1) { animation-delay: 0.1s; }
+.topic-tag:nth-child(2) { animation-delay: 0.2s; }
+.topic-tag:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.topic-tag:hover {
+    background: var(--rw-primary);
+    color: var(--rw-white);
+    transform: translateY(-2px);
+}
+
+/* Step 2 Visual - AI Processing */
+.ai-processing {
+    background: var(--rw-white);
+    border-radius: var(--rw-radius-lg);
+    padding: var(--rw-spacing-5);
+    box-shadow: var(--rw-shadow-md);
+}
+
+.processing-header {
+    display: flex;
+    align-items: center;
+    gap: var(--rw-spacing-3);
+    margin-bottom: var(--rw-spacing-5);
+    padding-bottom: var(--rw-spacing-3);
+    border-bottom: 2px solid var(--rw-gray-200);
+}
+
+.processing-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rw-white);
+}
+
+.processing-icon svg {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.processing-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--rw-gray-900);
+}
+
+.progress-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rw-spacing-4);
+}
+
+.progress-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rw-spacing-2);
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--rw-gray-700);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--rw-gray-200);
+    border-radius: var(--rw-radius-full);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rw-primary), #8b5cf6);
+    border-radius: var(--rw-radius-full);
+    animation: fillProgress 2s ease-out forwards;
+    width: 0;
+}
+
+.progress-fill.active {
+    background: linear-gradient(90deg, var(--rw-primary), #8b5cf6, var(--rw-primary));
+    background-size: 200% 100%;
+    animation: fillProgress 2s ease-out forwards, shimmer 2s linear infinite;
+}
+
+@keyframes fillProgress {
+    to { width: var(--target-width); }
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Step 3 Visual - Published Content */
+.published-content {
+    background: var(--rw-white);
+    border-radius: var(--rw-radius-lg);
+    padding: var(--rw-spacing-5);
+    box-shadow: var(--rw-shadow-md);
+}
+
+.content-preview {
+    background: var(--rw-gray-50);
+    border: 1px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-lg);
+    padding: var(--rw-spacing-4);
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.preview-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-2);
+}
+
+.preview-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--rw-gray-600);
+}
+
+.content-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--rw-spacing-3);
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--rw-spacing-2);
+    padding: var(--rw-spacing-3);
+    background: var(--rw-white);
+    border: 2px solid var(--rw-primary);
+    color: var(--rw-primary);
+    border-radius: var(--rw-radius-lg);
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: var(--rw-transition);
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: var(--rw-primary);
+    color: var(--rw-white);
+    transform: translateY(-2px);
+}
+
+/* CTA Section */
+.hiw-cta {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-primary-dark));
+    text-align: center;
+    color: var(--rw-white);
+    border-radius: 24px;
+    margin: var(--rw-spacing-4) var(--rw-spacing-6);
+}
+
+.hiw-cta h2 {
+    color: var(--rw-white);
+    font-size: 2.5rem;
+}
+
+.hiw-cta p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto var(--rw-spacing-6);
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    padding: 1rem 2rem;
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    border-radius: var(--rw-radius-lg);
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--rw-transition);
+    box-shadow: var(--rw-shadow-xl);
+}
+
+.cta-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 1.875rem; }
+
+    .hiw-stats {
+        flex-direction: column;
+        gap: var(--rw-spacing-4);
+    }
+
+    .step-card {
+        grid-template-columns: 1fr;
+    }
+
+    .step-card:nth-child(even) {
+        direction: ltr;
+    }
+
+    .content-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+.text-center { text-align: center; }
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="hiw-hero">
+    <div class="container">
+        <div class="hiw-badge">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+            <span>Simple 3-Step Process</span>
+        </div>
+
+        <h1>How <span>Runnwrite AI</span> Works</h1>
+
+        <p>
+            Generate professional, SEO-optimized content in minutes. Our AI-powered platform simplifies
+            content creation with an intuitive 3-step process that anyone can master.
+        </p>
+
+        <div class="hiw-stats">
+            <div class="hiw-stat">
+                <div class="hiw-stat-value">3</div>
+                <div class="hiw-stat-label">Simple Steps</div>
+            </div>
+            <div class="hiw-stat">
+                <div class="hiw-stat-value">60s</div>
+                <div class="hiw-stat-label">Average Time</div>
+            </div>
+            <div class="hiw-stat">
+                <div class="hiw-stat-value">∞</div>
+                <div class="hiw-stat-label">Content Possibilities</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Steps Section -->
+<section class="hiw-steps">
+    <div class="container">
+        <div class="section-header">
+            <h2>From Idea to Published Content in 3 Steps</h2>
+            <p>Our AI content generator makes professional content creation accessible to everyone, regardless of technical expertise.</p>
+        </div>
+
+        <div class="steps-container">
+            <!-- Step 1 -->
+            <div class="step-card">
+                <div class="step-content">
+                    <div class="step-number">1</div>
+                    <h3>Choose Your Topic & Platform</h3>
+                    <p>Select what type of content you want to create and where you'll publish it. Our AI adapts to each platform's best practices.</p>
+
+                    <ul class="step-features">
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Social media posts or blog articles</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>6 social platforms supported</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Smart topic suggestions included</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="step-visual">
+                    <div class="topic-selector">
+                        <div style="font-weight: 600; margin-bottom: 0.75rem; color: var(--rw-gray-700);">What do you want to create?</div>
+                        <div class="topic-input">
+                            💡 "10 marketing tips for small businesses"
+                        </div>
+                        <div style="font-size: 0.875rem; font-weight: 600; color: var(--rw-gray-600); margin-bottom: 0.5rem;">Popular Topics:</div>
+                        <div class="topic-suggestions">
+                            <div class="topic-tag">Content Marketing</div>
+                            <div class="topic-tag">Social Media Tips</div>
+                            <div class="topic-tag">SEO Guide</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card">
+                <div class="step-content">
+                    <div class="step-number">2</div>
+                    <h3>AI Generates Your Content</h3>
+                    <p>Watch as our AI analyzes your topic, researches keywords, and creates professional content optimized for your platform.</p>
+
+                    <ul class="step-features">
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Automatic keyword research</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>SEO optimization included</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Real-time content generation</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="step-visual">
+                    <div class="ai-processing">
+                        <div class="processing-header">
+                            <div class="processing-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                                </svg>
+                            </div>
+                            <div class="processing-title">Generating Content...</div>
+                        </div>
+
+                        <div class="progress-list">
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Keyword research</span>
+                                    <span style="color: var(--rw-primary);">100%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="--target-width: 100%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Content structure</span>
+                                    <span style="color: var(--rw-primary);">100%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="--target-width: 100%; animation-delay: 0.5s;"></div>
+                                </div>
+                            </div>
+
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Writing article</span>
+                                    <span style="color: var(--rw-primary);">72%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill active" style="--target-width: 72%; animation-delay: 1s;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card">
+                <div class="step-content">
+                    <div class="step-number">3</div>
+                    <h3>Review, Edit & Publish</h3>
+                    <p>Get your content ready to publish. Make any final edits, copy to your platform, or export in your preferred format.</p>
+
+                    <ul class="step-features">
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>3 variations for social posts</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>One-click copy to clipboard</span>
+                        </li>
+                        <li>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Export as HTML, Markdown, or PDF</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="step-visual">
+                    <div class="published-content">
+                        <div class="content-preview">
+                            <div class="preview-title">10 Marketing Tips for Small Businesses</div>
+                            <div class="preview-text">
+                                In today's competitive landscape, small businesses need smart marketing strategies to stand out. This guide covers essential tips that deliver real results without breaking the bank...
+                            </div>
+                        </div>
+
+                        <div class="content-actions">
+                            <div class="action-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span>Copy</span>
+                            </div>
+                            <div class="action-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                                <span>Edit</span>
+                            </div>
+                            <div class="action-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                <span>Export</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="hiw-cta">
+    <div class="container">
+        <h2>Ready to Create Amazing Content?</h2>
+        <p>Join thousands of content creators who are saving hours every week with Runnwrite AI</p>
+        <a href="#pricing" class="cta-btn">
+            <span>Start Creating Free</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+</section>
+
+</body>
+</html>
