@@ -189,6 +189,12 @@ ai-content-generator-runnwrite
                         </div>
                     </div>
                 </div>
+                <a href="/social-media-content-generator/" class="rw-feature-cta">
+                    <span>Explore Social Media Generator</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10h12m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
             </div>
             
             <!-- SEO Blog Feature -->
@@ -317,6 +323,12 @@ ai-content-generator-runnwrite
                         </div>
                     </div>
                 </div>
+                <a href="/seo-blog-writer/" class="rw-feature-cta">
+                    <span>Explore SEO Blog Writer</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10h12m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
@@ -1274,9 +1286,6 @@ ai-content-generator-runnwrite
                         <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 </a>
-                <a href="#demo" class="rw-btn rw-btn-outline rw-btn-xl">
-                    Watch Demo
-                </a>
             </div>
             <div class="rw-cta-note">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -1709,6 +1718,36 @@ html {
     font-weight: 600;
     color: var(--rw-gray-700);
     margin-bottom: var(--rw-spacing-3);
+}
+
+/* Feature CTA Button */
+.rw-feature-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    margin-top: var(--rw-spacing-5);
+    padding: var(--rw-spacing-3) var(--rw-spacing-5);
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    color: var(--rw-white);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: var(--rw-radius-lg);
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.rw-feature-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+}
+
+.rw-feature-cta svg {
+    transition: transform 0.3s ease;
+}
+
+.rw-feature-cta:hover svg {
+    transform: translateX(4px);
 }
 
 /* Post Preview Styles */
