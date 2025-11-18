@@ -1482,10 +1482,11 @@ html {
 
 @media (max-width: 768px) {
     .rw-hero {
-        border-radius: 16px;
-        margin: var(--rw-spacing-3) var(--rw-spacing-3);
-        padding: var(--rw-spacing-6) var(--rw-spacing-3);
-        overflow: hidden;
+        border-radius: 0;
+        margin: 0;
+        padding: var(--rw-spacing-6) 0;
+        overflow: visible;
+        background: none;
     }
 }
 
@@ -2480,7 +2481,7 @@ html {
     }
 
     .rw-hero .rw-container {
-        padding: 0;
+        padding: 0 var(--rw-spacing-4);
     }
 
     .rw-pricing-grid,
