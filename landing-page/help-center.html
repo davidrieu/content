@@ -1,0 +1,938 @@
+<!--
+========================================================================================
+RUNNWRITE AI - HELP CENTER PAGE
+WordPress SEO Settings
+========================================================================================
+
+META TITLE (55 characters):
+Help Center - AI Content Generator Support | Runnwrite
+
+META DESCRIPTION (158 characters):
+Get help with Runnwrite AI content generator. Find answers to FAQs, tutorials, troubleshooting guides, and support for creating social media and SEO content.
+
+FOCUS KEYWORD:
+AI content generator help
+
+ADDITIONAL KEYWORDS:
+- content generator support
+- AI writing tool FAQ
+- help center documentation
+- content creation tutorials
+
+URL SLUG:
+help-center-ai-content-generator
+
+========================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - AI Content Generator Support | Runnwrite</title>
+
+    <meta name="description" content="Get help with Runnwrite AI content generator. Find answers to FAQs, tutorials, troubleshooting guides, and support for creating social media and SEO content.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Help Center - AI Content Generator Support | Runnwrite">
+    <meta property="og:description" content="Get help with Runnwrite AI content generator. Find answers to FAQs and tutorials.">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Help Center - AI Content Generator Support | Runnwrite">
+    <meta property="twitter:description" content="Get help with Runnwrite AI content generator. Find answers to FAQs and tutorials.">
+
+    <style>
+/* CSS Variables */
+:root {
+    --rw-primary: #6366f1;
+    --rw-primary-dark: #4f46e5;
+    --rw-primary-light: #818cf8;
+    --rw-secondary: #10b981;
+    --rw-success: #10b981;
+    --rw-warning: #f59e0b;
+    --rw-white: #ffffff;
+    --rw-black: #000000;
+    --rw-gray-50: #f9fafb;
+    --rw-gray-100: #f3f4f6;
+    --rw-gray-200: #e5e7eb;
+    --rw-gray-300: #d1d5db;
+    --rw-gray-600: #4b5563;
+    --rw-gray-700: #374151;
+    --rw-gray-900: #111827;
+
+    --rw-spacing-2: 0.5rem;
+    --rw-spacing-3: 0.75rem;
+    --rw-spacing-4: 1rem;
+    --rw-spacing-5: 1.5rem;
+    --rw-spacing-6: 2rem;
+    --rw-spacing-8: 3rem;
+
+    --rw-radius-lg: 0.75rem;
+    --rw-radius-xl: 1rem;
+    --rw-radius-2xl: 1.5rem;
+    --rw-radius-full: 9999px;
+
+    --rw-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --rw-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --rw-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    --rw-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--rw-gray-900);
+    background: var(--rw-white);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--rw-spacing-6);
+}
+
+section {
+    padding: var(--rw-spacing-8) 0;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--rw-gray-900);
+}
+
+h1 { font-size: 3.5rem; margin-bottom: var(--rw-spacing-5); }
+h2 { font-size: 2.5rem; margin-bottom: var(--rw-spacing-4); }
+h3 { font-size: 1.75rem; margin-bottom: var(--rw-spacing-3); }
+
+p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
+
+/* Hero Section */
+.help-hero {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+    padding: var(--rw-spacing-8) 0;
+    border-radius: 24px;
+    margin: var(--rw-spacing-4) var(--rw-spacing-6);
+    text-align: center;
+}
+
+.help-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    padding: var(--rw-spacing-2) var(--rw-spacing-4);
+    border-radius: var(--rw-radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--rw-spacing-4);
+    border: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+.help-hero h1 span {
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.help-hero p {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto var(--rw-spacing-6);
+}
+
+/* Search Bar */
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--rw-spacing-4) var(--rw-spacing-5);
+    padding-left: 3.5rem;
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-xl);
+    font-size: 1rem;
+    transition: var(--rw-transition);
+    background: var(--rw-white);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--rw-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--rw-gray-600);
+}
+
+/* Categories Grid */
+.categories-section {
+    background: var(--rw-white);
+}
+
+.section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--rw-spacing-8);
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--rw-spacing-6);
+    margin-top: var(--rw-spacing-8);
+}
+
+.category-card {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-6);
+    text-align: center;
+    transition: var(--rw-transition);
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--rw-shadow-xl);
+    border-color: var(--rw-primary);
+}
+
+.category-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border-radius: var(--rw-radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--rw-spacing-4);
+    border: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+.category-icon svg {
+    color: var(--rw-primary);
+}
+
+.category-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--rw-spacing-2);
+}
+
+.category-card p {
+    font-size: 1rem;
+    margin-bottom: var(--rw-spacing-3);
+}
+
+.article-count {
+    font-size: 0.875rem;
+    color: var(--rw-primary);
+    font-weight: 600;
+}
+
+/* FAQ Section */
+.faq-section {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+}
+
+.faq-grid {
+    display: grid;
+    gap: var(--rw-spacing-4);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-xl);
+    overflow: hidden;
+    transition: var(--rw-transition);
+}
+
+.faq-item.active {
+    border-color: var(--rw-primary);
+    box-shadow: var(--rw-shadow-lg);
+}
+
+.faq-question {
+    padding: var(--rw-spacing-5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.faq-question h3 {
+    font-size: 1.25rem;
+    margin: 0;
+    color: var(--rw-gray-900);
+}
+
+.faq-toggle {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rw-white);
+    flex-shrink: 0;
+    transition: var(--rw-transition);
+}
+
+.faq-item.active .faq-toggle {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.faq-answer-content {
+    padding: 0 var(--rw-spacing-5) var(--rw-spacing-5);
+}
+
+.faq-answer p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Quick Guides */
+.guides-section {
+    background: var(--rw-white);
+}
+
+.guides-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--rw-spacing-6);
+    margin-top: var(--rw-spacing-8);
+}
+
+.guide-card {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+    border: 2px solid rgba(99, 102, 241, 0.1);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-6);
+    display: flex;
+    gap: var(--rw-spacing-4);
+    transition: var(--rw-transition);
+}
+
+.guide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--rw-shadow-xl);
+    border-color: var(--rw-primary);
+}
+
+.guide-number {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--rw-primary), #8b5cf6);
+    color: var(--rw-white);
+    border-radius: var(--rw-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.guide-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--rw-spacing-2);
+}
+
+.guide-content p {
+    font-size: 1.05rem;
+    margin: 0;
+}
+
+/* Contact Section */
+.contact-section {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-primary-dark));
+    text-align: center;
+    color: var(--rw-white);
+    border-radius: 24px;
+    margin: var(--rw-spacing-4) var(--rw-spacing-6);
+}
+
+.contact-section h2 {
+    color: var(--rw-white);
+    font-size: 2.5rem;
+}
+
+.contact-section p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto var(--rw-spacing-6);
+}
+
+.contact-buttons {
+    display: flex;
+    gap: var(--rw-spacing-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    padding: 1rem 2rem;
+    border-radius: var(--rw-radius-lg);
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--rw-transition);
+    box-shadow: var(--rw-shadow-xl);
+}
+
+.btn-white {
+    background: var(--rw-white);
+    color: var(--rw-primary);
+}
+
+.btn-white:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--rw-white);
+    border: 2px solid var(--rw-white);
+}
+
+.btn-outline:hover {
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    transform: translateY(-4px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--rw-spacing-4);
+    }
+
+    section {
+        padding: var(--rw-spacing-6) 0;
+    }
+
+    h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    /* Hero */
+    .help-hero {
+        margin: var(--rw-spacing-3) var(--rw-spacing-3);
+        padding: var(--rw-spacing-6) var(--rw-spacing-4);
+        border-radius: 16px;
+    }
+
+    .help-badge {
+        font-size: 0.8rem;
+        padding: var(--rw-spacing-2) var(--rw-spacing-3);
+    }
+
+    .help-hero p {
+        font-size: 1rem;
+    }
+
+    /* Search */
+    .search-input {
+        padding: var(--rw-spacing-3) var(--rw-spacing-4);
+        padding-left: 3rem;
+        font-size: 0.95rem;
+    }
+
+    .search-icon {
+        left: 1rem;
+    }
+
+    /* Categories */
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: var(--rw-spacing-4);
+    }
+
+    .category-card {
+        padding: var(--rw-spacing-5);
+    }
+
+    .category-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .category-card h3 {
+        font-size: 1.25rem;
+    }
+
+    /* FAQ */
+    .faq-question {
+        padding: var(--rw-spacing-4);
+    }
+
+    .faq-question h3 {
+        font-size: 1.125rem;
+    }
+
+    .faq-toggle {
+        width: 28px;
+        height: 28px;
+    }
+
+    .faq-answer-content {
+        padding: 0 var(--rw-spacing-4) var(--rw-spacing-4);
+    }
+
+    .faq-answer p {
+        font-size: 0.95rem;
+    }
+
+    /* Guides */
+    .guides-grid {
+        grid-template-columns: 1fr;
+        gap: var(--rw-spacing-4);
+    }
+
+    .guide-card {
+        padding: var(--rw-spacing-4);
+    }
+
+    .guide-number {
+        width: 45px;
+        height: 45px;
+        font-size: 1.25rem;
+    }
+
+    .guide-content h3 {
+        font-size: 1.25rem;
+    }
+
+    .guide-content p {
+        font-size: 0.95rem;
+    }
+
+    /* Contact */
+    .contact-section {
+        margin: var(--rw-spacing-3) var(--rw-spacing-3);
+        padding: var(--rw-spacing-6) var(--rw-spacing-4);
+        border-radius: 16px;
+    }
+
+    .contact-section h2 {
+        font-size: 1.75rem;
+    }
+
+    .contact-section p {
+        font-size: 1rem;
+    }
+
+    .contact-buttons {
+        flex-direction: column;
+        gap: var(--rw-spacing-3);
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    /* Section Header */
+    .section-header {
+        padding: 0 var(--rw-spacing-2);
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .section-header p {
+        font-size: 0.95rem;
+    }
+}
+
+.text-center { text-align: center; }
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="help-hero">
+    <div class="container">
+        <div class="help-badge">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>AI Content Generator Help</span>
+        </div>
+
+        <h1>How Can We <span>Help You</span> Today?</h1>
+
+        <p>
+            Find answers, tutorials, and troubleshooting guides for our AI content generator. Get content generator support for creating social media posts and SEO articles with our AI writing tool FAQ section.
+        </p>
+
+        <div class="search-container">
+            <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" class="search-input" placeholder="Search for help articles, guides, or FAQs...">
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Browse Help Topics</h2>
+            <p>Explore our help center documentation organized by category to quickly find the content creation tutorials and AI content generator help you need</p>
+        </div>
+
+        <div class="categories-grid">
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <h3>Getting Started</h3>
+                <p>Learn the basics of our AI content generator and start creating your first content</p>
+                <span class="article-count">12 articles</span>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                </div>
+                <h3>Content Creation</h3>
+                <p>Master social media posts, blog articles, and SEO optimization with our AI writing tool</p>
+                <span class="article-count">18 articles</span>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/>
+                    </svg>
+                </div>
+                <h3>Advanced Features</h3>
+                <p>Unlock powerful features like templates, keywords, and content optimization</p>
+                <span class="article-count">15 articles</span>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                </div>
+                <h3>Account & Billing</h3>
+                <p>Manage your subscription, payments, and account settings</p>
+                <span class="article-count">10 articles</span>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <h3>Troubleshooting</h3>
+                <p>Find solutions to common issues and technical problems with content generator support</p>
+                <span class="article-count">14 articles</span>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                    </svg>
+                </div>
+                <h3>Best Practices</h3>
+                <p>Tips and strategies to get the most out of your AI content creation</p>
+                <span class="article-count">16 articles</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Quick answers to common questions about our AI content generator help and content generator support</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How does the AI content generator work?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Our AI content generator uses advanced natural language processing to create high-quality content. Simply choose your content type (social media post or blog article), enter your topic or keywords, and our AI writing tool generates optimized content tailored to your needs. The process takes less than 60 seconds and provides 3 variations for each request.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What types of content can I create?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>You can create social media posts for Instagram, Facebook, LinkedIn, Twitter, TikTok, and YouTube. You can also generate SEO-optimized blog articles ranging from 1000-5000 words with automatic keyword research, meta tags, and proper H1-H6 structure. Our AI content generator supports both short-form and long-form content creation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is there a limit to how much content I can generate?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Content limits depend on your subscription plan. Our Free plan includes 10 content generations per month. Starter plan offers 100 per month, Professional includes 500, and Enterprise provides unlimited content creation. All paid plans include unlimited AI-generated content variations and access to all features.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I edit the AI-generated content?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Absolutely! All generated content is fully editable. You can modify text, adjust tone, add or remove sections, and customize the content to match your brand voice. We provide a built-in editor with formatting options, or you can copy the content to your preferred editing tool.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I get content generator support if I need help?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>We offer multiple support channels: browse our help center documentation, chat with our AI assistant 24/7, email our support team at support@runnwrite.com, or schedule a live demo call. Professional and Enterprise plans include priority support with dedicated account managers and faster response times.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is the content SEO-optimized?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Yes! Our AI writing tool automatically includes SEO optimization for all blog content. This includes automatic keyword research, optimal keyword density (1-2%), meta title and description generation, proper header structure (H1-H6), internal linking suggestions, and readability optimization. Each article receives an SEO score with actionable improvement tips.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Guides Section -->
+<section class="guides-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Quick Start Guides</h2>
+            <p>Follow these step-by-step content creation tutorials to master our AI content generator help resources</p>
+        </div>
+
+        <div class="guides-grid">
+            <div class="guide-card">
+                <div class="guide-number">1</div>
+                <div class="guide-content">
+                    <h3>Create Your First Social Media Post</h3>
+                    <p>Learn how to generate engaging social media content in under 60 seconds using our AI writing tool. This AI content generator help guide covers platform selection, topic input, and content customization.</p>
+                </div>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-number">2</div>
+                <div class="guide-content">
+                    <h3>Write SEO-Optimized Blog Articles</h3>
+                    <p>Master the art of creating blog content that ranks on Google. This content generator support tutorial shows you keyword research, structure optimization, and publishing best practices.</p>
+                </div>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-number">3</div>
+                <div class="guide-content">
+                    <h3>Use Templates & Save Favorites</h3>
+                    <p>Discover how to use our 200+ templates to speed up content creation and save your best-performing content for future reference and reuse.</p>
+                </div>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-number">4</div>
+                <div class="guide-content">
+                    <h3>Optimize Content for Maximum Engagement</h3>
+                    <p>Get tips on improving AI-generated content for better engagement rates. Learn about tone adjustment, hashtag optimization, and A/B testing strategies.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section">
+    <div class="container">
+        <h2>Still Need Help?</h2>
+        <p>Can't find what you're looking for? Our content generator support team is here to help you with any questions about our AI content generator</p>
+
+        <div class="contact-buttons">
+            <a href="#chat" class="btn btn-white">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span>Chat with Us</span>
+            </a>
+            <a href="mailto:support@runnwrite.com" class="btn btn-outline">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <span>Email Support</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // FAQ Accordion
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        const content = item.querySelector('.faq-answer-content');
+
+        question.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+
+            // Close all other items
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                }
+            });
+
+            // Toggle current item
+            if (isActive) {
+                item.classList.remove('active');
+                answer.style.maxHeight = null;
+            } else {
+                item.classList.add('active');
+                answer.style.maxHeight = content.offsetHeight + 'px';
+            }
+        });
+    });
+
+    // Search functionality (basic placeholder)
+    const searchInput = document.querySelector('.search-input');
+    searchInput.addEventListener('input', (e) => {
+        console.log('Searching for:', e.target.value);
+        // Add actual search functionality here
+    });
+});
+</script>
+
+</body>
+</html>
