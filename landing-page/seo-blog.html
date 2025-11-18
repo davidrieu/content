@@ -78,7 +78,7 @@ body {
 }
 
 .container {
-    max-width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 var(--rw-spacing-6);
 }
@@ -452,12 +452,161 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .seo-hero-grid { grid-template-columns: 1fr; }
-    .keywords-grid { grid-template-columns: 1fr; }
-    .strategy-grid { grid-template-columns: 1fr; }
-    .seo-metrics { grid-template-columns: 1fr; }
-    h1 { font-size: 2.5rem; }
-    h2 { font-size: 1.875rem; }
+    .container {
+        padding: 0 var(--rw-spacing-4);
+    }
+
+    section {
+        padding: var(--rw-spacing-6) 0;
+    }
+
+    .seo-hero-grid {
+        grid-template-columns: 1fr;
+        gap: var(--rw-spacing-6);
+    }
+
+    .keywords-grid {
+        grid-template-columns: 1fr;
+        gap: var(--rw-spacing-4);
+    }
+
+    .strategy-grid {
+        grid-template-columns: 1fr;
+        gap: var(--rw-spacing-5);
+    }
+
+    .seo-metrics {
+        grid-template-columns: 1fr;
+        gap: var(--rw-spacing-4);
+    }
+
+    h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    /* Hero Section */
+    .seo-badge {
+        font-size: 0.875rem;
+        padding: var(--rw-spacing-2) var(--rw-spacing-3);
+    }
+
+    .seo-hero p {
+        font-size: 1rem !important;
+    }
+
+    /* Score Card */
+    .seo-score-card {
+        padding: var(--rw-spacing-5);
+        margin-top: var(--rw-spacing-6);
+    }
+
+    .score-circle {
+        width: 160px;
+        height: 160px;
+    }
+
+    .score-circle svg {
+        width: 160px;
+        height: 160px;
+    }
+
+    .score-number {
+        font-size: 2.5rem;
+    }
+
+    .seo-metrics {
+        margin-top: var(--rw-spacing-4);
+    }
+
+    .metric-item {
+        padding: var(--rw-spacing-3);
+    }
+
+    .metric-value {
+        font-size: 1.25rem;
+    }
+
+    .metric-label {
+        font-size: 0.875rem;
+    }
+
+    /* Keywords */
+    .keyword-card {
+        padding: var(--rw-spacing-4);
+    }
+
+    .keyword-header h3 {
+        font-size: 1.125rem;
+    }
+
+    .difficulty-label {
+        font-size: 0.875rem;
+    }
+
+    .keyword-stats {
+        gap: var(--rw-spacing-3);
+    }
+
+    .stat-value {
+        font-size: 1.125rem;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    /* Strategy Cards */
+    .strategy-card {
+        padding: var(--rw-spacing-5);
+    }
+
+    .strategy-number {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .strategy-card h3 {
+        font-size: 1.25rem;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* Section Header */
+    .section-header {
+        padding: 0 var(--rw-spacing-2);
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .section-header p {
+        font-size: 0.95rem;
+    }
 }
 
 .text-center { text-align: center; }
