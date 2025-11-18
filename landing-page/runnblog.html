@@ -1,0 +1,509 @@
+<!--
+========================================================================================
+RUNNWRITE AI - RUNNBLOG MAIN PAGE
+WordPress SEO Settings
+========================================================================================
+
+META TITLE (58 characters):
+Runnblog - AI Content Marketing Insights | Runnwrite
+
+META DESCRIPTION (158 characters):
+Discover expert tips, guides, and best practices for AI content creation. Learn how to master social media marketing and SEO blogging with Runnwrite AI.
+
+FOCUS KEYWORD:
+AI content marketing blog
+
+ADDITIONAL KEYWORDS:
+- content creation tips
+- social media marketing blog
+- SEO writing guide
+- AI writing blog
+- content strategy insights
+
+URL SLUG:
+runnblog
+
+========================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Runnblog - AI Content Marketing Insights | Runnwrite</title>
+
+    <meta name="description" content="Discover expert tips, guides, and best practices for AI content creation. Learn how to master social media marketing and SEO blogging with Runnwrite AI.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Runnblog - AI Content Marketing Insights | Runnwrite">
+    <meta property="og:description" content="Discover expert tips, guides, and best practices for AI content creation. Learn how to master social media marketing and SEO blogging with Runnwrite AI.">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Runnblog - AI Content Marketing Insights | Runnwrite">
+    <meta property="twitter:description" content="Discover expert tips, guides, and best practices for AI content creation. Learn how to master social media marketing and SEO blogging with Runnwrite AI.">
+
+    <style>
+/* CSS Variables */
+:root {
+    --rw-primary: #6366f1;
+    --rw-primary-dark: #4f46e5;
+    --rw-primary-light: #818cf8;
+    --rw-secondary: #8b5cf6;
+    --rw-success: #10b981;
+    --rw-white: #ffffff;
+    --rw-black: #000000;
+    --rw-gray-50: #f9fafb;
+    --rw-gray-100: #f3f4f6;
+    --rw-gray-200: #e5e7eb;
+    --rw-gray-300: #d1d5db;
+    --rw-gray-400: #9ca3af;
+    --rw-gray-500: #6b7280;
+    --rw-gray-600: #4b5563;
+    --rw-gray-700: #374151;
+    --rw-gray-800: #1f2937;
+    --rw-gray-900: #111827;
+
+    --rw-spacing-1: 0.25rem;
+    --rw-spacing-2: 0.5rem;
+    --rw-spacing-3: 0.75rem;
+    --rw-spacing-4: 1rem;
+    --rw-spacing-5: 1.5rem;
+    --rw-spacing-6: 2rem;
+    --rw-spacing-8: 3rem;
+    --rw-spacing-10: 4rem;
+    --rw-spacing-12: 5rem;
+
+    --rw-radius-sm: 0.375rem;
+    --rw-radius-md: 0.5rem;
+    --rw-radius-lg: 0.75rem;
+    --rw-radius-xl: 1rem;
+    --rw-radius-2xl: 1.5rem;
+
+    --rw-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --rw-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --rw-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --rw-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    --rw-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--rw-gray-900);
+    background: var(--rw-white);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--rw-spacing-6);
+}
+
+section {
+    padding: var(--rw-spacing-8) 0;
+}
+
+/* Hero Section */
+.blog-hero {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    color: var(--rw-white);
+    text-align: center;
+    padding: var(--rw-spacing-10) 0;
+    margin: var(--rw-spacing-6) var(--rw-spacing-6);
+    border-radius: 24px;
+}
+
+.blog-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: var(--rw-spacing-2) var(--rw-spacing-4);
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: var(--rw-spacing-5);
+}
+
+.blog-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: var(--rw-spacing-4);
+    line-height: 1.2;
+}
+
+.blog-hero h1 span {
+    background: linear-gradient(135deg, var(--rw-white), rgba(255, 255, 255, 0.8));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.blog-hero p {
+    font-size: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+}
+
+/* Categories Section */
+.categories-section {
+    background: var(--rw-white);
+    padding: var(--rw-spacing-10) 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--rw-spacing-8);
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-3);
+}
+
+.section-header h2 span {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-header p {
+    font-size: 1.125rem;
+    color: var(--rw-gray-600);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--rw-spacing-6);
+    margin-top: var(--rw-spacing-8);
+}
+
+.category-card {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-8);
+    transition: var(--rw-transition);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    transform: scaleX(0);
+    transition: var(--rw-transition);
+}
+
+.category-card:hover::before {
+    transform: scaleX(1);
+}
+
+.category-card:hover {
+    border-color: var(--rw-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--rw-shadow-xl);
+}
+
+.category-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    border-radius: var(--rw-radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--rw-spacing-5);
+    font-size: 2.5rem;
+}
+
+.category-card h3 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-3);
+}
+
+.category-card p {
+    font-size: 1.125rem;
+    color: var(--rw-gray-600);
+    line-height: 1.7;
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.category-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--rw-spacing-5);
+    margin-top: var(--rw-spacing-5);
+    padding-top: var(--rw-spacing-5);
+    border-top: 1px solid var(--rw-gray-200);
+}
+
+.article-count {
+    display: flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    font-size: 0.95rem;
+    color: var(--rw-gray-500);
+}
+
+.article-count svg {
+    color: var(--rw-primary);
+}
+
+.view-category {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    color: var(--rw-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: var(--rw-spacing-4);
+}
+
+.view-category svg {
+    transition: var(--rw-transition);
+}
+
+.category-card:hover .view-category svg {
+    transform: translateX(4px);
+}
+
+/* CTA Section */
+.blog-cta {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    color: var(--rw-white);
+    text-align: center;
+    padding: var(--rw-spacing-10) var(--rw-spacing-6);
+    margin: var(--rw-spacing-10) var(--rw-spacing-6);
+    border-radius: 24px;
+}
+
+.blog-cta h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.blog-cta p {
+    font-size: 1.25rem;
+    margin-bottom: var(--rw-spacing-6);
+    opacity: 0.95;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-3);
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    padding: var(--rw-spacing-4) var(--rw-spacing-8);
+    border-radius: var(--rw-radius-lg);
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--rw-transition);
+    border: none;
+    cursor: pointer;
+}
+
+.cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--rw-spacing-4);
+    }
+
+    .blog-hero {
+        margin: var(--rw-spacing-3) var(--rw-spacing-3);
+        padding: var(--rw-spacing-6) var(--rw-spacing-4);
+        border-radius: 16px;
+    }
+
+    .blog-hero h1 {
+        font-size: 2.25rem;
+    }
+
+    .blog-hero p {
+        font-size: 1rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.875rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: var(--rw-spacing-4);
+    }
+
+    .category-card {
+        padding: var(--rw-spacing-6);
+    }
+
+    .category-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 2rem;
+    }
+
+    .category-card h3 {
+        font-size: 1.5rem;
+    }
+
+    .category-card p {
+        font-size: 1rem;
+    }
+
+    .blog-cta {
+        margin: var(--rw-spacing-6) var(--rw-spacing-3);
+        padding: var(--rw-spacing-6) var(--rw-spacing-4);
+    }
+
+    .blog-cta h2 {
+        font-size: 1.75rem;
+    }
+
+    .blog-cta p {
+        font-size: 1rem;
+    }
+}
+
+.text-center { text-align: center; }
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="blog-hero">
+    <div class="container">
+        <div class="blog-badge">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+            </svg>
+            <span>Runnblog - AI Content Insights</span>
+        </div>
+
+        <h1><span>Runnblog</span> - AI Content Marketing</h1>
+
+        <p>
+            Explore expert guides, actionable strategies, and proven tips for mastering AI content creation.
+            Learn how to leverage AI writing tools for social media marketing and SEO blogging success.
+        </p>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Explore <span>Content Categories</span></h2>
+            <p>Dive deep into specialized topics designed to elevate your AI content marketing strategy and drive real results</p>
+        </div>
+
+        <div class="categories-grid">
+            <!-- Social Media Category -->
+            <a href="/runnblog-category-ai-social-media" class="category-card">
+                <div class="category-icon">
+                    📱
+                </div>
+                <h3>AI Social Media Mastery</h3>
+                <p>
+                    Master social media content creation with AI-powered strategies. Discover platform-specific tips,
+                    engagement tactics, and viral content techniques for Instagram, Facebook, LinkedIn, TikTok, and more.
+                </p>
+                <div class="category-meta">
+                    <span class="article-count">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Latest Articles & Guides
+                    </span>
+                </div>
+                <span class="view-category">
+                    Explore Social Media AI
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10h12m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </a>
+
+            <!-- SEO & Blogging Category -->
+            <a href="/runnblog-category-ai-seo-blogging" class="category-card">
+                <div class="category-icon">
+                    🔍
+                </div>
+                <h3>AI SEO & Blogging Excellence</h3>
+                <p>
+                    Unlock advanced SEO strategies and AI-powered blogging techniques. Learn keyword research,
+                    on-page optimization, content structure, and ranking strategies to dominate search results.
+                </p>
+                <div class="category-meta">
+                    <span class="article-count">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Latest Articles & Guides
+                    </span>
+                </div>
+                <span class="view-category">
+                    Explore SEO & Blogging AI
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10h12m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="blog-cta">
+    <div class="container">
+        <h2>Ready to Create AI-Powered Content?</h2>
+        <p>
+            Stop reading, start creating! Transform your content marketing with Runnwrite AI and generate
+            professional social media posts and SEO blog articles in minutes.
+        </p>
+        <a href="https://www.app.runnwrite.com/" class="cta-btn">
+            <span>Start Creating Free</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+</section>
+
+</body>
+</html>
