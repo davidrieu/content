@@ -148,39 +148,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
 .help-hero p {
     font-size: 1.25rem;
     max-width: 700px;
-    margin: 0 auto var(--rw-spacing-6);
-}
-
-/* Search Bar */
-.search-container {
-    max-width: 600px;
     margin: 0 auto;
-    position: relative;
-}
-
-.search-input {
-    width: 100%;
-    padding: var(--rw-spacing-4) var(--rw-spacing-5);
-    padding-left: 3.5rem;
-    border: 2px solid var(--rw-gray-200);
-    border-radius: var(--rw-radius-xl);
-    font-size: 1rem;
-    transition: var(--rw-transition);
-    background: var(--rw-white);
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--rw-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-}
-
-.search-icon {
-    position: absolute;
-    left: 1.25rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--rw-gray-600);
 }
 
 /* Categories Grid */
@@ -209,6 +177,9 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
     text-align: center;
     transition: var(--rw-transition);
     cursor: pointer;
+    text-decoration: none;
+    display: block;
+    color: inherit;
 }
 
 .category-card:hover {
@@ -479,17 +450,6 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
         font-size: 1rem;
     }
 
-    /* Search */
-    .search-input {
-        padding: var(--rw-spacing-3) var(--rw-spacing-4);
-        padding-left: 3rem;
-        font-size: 0.95rem;
-    }
-
-    .search-icon {
-        left: 1rem;
-    }
-
     /* Categories */
     .categories-grid {
         grid-template-columns: 1fr;
@@ -618,14 +578,6 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
         <p>
             Find answers, tutorials, and troubleshooting guides for our AI content generator. Get content generator support for creating social media posts and SEO articles with our AI writing tool FAQ section.
         </p>
-
-        <div class="search-container">
-            <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
-            </svg>
-            <input type="text" class="search-input" placeholder="Search for help articles, guides, or FAQs...">
-        </div>
     </div>
 </section>
 
@@ -638,7 +590,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
         </div>
 
         <div class="categories-grid">
-            <div class="category-card">
+            <a href="#getting-started" class="category-card">
                 <div class="category-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
@@ -646,10 +598,10 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <h3>Getting Started</h3>
                 <p>Learn the basics of our AI content generator and start creating your first content</p>
-                <span class="article-count">12 articles</span>
-            </div>
+                <span class="article-count">4 questions</span>
+            </a>
 
-            <div class="category-card">
+            <a href="#content-creation" class="category-card">
                 <div class="category-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -658,10 +610,10 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <h3>Content Creation</h3>
                 <p>Master social media posts, blog articles, and SEO optimization with our AI writing tool</p>
-                <span class="article-count">18 articles</span>
-            </div>
+                <span class="article-count">4 questions</span>
+            </a>
 
-            <div class="category-card">
+            <a href="#advanced-features" class="category-card">
                 <div class="category-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3"/>
@@ -670,10 +622,10 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <h3>Advanced Features</h3>
                 <p>Unlock powerful features like templates, keywords, and content optimization</p>
-                <span class="article-count">15 articles</span>
-            </div>
+                <span class="article-count">4 questions</span>
+            </a>
 
-            <div class="category-card">
+            <a href="#account-billing" class="category-card">
                 <div class="category-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
@@ -682,10 +634,10 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <h3>Account & Billing</h3>
                 <p>Manage your subscription, payments, and account settings</p>
-                <span class="article-count">10 articles</span>
-            </div>
+                <span class="article-count">4 questions</span>
+            </a>
 
-            <div class="category-card">
+            <a href="#troubleshooting" class="category-card">
                 <div class="category-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
@@ -693,10 +645,10 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <h3>Troubleshooting</h3>
                 <p>Find solutions to common issues and technical problems with content generator support</p>
-                <span class="article-count">14 articles</span>
-            </div>
+                <span class="article-count">4 questions</span>
+            </a>
 
-            <div class="category-card">
+            <a href="#best-practices" class="category-card">
                 <div class="category-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
@@ -705,24 +657,24 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <h3>Best Practices</h3>
                 <p>Tips and strategies to get the most out of your AI content creation</p>
-                <span class="article-count">16 articles</span>
-            </div>
+                <span class="article-count">4 questions</span>
+            </a>
         </div>
     </div>
 </section>
 
-<!-- FAQ Section -->
-<section class="faq-section">
+<!-- Getting Started FAQ -->
+<section class="faq-section" id="getting-started">
     <div class="container">
         <div class="section-header">
-            <h2>Frequently Asked Questions</h2>
-            <p>Quick answers to common questions about our AI content generator help and content generator support</p>
+            <h2>Getting Started</h2>
+            <p>Learn the basics of our AI content generator help and start creating your first content</p>
         </div>
 
         <div class="faq-grid">
             <div class="faq-item">
                 <div class="faq-question">
-                    <h3>How does the AI content generator work?</h3>
+                    <h3>How do I create my first AI-generated content?</h3>
                     <div class="faq-toggle">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -732,14 +684,14 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <p>Our AI content generator uses advanced natural language processing to create high-quality content. Simply choose your content type (social media post or blog article), enter your topic or keywords, and our AI writing tool generates optimized content tailored to your needs. The process takes less than 60 seconds and provides 3 variations for each request.</p>
+                        <p>Simply sign up for a free account, choose whether you want to create social media content or blog articles, enter your topic or keywords, and click generate. Our AI content generator will create 3 variations in under 60 seconds. Select your favorite, edit if needed, and copy or export your content.</p>
                     </div>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">
-                    <h3>What types of content can I create?</h3>
+                    <h3>Do I need technical skills to use the AI writing tool?</h3>
                     <div class="faq-toggle">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -749,14 +701,14 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <p>You can create social media posts for Instagram, Facebook, LinkedIn, Twitter, TikTok, and YouTube. You can also generate SEO-optimized blog articles ranging from 1000-5000 words with automatic keyword research, meta tags, and proper H1-H6 structure. Our AI content generator supports both short-form and long-form content creation.</p>
+                        <p>No! Our AI content generator is designed for everyone, regardless of technical expertise. The interface is intuitive and user-friendly. Just type what you want to create, and our AI writing tool handles all the complex work behind the scenes.</p>
                     </div>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">
-                    <h3>Is there a limit to how much content I can generate?</h3>
+                    <h3>What platforms are supported for content creation?</h3>
                     <div class="faq-toggle">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -766,14 +718,14 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <p>Content limits depend on your subscription plan. Our Free plan includes 10 content generations per month. Starter plan offers 100 per month, Professional includes 500, and Enterprise provides unlimited content creation. All paid plans include unlimited AI-generated content variations and access to all features.</p>
+                        <p>We support Instagram, Facebook, LinkedIn, Twitter/X, TikTok, and YouTube for social media content. For blogging, our AI content generator creates SEO-optimized articles compatible with WordPress, Medium, Ghost, and all major CMS platforms.</p>
                     </div>
                 </div>
             </div>
 
             <div class="faq-item">
                 <div class="faq-question">
-                    <h3>Can I edit the AI-generated content?</h3>
+                    <h3>Is there a free trial available?</h3>
                     <div class="faq-toggle">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -783,41 +735,7 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
                 </div>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <p>Absolutely! All generated content is fully editable. You can modify text, adjust tone, add or remove sections, and customize the content to match your brand voice. We provide a built-in editor with formatting options, or you can copy the content to your preferred editing tool.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <h3>How do I get content generator support if I need help?</h3>
-                    <div class="faq-toggle">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"/>
-                            <line x1="5" y1="12" x2="19" y2="12"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>We offer multiple support channels: browse our help center documentation, chat with our AI assistant 24/7, email our support team at support@runnwrite.com, or schedule a live demo call. Professional and Enterprise plans include priority support with dedicated account managers and faster response times.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <h3>Is the content SEO-optimized?</h3>
-                    <div class="faq-toggle">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"/>
-                            <line x1="5" y1="12" x2="19" y2="12"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="faq-answer">
-                    <div class="faq-answer-content">
-                        <p>Yes! Our AI writing tool automatically includes SEO optimization for all blog content. This includes automatic keyword research, optimal keyword density (1-2%), meta title and description generation, proper header structure (H1-H6), internal linking suggestions, and readability optimization. Each article receives an SEO score with actionable improvement tips.</p>
+                        <p>Yes! We offer a free plan that includes 10 content generations per month. No credit card required. This lets you test our AI writing tool and see the quality of content before upgrading to a paid plan.</p>
                     </div>
                 </div>
             </div>
@@ -825,6 +743,405 @@ p { font-size: 1.125rem; line-height: 1.7; color: var(--rw-gray-600); }
     </div>
 </section>
 
+<!-- Content Creation FAQ -->
+<section class="faq-section" id="content-creation">
+    <div class="container">
+        <div class="section-header">
+            <h2>Content Creation</h2>
+            <p>Master social media posts and blog articles with our AI content generator</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I create SEO-optimized blog articles?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Select "Blog Article" from the content type menu, enter your main keyword or topic, and choose your desired word count (1000-5000 words). Our AI content generator automatically performs keyword research, creates proper H1-H6 structure, generates meta tags, and optimizes content for search engines.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I create content in different languages?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Yes! Our AI writing tool supports content creation in 30+ languages including English, Spanish, French, German, Italian, Portuguese, Dutch, and many more. Simply select your desired language before generating content.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How does the AI generate multiple content variations?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>When you request content, our AI content generator creates 3 unique variations with different tones, structures, and angles on your topic. This gives you options to choose from or combine elements from multiple versions for the perfect result.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can the AI match my brand voice and style?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Absolutely! You can set your preferred tone (professional, casual, friendly, authoritative, etc.) and our AI writing tool will adapt the content accordingly. For even better brand matching, use our custom templates feature to save your preferred style settings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Advanced Features FAQ -->
+<section class="faq-section" id="advanced-features">
+    <div class="container">
+        <div class="section-header">
+            <h2>Advanced Features</h2>
+            <p>Unlock powerful capabilities of our AI content generator</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I use content templates?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Browse our library of 200+ pre-built templates organized by industry and content type. Select a template, fill in your specific details, and our AI content generator customizes it for your needs. You can also create and save your own custom templates for repeated use.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What is the keyword research feature?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Our AI writing tool automatically researches relevant keywords for your topic, analyzes search volume and difficulty, and suggests the best keywords to target. It then naturally incorporates these keywords into your content for optimal SEO performance.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How does content scheduling work?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>After generating content, click the calendar icon to schedule posts for future publication. Set the date and time, and our AI content generator will automatically publish to your connected social media accounts or save drafts in your CMS at the scheduled time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I bulk generate multiple pieces of content?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Yes! Professional and Enterprise plans include bulk generation. Upload a CSV file with your topics or keywords, and our AI writing tool will generate content for all entries simultaneously. Perfect for creating a month's worth of content in minutes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Account & Billing FAQ -->
+<section class="faq-section" id="account-billing">
+    <div class="container">
+        <div class="section-header">
+            <h2>Account & Billing</h2>
+            <p>Manage your subscription and account settings</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What subscription plans are available?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>We offer four plans: Free (10 generations/month), Starter ($19/month, 100 generations), Professional ($49/month, 500 generations), and Enterprise (custom pricing, unlimited). All paid plans include access to all features, templates, and priority content generator support.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I upgrade or downgrade my plan anytime?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Yes! You can change your plan at any time from your account settings. When upgrading, you'll gain immediate access to new features. When downgrading, changes take effect at the end of your current billing cycle, so you keep your benefits until then.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What payment methods do you accept?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, and wire transfer for Enterprise plans. All payments are securely processed through Stripe with industry-standard encryption.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is there a refund policy?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Yes! We offer a 30-day money-back guarantee on all paid plans. If you're not satisfied with our AI content generator for any reason within the first 30 days, contact our content generator support team for a full refund, no questions asked.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Troubleshooting FAQ -->
+<section class="faq-section" id="troubleshooting">
+    <div class="container">
+        <div class="section-header">
+            <h2>Troubleshooting</h2>
+            <p>Solutions to common technical issues with content generator support</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Why is my content generation taking longer than usual?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Long-form content (3000+ words) can take up to 2 minutes. If it's taking longer, check your internet connection and try refreshing the page. During peak hours, there may be slight delays. If issues persist, contact our AI content generator help team for assistance.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>The AI generated content doesn't match my topic</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Try being more specific in your topic description. Include context, key points you want covered, and your target audience. Our AI writing tool performs better with detailed inputs. You can also try regenerating or selecting a different variation from the 3 provided options.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>I can't export my generated content</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Ensure you have a paid plan - export features are not available on the free tier. Check that you've selected the export format (HTML, Markdown, PDF) before clicking export. If using ad blockers or privacy extensions, try disabling them temporarily as they may interfere with downloads.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I reset my password?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Click "Forgot Password" on the login page, enter your email address, and we'll send you a password reset link within minutes. Check your spam folder if you don't see it. The link expires after 24 hours, so request a new one if needed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Best Practices FAQ -->
+<section class="faq-section" id="best-practices">
+    <div class="container">
+        <div class="section-header">
+            <h2>Best Practices</h2>
+            <p>Tips to maximize results from our AI content generator</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How can I get better AI-generated content?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Be specific and detailed in your inputs. Include target audience, tone, key points, and desired length. Review all 3 variations our AI writing tool provides. Use templates for consistency. Most importantly, always edit and personalize the content to add your unique perspective and brand voice.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Should I edit AI-generated content before publishing?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Yes! While our AI content generator produces high-quality content, we recommend reviewing and editing to ensure accuracy, add personal insights, include specific examples from your experience, and verify all facts. This makes the content uniquely yours and more valuable to your audience.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How often should I use AI-generated content?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Use our AI writing tool as often as you need! Many users generate daily social posts or weekly blog articles. The key is maintaining a consistent publishing schedule. Our AI content generator helps you maintain consistency without burnout, but always balance AI-created content with your original ideas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What are the best keywords to use for SEO content?</h3>
+                    <div class="faq-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Use our built-in keyword research tool to find relevant keywords with good search volume and low-medium difficulty. Focus on long-tail keywords (3-5 words) that match user intent. Our AI content generator automatically optimizes keyword density and placement for best SEO results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Quick Guides Section -->
 <section class="guides-section">
     <div class="container">
@@ -923,13 +1240,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 answer.style.maxHeight = content.offsetHeight + 'px';
             }
         });
-    });
-
-    // Search functionality (basic placeholder)
-    const searchInput = document.querySelector('.search-input');
-    searchInput.addEventListener('input', (e) => {
-        console.log('Searching for:', e.target.value);
-        // Add actual search functionality here
     });
 });
 </script>
