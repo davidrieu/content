@@ -1483,9 +1483,9 @@ html {
 @media (max-width: 768px) {
     .rw-hero {
         border-radius: 16px;
-        margin: var(--rw-spacing-3) var(--rw-spacing-4);
-        padding: var(--rw-spacing-6) 0;
-        overflow: visible;
+        margin: var(--rw-spacing-3) var(--rw-spacing-3);
+        padding: var(--rw-spacing-6) var(--rw-spacing-3);
+        overflow: hidden;
     }
 }
 
@@ -2463,16 +2463,24 @@ html {
 
     .rw-hero-content {
         text-align: center;
+        max-width: 100%;
+        padding: 0;
     }
 
     .rw-hero-cta {
         flex-direction: column;
         align-items: center;
+        width: 100%;
     }
 
     .rw-hero-visual {
         display: flex;
         justify-content: center;
+        max-width: 100%;
+    }
+
+    .rw-hero .rw-container {
+        padding: 0;
     }
 
     .rw-pricing-grid,
@@ -2628,7 +2636,9 @@ html {
     .rw-dashboard-preview {
         padding: var(--rw-spacing-3);
         max-width: 100%;
-        margin: 0 auto;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .rw-preview-stats {
