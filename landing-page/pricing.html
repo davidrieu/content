@@ -1,0 +1,1017 @@
+<!--
+========================================================================================
+RUNNWRITE AI - PRICING PAGE
+WordPress SEO Settings
+========================================================================================
+
+META TITLE (58 characters):
+Pricing Plans - AI Content Generator | Runnwrite AI
+
+META DESCRIPTION (158 characters):
+Affordable AI content generator pricing. Choose from Free, Starter, Pro, or Enterprise plans. Generate social media posts and SEO blog articles. 14-day refund.
+
+FOCUS KEYWORD:
+AI content generator pricing
+
+ADDITIONAL KEYWORDS:
+- runnwrite pricing
+- AI writing tool cost
+- content generator plans
+- social media AI pricing
+- SEO blog writer pricing
+
+URL SLUG:
+pricing
+
+========================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Plans - AI Content Generator | Runnwrite AI</title>
+
+    <meta name="description" content="Affordable AI content generator pricing. Choose from Free, Starter, Pro, or Enterprise plans. Generate social media posts and SEO blog articles. 14-day refund.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Pricing Plans - AI Content Generator | Runnwrite AI">
+    <meta property="og:description" content="Affordable AI content generator pricing. Choose from Free, Starter, Pro, or Enterprise plans for social media and SEO content.">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Pricing Plans - AI Content Generator | Runnwrite AI">
+    <meta property="twitter:description" content="Affordable AI content generator pricing. Choose from Free, Starter, Pro, or Enterprise plans.">
+
+    <style>
+/* CSS Variables */
+:root {
+    --rw-primary: #6366f1;
+    --rw-primary-dark: #4f46e5;
+    --rw-primary-light: #818cf8;
+    --rw-secondary: #8b5cf6;
+    --rw-success: #10b981;
+    --rw-white: #ffffff;
+    --rw-gray-50: #f9fafb;
+    --rw-gray-100: #f3f4f6;
+    --rw-gray-200: #e5e7eb;
+    --rw-gray-300: #d1d5db;
+    --rw-gray-400: #9ca3af;
+    --rw-gray-500: #6b7280;
+    --rw-gray-600: #4b5563;
+    --rw-gray-700: #374151;
+    --rw-gray-800: #1f2937;
+    --rw-gray-900: #111827;
+
+    --rw-spacing-2: 0.5rem;
+    --rw-spacing-3: 0.75rem;
+    --rw-spacing-4: 1rem;
+    --rw-spacing-5: 1.5rem;
+    --rw-spacing-6: 2rem;
+    --rw-spacing-8: 3rem;
+    --rw-spacing-10: 4rem;
+    --rw-spacing-12: 5rem;
+
+    --rw-radius-lg: 0.75rem;
+    --rw-radius-xl: 1rem;
+    --rw-radius-2xl: 1.5rem;
+
+    --rw-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --rw-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --rw-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--rw-gray-900);
+    background: var(--rw-white);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--rw-spacing-6);
+}
+
+section {
+    padding: var(--rw-spacing-10) 0;
+}
+
+/* Hero Section */
+.pricing-hero {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    color: var(--rw-white);
+    text-align: center;
+    padding: var(--rw-spacing-12) 0;
+    margin: var(--rw-spacing-6) var(--rw-spacing-6);
+    border-radius: 24px;
+}
+
+.pricing-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: var(--rw-spacing-2) var(--rw-spacing-4);
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: var(--rw-spacing-5);
+}
+
+.pricing-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: var(--rw-spacing-4);
+    line-height: 1.2;
+}
+
+.pricing-hero h1 span {
+    background: linear-gradient(135deg, var(--rw-white), rgba(255, 255, 255, 0.8));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.pricing-hero p {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto var(--rw-spacing-6);
+    opacity: 0.95;
+}
+
+/* Toggle */
+.billing-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-4);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: var(--rw-spacing-3) var(--rw-spacing-5);
+    border-radius: 50px;
+    margin-top: var(--rw-spacing-4);
+}
+
+.billing-toggle span {
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.billing-toggle span.active {
+    opacity: 1;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 56px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+    background: var(--rw-white);
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    background: var(--rw-white);
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.toggle-switch.active .toggle-slider {
+    transform: translateX(28px);
+    background: var(--rw-primary);
+}
+
+.save-badge {
+    display: inline-block;
+    background: var(--rw-success);
+    color: var(--rw-white);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: var(--rw-spacing-2);
+}
+
+/* Pricing Grid */
+.pricing-section {
+    background: var(--rw-gray-50);
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--rw-spacing-6);
+    margin-top: var(--rw-spacing-8);
+}
+
+.pricing-card {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-2xl);
+    padding: var(--rw-spacing-8);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.pricing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--rw-shadow-xl);
+    border-color: var(--rw-primary-light);
+}
+
+.pricing-card.popular {
+    border-color: var(--rw-primary);
+    box-shadow: var(--rw-shadow-lg);
+}
+
+.pricing-card.popular::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--rw-primary), var(--rw-secondary));
+    border-radius: var(--rw-radius-2xl) var(--rw-radius-2xl) 0 0;
+}
+
+.popular-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-primary-dark));
+    color: var(--rw-white);
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--rw-radius-lg);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.plan-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-3);
+}
+
+.plan-description {
+    font-size: 0.95rem;
+    color: var(--rw-gray-600);
+    margin-bottom: var(--rw-spacing-6);
+}
+
+.plan-price {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: var(--rw-spacing-2);
+}
+
+.currency {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--rw-gray-700);
+}
+
+.amount {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--rw-gray-900);
+    line-height: 1;
+}
+
+.period {
+    font-size: 1rem;
+    color: var(--rw-gray-500);
+    margin-left: var(--rw-spacing-2);
+}
+
+.price-note {
+    font-size: 0.875rem;
+    color: var(--rw-gray-500);
+    margin-bottom: var(--rw-spacing-6);
+}
+
+.plan-features {
+    list-style: none;
+    margin: var(--rw-spacing-6) 0;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--rw-spacing-3);
+    margin-bottom: var(--rw-spacing-4);
+    font-size: 0.95rem;
+    color: var(--rw-gray-700);
+}
+
+.plan-features svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.plan-features strong {
+    color: var(--rw-gray-900);
+    font-weight: 600;
+}
+
+.plan-cta {
+    display: block;
+    width: 100%;
+    padding: var(--rw-spacing-4);
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    color: var(--rw-white);
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--rw-radius-lg);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.plan-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+}
+
+.plan-cta.outline {
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    border: 2px solid var(--rw-primary);
+}
+
+.plan-cta.outline:hover {
+    background: var(--rw-gray-50);
+}
+
+/* Comparison Table */
+.comparison-section {
+    background: var(--rw-white);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--rw-spacing-8);
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-3);
+}
+
+.section-header h2 span {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-header p {
+    font-size: 1.125rem;
+    color: var(--rw-gray-600);
+}
+
+.comparison-table {
+    overflow-x: auto;
+    margin-top: var(--rw-spacing-8);
+}
+
+.comparison-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-xl);
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: var(--rw-spacing-4);
+    text-align: left;
+    border-bottom: 1px solid var(--rw-gray-200);
+}
+
+.comparison-table th {
+    background: var(--rw-gray-50);
+    font-weight: 600;
+    color: var(--rw-gray-900);
+    font-size: 1rem;
+}
+
+.comparison-table td {
+    font-size: 0.95rem;
+    color: var(--rw-gray-700);
+}
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+.feature-name {
+    font-weight: 500;
+    color: var(--rw-gray-900);
+}
+
+.check-icon {
+    color: var(--rw-success);
+}
+
+.cross-icon {
+    color: var(--rw-gray-300);
+}
+
+/* FAQ Section */
+.faq-section {
+    background: var(--rw-gray-50);
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--rw-spacing-5);
+    margin-top: var(--rw-spacing-8);
+}
+
+.faq-item {
+    background: var(--rw-white);
+    border: 2px solid var(--rw-gray-200);
+    border-radius: var(--rw-radius-xl);
+    padding: var(--rw-spacing-6);
+}
+
+.faq-question {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--rw-gray-900);
+    margin-bottom: var(--rw-spacing-3);
+}
+
+.faq-answer {
+    font-size: 1rem;
+    color: var(--rw-gray-700);
+    line-height: 1.7;
+}
+
+/* CTA Section */
+.pricing-cta {
+    background: linear-gradient(135deg, var(--rw-primary), var(--rw-secondary));
+    color: var(--rw-white);
+    text-align: center;
+    padding: var(--rw-spacing-10) var(--rw-spacing-6);
+    margin: var(--rw-spacing-10) var(--rw-spacing-6);
+    border-radius: 24px;
+}
+
+.pricing-cta h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: var(--rw-spacing-4);
+}
+
+.pricing-cta p {
+    font-size: 1.25rem;
+    margin-bottom: var(--rw-spacing-6);
+    opacity: 0.95;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rw-spacing-3);
+    background: var(--rw-white);
+    color: var(--rw-primary);
+    padding: var(--rw-spacing-4) var(--rw-spacing-8);
+    border-radius: var(--rw-radius-lg);
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Trust Badges */
+.trust-section {
+    text-align: center;
+    padding: var(--rw-spacing-6) 0;
+}
+
+.trust-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--rw-spacing-8);
+    flex-wrap: wrap;
+    margin-top: var(--rw-spacing-5);
+}
+
+.trust-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--rw-spacing-2);
+    font-size: 0.95rem;
+    color: var(--rw-gray-600);
+}
+
+.trust-badge svg {
+    color: var(--rw-success);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--rw-spacing-4);
+    }
+
+    .pricing-hero {
+        margin: var(--rw-spacing-3) var(--rw-spacing-3);
+        padding: var(--rw-spacing-6) var(--rw-spacing-4);
+    }
+
+    .pricing-hero h1 {
+        font-size: 2rem;
+    }
+
+    .pricing-hero p {
+        font-size: 1rem;
+    }
+
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: var(--rw-spacing-4);
+    }
+
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .pricing-cta h2 {
+        font-size: 1.75rem;
+    }
+
+    .pricing-cta p {
+        font-size: 1rem;
+    }
+
+    .trust-badges {
+        flex-direction: column;
+        gap: var(--rw-spacing-4);
+    }
+}
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="pricing-hero">
+    <div class="container">
+        <div class="pricing-badge">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Simple, Transparent Pricing</span>
+        </div>
+
+        <h1>Choose Your <span>Perfect Plan</span></h1>
+
+        <p>
+            Start creating AI-powered content today. All plans include social media posts and SEO blog articles.
+            No credit card required for Free plan. 14-day money-back guarantee.
+        </p>
+
+        <div class="billing-toggle">
+            <span id="monthly-label" class="active">Monthly</span>
+            <div class="toggle-switch" id="billing-switch" onclick="toggleBilling()">
+                <div class="toggle-slider"></div>
+            </div>
+            <span id="annual-label">Annual <span class="save-badge">Save 20%</span></span>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Grid -->
+<section class="pricing-section">
+    <div class="container">
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <h3 class="plan-name">Free</h3>
+                <p class="plan-description">Perfect for testing our AI content generator</p>
+
+                <div class="plan-price">
+                    <span class="currency">$</span>
+                    <span class="amount" id="free-price">0</span>
+                    <span class="period">/month</span>
+                </div>
+                <p class="price-note">Forever free</p>
+
+                <ul class="plan-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>10 Social Posts</strong> per month</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>1 Blog Article</strong> per month</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>All Languages</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>All Platforms</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>200+ Templates</span>
+                    </li>
+                </ul>
+
+                <a href="https://www.app.runnwrite.com/" class="plan-cta outline">Get Started Free</a>
+            </div>
+
+            <!-- Starter Plan -->
+            <div class="pricing-card">
+                <h3 class="plan-name">Starter</h3>
+                <p class="plan-description">For entrepreneurs & content creators</p>
+
+                <div class="plan-price">
+                    <span class="currency">$</span>
+                    <span class="amount" id="starter-price">29</span>
+                    <span class="period">/month</span>
+                </div>
+                <p class="price-note annual-note" style="display:none;">Billed annually ($278/year)</p>
+
+                <ul class="plan-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>50 Social Posts</strong> per month</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>5 Blog Articles</strong> per month</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>25 AI Images</strong> per month</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Content Calendar & Scheduling</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Priority Email Support</span>
+                    </li>
+                </ul>
+
+                <a href="https://www.app.runnwrite.com/" class="plan-cta">Start 14-Day Trial</a>
+            </div>
+
+            <!-- Pro Plan (Popular) -->
+            <div class="pricing-card popular">
+                <div class="popular-badge">Most Popular</div>
+                <h3 class="plan-name">Pro</h3>
+                <p class="plan-description">For agencies & marketing teams</p>
+
+                <div class="plan-price">
+                    <span class="currency">$</span>
+                    <span class="amount" id="pro-price">79</span>
+                    <span class="period">/month</span>
+                </div>
+                <p class="price-note annual-note" style="display:none;">Billed annually ($758/year)</p>
+
+                <ul class="plan-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>200 Social Posts</strong> per month</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>20 Blog Articles</strong> per month</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>100 AI Images</strong> per month</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>5 Team Members</strong></span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Advanced Analytics</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Priority Support & Onboarding</span>
+                    </li>
+                </ul>
+
+                <a href="https://www.app.runnwrite.com/" class="plan-cta">Start 14-Day Trial</a>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card">
+                <h3 class="plan-name">Enterprise</h3>
+                <p class="plan-description">For large teams & organizations</p>
+
+                <div class="plan-price">
+                    <span class="currency">$</span>
+                    <span class="amount" id="enterprise-price">199</span>
+                    <span class="period">/month</span>
+                </div>
+                <p class="price-note annual-note" style="display:none;">Billed annually ($1,910/year)</p>
+
+                <ul class="plan-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>Unlimited Posts</strong></span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>Unlimited Articles</strong></span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>Unlimited AI Images</strong></span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span><strong>Unlimited Team Members</strong></span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Custom AI Training</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Dedicated Account Manager</span>
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                            <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>API Access & Custom Integrations</span>
+                    </li>
+                </ul>
+
+                <a href="https://www.app.runnwrite.com/" class="plan-cta">Contact Sales</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Badges -->
+<section class="trust-section">
+    <div class="container">
+        <div class="trust-badges">
+            <div class="trust-badge">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                    <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>14-Day Money-Back Guarantee</span>
+            </div>
+            <div class="trust-badge">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                    <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>No Credit Card Required (Free Plan)</span>
+            </div>
+            <div class="trust-badge">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                    <path d="M6 10l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Cancel Anytime</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Frequently Asked <span>Questions</span></h2>
+            <p>Everything you need to know about pricing and plans</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h3 class="faq-question">Can I change plans later?</h3>
+                <p class="faq-answer">
+                    Yes! You can upgrade or downgrade your plan at any time. When upgrading, you'll be charged the prorated difference. When downgrading, the change will take effect at the end of your current billing cycle.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">What payment methods do you accept?</h3>
+                <p class="faq-answer">
+                    We accept all major credit cards (Visa, MasterCard, American Express) and PayPal. All payments are processed securely through Stripe, and we never store your payment information on our servers.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">What happens if I exceed my plan limits?</h3>
+                <p class="faq-answer">
+                    If you reach your monthly limit, you'll be notified and can either wait until your next billing cycle or upgrade to a higher plan immediately. Your existing content will remain accessible even if you exceed limits.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Is there a long-term contract?</h3>
+                <p class="faq-answer">
+                    No! All plans are month-to-month or annual subscriptions with no long-term commitment. You can cancel at any time, and you'll continue to have access until the end of your current billing period.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Do you offer discounts for annual billing?</h3>
+                <p class="faq-answer">
+                    Yes! Annual billing saves you 20% compared to monthly billing. For example, the Starter plan is $278/year instead of $348/year when paid monthly. Toggle to "Annual" above to see all pricing.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Can I get a refund if I'm not satisfied?</h3>
+                <p class="faq-answer">
+                    Absolutely! We offer a 14-day money-back guarantee on all paid plans. If you're not completely satisfied within the first 14 days, contact us at support@runnwrite.com for a full refund.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="pricing-cta">
+    <div class="container">
+        <h2>Ready to Start Creating AI Content?</h2>
+        <p>
+            Join 500+ content creators who are saving hours every week with Runnwrite AI.
+            Start your free trial today and experience the power of AI content generation.
+        </p>
+        <a href="https://www.app.runnwrite.com/" class="cta-btn">
+            <span>Start Free Trial</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12m-6-6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+</section>
+
+<script>
+let isAnnual = false;
+
+function toggleBilling() {
+    isAnnual = !isAnnual;
+    const toggle = document.getElementById('billing-switch');
+    const monthlyLabel = document.getElementById('monthly-label');
+    const annualLabel = document.getElementById('annual-label');
+
+    toggle.classList.toggle('active');
+
+    if (isAnnual) {
+        monthlyLabel.classList.remove('active');
+        annualLabel.classList.add('active');
+
+        // Update prices (20% discount)
+        document.getElementById('starter-price').textContent = '23';
+        document.getElementById('pro-price').textContent = '63';
+        document.getElementById('enterprise-price').textContent = '159';
+
+        // Show annual notes
+        document.querySelectorAll('.annual-note').forEach(note => {
+            note.style.display = 'block';
+        });
+    } else {
+        monthlyLabel.classList.add('active');
+        annualLabel.classList.remove('active');
+
+        // Reset to monthly prices
+        document.getElementById('starter-price').textContent = '29';
+        document.getElementById('pro-price').textContent = '79';
+        document.getElementById('enterprise-price').textContent = '199';
+
+        // Hide annual notes
+        document.querySelectorAll('.annual-note').forEach(note => {
+            note.style.display = 'none';
+        });
+    }
+}
+</script>
+
+</body>
+</html>
